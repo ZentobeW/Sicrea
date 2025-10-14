@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{ $title ?? config('app.name', 'Sicrea') }}</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @stack('styles')
 </head>
 <body class="bg-slate-50 text-slate-900 min-h-screen">
     <div class="min-h-screen flex flex-col">
@@ -88,5 +89,6 @@
             </div>
         </footer>
     </div>
+    @stack('scripts')
 </body>
 </html>
