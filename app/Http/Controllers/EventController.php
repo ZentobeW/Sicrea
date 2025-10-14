@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Enums\EventStatus;
+use App\Enums\RegistrationStatus;
 use App\Models\Event;
+use App\Models\Portfolio;
+use App\Models\Registration;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -26,7 +29,22 @@ class EventController extends Controller
             ->paginate(9)
             ->withQueryString();
 
-        return view('events.index', compact('events'));
+        $featuredPortfolios = Portfolio::query()
+            ->with(['event:id,title,slug'])
+            ->latest('created_at')
+            ->take(4)
+            ->get();
+
+        $stats = [
+            'published_events' => Event::query()
+                ->where('status', EventStatus::Published->value)
+                ->count(),
+            'confirmed_participants' => Registration::query()
+                ->where('status', RegistrationStatus::Confirmed->value)
+                ->count(),
+        ];
+
+        return view('events.index', compact('events', 'featuredPortfolios', 'stats'));
     }
 
     public function show(string $slug): View
