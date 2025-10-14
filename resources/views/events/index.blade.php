@@ -73,80 +73,25 @@
             animation: floatPulse 5s ease-in-out infinite;
         }
 
-        @keyframes gradientShift {
-            0% {
-                transform: translate3d(-5%, -5%, 0) scale(1.02);
-                opacity: 0.6;
-            }
-
-            50% {
-                transform: translate3d(5%, 5%, 0) scale(1.05);
-                opacity: 1;
-            }
-
-            100% {
-                transform: translate3d(-5%, -5%, 0) scale(1.02);
-                opacity: 0.6;
-            }
-        }
-
-        .partnership-hero {
-            position: relative;
+        .partnership-visual {
             border-radius: 1.5rem;
-            overflow: hidden;
+            background: linear-gradient(180deg, #f8fafc 0%, #e2e8f0 100%);
+            border: 1px solid rgba(148, 163, 184, 0.35);
         }
 
-        .partnership-hero::before,
-        .partnership-hero::after {
+        .partnership-benefit::before,
+        .partnership-support::before {
             content: '';
-            position: absolute;
-            inset: 0;
-            border-radius: inherit;
+            display: block;
+            width: 100%;
+            aspect-ratio: 4 / 3;
+            border-radius: 1rem;
+            background: #e2e8f0;
+            margin-bottom: 1.25rem;
         }
 
-        .partnership-hero::before {
-            background: linear-gradient(135deg, rgba(79, 70, 229, 0.18), rgba(15, 23, 42, 0.12));
-            animation: gradientShift 12s ease-in-out infinite;
-        }
-
-        .partnership-hero::after {
-            background-image: radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.35), transparent 55%),
-                radial-gradient(circle at 80% 30%, rgba(129, 140, 248, 0.3), transparent 60%),
-                radial-gradient(circle at 50% 80%, rgba(15, 118, 110, 0.28), transparent 55%);
-            mix-blend-mode: screen;
-        }
-
-        .partnership-card {
-            position: relative;
-            overflow: hidden;
-            transition: transform 0.4s ease, box-shadow 0.4s ease;
-        }
-
-        .partnership-card::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(135deg, rgba(79, 70, 229, 0.12), rgba(14, 116, 144, 0.12));
-            opacity: 0;
-            transition: opacity 0.4s ease;
-        }
-
-        .partnership-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 20px 45px -20px rgba(15, 23, 42, 0.35);
-        }
-
-        .partnership-card:hover::after {
-            opacity: 1;
-        }
-
-        .partnership-support {
-            transition: transform 0.35s ease, box-shadow 0.35s ease;
-        }
-
-        .partnership-support:hover {
-            transform: translateY(-6px);
-            box-shadow: 0 18px 35px -18px rgba(15, 23, 42, 0.35);
+        .partnership-support::before {
+            aspect-ratio: 16 / 9;
         }
     </style>
 @endpush
@@ -164,6 +109,37 @@
             }, { threshold: 0.2 });
 
             document.querySelectorAll('.reveal').forEach((element) => observer.observe(element));
+
+            const header = document.querySelector('header');
+            const offset = header ? header.offsetHeight + 16 : 0;
+
+            document.querySelectorAll('a[href*="#"]').forEach((link) => {
+                try {
+                    const url = new URL(link.href, window.location.origin);
+
+                    if (url.pathname !== window.location.pathname || !url.hash) {
+                        return;
+                    }
+
+                    link.addEventListener('click', (event) => {
+                        event.preventDefault();
+                        const target = document.querySelector(url.hash);
+
+                        if (!target) {
+                            return;
+                        }
+
+                        const top = target.getBoundingClientRect().top + window.pageYOffset - offset;
+
+                        window.scrollTo({
+                            top,
+                            behavior: 'smooth',
+                        });
+                    });
+                } catch (error) {
+                    // Ignore invalid URLs
+                }
+            });
         });
     </script>
 @endpush
@@ -297,61 +273,45 @@
 
     <section id="partnership" data-scroll-section class="bg-slate-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 space-y-16">
-            <div class="grid gap-12 lg:grid-cols-[1.05fr,0.95fr] items-center">
-                <div class="space-y-6 reveal" style="--reveal-delay: 0ms;">
+            <div class="grid gap-10 lg:grid-cols-2 items-center">
+                <div class="space-y-5 reveal" style="--reveal-delay: 0ms;">
                     <span class="inline-flex items-center rounded-full bg-white px-4 py-1 text-xs font-semibold uppercase tracking-[0.35em] text-slate-500">Partnership</span>
-                    <h2 class="text-3xl md:text-4xl font-semibold text-slate-900 leading-tight">Ekosistem kolaborasi untuk brand, komunitas, dan institusi</h2>
-                    <p class="text-base md:text-lg text-slate-600 leading-relaxed">Gabung dengan jaringan kolaborator Sicrea untuk menghadirkan program kreatif yang berdampak, mulai dari konsep hingga pelaksanaan dan publikasi multi-kanal.</p>
+                    <h2 class="text-3xl md:text-4xl font-semibold text-slate-900 leading-tight">Tagline</h2>
+                    <p class="text-base md:text-lg text-slate-600 leading-relaxed">Body text for your whole article or post. We&rsquo;ll put in some lorem ipsum or short paragraph to mirror the provided wireframe copy.</p>
                     <div class="flex flex-wrap items-center gap-4">
                         <a href="mailto:hello@sicrea.id" class="inline-flex items-center rounded-full bg-slate-900 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-slate-900/20 hover:bg-slate-700 transition">Ajukan Kerjasama</a>
-                        <a href="#portfolio" class="inline-flex items-center text-sm font-semibold text-slate-700 hover:text-indigo-600 transition">Lihat Studi Kasus</a>
+                        <a href="#events" class="inline-flex items-center text-sm font-semibold text-slate-700 hover:text-indigo-600 transition">Lihat Event</a>
                     </div>
                 </div>
-                <div class="reveal" style="--reveal-delay: 140ms;">
-                    <div class="partnership-hero p-1.5 shadow-xl shadow-slate-900/10">
-                        <div class="relative aspect-[4/3] w-full rounded-[1.25rem] bg-slate-900/5 backdrop-blur flex items-center justify-center">
-                            <div class="relative z-10 flex flex-col items-center justify-center gap-3 text-center text-slate-600">
-                                <span class="inline-flex items-center rounded-full bg-white/80 px-4 py-1 text-[11px] font-semibold uppercase tracking-[0.4em] text-slate-500">Co-Creation</span>
-                                <p class="text-lg font-semibold text-slate-900">Visual Placeholder</p>
-                                <p class="text-sm max-w-sm text-slate-600">Aktivasi brand, showcase kreatif, hingga program pelatihan yang terintegrasi.</p>
-                            </div>
-                        </div>
-                    </div>
+                <div class="reveal lg:justify-self-end w-full max-w-lg" style="--reveal-delay: 140ms;">
+                    <div class="partnership-visual aspect-[4/3] flex items-center justify-center text-slate-400 text-sm font-semibold tracking-[0.4em] uppercase">Image Placeholder</div>
                 </div>
             </div>
 
-            <div class="space-y-8">
-                <div class="reveal flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between" style="--reveal-delay: 80ms;">
-                    <div>
-                        <span class="text-xs font-semibold uppercase tracking-[0.4em] text-slate-500">Benefit</span>
-                        <h3 class="mt-2 text-2xl font-semibold text-slate-900">Kolaborasi yang kurasi dan terukur dampaknya</h3>
-                    </div>
-                    <p class="text-sm text-slate-500 max-w-xl">Kami mendampingi sejak fase eksplorasi ide hingga evaluasi program untuk memastikan tujuan mitra tercapai.</p>
+            <div class="space-y-10">
+                <div class="reveal space-y-2" style="--reveal-delay: 80ms;">
+                    <span class="text-xs font-semibold uppercase tracking-[0.4em] text-slate-500">Benefit</span>
+                    <h3 class="text-2xl font-semibold text-slate-900">Subheading</h3>
+                    <p class="text-sm text-slate-500 max-w-2xl">Short description for whatever you want to say here. Add text for a very short story or summary.</p>
                 </div>
                 <div class="grid gap-6 md:grid-cols-3">
                     @foreach ($partnershipBenefits as $index => $benefit)
-                        <div class="reveal partnership-card rounded-3xl border border-slate-200 bg-white/80 p-6 backdrop-blur" style="--reveal-delay: {{ 120 + ($index * 60) }}ms;">
-                            <div class="relative z-10 space-y-3">
-                                <span class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-slate-900 text-xs font-semibold uppercase tracking-[0.3em] text-white">0{{ $index + 1 }}</span>
-                                <h4 class="text-lg font-semibold text-slate-900">{{ $benefit['title'] }}</h4>
-                                <p class="text-sm text-slate-600 leading-relaxed">{{ $benefit['description'] }}</p>
-                            </div>
+                        <div class="reveal partnership-benefit rounded-3xl border border-slate-200 bg-white p-6" style="--reveal-delay: {{ 120 + ($index * 60) }}ms;">
+                            <h4 class="text-lg font-semibold text-slate-900">{{ $benefit['title'] }}</h4>
+                            <p class="mt-3 text-sm text-slate-600 leading-relaxed">{{ $benefit['description'] }}</p>
                         </div>
                     @endforeach
                 </div>
             </div>
 
             <div class="space-y-6">
-                <div class="reveal flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between" style="--reveal-delay: 80ms;">
-                    <div>
-                        <span class="text-xs font-semibold uppercase tracking-[0.4em] text-slate-500">Kolaborasi Populer</span>
-                        <h3 class="mt-2 text-xl font-semibold text-slate-900">Pilih format yang sesuai dengan kebutuhan kamu</h3>
-                    </div>
-                    <p class="text-sm text-slate-500 max-w-md">Hubungi kami untuk mendiskusikan paket custom apabila memerlukan solusi di luar opsi berikut.</p>
+                <div class="reveal space-y-2" style="--reveal-delay: 80ms;">
+                    <h3 class="text-xl font-semibold text-slate-900">Kolaborasi Populer</h3>
+                    <p class="text-sm text-slate-500 max-w-2xl">Short description for whatever you want to say here. Add text for a very short story.</p>
                 </div>
                 <div class="grid gap-6 md:grid-cols-3">
                     @foreach ($partnershipSupports as $index => $support)
-                        <div class="reveal partnership-support rounded-3xl border border-dashed border-slate-300 bg-white p-6 text-center" style="--reveal-delay: {{ 140 + ($index * 60) }}ms;">
+                        <div class="reveal partnership-support rounded-3xl border border-dashed border-slate-300 bg-white p-6" style="--reveal-delay: {{ 140 + ($index * 60) }}ms;">
                             <h4 class="text-lg font-semibold text-slate-900">{{ $support['title'] }}</h4>
                             <p class="mt-3 text-sm text-slate-600 leading-relaxed">{{ $support['description'] }}</p>
                         </div>
