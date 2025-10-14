@@ -26,7 +26,7 @@ class AuthController extends Controller
         if (Auth::attempt($credentials, $remember)) {
             $request->session()->regenerate();
 
-            return redirect()->intended(route('events.index'))
+            return redirect()->intended(route('home'))
                 ->with('status', 'Selamat datang kembali!');
         }
 
@@ -57,7 +57,7 @@ class AuthController extends Controller
 
         Auth::login($user);
 
-        return redirect()->route('events.index')
+        return redirect()->route('home')
             ->with('status', 'Pendaftaran berhasil, selamat datang!');
     }
 
@@ -68,7 +68,7 @@ class AuthController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect()->route('events.index')
+        return redirect()->route('home')
             ->with('status', 'Anda telah keluar dari akun.');
     }
 }

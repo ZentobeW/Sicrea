@@ -11,13 +11,13 @@
     <div class="min-h-screen flex flex-col">
         <header class="bg-white/90 backdrop-blur border-b">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
-                <a href="{{ route('events.index') }}" class="text-lg font-semibold text-slate-900">{{ config('app.name', 'Sicrea') }}</a>
+                <a href="{{ route('home') }}" class="text-lg font-semibold text-slate-900">{{ config('app.name', 'Sicrea') }}</a>
                 <nav class="hidden md:flex items-center gap-6 text-sm text-slate-600">
-                    <a href="{{ route('events.index') }}#home" class="hover:text-indigo-600 transition">Home</a>
-                    <a href="{{ route('events.index') }}#events" class="hover:text-indigo-600 transition">Events</a>
-                    <a href="{{ route('events.index') }}#portfolio" class="hover:text-indigo-600 transition">Portfolio</a>
-                    <a href="{{ route('events.index') }}#partnership" class="hover:text-indigo-600 transition">Partnership</a>
-                    <a href="{{ route('events.index') }}#about" class="hover:text-indigo-600 transition">About Us</a>
+                    <a href="{{ route('home') }}" class="hover:text-indigo-600 transition">Home</a>
+                    <a href="{{ route('events.index') }}" class="hover:text-indigo-600 transition">Events</a>
+                    <a href="{{ route('portfolio.index') }}" class="hover:text-indigo-600 transition">Portfolio</a>
+                    <a href="{{ route('partnership.index') }}" class="hover:text-indigo-600 transition">Partnership</a>
+                    <a href="{{ route('about.index') }}" class="hover:text-indigo-600 transition">About Us</a>
                 </nav>
                 <div class="flex items-center gap-3 text-sm">
                     @auth

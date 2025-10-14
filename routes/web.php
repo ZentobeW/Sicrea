@@ -5,11 +5,16 @@ use App\Http\Controllers\Admin\PortfolioController as AdminPortfolioController;
 use App\Http\Controllers\Admin\RegistrationController as AdminRegistrationController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\EventController;
+use App\Http\Controllers\PageController;
 use App\Http\Controllers\RefundController;
 use App\Http\Controllers\RegistrationController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', [EventController::class, 'index'])->name('events.index');
+Route::get('/', [PageController::class, 'home'])->name('home');
+Route::get('/events', [EventController::class, 'index'])->name('events.index');
+Route::get('/portfolio', [PageController::class, 'portfolio'])->name('portfolio.index');
+Route::get('/partnership', [PageController::class, 'partnership'])->name('partnership.index');
+Route::get('/about', [PageController::class, 'about'])->name('about.index');
 Route::get('/events/{slug}', [EventController::class, 'show'])->name('events.show');
 
 Route::middleware('guest')->group(function () {
