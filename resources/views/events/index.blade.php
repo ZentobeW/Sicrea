@@ -8,10 +8,44 @@
 
         return $value . ($value > 0 ? '+' : '');
     };
+
+    $partnershipBenefits = [
+        [
+            'title' => 'Kurasi Konsep',
+            'description' => 'Tim kami membantu merumuskan ide dan format aktivitas yang selaras dengan tujuan brand maupun komunitas.',
+        ],
+        [
+            'title' => 'Produksi End-to-End',
+            'description' => 'Mulai dari talent, materi kreatif, hingga kebutuhan teknis ditangani secara menyeluruh agar pengalaman peserta terjaga.',
+        ],
+        [
+            'title' => 'Aktivasi Multi Kanal',
+            'description' => 'Distribusi konten dan publikasi dilakukan lintas kanal untuk memperluas jangkauan audiens dan memaksimalkan engagement.',
+        ],
+    ];
+
+    $partnershipSupports = [
+        [
+            'title' => 'Sponsor Event',
+            'description' => 'Berkolaborasi pada rangkaian workshop pilihan dan tampil di hadapan komunitas kreatif.',
+        ],
+        [
+            'title' => 'Venue Partnership',
+            'description' => 'Sediakan ruang yang inspiratif untuk menghadirkan pengalaman offline yang berkesan.',
+        ],
+        [
+            'title' => 'Corporate Workshop',
+            'description' => 'Rancang sesi pengembangan talenta internal dengan materi yang dapat disesuaikan.',
+        ],
+    ];
 @endphp
 
 @push('styles')
     <style>
+        [data-scroll-section] {
+            scroll-margin-top: 96px;
+        }
+
         @keyframes floatPulse {
             0%,
             100% {
@@ -38,6 +72,82 @@
         .floating-card {
             animation: floatPulse 5s ease-in-out infinite;
         }
+
+        @keyframes gradientShift {
+            0% {
+                transform: translate3d(-5%, -5%, 0) scale(1.02);
+                opacity: 0.6;
+            }
+
+            50% {
+                transform: translate3d(5%, 5%, 0) scale(1.05);
+                opacity: 1;
+            }
+
+            100% {
+                transform: translate3d(-5%, -5%, 0) scale(1.02);
+                opacity: 0.6;
+            }
+        }
+
+        .partnership-hero {
+            position: relative;
+            border-radius: 1.5rem;
+            overflow: hidden;
+        }
+
+        .partnership-hero::before,
+        .partnership-hero::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+        }
+
+        .partnership-hero::before {
+            background: linear-gradient(135deg, rgba(79, 70, 229, 0.18), rgba(15, 23, 42, 0.12));
+            animation: gradientShift 12s ease-in-out infinite;
+        }
+
+        .partnership-hero::after {
+            background-image: radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.35), transparent 55%),
+                radial-gradient(circle at 80% 30%, rgba(129, 140, 248, 0.3), transparent 60%),
+                radial-gradient(circle at 50% 80%, rgba(15, 118, 110, 0.28), transparent 55%);
+            mix-blend-mode: screen;
+        }
+
+        .partnership-card {
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+        }
+
+        .partnership-card::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(79, 70, 229, 0.12), rgba(14, 116, 144, 0.12));
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .partnership-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 45px -20px rgba(15, 23, 42, 0.35);
+        }
+
+        .partnership-card:hover::after {
+            opacity: 1;
+        }
+
+        .partnership-support {
+            transition: transform 0.35s ease, box-shadow 0.35s ease;
+        }
+
+        .partnership-support:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 18px 35px -18px rgba(15, 23, 42, 0.35);
+        }
     </style>
 @endpush
 
@@ -59,7 +169,7 @@
 @endpush
 
 <x-layouts.app :title="'Kreasi Hangat'">
-    <section id="home" class="bg-white">
+    <section id="home" data-scroll-section class="bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
             <div class="grid gap-12 lg:grid-cols-[1fr,1.1fr] items-center">
                 <div class="space-y-6">
@@ -79,7 +189,7 @@
         </div>
     </section>
 
-    <section id="events" class="bg-slate-50">
+    <section id="events" data-scroll-section class="bg-slate-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
             <div class="space-y-3 mb-10">
                 <span class="text-sm font-semibold uppercase tracking-[0.3em] text-slate-500">Event Mendatang</span>
@@ -147,7 +257,7 @@
         </div>
     </section>
 
-    <section id="portfolio" class="bg-white">
+    <section id="portfolio" data-scroll-section class="bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
             <div class="grid gap-12 lg:grid-cols-[1fr,1.1fr] items-start">
                 <div class="space-y-4">
@@ -185,38 +295,73 @@
         </div>
     </section>
 
-    <section id="partnership" class="bg-slate-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-            <div class="grid gap-12 lg:grid-cols-2 items-center">
-                <div class="space-y-4">
-                    <span class="text-sm font-semibold uppercase tracking-[0.3em] text-slate-500">Partnership</span>
-                    <h2 class="text-3xl font-semibold text-slate-900">Kolaborasi dengan Brand &amp; Komunitas</h2>
-                    <p class="text-base text-slate-600 leading-relaxed">Kami membuka peluang kerjasama untuk menghadirkan program kolaboratif yang berdampak. Hubungi kami untuk eksplorasi ide bersama.</p>
-                    <a href="mailto:hello@sicrea.id" class="inline-flex items-center rounded-full bg-slate-900 px-6 py-3 text-sm font-semibold text-white hover:bg-slate-700 transition">Ajukan Kerjasama</a>
+    <section id="partnership" data-scroll-section class="bg-slate-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 space-y-16">
+            <div class="grid gap-12 lg:grid-cols-[1.05fr,0.95fr] items-center">
+                <div class="space-y-6 reveal" style="--reveal-delay: 0ms;">
+                    <span class="inline-flex items-center rounded-full bg-white px-4 py-1 text-xs font-semibold uppercase tracking-[0.35em] text-slate-500">Partnership</span>
+                    <h2 class="text-3xl md:text-4xl font-semibold text-slate-900 leading-tight">Ekosistem kolaborasi untuk brand, komunitas, dan institusi</h2>
+                    <p class="text-base md:text-lg text-slate-600 leading-relaxed">Gabung dengan jaringan kolaborator Sicrea untuk menghadirkan program kreatif yang berdampak, mulai dari konsep hingga pelaksanaan dan publikasi multi-kanal.</p>
+                    <div class="flex flex-wrap items-center gap-4">
+                        <a href="mailto:hello@sicrea.id" class="inline-flex items-center rounded-full bg-slate-900 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-slate-900/20 hover:bg-slate-700 transition">Ajukan Kerjasama</a>
+                        <a href="#portfolio" class="inline-flex items-center text-sm font-semibold text-slate-700 hover:text-indigo-600 transition">Lihat Studi Kasus</a>
+                    </div>
                 </div>
-                <div class="grid gap-6 sm:grid-cols-2">
-                    <div class="rounded-3xl bg-white border border-slate-100 p-6 space-y-3">
-                        <h3 class="text-lg font-semibold text-slate-900">Program Komunitas</h3>
-                        <p class="text-sm text-slate-600">Rancang sesi berbagi inspirasi, kelas kreatif, atau mini showcase bersama jejaring komunitasmu.</p>
+                <div class="reveal" style="--reveal-delay: 140ms;">
+                    <div class="partnership-hero p-1.5 shadow-xl shadow-slate-900/10">
+                        <div class="relative aspect-[4/3] w-full rounded-[1.25rem] bg-slate-900/5 backdrop-blur flex items-center justify-center">
+                            <div class="relative z-10 flex flex-col items-center justify-center gap-3 text-center text-slate-600">
+                                <span class="inline-flex items-center rounded-full bg-white/80 px-4 py-1 text-[11px] font-semibold uppercase tracking-[0.4em] text-slate-500">Co-Creation</span>
+                                <p class="text-lg font-semibold text-slate-900">Visual Placeholder</p>
+                                <p class="text-sm max-w-sm text-slate-600">Aktivasi brand, showcase kreatif, hingga program pelatihan yang terintegrasi.</p>
+                            </div>
+                        </div>
                     </div>
-                    <div class="rounded-3xl bg-white border border-slate-100 p-6 space-y-3">
-                        <h3 class="text-lg font-semibold text-slate-900">Brand Activation</h3>
-                        <p class="text-sm text-slate-600">Bangun engagement dengan audiens kreatif melalui aktivasi brand yang otentik.</p>
+                </div>
+            </div>
+
+            <div class="space-y-8">
+                <div class="reveal flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between" style="--reveal-delay: 80ms;">
+                    <div>
+                        <span class="text-xs font-semibold uppercase tracking-[0.4em] text-slate-500">Benefit</span>
+                        <h3 class="mt-2 text-2xl font-semibold text-slate-900">Kolaborasi yang kurasi dan terukur dampaknya</h3>
                     </div>
-                    <div class="rounded-3xl bg-white border border-slate-100 p-6 space-y-3">
-                        <h3 class="text-lg font-semibold text-slate-900">Program Internal</h3>
-                        <p class="text-sm text-slate-600">Kembangkan talenta internal perusahaan lewat workshop yang dirancang khusus.</p>
+                    <p class="text-sm text-slate-500 max-w-xl">Kami mendampingi sejak fase eksplorasi ide hingga evaluasi program untuk memastikan tujuan mitra tercapai.</p>
+                </div>
+                <div class="grid gap-6 md:grid-cols-3">
+                    @foreach ($partnershipBenefits as $index => $benefit)
+                        <div class="reveal partnership-card rounded-3xl border border-slate-200 bg-white/80 p-6 backdrop-blur" style="--reveal-delay: {{ 120 + ($index * 60) }}ms;">
+                            <div class="relative z-10 space-y-3">
+                                <span class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-slate-900 text-xs font-semibold uppercase tracking-[0.3em] text-white">0{{ $index + 1 }}</span>
+                                <h4 class="text-lg font-semibold text-slate-900">{{ $benefit['title'] }}</h4>
+                                <p class="text-sm text-slate-600 leading-relaxed">{{ $benefit['description'] }}</p>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+
+            <div class="space-y-6">
+                <div class="reveal flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between" style="--reveal-delay: 80ms;">
+                    <div>
+                        <span class="text-xs font-semibold uppercase tracking-[0.4em] text-slate-500">Kolaborasi Populer</span>
+                        <h3 class="mt-2 text-xl font-semibold text-slate-900">Pilih format yang sesuai dengan kebutuhan kamu</h3>
                     </div>
-                    <div class="rounded-3xl bg-white border border-slate-100 p-6 space-y-3">
-                        <h3 class="text-lg font-semibold text-slate-900">Paket Custom</h3>
-                        <p class="text-sm text-slate-600">Sesuaikan pengalaman sesuai kebutuhan bisnis maupun komunitas kamu.</p>
-                    </div>
+                    <p class="text-sm text-slate-500 max-w-md">Hubungi kami untuk mendiskusikan paket custom apabila memerlukan solusi di luar opsi berikut.</p>
+                </div>
+                <div class="grid gap-6 md:grid-cols-3">
+                    @foreach ($partnershipSupports as $index => $support)
+                        <div class="reveal partnership-support rounded-3xl border border-dashed border-slate-300 bg-white p-6 text-center" style="--reveal-delay: {{ 140 + ($index * 60) }}ms;">
+                            <h4 class="text-lg font-semibold text-slate-900">{{ $support['title'] }}</h4>
+                            <p class="mt-3 text-sm text-slate-600 leading-relaxed">{{ $support['description'] }}</p>
+                        </div>
+                    @endforeach
                 </div>
             </div>
         </div>
     </section>
 
-    <section id="about" class="bg-white">
+    <section id="about" data-scroll-section class="bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 space-y-16">
             <div class="grid gap-10 lg:grid-cols-[1.2fr,0.9fr] items-center reveal" style="--reveal-delay: 0ms;">
                 <div class="space-y-5">
