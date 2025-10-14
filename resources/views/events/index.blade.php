@@ -1,0 +1,455 @@
+@php
+    use Illuminate\Support\Str;
+
+    $formatStat = static function (int $value): string {
+        if ($value >= 1000) {
+            return rtrim(number_format($value / 1000, 1), '.0') . 'K+';
+        }
+
+        return $value . ($value > 0 ? '+' : '');
+    };
+
+    $partnershipBenefits = [
+        [
+            'title' => 'Kurasi Konsep',
+            'description' => 'Tim kami membantu merumuskan ide dan format aktivitas yang selaras dengan tujuan brand maupun komunitas.',
+        ],
+        [
+            'title' => 'Produksi End-to-End',
+            'description' => 'Mulai dari talent, materi kreatif, hingga kebutuhan teknis ditangani secara menyeluruh agar pengalaman peserta terjaga.',
+        ],
+        [
+            'title' => 'Aktivasi Multi Kanal',
+            'description' => 'Distribusi konten dan publikasi dilakukan lintas kanal untuk memperluas jangkauan audiens dan memaksimalkan engagement.',
+        ],
+    ];
+
+    $partnershipSupports = [
+        [
+            'title' => 'Sponsor Event',
+            'description' => 'Berkolaborasi pada rangkaian workshop pilihan dan tampil di hadapan komunitas kreatif.',
+        ],
+        [
+            'title' => 'Venue Partnership',
+            'description' => 'Sediakan ruang yang inspiratif untuk menghadirkan pengalaman offline yang berkesan.',
+        ],
+        [
+            'title' => 'Corporate Workshop',
+            'description' => 'Rancang sesi pengembangan talenta internal dengan materi yang dapat disesuaikan.',
+        ],
+    ];
+@endphp
+
+@push('styles')
+    <style>
+        [data-scroll-section] {
+            scroll-margin-top: 96px;
+        }
+
+        @keyframes floatPulse {
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-6px);
+            }
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(32px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+            transition-delay: var(--reveal-delay, 0ms);
+        }
+
+        .reveal.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .floating-card {
+            animation: floatPulse 5s ease-in-out infinite;
+        }
+
+        @keyframes gradientShift {
+            0% {
+                transform: translate3d(-5%, -5%, 0) scale(1.02);
+                opacity: 0.6;
+            }
+
+            50% {
+                transform: translate3d(5%, 5%, 0) scale(1.05);
+                opacity: 1;
+            }
+
+            100% {
+                transform: translate3d(-5%, -5%, 0) scale(1.02);
+                opacity: 0.6;
+            }
+        }
+
+        .partnership-hero {
+            position: relative;
+            border-radius: 1.5rem;
+            overflow: hidden;
+        }
+
+        .partnership-hero::before,
+        .partnership-hero::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+        }
+
+        .partnership-hero::before {
+            background: linear-gradient(135deg, rgba(79, 70, 229, 0.18), rgba(15, 23, 42, 0.12));
+            animation: gradientShift 12s ease-in-out infinite;
+        }
+
+        .partnership-hero::after {
+            background-image: radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.35), transparent 55%),
+                radial-gradient(circle at 80% 30%, rgba(129, 140, 248, 0.3), transparent 60%),
+                radial-gradient(circle at 50% 80%, rgba(15, 118, 110, 0.28), transparent 55%);
+            mix-blend-mode: screen;
+        }
+
+        .partnership-card {
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+        }
+
+        .partnership-card::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(79, 70, 229, 0.12), rgba(14, 116, 144, 0.12));
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .partnership-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 45px -20px rgba(15, 23, 42, 0.35);
+        }
+
+        .partnership-card:hover::after {
+            opacity: 1;
+        }
+
+        .partnership-support {
+            transition: transform 0.35s ease, box-shadow 0.35s ease;
+        }
+
+        .partnership-support:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 18px 35px -18px rgba(15, 23, 42, 0.35);
+        }
+    </style>
+@endpush
+
+@push('scripts')
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.2 });
+
+            document.querySelectorAll('.reveal').forEach((element) => observer.observe(element));
+        });
+    </script>
+@endpush
+
+<x-layouts.app :title="'Kreasi Hangat'">
+    <section id="home" data-scroll-section class="bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+            <div class="grid gap-12 lg:grid-cols-[1fr,1.1fr] items-center">
+                <div class="space-y-6">
+                    <span class="inline-flex items-center rounded-full bg-slate-100 px-4 py-1 text-sm font-medium text-slate-600">Kreasi Hangat</span>
+                    <h1 class="text-4xl md:text-5xl font-semibold leading-tight text-slate-900">Rangkaian Workshop dan Event Kreatif untuk Komunitasmu</h1>
+                    <p class="text-base md:text-lg text-slate-600 leading-relaxed">Bangun jejaring, tingkatkan skill, dan temukan peluang kolaborasi melalui event yang dikurasi secara personal oleh tim Sicrea.</p>
+                    <div class="flex flex-wrap items-center gap-4">
+                        <a href="#events" class="inline-flex items-center rounded-full bg-slate-900 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-slate-900/20 hover:bg-slate-700 transition">Lihat Event Mendatang</a>
+                        <a href="#portfolio" class="inline-flex items-center text-sm font-semibold text-slate-700 hover:text-indigo-600 transition">Jelajahi Portofolio</a>
+                    </div>
+                </div>
+                <div class="relative">
+                    <div class="aspect-[4/3] rounded-3xl bg-slate-200 flex items-center justify-center text-slate-400 text-xs tracking-[0.3em] uppercase">Hero Image</div>
+                    <div class="hidden lg:block absolute -bottom-6 -left-6 w-40 h-40 rounded-3xl border-4 border-white bg-slate-100"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="events" data-scroll-section class="bg-slate-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+            <div class="space-y-3 mb-10">
+                <span class="text-sm font-semibold uppercase tracking-[0.3em] text-slate-500">Event Mendatang</span>
+                <div class="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+                    <div class="space-y-2">
+                        <h2 class="text-3xl font-semibold text-slate-900">Agenda Kreatif Bulan Ini</h2>
+                        <p class="text-slate-600">Pilih aktivitas yang paling sesuai dengan kebutuhan tim dan komunitasmu.</p>
+                        @if ($events->total() > 0)
+                            <p class="text-xs uppercase tracking-[0.3em] text-slate-400">Menampilkan {{ $events->firstItem() }}-{{ $events->lastItem() }} dari {{ $events->total() }} event.</p>
+                        @else
+                            <p class="text-xs uppercase tracking-[0.3em] text-slate-400">Belum ada event yang siap didaftarkan.</p>
+                        @endif
+                    </div>
+                    <form method="GET" action="{{ route('events.index') }}" class="flex flex-col sm:flex-row gap-3 w-full lg:w-auto">
+                        <label for="q" class="sr-only">Cari event</label>
+                        <input id="q" type="search" name="q" value="{{ request('q') }}" placeholder="Cari event atau lokasi"
+                            class="flex-1 rounded-full border border-slate-200 bg-white px-4 py-2 text-sm text-slate-600 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200" />
+                        <button type="submit"
+                            class="inline-flex items-center justify-center rounded-full bg-slate-900 px-5 py-2 text-sm font-semibold text-white hover:bg-slate-700 transition">
+                            Cari
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="grid gap-8 md:grid-cols-2 xl:grid-cols-3">
+                @forelse ($events as $event)
+                    <article class="group rounded-3xl bg-white border border-slate-100/80 shadow-sm hover:shadow-lg transition overflow-hidden">
+                        <div class="p-6 space-y-6">
+                            <div class="flex items-center justify-between text-xs font-semibold uppercase tracking-[0.25em] text-slate-400">
+                                <span>{{ $event->start_at->translatedFormat('d M Y • H:i') }}</span>
+                                <span class="text-slate-900">Rp{{ number_format($event->price, 0, ',', '.') }}</span>
+                            </div>
+                            <div class="space-y-3">
+                                <h3 class="text-xl font-semibold text-slate-900 group-hover:text-indigo-600 transition">{{ $event->title }}</h3>
+                                <p class="text-sm text-slate-600 leading-relaxed">{{ Str::limit(strip_tags($event->description), 140) }}</p>
+                            </div>
+                            <div class="flex items-center gap-2 text-sm text-slate-500">
+                                <svg class="h-4 w-4 text-indigo-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 11c.828 0 1.5-.672 1.5-1.5S12.828 8 12 8s-1.5.672-1.5 1.5S11.172 11 12 11z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20.25 10.5c0 7.5-8.25 11.25-8.25 11.25S3.75 18 3.75 10.5a8.25 8.25 0 1116.5 0z" />
+                                </svg>
+                                <span>{{ $event->location }}</span>
+                            </div>
+                        </div>
+                        <div class="px-6 pb-6">
+                            <div class="flex items-center justify-between rounded-2xl bg-slate-100/80 px-4 py-3 text-xs font-medium text-slate-500">
+                                <span>Kuota tersisa: {{ $event->available_slots ?? 'Tidak terbatas' }}</span>
+                                <a href="{{ route('events.show', $event->slug) }}" class="inline-flex items-center rounded-full bg-slate-900 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.2em] text-white hover:bg-slate-700 transition">Detail</a>
+                            </div>
+                        </div>
+                    </article>
+                @empty
+                    <div class="col-span-full text-center py-20 rounded-3xl border border-dashed border-slate-300 bg-white">
+                        <p class="text-slate-500">Belum ada event yang tersedia saat ini. Nantikan pengumuman berikutnya!</p>
+                    </div>
+                @endforelse
+            </div>
+
+            @if ($events->hasPages())
+                <div class="mt-10">
+                    {{ $events->links() }}
+                </div>
+            @endif
+        </div>
+    </section>
+
+    <section id="portfolio" data-scroll-section class="bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+            <div class="grid gap-12 lg:grid-cols-[1fr,1.1fr] items-start">
+                <div class="space-y-4">
+                    <span class="text-sm font-semibold uppercase tracking-[0.3em] text-slate-500">Portfolio</span>
+                    <h2 class="text-3xl font-semibold text-slate-900">Tampilkan Dampak Kegiatan</h2>
+                    <p class="text-base text-slate-600 leading-relaxed">Lihat dokumentasi program dan kisah sukses alumni yang memperlihatkan bagaimana Sicrea membantu komunitas kreatif berkembang.</p>
+                    @can('access-admin')
+                        <a href="{{ route('admin.portfolios.index') }}" class="inline-flex items-center text-sm font-semibold text-slate-900 hover:text-indigo-600 transition">Kelola Portofolio</a>
+                    @endcan
+                </div>
+                <div class="grid gap-6 md:grid-cols-2">
+                    @forelse ($featuredPortfolios as $portfolio)
+                        <article class="group relative overflow-hidden rounded-3xl border border-slate-100 bg-white shadow-sm">
+                            @if ($portfolio->media_url)
+                                <img src="{{ $portfolio->media_url }}" alt="{{ $portfolio->title }}"
+                                    class="h-48 w-full object-cover transition duration-300 group-hover:scale-105" />
+                            @else
+                                <div class="h-48 w-full bg-slate-100 flex items-center justify-center text-xs tracking-[0.3em] uppercase text-slate-400">Dokumentasi</div>
+                            @endif
+                            <div class="p-5 space-y-2">
+                                <h3 class="text-lg font-semibold text-slate-900 group-hover:text-indigo-600 transition">{{ $portfolio->title }}</h3>
+                                <p class="text-sm text-slate-600 leading-relaxed">{{ Str::limit($portfolio->description, 110) }}</p>
+                                @if ($portfolio->event)
+                                    <a href="{{ route('events.show', $portfolio->event->slug) }}" class="inline-flex items-center text-xs font-semibold uppercase tracking-[0.25em] text-indigo-600">{{ $portfolio->event->title }}</a>
+                                @endif
+                            </div>
+                        </article>
+                    @empty
+                        <div class="md:col-span-2 text-center py-12 rounded-3xl border border-dashed border-slate-200 bg-slate-50">
+                            <p class="text-slate-500">Belum ada dokumentasi portofolio yang dapat ditampilkan saat ini.</p>
+                        </div>
+                    @endforelse
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="partnership" data-scroll-section class="bg-slate-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 space-y-16">
+            <div class="grid gap-12 lg:grid-cols-[1.05fr,0.95fr] items-center">
+                <div class="space-y-6 reveal" style="--reveal-delay: 0ms;">
+                    <span class="inline-flex items-center rounded-full bg-white px-4 py-1 text-xs font-semibold uppercase tracking-[0.35em] text-slate-500">Partnership</span>
+                    <h2 class="text-3xl md:text-4xl font-semibold text-slate-900 leading-tight">Ekosistem kolaborasi untuk brand, komunitas, dan institusi</h2>
+                    <p class="text-base md:text-lg text-slate-600 leading-relaxed">Gabung dengan jaringan kolaborator Sicrea untuk menghadirkan program kreatif yang berdampak, mulai dari konsep hingga pelaksanaan dan publikasi multi-kanal.</p>
+                    <div class="flex flex-wrap items-center gap-4">
+                        <a href="mailto:hello@sicrea.id" class="inline-flex items-center rounded-full bg-slate-900 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-slate-900/20 hover:bg-slate-700 transition">Ajukan Kerjasama</a>
+                        <a href="#portfolio" class="inline-flex items-center text-sm font-semibold text-slate-700 hover:text-indigo-600 transition">Lihat Studi Kasus</a>
+                    </div>
+                </div>
+                <div class="reveal" style="--reveal-delay: 140ms;">
+                    <div class="partnership-hero p-1.5 shadow-xl shadow-slate-900/10">
+                        <div class="relative aspect-[4/3] w-full rounded-[1.25rem] bg-slate-900/5 backdrop-blur flex items-center justify-center">
+                            <div class="relative z-10 flex flex-col items-center justify-center gap-3 text-center text-slate-600">
+                                <span class="inline-flex items-center rounded-full bg-white/80 px-4 py-1 text-[11px] font-semibold uppercase tracking-[0.4em] text-slate-500">Co-Creation</span>
+                                <p class="text-lg font-semibold text-slate-900">Visual Placeholder</p>
+                                <p class="text-sm max-w-sm text-slate-600">Aktivasi brand, showcase kreatif, hingga program pelatihan yang terintegrasi.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="space-y-8">
+                <div class="reveal flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between" style="--reveal-delay: 80ms;">
+                    <div>
+                        <span class="text-xs font-semibold uppercase tracking-[0.4em] text-slate-500">Benefit</span>
+                        <h3 class="mt-2 text-2xl font-semibold text-slate-900">Kolaborasi yang kurasi dan terukur dampaknya</h3>
+                    </div>
+                    <p class="text-sm text-slate-500 max-w-xl">Kami mendampingi sejak fase eksplorasi ide hingga evaluasi program untuk memastikan tujuan mitra tercapai.</p>
+                </div>
+                <div class="grid gap-6 md:grid-cols-3">
+                    @foreach ($partnershipBenefits as $index => $benefit)
+                        <div class="reveal partnership-card rounded-3xl border border-slate-200 bg-white/80 p-6 backdrop-blur" style="--reveal-delay: {{ 120 + ($index * 60) }}ms;">
+                            <div class="relative z-10 space-y-3">
+                                <span class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-slate-900 text-xs font-semibold uppercase tracking-[0.3em] text-white">0{{ $index + 1 }}</span>
+                                <h4 class="text-lg font-semibold text-slate-900">{{ $benefit['title'] }}</h4>
+                                <p class="text-sm text-slate-600 leading-relaxed">{{ $benefit['description'] }}</p>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+
+            <div class="space-y-6">
+                <div class="reveal flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between" style="--reveal-delay: 80ms;">
+                    <div>
+                        <span class="text-xs font-semibold uppercase tracking-[0.4em] text-slate-500">Kolaborasi Populer</span>
+                        <h3 class="mt-2 text-xl font-semibold text-slate-900">Pilih format yang sesuai dengan kebutuhan kamu</h3>
+                    </div>
+                    <p class="text-sm text-slate-500 max-w-md">Hubungi kami untuk mendiskusikan paket custom apabila memerlukan solusi di luar opsi berikut.</p>
+                </div>
+                <div class="grid gap-6 md:grid-cols-3">
+                    @foreach ($partnershipSupports as $index => $support)
+                        <div class="reveal partnership-support rounded-3xl border border-dashed border-slate-300 bg-white p-6 text-center" style="--reveal-delay: {{ 140 + ($index * 60) }}ms;">
+                            <h4 class="text-lg font-semibold text-slate-900">{{ $support['title'] }}</h4>
+                            <p class="mt-3 text-sm text-slate-600 leading-relaxed">{{ $support['description'] }}</p>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="about" data-scroll-section class="bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 space-y-16">
+            <div class="grid gap-10 lg:grid-cols-[1.2fr,0.9fr] items-center reveal" style="--reveal-delay: 0ms;">
+                <div class="space-y-5">
+                    <span class="inline-flex items-center rounded-full bg-slate-100 px-4 py-1 text-xs font-semibold uppercase tracking-[0.4em] text-slate-500">About Us</span>
+                    <h2 class="text-3xl md:text-4xl font-semibold text-slate-900 leading-tight">Merancang pengalaman belajar dan kolaborasi yang berdampak</h2>
+                    <p class="text-base md:text-lg text-slate-600 leading-relaxed">Sicrea hadir sebagai studio kreatif yang menghubungkan mentor ahli dengan komunitas dan brand. Kami merancang workshop, program inkubasi, dan showcase yang mendorong kolaborasi lintas disiplin.</p>
+                    <div class="grid gap-4 sm:grid-cols-2">
+                        <div class="flex items-center gap-3 rounded-2xl border border-slate-200 bg-white/60 p-4 shadow-sm">
+                            <div class="inline-flex h-12 w-12 items-center justify-center rounded-full bg-slate-900 text-white text-base font-semibold">{{ $formatStat($stats['published_events']) }}</div>
+                            <div>
+                                <p class="text-xs uppercase tracking-[0.3em] text-slate-400">Program Tahunan</p>
+                                <p class="text-sm font-medium text-slate-700">Dirancang bersama praktisi</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-3 rounded-2xl border border-slate-200 bg-white/60 p-4 shadow-sm">
+                            <div class="inline-flex h-12 w-12 items-center justify-center rounded-full bg-slate-900 text-white text-base font-semibold">{{ $formatStat($stats['confirmed_participants']) }}</div>
+                            <div>
+                                <p class="text-xs uppercase tracking-[0.3em] text-slate-400">Alumni Komunitas</p>
+                                <p class="text-sm font-medium text-slate-700">Aktif berjejaring &amp; berkarya</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="relative">
+                    <div class="aspect-[4/3] rounded-3xl bg-slate-200 flex items-center justify-center text-xs uppercase tracking-[0.4em] text-slate-400">Foto Studio</div>
+                    <div class="floating-card absolute -bottom-8 -right-6 w-48 rounded-3xl border border-white bg-white/90 p-5 shadow-xl backdrop-blur">
+                        <p class="text-xs uppercase tracking-[0.4em] text-slate-400">Highlight</p>
+                        <p class="mt-2 text-sm font-semibold text-slate-800">Kolaborasi lintas kota dan komunitas kreatif Indonesia.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="reveal text-center max-w-3xl mx-auto space-y-4" style="--reveal-delay: 120ms;">
+                <span class="text-xs font-semibold uppercase tracking-[0.4em] text-slate-500">Visi Misi</span>
+                <h3 class="text-2xl font-semibold text-slate-900">Menyalakan ekosistem kreatif yang inklusif dan berkelanjutan</h3>
+                <p class="text-base text-slate-600 leading-relaxed">Kami memfasilitasi proses belajar yang relevan, membangun jejaring kolaborasi, dan menyediakan akses terhadap sumber daya sehingga setiap talenta dapat bertumbuh.</p>
+            </div>
+
+            <div class="reveal space-y-8" style="--reveal-delay: 200ms;">
+                <div class="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+                    <span class="text-xs font-semibold uppercase tracking-[0.4em] text-slate-500">Core Value</span>
+                    <p class="text-sm text-slate-500">Nilai yang kami pegang dalam merancang setiap program.</p>
+                </div>
+                <div class="grid gap-6 md:grid-cols-3">
+                    <div class="rounded-3xl border border-slate-200 bg-white/70 p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-lg">
+                        <h4 class="text-lg font-semibold text-slate-900">Kolaboratif</h4>
+                        <p class="mt-3 text-sm text-slate-600 leading-relaxed">Mendengar kebutuhan peserta dan mitra agar solusi yang dihadirkan terasa relevan.</p>
+                    </div>
+                    <div class="rounded-3xl border border-slate-200 bg-white/70 p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-lg">
+                        <h4 class="text-lg font-semibold text-slate-900">Eksperiensial</h4>
+                        <p class="mt-3 text-sm text-slate-600 leading-relaxed">Mengemas pembelajaran berbasis praktik sehingga peserta dapat langsung menerapkan insight.</p>
+                    </div>
+                    <div class="rounded-3xl border border-slate-200 bg-white/70 p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-lg">
+                        <h4 class="text-lg font-semibold text-slate-900">Berdampak</h4>
+                        <p class="mt-3 text-sm text-slate-600 leading-relaxed">Mengukur keberhasilan dengan perubahan nyata pada individu maupun komunitas.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="reveal space-y-8" style="--reveal-delay: 260ms;">
+                <div class="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+                    <span class="text-xs font-semibold uppercase tracking-[0.4em] text-slate-500">Struktur Tim</span>
+                    <p class="text-sm text-slate-500">Tim inti yang mengawal perjalanan program Sicrea.</p>
+                </div>
+                <div class="grid gap-6 md:grid-cols-3">
+                    <div class="space-y-3 text-center">
+                        <div class="aspect-[3/4] rounded-3xl bg-slate-200 flex items-center justify-center text-xs uppercase tracking-[0.4em] text-slate-400">Foto Founder</div>
+                        <div>
+                            <p class="text-sm font-semibold text-slate-900">Nama Founder</p>
+                            <p class="text-xs uppercase tracking-[0.3em] text-slate-500">Creative Director</p>
+                        </div>
+                    </div>
+                    <div class="space-y-3 text-center">
+                        <div class="aspect-[3/4] rounded-3xl bg-slate-200 flex items-center justify-center text-xs uppercase tracking-[0.4em] text-slate-400">Foto Co Founder</div>
+                        <div>
+                            <p class="text-sm font-semibold text-slate-900">Nama Co-Founder</p>
+                            <p class="text-xs uppercase tracking-[0.3em] text-slate-500">Program Lead</p>
+                        </div>
+                    </div>
+                    <div class="space-y-3 text-center">
+                        <div class="aspect-[3/4] rounded-3xl bg-slate-200 flex items-center justify-center text-xs uppercase tracking-[0.4em] text-slate-400">Foto Co Founder</div>
+                        <div>
+                            <p class="text-sm font-semibold text-slate-900">Nama Co-Founder</p>
+                            <p class="text-xs uppercase tracking-[0.3em] text-slate-500">Operations Lead</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</x-layouts.app>
