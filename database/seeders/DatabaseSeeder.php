@@ -11,6 +11,7 @@ use App\Models\RefundRequest;
 use App\Models\Registration;
 use App\Models\User;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
 class DatabaseSeeder extends Seeder
@@ -26,7 +27,7 @@ class DatabaseSeeder extends Seeder
             'name' => 'Administrator',
             'email' => 'admin@example.com',
             'is_admin' => true,
-            'password' => 'password',
+            'password' => Hash::make('password'),
         ]);
 
         $users = User::factory(15)->create();
