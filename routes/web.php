@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\EventController as AdminEventController;
 use App\Http\Controllers\Admin\PortfolioController as AdminPortfolioController;
 use App\Http\Controllers\Admin\RegistrationController as AdminRegistrationController;
+use App\Http\Controllers\Admin\ReportController as AdminReportController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\PageController;
@@ -54,4 +55,6 @@ Route::middleware(['auth', 'can:access-admin'])->prefix('admin')->name('admin.')
     Route::resource('registrations', AdminRegistrationController::class)->only(['index', 'show']);
 
     Route::resource('portfolios', AdminPortfolioController::class)->except(['show']);
+
+    Route::get('reports', [AdminReportController::class, 'index'])->name('reports.index');
 });

@@ -27,9 +27,8 @@
         [
             'label' => 'Laporan & Analitik',
             'icon' => '📊',
-            'route' => '#',
-            'active' => false,
-            'disabled' => true,
+            'route' => route('admin.reports.index'),
+            'active' => request()->routeIs('admin.reports.*'),
         ],
         [
             'label' => 'Kelola Transaksi',
