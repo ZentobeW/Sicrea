@@ -26,7 +26,7 @@ class AuthController extends Controller
         if (Auth::attempt($credentials, $remember)) {
             $request->session()->regenerate();
 
-            return redirect()->intended(route('home'))
+            return redirect()->intended(route('profile.show'))
                 ->with('status', 'Selamat datang kembali!');
         }
 
@@ -57,7 +57,7 @@ class AuthController extends Controller
 
         Auth::login($user);
 
-        return redirect()->route('home')
+        return redirect()->route('profile.show')
             ->with('status', 'Pendaftaran berhasil, selamat datang!');
     }
 

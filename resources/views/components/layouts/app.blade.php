@@ -20,34 +20,35 @@
         {{ $slot }}
     @else
         <div class="min-h-screen flex flex-col">
-            <header class="bg-white/90 backdrop-blur border-b">
+            <header class="bg-gradient-to-r from-[#FFEFE1]/90 via-[#FFE2CE]/90 to-[#FFD5C4]/90 backdrop-blur border-b border-[#F7C8B8]/60">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
-                    <a href="{{ route('home') }}" class="text-lg font-semibold text-slate-900">{{ config('app.name', 'Sicrea') }}</a>
-                    <nav class="hidden md:flex items-center gap-6 text-sm text-slate-600">
-                        <a href="{{ route('home') }}" class="hover:text-indigo-600 transition">Home</a>
-                        <a href="{{ route('events.index') }}" class="hover:text-indigo-600 transition">Events</a>
-                        <a href="{{ route('portfolio.index') }}" class="hover:text-indigo-600 transition">Portfolio</a>
-                        <a href="{{ route('partnership.index') }}" class="hover:text-indigo-600 transition">Partnership</a>
-                        <a href="{{ route('about.index') }}" class="hover:text-indigo-600 transition">About Us</a>
+                    <a href="{{ route('home') }}" class="text-lg font-semibold text-[#7C3A2D]">{{ config('app.name', 'Sicrea') }}</a>
+                    <nav class="hidden md:flex items-center gap-6 text-sm text-[#9A5A46]">
+                        <a href="{{ route('home') }}" class="hover:text-[#7C3A2D] transition">Home</a>
+                        <a href="{{ route('events.index') }}" class="hover:text-[#7C3A2D] transition">Events</a>
+                        <a href="{{ route('portfolio.index') }}" class="hover:text-[#7C3A2D] transition">Portfolio</a>
+                        <a href="{{ route('partnership.index') }}" class="hover:text-[#7C3A2D] transition">Partnership</a>
+                        <a href="{{ route('about.index') }}" class="hover:text-[#7C3A2D] transition">About Us</a>
                     </nav>
                     <div class="flex items-center gap-3 text-sm">
                         @auth
-                            <a href="{{ route('registrations.index') }}" class="hidden md:inline-flex items-center rounded-full border border-slate-200 px-4 py-2 font-medium text-slate-700 hover:border-indigo-600 hover:text-indigo-600 transition">Riwayat Saya</a>
+                            <a href="{{ route('profile.show') }}" class="hidden md:inline-flex items-center rounded-full border border-[#F7C8B8] px-4 py-2 font-medium text-[#7C3A2D] bg-white/70 hover:bg-white transition">Profil Saya</a>
+                            <a href="{{ route('registrations.index') }}" class="hidden md:inline-flex items-center rounded-full border border-[#F7C8B8] px-4 py-2 font-medium text-[#7C3A2D] bg-white/70 hover:bg-white transition">Riwayat Saya</a>
                             @can('access-admin')
-                                <a href="{{ route('admin.dashboard') }}" class="hidden md:inline-flex items-center rounded-full border border-slate-200 px-4 py-2 font-medium text-slate-700 hover:border-indigo-600 hover:text-indigo-600 transition">Dashboard Admin</a>
+                                <a href="{{ route('admin.dashboard') }}" class="hidden md:inline-flex items-center rounded-full border border-[#F7C8B8] px-4 py-2 font-medium text-[#7C3A2D] bg-white/70 hover:bg-white transition">Dashboard Admin</a>
                             @endcan
                             @if (Route::has('logout'))
                                 <form method="POST" action="{{ route('logout') }}">
                                     @csrf
-                                    <button class="inline-flex items-center rounded-full bg-slate-900 px-4 py-2 font-semibold text-white hover:bg-slate-700 transition">Keluar</button>
+                                    <button class="inline-flex items-center rounded-full bg-[#7C3A2D] px-4 py-2 font-semibold text-white hover:bg-[#5c261d] transition">Keluar</button>
                                 </form>
                             @endif
                         @else
                             @if (Route::has('login'))
-                                <a href="{{ route('login') }}" class="inline-flex items-center rounded-full border border-slate-200 px-4 py-2 font-semibold text-slate-700 hover:border-indigo-600 hover:text-indigo-600 transition">Sign In</a>
+                                <a href="{{ route('login') }}" class="inline-flex items-center rounded-full border border-[#F7C8B8] px-4 py-2 font-semibold text-[#7C3A2D] bg-white/70 hover:bg-white transition">Login</a>
                             @endif
                             @if (Route::has('register'))
-                                <a href="{{ route('register') }}" class="inline-flex items-center rounded-full bg-slate-900 px-4 py-2 font-semibold text-white hover:bg-slate-700 transition">Register</a>
+                                <a href="{{ route('register') }}" class="inline-flex items-center rounded-full bg-[#7C3A2D] px-4 py-2 font-semibold text-white hover:bg-[#5c261d] transition">Registrasi</a>
                             @endif
                         @endauth
                     </div>
@@ -78,24 +79,33 @@
                 {{ $slot }}
             </main>
 
-            <footer class="bg-slate-900 text-slate-100">
-                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 grid gap-6 md:grid-cols-3">
-                    <div class="rounded-2xl bg-slate-800/80 p-6">
-                        <h3 class="text-lg font-semibold">Ringkasan Program</h3>
-                        <p class="mt-3 text-sm text-slate-300 leading-relaxed">Ikuti rangkaian workshop kreatif, sesi mentoring, dan pameran karya yang dikurasi untuk memperkuat komunitas pelaku industri kreatif.</p>
+            <footer class="bg-[#5E1F1A] text-[#FFEDE0]">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 grid gap-8 md:grid-cols-3">
+                    <div class="space-y-3">
+                        <h3 class="text-xl font-semibold">{{ config('app.name', 'Sicrea') }}</h3>
+                        <p class="text-sm leading-relaxed text-[#F7C8B8]">Platform online untuk pendaftaran workshop, pengelolaan event, dan showcase portofolio kreatif komunitas.</p>
                     </div>
-                    <div class="rounded-2xl bg-slate-800/80 p-6">
-                        <h3 class="text-lg font-semibold">Kontak Project Manager</h3>
-                        <p class="mt-3 text-sm text-slate-300 leading-relaxed">Hubungi kami di <a href="mailto:hello@sicrea.id" class="underline decoration-slate-500 hover:text-white">hello@sicrea.id</a> atau WhatsApp <span class="font-semibold">+62 812-3456-7890</span>.</p>
+                    <div class="space-y-3">
+                        <h3 class="text-xl font-semibold">Kontak Kami</h3>
+                        <ul class="space-y-2 text-sm text-[#F7C8B8]">
+                            <li>📍 Jl. Kreasi No. 123, Jakarta</li>
+                            <li>📞 021-2345-6789</li>
+                            <li>✉️ <a href="mailto:info@kreasihangat.com" class="underline decoration-[#F7C8B8] hover:text-white">info@kreasihangat.com</a></li>
+                        </ul>
                     </div>
-                    <div class="rounded-2xl bg-slate-800/80 p-6">
-                        <h3 class="text-lg font-semibold">Media Sosial &amp; Testimoni</h3>
-                        <p class="mt-3 text-sm text-slate-300 leading-relaxed">Ikuti perjalanan kami melalui Instagram <span class="font-semibold">@sicrea.id</span> dan baca cerita sukses alumni yang merasakan dampak nyata.</p>
+                    <div class="space-y-3">
+                        <h3 class="text-xl font-semibold">Ikuti Kami</h3>
+                        <p class="text-sm text-[#F7C8B8]">@kreasihangat</p>
+                        <div class="flex gap-3 text-[#FFEDE0]">
+                            <span class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-white/10">IG</span>
+                            <span class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-white/10">FB</span>
+                            <span class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-white/10">YT</span>
+                        </div>
                     </div>
                 </div>
-                <div class="border-t border-slate-800/60">
-                    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 text-center text-sm text-slate-400">
-                        &copy; {{ now()->year }} {{ config('app.name', 'Sicrea') }}. Semua hak dilindungi.
+                <div class="border-t border-white/10">
+                    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 text-center text-sm text-[#F7C8B8]">
+                        &copy; {{ now()->year }} {{ config('app.name', 'Sicrea') }}. Made with <span class="text-[#FF9AA2]">❤</span>
                     </div>
                 </div>
             </footer>
