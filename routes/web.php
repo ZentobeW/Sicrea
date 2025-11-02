@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\EventController as AdminEventController;
 use App\Http\Controllers\Admin\PortfolioController as AdminPortfolioController;
 use App\Http\Controllers\Admin\RegistrationController as AdminRegistrationController;
@@ -41,6 +42,8 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::middleware(['auth', 'can:access-admin'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/', [AdminDashboardController::class, 'index'])->name('dashboard');
+
     Route::resource('events', AdminEventController::class)->except(['show']);
 
     Route::get('registrations/export', [AdminRegistrationController::class, 'export'])->name('registrations.export');

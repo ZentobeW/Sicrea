@@ -1,121 +1,130 @@
-@php($tabs = [
-    ['label' => 'Event', 'route' => route('admin.events.index'), 'active' => request()->routeIs('admin.events.*'), 'icon' => '📅'],
-    ['label' => 'Pendaftaran', 'route' => route('admin.registrations.index'), 'active' => request()->routeIs('admin.registrations.*'), 'icon' => '🧾'],
-    ['label' => 'Portofolio', 'route' => route('admin.portfolios.index'), 'active' => request()->routeIs('admin.portfolios.*'), 'icon' => '🖼️'],
-])
-
-<x-layouts.admin title="Manajemen Event" subtitle="Rencanakan kalender program, publikasikan workshop terbaik, dan pantau statusnya secara real-time." :tabs="$tabs">
+<x-layouts.admin title="Kelola Event" subtitle="Tambahkan, edit, atau hapus event dan workshop.">
     <x-slot name="actions">
-        <a href="{{ route('admin.events.create') }}" class="inline-flex items-center gap-2 rounded-full bg-white px-4 py-2 text-sm font-semibold text-slate-900 shadow-lg shadow-indigo-500/20 transition hover:-translate-y-0.5 hover:bg-slate-100">
+        <a href="{{ route('admin.events.create') }}" class="inline-flex items-center gap-2 rounded-full bg-[#F68C7B] px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-[#F68C7B]/40 transition hover:-translate-y-0.5 hover:bg-[#e37b69]">
             <span class="text-lg">＋</span>
-            Buat Event
+            Tambah Event Baru
         </a>
     </x-slot>
 
-    <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <div class="rounded-2xl border border-slate-200/60 bg-white/90 p-5 shadow-sm">
-            <p class="text-xs font-medium uppercase tracking-wide text-slate-500">Total Event</p>
-            <p class="mt-2 text-2xl font-semibold text-slate-900">{{ $overview['total'] }}</p>
-            <p class="text-xs text-slate-500 mt-1">Termasuk semua status event.</p>
+    <div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+        <div class="rounded-3xl bg-white p-5 shadow-[0_25px_60px_-30px_rgba(243,140,118,0.55)]">
+            <p class="text-xs font-semibold uppercase tracking-[0.3em] text-[#E77B5F]">Total Event</p>
+            <p class="mt-3 text-3xl font-semibold text-[#4B2A22]">{{ $overview['total'] }}</p>
+            <p class="mt-1 text-xs text-[#9C5A45]">Termasuk semua status.</p>
         </div>
-        <div class="rounded-2xl border border-emerald-200/70 bg-emerald-50/80 p-5 shadow-sm">
-            <p class="text-xs font-medium uppercase tracking-wide text-emerald-600">Published</p>
-            <p class="mt-2 text-2xl font-semibold text-emerald-700">{{ $overview['published'] }}</p>
-            <p class="text-xs text-emerald-600/80 mt-1">Tayang di halaman publik.</p>
+        <div class="rounded-3xl bg-[#FFF0E7] p-5 shadow-[0_25px_60px_-30px_rgba(255,176,130,0.55)]">
+            <p class="text-xs font-semibold uppercase tracking-[0.3em] text-[#EF935E]">Published</p>
+            <p class="mt-3 text-3xl font-semibold text-[#4B2A22]">{{ $overview['published'] }}</p>
+            <p class="mt-1 text-xs text-[#9C5A45]">Event yang tampil di katalog.</p>
         </div>
-        <div class="rounded-2xl border border-amber-200/70 bg-amber-50/90 p-5 shadow-sm">
-            <p class="text-xs font-medium uppercase tracking-wide text-amber-600">Draft</p>
-            <p class="mt-2 text-2xl font-semibold text-amber-700">{{ $overview['drafts'] }}</p>
-            <p class="text-xs text-amber-600/80 mt-1">Perlu dipublikasikan.</p>
+        <div class="rounded-3xl bg-[#FFE5DE] p-5 shadow-[0_25px_60px_-30px_rgba(241,128,128,0.4)]">
+            <p class="text-xs font-semibold uppercase tracking-[0.3em] text-[#E56D5D]">Draft</p>
+            <p class="mt-3 text-3xl font-semibold text-[#4B2A22]">{{ $overview['drafts'] }}</p>
+            <p class="mt-1 text-xs text-[#9C5A45]">Perlu dipublikasikan.</p>
         </div>
-        <div class="rounded-2xl border border-indigo-200/70 bg-indigo-50/90 p-5 shadow-sm">
-            <p class="text-xs font-medium uppercase tracking-wide text-indigo-600">Event Terdekat</p>
+        <div class="rounded-3xl bg-white p-5 shadow-[0_25px_60px_-30px_rgba(210,110,86,0.4)]">
+            <p class="text-xs font-semibold uppercase tracking-[0.3em] text-[#D2644B]">Event Terdekat</p>
             @if ($nextEvent)
-                <p class="mt-2 text-base font-semibold text-indigo-700">{{ $nextEvent->title }}</p>
-                <p class="text-xs text-indigo-600/80 mt-1">{{ $nextEvent->start_at->translatedFormat('d M Y H:i') }}</p>
+                <p class="mt-3 text-base font-semibold text-[#4B2A22]">{{ $nextEvent->title }}</p>
+                <p class="mt-1 text-xs text-[#9C5A45]">{{ $nextEvent->start_at->translatedFormat('d M Y H:i') }}</p>
             @else
-                <p class="mt-2 text-base font-semibold text-indigo-700">Belum ada jadwal</p>
-                <p class="text-xs text-indigo-600/80 mt-1">Publikasikan event untuk menjadwalkan.</p>
+                <p class="mt-3 text-base font-semibold text-[#4B2A22]">Belum ada jadwal</p>
+                <p class="mt-1 text-xs text-[#9C5A45]">Publikasikan event untuk menampilkannya.</p>
             @endif
         </div>
     </div>
 
-    <div class="rounded-3xl border border-slate-200/60 bg-white/90 shadow-xl">
-        <div class="flex flex-col gap-4 border-b border-slate-200/60 p-6 sm:flex-row sm:items-center sm:justify-between">
+    <div class="rounded-3xl bg-white p-6 shadow-[0_35px_90px_-45px_rgba(240,128,128,0.55)]">
+        <div class="flex flex-col gap-4 border-b border-[#FFE0D6] pb-6 sm:flex-row sm:items-center sm:justify-between">
             <div>
-                <h2 class="text-lg font-semibold text-slate-900">Daftar Event</h2>
-                <p class="text-sm text-slate-500">Kelola event yang sedang berjalan maupun yang akan datang.</p>
+                <h2 class="text-lg font-semibold text-[#4B2A22]">Daftar Event</h2>
+                <p class="text-sm text-[#A35C45]">Kelola event yang sedang berjalan maupun yang akan datang.</p>
             </div>
-            <div class="flex items-center gap-3 text-sm text-slate-500">
-                <span class="inline-flex items-center gap-2 rounded-full bg-slate-100 px-3 py-1">
-                    <span class="h-2 w-2 rounded-full bg-emerald-500"></span>
-                    Published
-                </span>
-                <span class="inline-flex items-center gap-2 rounded-full bg-slate-100 px-3 py-1">
-                    <span class="h-2 w-2 rounded-full bg-slate-400"></span>
-                    Draft
-                </span>
-            </div>
+            <form method="GET" class="flex w-full max-w-sm items-center rounded-full bg-[#FFF5F0] px-4 py-2 text-sm shadow-inner">
+                <span class="text-lg text-[#E77B5F]">🔍</span>
+                <input type="text" name="search" value="{{ $filters['search'] }}" placeholder="Cari event..." class="ml-2 flex-1 bg-transparent text-[#4B2A22] placeholder:text-[#D28B7B] focus:outline-none" />
+                @if ($filters['search'])
+                    <a href="{{ route('admin.events.index') }}" class="text-xs font-semibold text-[#D2644B]">Reset</a>
+                @endif
+            </form>
         </div>
 
-        <div class="overflow-x-auto">
-            <table class="min-w-full divide-y divide-slate-200/70 text-sm">
-                <thead class="bg-slate-50/80 text-slate-500 uppercase text-xs">
+        <div class="mt-6 overflow-x-auto">
+            <table class="min-w-full divide-y divide-[#FFE0D6] text-sm">
+                <thead class="text-xs uppercase tracking-wide text-[#C16A55]">
                     <tr>
-                        <th class="px-6 py-3 text-left">Judul</th>
-                        <th class="px-6 py-3 text-left">Jadwal</th>
-                        <th class="px-6 py-3 text-left">Kuota</th>
-                        <th class="px-6 py-3 text-left">Status</th>
-                        <th class="px-6 py-3 text-right">Aksi</th>
+                        <th class="px-5 py-3 text-left">Event</th>
+                        <th class="px-5 py-3 text-left">Jadwal</th>
+                        <th class="px-5 py-3 text-left">Kuota</th>
+                        <th class="px-5 py-3 text-left">Status</th>
+                        <th class="px-5 py-3 text-right">Aksi</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-slate-200/60 bg-white/60">
+                <tbody class="divide-y divide-[#FFE0D6] bg-[#FFF7F3]">
                     @forelse ($events as $event)
-                        <tr class="transition hover:bg-slate-50/80">
-                            <td class="px-6 py-4 align-top">
-                                <div class="font-semibold text-slate-900">{{ $event->title }}</div>
-                                <div class="text-xs text-slate-500 mt-1">Rp{{ number_format($event->price, 0, ',', '.') }}</div>
+                        @php
+                            $capacity = $event->capacity ?: null;
+                            $filled = $event->confirmed_registrations_count;
+                            $quotaLabel = $capacity ? $filled . '/' . $capacity : $filled . ' peserta';
+                            $progress = $capacity ? min(100, ($filled / $capacity) * 100) : null;
+                        @endphp
+                        <tr class="transition hover:bg-white">
+                            <td class="px-5 py-4 align-top">
+                                <div class="font-semibold text-[#4B2A22]">{{ $event->title }}</div>
+                                <div class="mt-1 text-xs text-[#D28B7B]">Rp{{ number_format($event->price, 0, ',', '.') }}</div>
                             </td>
-                            <td class="px-6 py-4 text-slate-600 align-top">
+                            <td class="px-5 py-4 align-top text-[#9C5A45]">
                                 <div>{{ $event->start_at->translatedFormat('d M Y H:i') }}</div>
-                                <div class="text-xs text-slate-400">s/d {{ $event->end_at->translatedFormat('d M Y H:i') }}</div>
+                                <div class="text-xs text-[#D28B7B]">s/d {{ $event->end_at->translatedFormat('d M Y H:i') }}</div>
+                                <div class="mt-2 inline-flex items-center gap-1 rounded-full bg-[#FFE8E0] px-3 py-1 text-xs text-[#C16A55]">📍 {{ $event->location }}</div>
                             </td>
-                            <td class="px-6 py-4 text-slate-600 align-top">
-                                {{ $event->available_slots ?? '∞' }}
+                            <td class="px-5 py-4 align-top text-[#9C5A45]">
+                                <div class="font-semibold">{{ $quotaLabel }}</div>
+                                @if ($progress)
+                                    <div class="mt-2 h-1.5 w-28 rounded-full bg-[#FFE0D6]">
+                                        <div class="h-full rounded-full bg-[#F68C7B]" style="width: {{ $progress }}%"></div>
+                                    </div>
+                                @endif
                             </td>
-                            <td class="px-6 py-4 align-top">
+                            <td class="px-5 py-4 align-top">
                                 <span @class([
-                                    'inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-semibold transition',
-                                    'bg-emerald-100 text-emerald-600 ring-1 ring-emerald-500/20' => $event->status->value === 'published',
-                                    'bg-slate-100 text-slate-600 ring-1 ring-slate-500/10' => $event->status->value !== 'published',
+                                    'inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-semibold',
+                                    'bg-[#EAF9F1] text-[#2D8F64]' => $event->status->value === 'published',
+                                    'bg-[#FFF0E7] text-[#C16A55]' => $event->status->value !== 'published',
                                 ])>
-                                    <span class="h-2 w-2 rounded-full {{ $event->status->value === 'published' ? 'bg-emerald-500' : 'bg-slate-400' }}"></span>
+                                    <span class="text-sm">{{ $event->status->value === 'published' ? '●' : '○' }}</span>
                                     {{ $event->status->label() }}
                                 </span>
                             </td>
-                            <td class="px-6 py-4 text-right align-top">
-                                <div class="inline-flex items-center gap-2 text-xs font-medium">
-                                    <a href="{{ route('admin.events.edit', $event) }}" class="inline-flex items-center gap-1 rounded-full border border-indigo-200 bg-indigo-50 px-3 py-1 text-indigo-600 transition hover:border-indigo-300 hover:bg-indigo-100">Edit</a>
+                            <td class="px-5 py-4 align-top text-right">
+                                <div class="inline-flex items-center gap-2 text-xs font-semibold">
+                                    <a href="{{ route('admin.events.edit', $event) }}" class="inline-flex items-center gap-1 rounded-full bg-[#FFE8E0] px-3 py-1 text-[#C16A55] transition hover:bg-[#FFD6C7]">Edit</a>
                                     <form method="POST" action="{{ route('admin.events.destroy', $event) }}" onsubmit="return confirm('Hapus event ini?')">
                                         @csrf
                                         @method('DELETE')
-                                        <button class="inline-flex items-center gap-1 rounded-full border border-rose-200 bg-rose-50 px-3 py-1 text-rose-600 transition hover:border-rose-300 hover:bg-rose-100">Hapus</button>
+                                        <button class="inline-flex items-center gap-1 rounded-full bg-[#FCE0DE] px-3 py-1 text-[#D2644B] transition hover:bg-[#F9C9C4]">Hapus</button>
                                     </form>
                                 </div>
                             </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="5" class="px-6 py-12 text-center text-slate-500">Belum ada data event.</td>
+                            <td colspan="5" class="px-5 py-12 text-center text-sm text-[#A35C45]">Belum ada data event.</td>
                         </tr>
                     @endforelse
                 </tbody>
             </table>
         </div>
-    </div>
 
-    <div class="flex justify-between items-center text-sm text-slate-500">
-        <div>Menampilkan {{ $events->firstItem() }}-{{ $events->lastItem() }} dari {{ $events->total() }} event</div>
-        <div>{{ $events->links() }}</div>
+        <div class="mt-6 flex flex-col gap-3 text-sm text-[#A35C45] sm:flex-row sm:items-center sm:justify-between">
+            <div>
+                @if ($events->count())
+                    Menampilkan {{ $events->firstItem() }}-{{ $events->lastItem() }} dari {{ $events->total() }} event
+                @else
+                    Menampilkan 0 event
+                @endif
+            </div>
+            <div class="sm:ml-auto">{{ $events->links() }}</div>
+        </div>
     </div>
 </x-layouts.admin>

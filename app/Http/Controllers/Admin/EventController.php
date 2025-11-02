@@ -3,22 +3,30 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Enums\EventStatus;
+use App\Enums\RegistrationStatus;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreEventRequest;
 use App\Http\Requests\UpdateEventRequest;
 use App\Models\Event;
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class EventController extends Controller
 {
-    public function index(): View
+    public function index(Request $request): View
     {
         $events = Event::query()
-            ->latest('start_at')
-            ->paginate(15);
+            ->withCount([
+                'registrations as confirmed_registrations_count' => fn ($query) => $query->where('status', RegistrationStatus::Confirmed),
+                'registrations as total_registrations_count',
+            ])
+            ->when($request->filled('search'), fn ($query) => $query->where('title', 'like', '%' . $request->string('search') . '%'))
+            ->orderByDesc('start_at')
+            ->paginate(10)
+            ->withQueryString();
 
         $overview = [
             'total' => Event::count(),
@@ -32,7 +40,11 @@ class EventController extends Controller
             ->orderBy('start_at')
             ->first();
 
-        return view('admin.events.index', compact('events', 'overview', 'nextEvent'));
+        $filters = [
+            'search' => $request->string('search'),
+        ];
+
+        return view('admin.events.index', compact('events', 'overview', 'nextEvent', 'filters'));
     }
 
     public function create(): View
