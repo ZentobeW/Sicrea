@@ -20,7 +20,19 @@ class EventController extends Controller
             ->latest('start_at')
             ->paginate(15);
 
-        return view('admin.events.index', compact('events'));
+        $overview = [
+            'total' => Event::count(),
+            'published' => Event::where('status', EventStatus::Published)->count(),
+            'drafts' => Event::where('status', EventStatus::Draft)->count(),
+        ];
+
+        $nextEvent = Event::query()
+            ->where('status', EventStatus::Published)
+            ->where('start_at', '>=', now())
+            ->orderBy('start_at')
+            ->first();
+
+        return view('admin.events.index', compact('events', 'overview', 'nextEvent'));
     }
 
     public function create(): View

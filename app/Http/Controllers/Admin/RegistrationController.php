@@ -30,7 +30,14 @@ class RegistrationController extends Controller
 
         $events = \App\Models\Event::orderBy('title')->get();
 
-        return view('admin.registrations.index', compact('registrations', 'events'));
+        $summary = [
+            'total' => Registration::count(),
+            'pendingPayment' => Registration::where('payment_status', PaymentStatus::Pending)->count(),
+            'verifiedPayment' => Registration::where('payment_status', PaymentStatus::Verified)->count(),
+            'refundRequests' => RefundRequest::where('status', RefundStatus::Pending)->count(),
+        ];
+
+        return view('admin.registrations.index', compact('registrations', 'events', 'summary'));
     }
 
     public function show(Registration $registration): View

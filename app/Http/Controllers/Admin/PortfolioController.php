@@ -16,7 +16,14 @@ class PortfolioController extends Controller
     {
         $portfolios = Portfolio::query()->with('event')->latest()->paginate(20);
 
-        return view('admin.portfolios.index', compact('portfolios'));
+        $insight = [
+            'total' => Portfolio::count(),
+            'linked' => Portfolio::whereNotNull('event_id')->count(),
+        ];
+
+        $latestUpdate = Portfolio::latest('updated_at')->first();
+
+        return view('admin.portfolios.index', compact('portfolios', 'insight', 'latestUpdate'));
     }
 
     public function create(): View

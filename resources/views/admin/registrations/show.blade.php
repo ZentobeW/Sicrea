@@ -1,85 +1,108 @@
-@php use Illuminate\Support\Facades\Storage; @endphp
-<x-layouts.app :title="'Detail Registrasi'">
-    <div class="flex justify-between mb-6">
-        <div>
-            <h1 class="text-2xl font-semibold text-slate-800">{{ $registration->user->name }}</h1>
-            <p class="text-sm text-slate-500">{{ $registration->user->email }}</p>
-        </div>
-        <a href="{{ route('admin.registrations.index') }}" class="text-sm text-slate-500 hover:text-slate-700">&larr; Kembali</a>
-    </div>
+@php($tabs = [
+    ['label' => 'Event', 'route' => route('admin.events.index'), 'active' => request()->routeIs('admin.events.*'), 'icon' => '📅'],
+    ['label' => 'Pendaftaran', 'route' => route('admin.registrations.index'), 'active' => request()->routeIs('admin.registrations.*'), 'icon' => '🧾'],
+    ['label' => 'Portofolio', 'route' => route('admin.portfolios.index'), 'active' => request()->routeIs('admin.portfolios.*'), 'icon' => '🖼️'],
+])
 
+@php use Illuminate\Support\Facades\Storage; @endphp
+
+<x-layouts.admin :title="$registration->user->name" :subtitle="$registration->user->email" :tabs="$tabs" :back-url="route('admin.registrations.index')">
     <div class="grid gap-8 lg:grid-cols-[2fr,1fr]">
-        <section class="bg-white rounded-xl border border-slate-100 shadow-sm p-6 space-y-5">
-            <div class="grid md:grid-cols-2 gap-4 text-sm text-slate-600">
+        <section class="space-y-6 rounded-3xl border border-slate-200/60 bg-white/95 p-6 sm:p-8 shadow-xl">
+            <div class="grid gap-4 md:grid-cols-2 text-sm text-slate-600">
                 <div>
-                    <span class="font-medium text-slate-700 block">Event</span>
-                    <p>{{ $registration->event->title }}</p>
+                    <span class="font-semibold text-slate-700 block">Event</span>
+                    <p class="mt-1 text-base font-semibold text-slate-900">{{ $registration->event->title }}</p>
                     <p class="text-xs text-slate-500">{{ $registration->event->start_at->translatedFormat('d M Y H:i') }}</p>
                 </div>
                 <div>
-                    <span class="font-medium text-slate-700 block">Status Pendaftaran</span>
-                    <span class="inline-flex rounded-full bg-indigo-50 px-3 py-1 text-xs font-medium text-indigo-600">{{ $registration->status->label() }}</span>
+                    <span class="font-semibold text-slate-700 block">Status Pendaftaran</span>
+                    <span class="mt-1 inline-flex items-center gap-2 rounded-full bg-indigo-50 px-3 py-1 text-xs font-semibold text-indigo-600">
+                        <span class="h-2 w-2 rounded-full bg-indigo-400"></span>
+                        {{ $registration->status->label() }}
+                    </span>
                 </div>
                 <div>
-                    <span class="font-medium text-slate-700 block">Status Pembayaran</span>
-                    <span class="inline-flex rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-600">{{ $registration->payment_status->label() }}</span>
+                    <span class="font-semibold text-slate-700 block">Status Pembayaran</span>
+                    <span @class([
+                        'mt-1 inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-semibold transition',
+                        'bg-emerald-100 text-emerald-600 ring-1 ring-emerald-500/20' => $registration->payment_status->value === 'verified',
+                        'bg-amber-100 text-amber-600 ring-1 ring-amber-500/20' => $registration->payment_status->value === 'pending',
+                        'bg-rose-100 text-rose-600 ring-1 ring-rose-500/20' => $registration->payment_status->value === 'rejected',
+                        'bg-slate-100 text-slate-600 ring-1 ring-slate-500/10' => ! in_array($registration->payment_status->value, ['verified', 'pending', 'rejected']),
+                    ])>
+                        <span class="h-2 w-2 rounded-full {{ match ($registration->payment_status->value) {
+                            'verified' => 'bg-emerald-500',
+                            'pending' => 'bg-amber-500',
+                            'rejected' => 'bg-rose-500',
+                            default => 'bg-slate-400',
+                        } }}"></span>
+                        {{ $registration->payment_status->label() }}
+                    </span>
                 </div>
                 <div>
-                    <span class="font-medium text-slate-700 block">Nominal</span>
-                    <p>Rp{{ number_format($registration->amount, 0, ',', '.') }}</p>
+                    <span class="font-semibold text-slate-700 block">Nominal</span>
+                    <p class="mt-1 text-base font-semibold text-slate-900">Rp{{ number_format($registration->amount, 0, ',', '.') }}</p>
                 </div>
             </div>
 
-            <div class="border border-dashed border-slate-200 rounded-lg p-4">
-                <h2 class="text-sm font-semibold text-slate-700 mb-2">Data Peserta</h2>
-                <dl class="grid md:grid-cols-2 gap-x-6 gap-y-2 text-sm text-slate-600">
+            <div class="rounded-2xl border border-dashed border-slate-200 bg-white/80 p-6">
+                <h2 class="text-sm font-semibold text-slate-700">Data Peserta</h2>
+                <dl class="mt-4 grid gap-x-6 gap-y-3 md:grid-cols-2 text-sm text-slate-600">
                     @foreach ($registration->form_data as $key => $value)
                         <div>
                             <dt class="font-medium text-slate-700 capitalize">{{ str_replace('_', ' ', $key) }}</dt>
-                            <dd>{{ $value }}</dd>
+                            <dd class="mt-1">{{ $value }}</dd>
                         </div>
                     @endforeach
                 </dl>
             </div>
 
             @if ($registration->payment_proof_path)
-                <div class="border border-slate-200 rounded-lg p-4">
-                    <h2 class="text-sm font-semibold text-slate-700 mb-2">Bukti Pembayaran</h2>
-                    <a href="{{ Storage::disk('public')->url($registration->payment_proof_path) }}" target="_blank" class="text-indigo-600 text-sm">Lihat Bukti</a>
+                <div class="rounded-2xl border border-slate-200 bg-slate-50/70 p-6">
+                    <h2 class="text-sm font-semibold text-slate-700">Bukti Pembayaran</h2>
+                    <p class="mt-2 text-sm text-slate-500">Periksa kecocokan nominal dan detail transfer sebelum verifikasi.</p>
+                    <a href="{{ Storage::disk('public')->url($registration->payment_proof_path) }}" target="_blank" class="mt-3 inline-flex items-center gap-2 text-sm font-semibold text-indigo-600 hover:text-indigo-700">Lihat Bukti →</a>
                 </div>
             @endif
         </section>
 
         <aside class="space-y-6">
-            <div class="bg-white rounded-xl border border-slate-100 shadow-sm p-6 space-y-4">
-                <h2 class="text-lg font-semibold text-slate-800">Tindakan Admin</h2>
-                @if ($registration->payment_status->value === 'awaiting_verification')
-                    <form method="POST" action="{{ route('admin.registrations.verify-payment', $registration) }}">
-                        @csrf
-                        <button class="w-full rounded-md bg-emerald-500 px-4 py-2 text-sm font-semibold text-white hover:bg-emerald-600">Verifikasi Pembayaran</button>
-                    </form>
-                    <form method="POST" action="{{ route('admin.registrations.reject-payment', $registration) }}">
-                        @csrf
-                        <button class="w-full rounded-md bg-red-500 px-4 py-2 text-sm font-semibold text-white hover:bg-red-600">Tolak Pembayaran</button>
-                    </form>
-                @endif
+            <div class="rounded-3xl border border-white/60 bg-white/80 p-6 shadow-xl backdrop-blur">
+                <h2 class="text-base font-semibold text-slate-800">Tindakan Admin</h2>
+                <p class="mt-2 text-sm text-slate-500">Verifikasi pembayaran atau mintalah peserta mengunggah ulang jika data belum valid.</p>
+                <div class="mt-4 space-y-3">
+                    @if ($registration->payment_status->value === 'awaiting_verification')
+                        <form method="POST" action="{{ route('admin.registrations.verify-payment', $registration) }}">
+                            @csrf
+                            <button class="w-full inline-flex items-center justify-center gap-2 rounded-full bg-emerald-500 px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-emerald-500/30 transition hover:-translate-y-0.5 hover:bg-emerald-600">Verifikasi Pembayaran</button>
+                        </form>
+                        <form method="POST" action="{{ route('admin.registrations.reject-payment', $registration) }}">
+                            @csrf
+                            <button class="w-full inline-flex items-center justify-center gap-2 rounded-full bg-rose-500 px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-rose-500/30 transition hover:-translate-y-0.5 hover:bg-rose-600">Tolak Pembayaran</button>
+                        </form>
+                    @else
+                        <p class="text-sm text-slate-500">Pembayaran telah diproses. Anda dapat mengelola refund jika diperlukan.</p>
+                    @endif
+                </div>
             </div>
 
             @if ($registration->refundRequest)
-                <div class="bg-white rounded-xl border border-slate-100 shadow-sm p-6 space-y-4">
-                    <h2 class="text-lg font-semibold text-slate-800">Permintaan Refund</h2>
-                    <p class="text-sm text-slate-600">Status: {{ $registration->refundRequest->status->label() }}</p>
-                    <p class="text-sm text-slate-600">Alasan: {{ $registration->refundRequest->reason ?? '-' }}</p>
+                <div class="rounded-3xl border border-white/60 bg-white/80 p-6 shadow-xl backdrop-blur">
+                    <h2 class="text-base font-semibold text-slate-800">Permintaan Refund</h2>
+                    <p class="mt-2 text-sm text-slate-500">Status: <span class="font-semibold text-slate-700">{{ $registration->refundRequest->status->label() }}</span></p>
+                    <p class="mt-2 text-sm text-slate-500">Alasan peserta:</p>
+                    <p class="mt-1 rounded-2xl border border-slate-200 bg-slate-50/80 px-4 py-3 text-sm text-slate-600">{{ $registration->refundRequest->reason ?? '-' }}</p>
 
                     @if ($registration->refundRequest->status->value === 'pending')
-                        <div class="space-y-3">
+                        <div class="mt-4 space-y-3">
                             <form method="POST" action="{{ route('admin.refunds.approve', $registration->refundRequest) }}">
                                 @csrf
-                                <button class="w-full rounded-md bg-emerald-500 px-4 py-2 text-sm font-semibold text-white hover:bg-emerald-600">Setujui Refund</button>
+                                <button class="w-full inline-flex items-center justify-center gap-2 rounded-full bg-emerald-500 px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-emerald-500/30 transition hover:-translate-y-0.5 hover:bg-emerald-600">Setujui Refund</button>
                             </form>
                             <form method="POST" action="{{ route('admin.refunds.reject', $registration->refundRequest) }}">
                                 @csrf
-                                <button class="w-full rounded-md bg-red-500 px-4 py-2 text-sm font-semibold text-white hover:bg-red-600">Tolak Refund</button>
+                                <button class="w-full inline-flex items-center justify-center gap-2 rounded-full bg-amber-500 px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-amber-500/30 transition hover:-translate-y-0.5 hover:bg-amber-600">Tolak Refund</button>
                             </form>
                         </div>
                     @endif
@@ -87,4 +110,4 @@
             @endif
         </aside>
     </div>
-</x-layouts.app>
+</x-layouts.admin>
