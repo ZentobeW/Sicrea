@@ -20,6 +20,13 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
+        'phone',
+        'birth_date',
+        'province',
+        'city',
+        'address',
+        'avatar_path',
+        'is_admin',
         'password',
     ];
 
@@ -43,6 +50,18 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'is_admin' => 'boolean',
+            'birth_date' => 'date',
         ];
+    }
+
+    public function isAdmin(): bool
+    {
+        return (bool) $this->is_admin;
+    }
+
+    public function registrations()
+    {
+        return $this->hasMany(\App\Models\Registration::class);
     }
 }
