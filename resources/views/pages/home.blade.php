@@ -11,67 +11,102 @@
 @endphp
 
 <x-layouts.app :title="'Kreasi Hangat'">
-    <section class="bg-white">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-            <div class="grid gap-12 lg:grid-cols-[1fr,1.1fr] items-center">
-                <div class="space-y-6">
-                    <span class="inline-flex items-center rounded-full bg-slate-100 px-4 py-1 text-sm font-medium text-slate-600">Kreasi Hangat</span>
-                    <h1 class="text-4xl md:text-5xl font-semibold leading-tight text-slate-900">Rangkaian Workshop dan Event Kreatif untuk Komunitasmu</h1>
-                    <p class="text-base md:text-lg text-slate-600 leading-relaxed">Bangun jejaring, tingkatkan skill, dan temukan peluang kolaborasi melalui event yang dikurasi secara personal oleh tim Sicrea.</p>
-                    <div class="flex flex-wrap items-center gap-4">
-                        <a href="{{ route('events.index') }}" class="inline-flex items-center rounded-full bg-slate-900 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-slate-900/20 hover:bg-slate-700 transition">Lihat Event Mendatang</a>
-                        <a href="{{ route('portfolio.index') }}" class="inline-flex items-center text-sm font-semibold text-slate-700 hover:text-indigo-600 transition">Jelajahi Portofolio</a>
+    <section class="relative overflow-hidden bg-gradient-to-br from-[#FFE3D3] via-[#FFF1EA] to-white">
+        <div class="absolute -left-20 -top-24 h-60 w-60 rounded-full bg-[#FFB6A0]/60 blur-3xl"></div>
+        <div class="absolute -right-24 bottom-0 h-72 w-72 rounded-full bg-[#FFD3B6]/50 blur-3xl"></div>
+
+        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-20">
+            <div class="grid gap-10 lg:grid-cols-[1.1fr,0.9fr] items-center">
+                <div class="space-y-8">
+                    <span class="inline-flex items-center gap-2 rounded-full bg-white/70 px-4 py-2 text-sm font-semibold text-[#C65B74] shadow-sm shadow-[#C65B74]/10">
+                        <span class="h-2 w-2 rounded-full bg-[#FF8A64]"></span>
+                        Kreasi Hangat
+                    </span>
+                    <div class="space-y-4">
+                        <h1 class="text-4xl md:text-5xl font-semibold leading-tight text-[#2C1E1E]">
+                            Wujudkan Kreativitas Anda Bersama Kami
+                        </h1>
+                        <p class="text-base md:text-lg leading-relaxed text-[#5F4C4C] max-w-xl">
+                            Temukan workshop, kolaborasi, dan pengalaman belajar yang hangat dalam satu platform. Kami hadir membantu komunitas kreatif berkembang dengan mentor terbaik.
+                        </p>
                     </div>
+                    <div class="flex flex-wrap items-center gap-4">
+                        <a href="{{ route('events.index') }}" class="inline-flex items-center rounded-full bg-[#FF8A64] px-7 py-3 text-sm font-semibold text-white shadow-md shadow-[#FF8A64]/30 transition hover:bg-[#F9744B]">
+                            Lihat Katalog Event
+                        </a>
+                        <a href="{{ route('portfolio.index') }}" class="inline-flex items-center gap-2 text-sm font-semibold text-[#C65B74] hover:text-[#A2475D]">
+                            <span>Lihat Portofolio</span>
+                            <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5l7 7-7 7" />
+                            </svg>
+                        </a>
+                    </div>
+                    <dl class="grid gap-6 sm:grid-cols-3">
+                        <div class="rounded-3xl bg-white/80 p-6 shadow-sm shadow-[#FFB6A0]/20 backdrop-blur">
+                            <dt class="text-sm font-medium text-[#A04E62]">Event Aktif</dt>
+                            <dd class="mt-2 text-3xl font-semibold text-[#2C1E1E]">{{ $formatStat($stats['published_events']) }}</dd>
+                        </div>
+                        <div class="rounded-3xl bg-white/80 p-6 shadow-sm shadow-[#FFB6A0]/20 backdrop-blur">
+                            <dt class="text-sm font-medium text-[#A04E62]">Peserta Terdaftar</dt>
+                            <dd class="mt-2 text-3xl font-semibold text-[#2C1E1E]">{{ $formatStat($stats['confirmed_participants']) }}</dd>
+                        </div>
+                        <div class="rounded-3xl bg-white/80 p-6 shadow-sm shadow-[#FFB6A0]/20 backdrop-blur">
+                            <dt class="text-sm font-medium text-[#A04E62]">Kolaborator</dt>
+                            <dd class="mt-2 text-3xl font-semibold text-[#2C1E1E]">{{ $formatStat($stats['partners'] ?? 15) }}</dd>
+                        </div>
+                    </dl>
                 </div>
                 <div class="relative">
-                    <div class="aspect-[4/3] rounded-3xl bg-slate-200 flex items-center justify-center text-slate-400 text-xs tracking-[0.3em] uppercase">Hero Image</div>
-                    <div class="hidden lg:block absolute -bottom-6 -left-6 w-40 h-40 rounded-3xl border-4 border-white bg-slate-100"></div>
+                    <div class="relative rounded-[48px] border border-white/60 bg-white/80 p-6 shadow-xl shadow-[#E8BDB0]/40 backdrop-blur">
+                        <div class="aspect-[4/5] overflow-hidden rounded-[36px] bg-[#FCD9CA] flex items-center justify-center text-sm uppercase tracking-[0.35em] text-[#C65B74]/70">
+                            Foto Workshop
+                        </div>
+                        <div class="absolute -bottom-8 left-8 rounded-3xl bg-white px-5 py-4 shadow-lg shadow-[#FFB6A0]/40">
+                            <p class="text-xs font-semibold uppercase tracking-[0.3em] text-[#C65B74]/70">Highlight</p>
+                            <p class="mt-1 text-sm font-medium text-[#2C1E1E]">Lebih dari 150 sesi kreatif setiap tahun.</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <section class="bg-slate-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 space-y-12">
-            <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-                <div class="space-y-2">
-                    <span class="text-xs font-semibold uppercase tracking-[0.3em] text-slate-500">Event Mendatang</span>
-                    <h2 class="text-3xl font-semibold text-slate-900">Agenda Kreatif Bulan Ini</h2>
-                    <p class="text-slate-600 max-w-2xl">Pilih aktivitas yang paling sesuai dengan kebutuhan tim dan komunitasmu.</p>
-                </div>
-                <a href="{{ route('events.index') }}" class="inline-flex items-center rounded-full border border-slate-200 px-5 py-2 text-sm font-semibold text-slate-700 hover:border-indigo-600 hover:text-indigo-600 transition">Lihat Semua Event</a>
+    <section class="bg-[#FFF7F2]">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 space-y-10">
+            <div class="text-center space-y-3">
+                <span class="inline-flex items-center gap-2 rounded-full bg-white px-4 py-1 text-xs font-semibold uppercase tracking-[0.3em] text-[#C65B74] shadow-sm shadow-[#FFB6A0]/30">Event Mendatang</span>
+                <h2 class="text-3xl font-semibold text-[#2C1E1E]">Temukan Pengalaman Kreatif Favoritmu</h2>
+                <p class="text-base text-[#5F4C4C] max-w-2xl mx-auto">Pilih workshop yang sesuai minatmu dan daftar langsung secara online. Kami menghadirkan mentor terpercaya dengan kurikulum terkurasi.</p>
             </div>
 
             <div class="grid gap-8 md:grid-cols-2 xl:grid-cols-3">
                 @forelse ($upcomingEvents as $event)
-                    <article class="group rounded-3xl bg-white border border-slate-100/80 shadow-sm hover:shadow-lg transition overflow-hidden">
-                        <div class="p-6 space-y-6">
-                            <div class="flex items-center justify-between text-xs font-semibold uppercase tracking-[0.25em] text-slate-400">
+                    <article class="group relative h-full rounded-[32px] border border-[#FAD6C7] bg-white/90 p-6 shadow-sm shadow-[#FAD6C7]/40 transition hover:-translate-y-1 hover:shadow-xl flex flex-col">
+                        <div class="rounded-[28px] bg-gradient-to-br from-[#FFD4B6] via-[#FFE9DC] to-white p-5">
+                            <div class="flex items-center justify-between text-xs font-semibold uppercase tracking-[0.3em] text-[#C65B74]/80">
                                 <span>{{ $event->start_at->translatedFormat('d M Y • H:i') }}</span>
-                                <span class="text-slate-900">Rp{{ number_format($event->price, 0, ',', '.') }}</span>
+                                <span class="text-[#2C1E1E]">Rp{{ number_format($event->price, 0, ',', '.') }}</span>
                             </div>
-                            <div class="space-y-3">
-                                <h3 class="text-xl font-semibold text-slate-900 group-hover:text-indigo-600 transition">{{ $event->title }}</h3>
-                                <p class="text-sm text-slate-600 leading-relaxed">{{ Str::limit(strip_tags($event->description), 130) }}</p>
+                            <div class="mt-4 space-y-3">
+                                <h3 class="text-xl font-semibold text-[#2C1E1E] group-hover:text-[#C65B74] transition">{{ $event->title }}</h3>
+                                <p class="text-sm leading-relaxed text-[#5F4C4C]">{{ Str::limit(strip_tags($event->description), 130) }}</p>
                             </div>
-                            <div class="flex items-center gap-2 text-sm text-slate-500">
-                                <svg class="h-4 w-4 text-indigo-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <div class="mt-5 flex items-center gap-2 text-sm text-[#A04E62]">
+                                <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 11c.828 0 1.5-.672 1.5-1.5S12.828 8 12 8s-1.5.672-1.5 1.5S11.172 11 12 11z" />
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20.25 10.5c0 7.5-8.25 11.25-8.25 11.25S3.75 18 3.75 10.5a8.25 8.25 0 1116.5 0z" />
                                 </svg>
                                 <span>{{ $event->location }}</span>
                             </div>
                         </div>
-                        <div class="px-6 pb-6">
-                            <div class="flex items-center justify-between rounded-2xl bg-slate-100/80 px-4 py-3 text-xs font-medium text-slate-500">
-                                <span>Kuota tersisa: {{ $event->available_slots ?? 'Tidak terbatas' }}</span>
-                                <a href="{{ route('events.show', $event->slug) }}" class="inline-flex items-center rounded-full bg-slate-900 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.2em] text-white hover:bg-slate-700 transition">Detail</a>
-                            </div>
+                        <div class="mt-6 flex items-center justify-between rounded-2xl bg-[#FFF0E6] px-5 py-3 text-xs font-semibold uppercase tracking-[0.28em] text-[#A04E62]">
+                            <span>Kuota tersisa: {{ $event->available_slots ?? 'Tidak terbatas' }}</span>
+                            <a href="{{ route('events.show', $event->slug) }}" class="inline-flex items-center rounded-full bg-[#FF8A64] px-4 py-2 text-white transition hover:bg-[#F9744B]">Lihat Detail</a>
                         </div>
                     </article>
                 @empty
-                    <div class="col-span-full text-center py-16 rounded-3xl border border-dashed border-slate-300 bg-white">
-                        <p class="text-slate-500">Belum ada event yang tersedia saat ini. Nantikan pengumuman berikutnya!</p>
+                    <div class="col-span-full text-center py-16 rounded-[32px] border border-dashed border-[#FAD6C7] bg-white/80">
+                        <p class="text-[#5F4C4C]">Belum ada event yang tersedia saat ini. Nantikan pengumuman berikutnya!</p>
                     </div>
                 @endforelse
             </div>
@@ -79,87 +114,66 @@
     </section>
 
     <section class="bg-white">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 grid gap-10 lg:grid-cols-[1.1fr,0.9fr] items-center">
-            <div class="space-y-5">
-                <span class="inline-flex items-center rounded-full bg-slate-100 px-4 py-1 text-xs font-semibold uppercase tracking-[0.35em] text-slate-600">Tentang Sicrea</span>
-                <h2 class="text-3xl md:text-4xl font-semibold text-slate-900 leading-tight">Merancang pengalaman belajar dan kolaborasi yang berdampak</h2>
-                <p class="text-base text-slate-600 leading-relaxed">Sicrea hadir sebagai studio kreatif yang menghubungkan mentor ahli dengan komunitas dan brand. Kami merancang workshop, program inkubasi, dan showcase yang mendorong kolaborasi lintas disiplin.</p>
-                <div class="grid gap-4 sm:grid-cols-2">
-                    <div class="flex items-center gap-3 rounded-2xl border border-slate-200 bg-white/60 p-4 shadow-sm">
-                        <div class="inline-flex h-12 w-12 items-center justify-center rounded-full bg-slate-900 text-white text-base font-semibold">{{ $formatStat($stats['published_events']) }}</div>
-                        <div>
-                            <p class="text-xs uppercase tracking-[0.3em] text-slate-400">Program Tahunan</p>
-                            <p class="text-sm font-medium text-slate-700">Dirancang bersama praktisi</p>
-                        </div>
-                    </div>
-                    <div class="flex items-center gap-3 rounded-2xl border border-slate-200 bg-white/60 p-4 shadow-sm">
-                        <div class="inline-flex h-12 w-12 items-center justify-center rounded-full bg-slate-900 text-white text-base font-semibold">{{ $formatStat($stats['confirmed_participants']) }}</div>
-                        <div>
-                            <p class="text-xs uppercase tracking-[0.3em] text-slate-400">Alumni Komunitas</p>
-                            <p class="text-sm font-medium text-slate-700">Aktif berjejaring &amp; berkarya</p>
-                        </div>
-                    </div>
-                </div>
-                <a href="{{ route('about.index') }}" class="inline-flex items-center rounded-full border border-slate-200 px-5 py-2 text-sm font-semibold text-slate-700 hover:border-indigo-600 hover:text-indigo-600 transition">Pelajari Lebih Lanjut</a>
-            </div>
-            <div class="relative">
-                <div class="aspect-[4/3] rounded-3xl bg-slate-200 flex items-center justify-center text-xs uppercase tracking-[0.4em] text-slate-400">Foto Studio</div>
-                <div class="absolute -bottom-8 -right-6 hidden lg:block w-48 rounded-3xl border border-white bg-white/90 p-5 shadow-xl backdrop-blur">
-                    <p class="text-xs uppercase tracking-[0.4em] text-slate-400">Highlight</p>
-                    <p class="mt-2 text-sm font-semibold text-slate-800">Kolaborasi lintas kota dan komunitas kreatif Indonesia.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="bg-slate-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 space-y-12">
-            <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-                <div class="space-y-2">
-                    <span class="text-xs font-semibold uppercase tracking-[0.3em] text-slate-500">Portfolio</span>
-                    <h2 class="text-3xl font-semibold text-slate-900">Tampilkan Dampak Kegiatan</h2>
-                    <p class="text-slate-600 max-w-2xl">Lihat dokumentasi program dan kisah sukses alumni yang memperlihatkan bagaimana Sicrea membantu komunitas kreatif berkembang.</p>
-                </div>
-                <a href="{{ route('portfolio.index') }}" class="inline-flex items-center rounded-full border border-slate-200 px-5 py-2 text-sm font-semibold text-slate-700 hover:border-indigo-600 hover:text-indigo-600 transition">Lihat Semua Portofolio</a>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 space-y-10">
+            <div class="text-center space-y-3">
+                <span class="inline-flex items-center gap-2 rounded-full bg-[#FFF0E6] px-4 py-1 text-xs font-semibold uppercase tracking-[0.3em] text-[#C65B74]">Portofolio</span>
+                <h2 class="text-3xl font-semibold text-[#2C1E1E]">Portofolio Kegiatan</h2>
+                <p class="text-base text-[#5F4C4C] max-w-2xl mx-auto">Dokumentasi berbagai workshop dan program kreatif yang pernah kami selenggarakan bersama komunitas dan mitra.</p>
             </div>
 
             <div class="grid gap-6 md:grid-cols-3">
                 @forelse ($featuredPortfolios as $portfolio)
-                    <article class="group relative overflow-hidden rounded-3xl border border-slate-100 bg-white shadow-sm">
-                        @if ($portfolio->media_url)
-                            <img src="{{ $portfolio->media_url }}" alt="{{ $portfolio->title }}" class="h-48 w-full object-cover transition duration-300 group-hover:scale-105" />
-                        @else
-                            <div class="h-48 w-full bg-slate-100 flex items-center justify-center text-xs tracking-[0.3em] uppercase text-slate-400">Dokumentasi</div>
-                        @endif
-                        <div class="p-5 space-y-2">
-                            <h3 class="text-lg font-semibold text-slate-900 group-hover:text-indigo-600 transition">{{ $portfolio->title }}</h3>
-                            <p class="text-sm text-slate-600 leading-relaxed">{{ Str::limit($portfolio->description, 110) }}</p>
+                    <article class="group overflow-hidden rounded-[32px] border border-[#FAD6C7] bg-white shadow-sm shadow-[#FAD6C7]/40">
+                        <div class="relative h-52 overflow-hidden">
+                            @if ($portfolio->media_url)
+                                <img src="{{ $portfolio->media_url }}" alt="{{ $portfolio->title }}" class="h-full w-full object-cover transition duration-300 group-hover:scale-105" />
+                            @else
+                                <div class="flex h-full w-full items-center justify-center bg-[#FFE9DC] text-xs uppercase tracking-[0.35em] text-[#C65B74]/70">Dokumentasi</div>
+                            @endif
+                            <div class="absolute inset-x-4 bottom-4 rounded-full bg-white/90 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.3em] text-[#C65B74] shadow-sm shadow-[#FAD6C7]/60">{{ $portfolio->event?->title ?? 'Program Internal' }}</div>
+                        </div>
+                        <div class="p-6 space-y-3">
+                            <h3 class="text-lg font-semibold text-[#2C1E1E] group-hover:text-[#C65B74] transition">{{ $portfolio->title }}</h3>
+                            <p class="text-sm leading-relaxed text-[#5F4C4C]">{{ Str::limit($portfolio->description, 110) }}</p>
                             @if ($portfolio->event)
-                                <a href="{{ route('events.show', $portfolio->event->slug) }}" class="inline-flex items-center text-xs font-semibold uppercase tracking-[0.25em] text-indigo-600">{{ $portfolio->event->title }}</a>
+                                <a href="{{ route('events.show', $portfolio->event->slug) }}" class="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.3em] text-[#C65B74]">
+                                    Lihat Event
+                                    <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5l7 7-7 7" />
+                                    </svg>
+                                </a>
                             @endif
                         </div>
                     </article>
                 @empty
-                    <div class="md:col-span-3 text-center py-12 rounded-3xl border border-dashed border-slate-200 bg-white">
-                        <p class="text-slate-500">Belum ada dokumentasi portofolio yang dapat ditampilkan saat ini.</p>
+                    <div class="md:col-span-3 text-center py-14 rounded-[32px] border border-dashed border-[#FAD6C7] bg-white/80">
+                        <p class="text-[#5F4C4C]">Belum ada dokumentasi portofolio yang dapat ditampilkan saat ini.</p>
                     </div>
                 @endforelse
+            </div>
+
+            <div class="text-center">
+                <a href="{{ route('portfolio.index') }}" class="inline-flex items-center rounded-full bg-[#FF8A64] px-7 py-3 text-sm font-semibold text-white shadow-md shadow-[#FF8A64]/30 transition hover:bg-[#F9744B]">
+                    Jelajahi Semua Portofolio
+                </a>
             </div>
         </div>
     </section>
 
-    <section class="bg-white">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 grid gap-12 lg:grid-cols-2 items-center">
-            <div class="space-y-5">
-                <span class="inline-flex items-center rounded-full bg-slate-100 px-4 py-1 text-xs font-semibold uppercase tracking-[0.35em] text-slate-600">Kemitraan</span>
-                <h2 class="text-3xl md:text-4xl font-semibold text-slate-900 leading-tight">Siap berkolaborasi dengan brand dan komunitas</h2>
-                <p class="text-base text-slate-600 leading-relaxed">Jelajahi peluang kemitraan yang menghadirkan nilai tambah untuk audiensmu. Mulai dari sponsor hingga program tailor-made, tim Sicrea siap membantu.</p>
-                <div class="flex flex-wrap items-center gap-4">
-                    <a href="{{ route('partnership.index') }}" class="inline-flex items-center rounded-full bg-slate-900 px-6 py-3 text-sm font-semibold text-white hover:bg-slate-700 transition">Detail Kemitraan</a>
-                    <a href="mailto:hello@sicrea.id" class="inline-flex items-center text-sm font-semibold text-slate-700 hover:text-indigo-600 transition">Hubungi Kami</a>
+    <section class="bg-gradient-to-r from-[#FFE1D2] via-[#FFD4B6] to-[#FFEDE1]">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 text-center">
+            <div class="mx-auto max-w-3xl space-y-4">
+                <h2 class="text-3xl font-semibold text-[#2C1E1E]">Siap Memulai Perjalanan Kreatif Anda?</h2>
+                <p class="text-base text-[#5F4C4C]">Daftarkan tim atau komunitasmu pada program terbaik dari Kreasi Hangat dan rasakan pengalaman belajar yang hangat, kolaboratif, dan relevan.</p>
+                <div class="flex flex-wrap justify-center gap-4 pt-2">
+                    <a href="{{ route('events.index') }}" class="inline-flex items-center rounded-full bg-white px-7 py-3 text-sm font-semibold text-[#C65B74] shadow-lg shadow-[#FFB6A0]/40 transition hover:text-[#A2475D]">
+                        Lihat Event
+                    </a>
+                    <a href="{{ route('partnership.index') }}" class="inline-flex items-center rounded-full bg-[#FF8A64] px-7 py-3 text-sm font-semibold text-white shadow-md shadow-[#FF8A64]/30 transition hover:bg-[#F9744B]">
+                        Ajukan Kolaborasi
+                    </a>
                 </div>
             </div>
-            <div class="rounded-3xl bg-slate-100 border border-slate-200 aspect-[4/3] flex items-center justify-center text-xs uppercase tracking-[0.4em] text-slate-400">Partnership Visual</div>
         </div>
     </section>
 </x-layouts.app>
