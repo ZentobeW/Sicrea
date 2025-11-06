@@ -53,22 +53,22 @@ class PageController extends Controller
             [
                 'title' => 'Kurasi Konsep',
                 'description' => 'Tim kami membantu merumuskan ide dan format aktivitas yang selaras dengan tujuan brand maupun komunitas.',
-                'icon' => '💡',
+                'icon' => 'light-bulb',
             ],
             [
                 'title' => 'Produksi End-to-End',
                 'description' => 'Mulai dari talent, materi kreatif, hingga kebutuhan teknis ditangani menyeluruh agar pengalaman peserta terjaga.',
-                'icon' => '🎬',
+                'icon' => 'clapperboard',
             ],
             [
                 'title' => 'Aktivasi Multi Kanal',
                 'description' => 'Distribusi konten lintas kanal memperluas jangkauan audiens dan memaksimalkan engagement.',
-                'icon' => '📣',
+                'icon' => 'megaphone',
             ],
             [
                 'title' => 'Laporan & Insight',
                 'description' => 'Analisis performa program membantu mitra memetakan dampak dan peluang kolaborasi berikutnya.',
-                'icon' => '📊',
+                'icon' => 'presentation-chart-bar',
             ],
         ];
 
@@ -76,22 +76,22 @@ class PageController extends Controller
             [
                 'title' => 'Sponsor Event',
                 'description' => 'Berkolaborasi pada rangkaian workshop pilihan dan tampil di hadapan komunitas kreatif.',
-                'icon' => '🎟️',
+                'icon' => 'ticket',
             ],
             [
                 'title' => 'Venue Partnership',
                 'description' => 'Sediakan ruang yang inspiratif untuk menghadirkan pengalaman offline yang berkesan.',
-                'icon' => '🏢',
+                'icon' => 'building-office',
             ],
             [
                 'title' => 'Corporate Workshop',
                 'description' => 'Rancang sesi pengembangan talenta internal dengan materi yang dapat disesuaikan.',
-                'icon' => '🧑‍🤝‍🧑',
+                'icon' => 'user-group',
             ],
             [
                 'title' => 'Content Collaboration',
                 'description' => 'Produksi konten edukatif atau promosi bersama untuk memperkuat citra brand secara digital.',
-                'icon' => '🎥',
+                'icon' => 'video-camera',
             ],
         ];
 

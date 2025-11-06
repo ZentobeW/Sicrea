@@ -1,13 +1,13 @@
 @php($tabs = [
-    ['label' => 'Event', 'route' => route('admin.events.index'), 'active' => request()->routeIs('admin.events.*'), 'icon' => '📅'],
-    ['label' => 'Pendaftaran', 'route' => route('admin.registrations.index'), 'active' => request()->routeIs('admin.registrations.*'), 'icon' => '🧾'],
-    ['label' => 'Portofolio', 'route' => route('admin.portfolios.index'), 'active' => request()->routeIs('admin.portfolios.*'), 'icon' => '🖼️'],
+    ['label' => 'Event', 'route' => route('admin.events.index'), 'active' => request()->routeIs('admin.events.*'), 'icon' => 'calendar'],
+    ['label' => 'Pendaftaran', 'route' => route('admin.registrations.index'), 'active' => request()->routeIs('admin.registrations.*'), 'icon' => 'document-text'],
+    ['label' => 'Portofolio', 'route' => route('admin.portfolios.index'), 'active' => request()->routeIs('admin.portfolios.*'), 'icon' => 'photo'],
 ])
 
 <x-layouts.admin title="Kelola Portofolio" subtitle="Upload dan kelola dokumentasi kegiatan agar publik dapat merasakan energi workshop secara visual." :tabs="$tabs">
     <x-slot name="actions">
         <a href="{{ route('admin.portfolios.create') }}" class="inline-flex items-center gap-2 rounded-full bg-white/90 px-4 py-2 text-sm font-semibold text-[#6B3021] shadow-lg shadow-[#FF9F80]/30 transition hover:-translate-y-0.5 hover:bg-white">
-            <span class="text-lg">＋</span>
+            <x-heroicon-o-plus class="h-5 w-5" />
             Tambah Portofolio
         </a>
     </x-slot>
@@ -22,7 +22,7 @@
                 <div>
                     <label for="search" class="text-xs font-semibold uppercase tracking-wide text-[#A3563F]">Cari Portofolio</label>
                     <div class="mt-2 flex items-center gap-3 rounded-2xl border border-[#FFD1BE] bg-white px-4 py-2.5 shadow-inner">
-                        <span class="text-[#FF8A65]">🔍</span>
+                        <x-heroicon-o-magnifying-glass class="h-5 w-5 text-[#FF8A65]" />
                         <input id="search" type="text" name="q" value="{{ $filters['q'] }}" placeholder="Cari portofolio berdasarkan judul atau nama event" class="w-full border-0 bg-transparent text-sm text-[#5C2518] placeholder:text-[#C97A64] focus:ring-0" />
                     </div>
                 </div>

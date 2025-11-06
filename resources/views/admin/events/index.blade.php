@@ -1,7 +1,7 @@
 <x-layouts.admin title="Kelola Event" subtitle="Tambahkan, edit, atau hapus event dan workshop.">
     <x-slot name="actions">
         <a href="{{ route('admin.events.create') }}" class="inline-flex items-center gap-2 rounded-full bg-[#F68C7B] px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-[#F68C7B]/40 transition hover:-translate-y-0.5 hover:bg-[#e37b69]">
-            <span class="text-lg">＋</span>
+            <x-heroicon-o-plus class="h-5 w-5" />
             Tambah Event Baru
         </a>
     </x-slot>
@@ -41,7 +41,7 @@
                 <p class="text-sm text-[#A35C45]">Kelola event yang sedang berjalan maupun yang akan datang.</p>
             </div>
             <form method="GET" class="flex w-full max-w-sm items-center rounded-full bg-[#FFF5F0] px-4 py-2 text-sm shadow-inner">
-                <span class="text-lg text-[#E77B5F]">🔍</span>
+                <x-heroicon-o-magnifying-glass class="h-5 w-5 text-[#E77B5F]" />
                 <input type="text" name="search" value="{{ $filters['search'] }}" placeholder="Cari event..." class="ml-2 flex-1 bg-transparent text-[#4B2A22] placeholder:text-[#D28B7B] focus:outline-none" />
                 @if ($filters['search'])
                     <a href="{{ route('admin.events.index') }}" class="text-xs font-semibold text-[#D2644B]">Reset</a>
@@ -76,7 +76,10 @@
                             <td class="px-5 py-4 align-top text-[#9C5A45]">
                                 <div>{{ $event->start_at->translatedFormat('d M Y H:i') }}</div>
                                 <div class="text-xs text-[#D28B7B]">s/d {{ $event->end_at->translatedFormat('d M Y H:i') }}</div>
-                                <div class="mt-2 inline-flex items-center gap-1 rounded-full bg-[#FFE8E0] px-3 py-1 text-xs text-[#C16A55]">📍 {{ $event->location }}</div>
+                                <div class="mt-2 inline-flex items-center gap-1 rounded-full bg-[#FFE8E0] px-3 py-1 text-xs text-[#C16A55]">
+                                    <x-heroicon-o-map-pin class="h-4 w-4" />
+                                    {{ $event->location }}
+                                </div>
                             </td>
                             <td class="px-5 py-4 align-top text-[#9C5A45]">
                                 <div class="font-semibold">{{ $quotaLabel }}</div>

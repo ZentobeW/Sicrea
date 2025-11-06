@@ -203,7 +203,7 @@
                 @foreach ($partnershipBenefits as $index => $benefit)
                     <article class="benefit-card reveal h-full rounded-[28px] border border-[#FAD6C7] bg-[#FFFAF6] p-6" style="--reveal-delay: {{ 120 + ($index * 100) }}ms;">
                         <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-white text-xl shadow-sm shadow-[#FAD6C7]/60">
-                            {{ $benefit['icon'] }}
+                            <x-dynamic-component :component="'heroicon-o-' . $benefit['icon']" class="h-7 w-7 text-[#C65B74]" />
                         </div>
                         <h3 class="mt-6 text-lg font-semibold text-[#2C1E1E]">{{ $benefit['title'] }}</h3>
                         <p class="mt-3 text-sm leading-relaxed text-[#5F4C4C]">{{ $benefit['description'] }}</p>
@@ -276,7 +276,7 @@
                 @foreach ($partnershipSupports as $index => $support)
                     <article class="model-card reveal h-full rounded-[28px] border border-dashed border-[#FAD6C7] bg-[#FFF7F2] p-6" style="--reveal-delay: {{ 120 + ($index * 100) }}ms;">
                         <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-white text-xl shadow-sm shadow-[#FAD6C7]/60">
-                            {{ $support['icon'] }}
+                            <x-dynamic-component :component="'heroicon-o-' . $support['icon']" class="h-7 w-7 text-[#C65B74]" />
                         </div>
                         <h3 class="mt-6 text-lg font-semibold text-[#2C1E1E]">{{ $support['title'] }}</h3>
                         <p class="mt-3 text-sm leading-relaxed text-[#5F4C4C]">{{ $support['description'] }}</p>
@@ -295,15 +295,15 @@
                     <p class="text-sm leading-relaxed text-[#5F4C4C] max-w-xl">Mari diskusikan kebutuhan Anda lebih lanjut. Tim kami akan membantu memetakan tujuan program, audiens, hingga format eksekusi yang paling sesuai.</p>
                     <div class="space-y-2 text-sm text-[#5F4C4C]">
                         <div class="flex items-start gap-3">
-                            <span class="mt-1 text-[#C65B74]">📍</span>
+                            <x-heroicon-o-map-pin class="mt-1 h-5 w-5 text-[#C65B74]" />
                             <span>{{ $contactInfo['address'] }}</span>
                         </div>
                         <div class="flex items-start gap-3">
-                            <span class="mt-1 text-[#C65B74]">📞</span>
+                            <x-heroicon-o-phone class="mt-1 h-5 w-5 text-[#C65B74]" />
                             <span>{{ $contactInfo['phone'] }}</span>
                         </div>
                         <div class="flex items-start gap-3">
-                            <span class="mt-1 text-[#C65B74]">✉️</span>
+                            <x-heroicon-o-envelope class="mt-1 h-5 w-5 text-[#C65B74]" />
                             <a href="mailto:{{ $contactInfo['email'] }}" class="underline decoration-[#C65B74]/50 hover:text-[#C65B74]">{{ $contactInfo['email'] }}</a>
                         </div>
                     </div>

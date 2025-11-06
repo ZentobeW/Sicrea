@@ -1,7 +1,7 @@
 <x-layouts.admin title="Dashboard Admin" subtitle="Selamat datang kembali! Berikut ringkasan aktivitas mingguan platform Anda.">
     <x-slot name="actions">
         <a href="{{ route('admin.events.create') }}" class="inline-flex items-center gap-2 rounded-full bg-white px-5 py-3 text-sm font-semibold text-[#6B3021] shadow-lg shadow-[#FFB59F]/40 transition hover:-translate-y-0.5 hover:bg-[#FFEFE9]">
-            <span class="text-lg">＋</span>
+            <x-heroicon-o-plus class="h-5 w-5" />
             Tambah Event Baru
         </a>
     </x-slot>
@@ -66,7 +66,10 @@
                     <div class="rounded-2xl bg-white/80 px-4 py-3">
                         <p class="text-sm font-semibold text-[#5A291B]">{{ $event->title }}</p>
                         <p class="text-xs text-[#A35C45]">{{ $event->start_at->translatedFormat('d M Y, H:i') }}</p>
-                        <p class="mt-1 text-xs text-[#D16A54] flex items-center gap-1">📍 {{ $event->location }}</p>
+                        <p class="mt-1 text-xs text-[#D16A54] flex items-center gap-1">
+                            <x-heroicon-o-map-pin class="h-4 w-4" />
+                            {{ $event->location }}
+                        </p>
                     </div>
                 @empty
                     <div class="rounded-2xl bg-white/70 px-4 py-6 text-center text-sm text-[#A35C45]">
@@ -87,7 +90,10 @@
                         <p class="text-sm font-semibold text-[#5A291B]">{{ $action['label'] }}</p>
                         <p class="mt-2 text-xs text-[#A35C45] leading-relaxed">{{ $action['description'] }}</p>
                     </div>
-                    <span class="mt-4 inline-flex items-center gap-2 text-xs font-semibold text-[#E57255]">Mulai ↗</span>
+                    <span class="mt-4 inline-flex items-center gap-2 text-xs font-semibold text-[#E57255]">
+                        Mulai
+                        <x-heroicon-o-arrow-up-right class="h-4 w-4" />
+                    </span>
                 </a>
             @endforeach
         </div>

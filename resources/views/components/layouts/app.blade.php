@@ -88,9 +88,18 @@
                     <div class="space-y-3">
                         <h3 class="text-xl font-semibold">Kontak Kami</h3>
                         <ul class="space-y-2 text-sm text-[#F7C8B8]">
-                            <li>📍 Jl. Kreasi No. 123, Jakarta</li>
-                            <li>📞 021-2345-6789</li>
-                            <li>✉️ <a href="mailto:info@kreasihangat.com" class="underline decoration-[#F7C8B8] hover:text-white">info@kreasihangat.com</a></li>
+                            <li class="flex items-center gap-2">
+                                <x-heroicon-o-map-pin class="h-5 w-5" />
+                                <span>Jl. Kreasi No. 123, Jakarta</span>
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <x-heroicon-o-phone class="h-5 w-5" />
+                                <span>021-2345-6789</span>
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <x-heroicon-o-envelope class="h-5 w-5" />
+                                <a href="mailto:info@kreasihangat.com" class="underline decoration-[#F7C8B8] hover:text-white">info@kreasihangat.com</a>
+                            </li>
                         </ul>
                     </div>
                     <div class="space-y-3">
@@ -105,7 +114,8 @@
                 </div>
                 <div class="border-t border-white/10">
                     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 text-center text-sm text-[#F7C8B8]">
-                        &copy; {{ now()->year }} {{ config('app.name', 'Sicrea') }}. Made with <span class="text-[#FF9AA2]">❤</span>
+                        &copy; {{ now()->year }} {{ config('app.name', 'Sicrea') }}. Made with
+                        <x-heroicon-s-heart class="mx-1 inline h-5 w-5 text-[#FF9AA2]" />
                     </div>
                 </div>
             </footer>

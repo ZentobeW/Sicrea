@@ -8,31 +8,31 @@
     $navigation = [
         [
             'label' => 'Dashboard',
-            'icon' => '🏠',
+            'icon' => 'home',
             'route' => route('admin.dashboard'),
             'active' => request()->routeIs('admin.dashboard'),
         ],
         [
             'label' => 'Kelola Event',
-            'icon' => '📅',
+            'icon' => 'calendar',
             'route' => route('admin.events.index'),
             'active' => request()->routeIs('admin.events.*'),
         ],
         [
             'label' => 'Kelola Portofolio',
-            'icon' => '🖼️',
+            'icon' => 'photo',
             'route' => route('admin.portfolios.index'),
             'active' => request()->routeIs('admin.portfolios.*'),
         ],
         [
             'label' => 'Laporan & Analitik',
-            'icon' => '📊',
+            'icon' => 'chart-bar-square',
             'route' => route('admin.reports.index'),
             'active' => request()->routeIs('admin.reports.*'),
         ],
         [
             'label' => 'Kelola Transaksi',
-            'icon' => '💳',
+            'icon' => 'credit-card',
             'route' => route('admin.registrations.index'),
             'active' => request()->routeIs('admin.registrations.*'),
         ],
@@ -55,7 +55,7 @@
                             'bg-white/70 text-[#5C2518] shadow-md shadow-[#FF9F80]/20' => $item['active'],
                             'text-[#874532] hover:bg-white/40 hover:text-[#5C2518]' => ! ($item['active'] ?? false),
                         ])>
-                            <span class="text-lg">{{ $item['icon'] }}</span>
+                            <x-dynamic-component :component="'heroicon-o-' . $item['icon']" class="h-5 w-5" />
                             {{ $item['label'] }}
                         </a>
                     @endforeach
@@ -64,13 +64,13 @@
 
             <div class="space-y-4 text-sm">
                 <a href="{{ route('home') }}" class="flex items-center gap-3 rounded-2xl bg-white/40 px-4 py-3 font-semibold text-[#6B3021] transition hover:bg-white/60">
-                    <span>🌐</span>
+                    <x-heroicon-o-globe-alt class="h-5 w-5" />
                     Lihat Website
                 </a>
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
                     <button class="flex w-full items-center justify-center gap-2 rounded-2xl bg-[#F68C7B] px-4 py-3 font-semibold text-white shadow-md shadow-[#E86A54]/30 transition hover:bg-[#e37b69]">
-                        <span>↩</span>
+                        <x-heroicon-o-arrow-left-on-rectangle class="h-5 w-5" />
                         Logout
                     </button>
                 </form>
