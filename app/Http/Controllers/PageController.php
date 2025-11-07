@@ -53,14 +53,22 @@ class PageController extends Controller
             [
                 'title' => 'Kurasi Konsep',
                 'description' => 'Tim kami membantu merumuskan ide dan format aktivitas yang selaras dengan tujuan brand maupun komunitas.',
+                'icon' => 'light-bulb',
             ],
             [
                 'title' => 'Produksi End-to-End',
-                'description' => 'Mulai dari talent, materi kreatif, hingga kebutuhan teknis ditangani secara menyeluruh agar pengalaman peserta terjaga.',
+                'description' => 'Mulai dari talent, materi kreatif, hingga kebutuhan teknis ditangani menyeluruh agar pengalaman peserta terjaga.',
+                'icon' => 'clapperboard',
             ],
             [
                 'title' => 'Aktivasi Multi Kanal',
-                'description' => 'Distribusi konten dan publikasi dilakukan lintas kanal untuk memperluas jangkauan audiens dan memaksimalkan engagement.',
+                'description' => 'Distribusi konten lintas kanal memperluas jangkauan audiens dan memaksimalkan engagement.',
+                'icon' => 'megaphone',
+            ],
+            [
+                'title' => 'Laporan & Insight',
+                'description' => 'Analisis performa program membantu mitra memetakan dampak dan peluang kolaborasi berikutnya.',
+                'icon' => 'presentation-chart-bar',
             ],
         ];
 
@@ -68,18 +76,63 @@ class PageController extends Controller
             [
                 'title' => 'Sponsor Event',
                 'description' => 'Berkolaborasi pada rangkaian workshop pilihan dan tampil di hadapan komunitas kreatif.',
+                'icon' => 'ticket',
             ],
             [
                 'title' => 'Venue Partnership',
                 'description' => 'Sediakan ruang yang inspiratif untuk menghadirkan pengalaman offline yang berkesan.',
+                'icon' => 'building-office',
             ],
             [
                 'title' => 'Corporate Workshop',
                 'description' => 'Rancang sesi pengembangan talenta internal dengan materi yang dapat disesuaikan.',
+                'icon' => 'user-group',
+            ],
+            [
+                'title' => 'Content Collaboration',
+                'description' => 'Produksi konten edukatif atau promosi bersama untuk memperkuat citra brand secara digital.',
+                'icon' => 'video-camera',
             ],
         ];
 
-        return view('pages.partnership', compact('partnershipBenefits', 'partnershipSupports'));
+        $highlightStats = [
+            [
+                'value' => '40+',
+                'label' => 'Brand Partners',
+                'description' => 'Kolaborasi aktif dengan pelaku industri kreatif dan lifestyle.',
+            ],
+            [
+                'value' => '120+',
+                'label' => 'Event Terselenggara',
+                'description' => 'Program hybrid dan offline sepanjang dua tahun terakhir.',
+            ],
+            [
+                'value' => '8.5K',
+                'label' => 'Peserta Terjangkau',
+                'description' => 'Jangkauan audiens komunitas dan publik yang mengikuti program kami.',
+            ],
+        ];
+
+        $featuredPortfolios = Portfolio::query()
+            ->with(['event:id,title,slug'])
+            ->latest('created_at')
+            ->take(3)
+            ->get();
+
+        $contactInfo = [
+            'email' => 'partnership@sicrea.id',
+            'phone' => '+62 812-3456-7890',
+            'address' => 'Jl. Kreasi No. 123, Jakarta Selatan',
+            'whatsapp' => '6281234567890',
+        ];
+
+        return view('pages.partnership', compact(
+            'partnershipBenefits',
+            'partnershipSupports',
+            'highlightStats',
+            'featuredPortfolios',
+            'contactInfo'
+        ));
     }
 
     public function about(): View
