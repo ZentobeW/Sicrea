@@ -18,7 +18,7 @@ Route::get('/events', [EventController::class, 'index'])->name('events.index');
 Route::get('/portfolio', [PageController::class, 'portfolio'])->name('portfolio.index');
 Route::get('/partnership', [PageController::class, 'partnership'])->name('partnership.index');
 Route::get('/about', [PageController::class, 'about'])->name('about.index');
-Route::get('/events/{slug}', [EventController::class, 'show'])->name('events.show');
+Route::get('/events/{event}', [EventController::class, 'show'])->name('events.show');
 
 Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');

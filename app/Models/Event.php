@@ -16,11 +16,12 @@ class Event extends Model
 
     protected $fillable = [
         'title',
-        'slug',
         'description',
         'start_at',
         'end_at',
-        'location',
+        'venue_name',
+        'venue_address',
+        'tutor_name',
         'capacity',
         'available_slots',
         'price',
@@ -40,10 +41,6 @@ class Event extends Model
     protected static function booted(): void
     {
         static::creating(function (Event $event) {
-            if (empty($event->slug)) {
-                $event->slug = Str::slug($event->title);
-            }
-
             if ($event->capacity && $event->available_slots === null) {
                 $event->available_slots = $event->capacity;
             }

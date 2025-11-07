@@ -20,7 +20,7 @@ class PageController extends Controller
             ->get();
 
         $featuredPortfolios = Portfolio::query()
-            ->with(['event:id,title,slug'])
+            ->with(['event:id,title'])
             ->latest('created_at')
             ->take(3)
             ->get();

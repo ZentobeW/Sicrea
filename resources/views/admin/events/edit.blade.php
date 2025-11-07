@@ -10,10 +10,9 @@
                         <span>Judul Event</span>
                         <input type="text" name="title" value="{{ old('title', $event->title) }}" class="w-full rounded-2xl border border-[#FFD6C7] bg-[#FFF7F3] px-4 py-3 text-sm text-[#4B2A22] placeholder:text-[#D28B7B] focus:border-[#F68C7B] focus:outline-none" required>
                     </label>
-                    <label class="space-y-2 text-sm font-semibold text-[#7A3E2F]">
-                        <span>Slug</span>
-                        <input type="text" name="slug" value="{{ old('slug', $event->slug) }}" class="w-full rounded-2xl border border-[#FFD6C7] bg-[#FFF7F3] px-4 py-3 text-sm text-[#4B2A22] placeholder:text-[#D28B7B] focus:border-[#F68C7B] focus:outline-none">
-                    </label>
+                    
+                    <!-- FIELD SLUG DIHAPUS DARI SINI -->
+                    
                     <div class="grid gap-4 md:grid-cols-2">
                         <label class="space-y-2 text-sm font-semibold text-[#7A3E2F]">
                             <span>Mulai</span>
@@ -24,9 +23,22 @@
                             <input type="datetime-local" name="end_at" value="{{ old('end_at', $event->end_at->format('Y-m-d\TH:i')) }}" class="w-full rounded-2xl border border-[#FFD6C7] bg-[#FFF7F3] px-4 py-3 text-sm text-[#4B2A22] focus:border-[#F68C7B] focus:outline-none" required>
                         </label>
                     </div>
+
+                    <!-- FIELD LOKASI DIGANTI DENGAN 3 FIELD BARU DI BAWAH: -->
+
                     <label class="space-y-2 text-sm font-semibold text-[#7A3E2F]">
-                        <span>Lokasi / Platform</span>
-                        <input type="text" name="location" value="{{ old('location', $event->location) }}" class="w-full rounded-2xl border border-[#FFD6C7] bg-[#FFF7F3] px-4 py-3 text-sm text-[#4B2A22] placeholder:text-[#D28B7B] focus:border-[#F68C7B] focus:outline-none" required>
+                        <span>Nama Tutor / Pembicara</span>
+                        <input type="text" name="tutor_name" value="{{ old('tutor_name', $event->tutor_name) }}" class="w-full rounded-2xl border border-[#FFD6C7] bg-[#FFF7F3] px-4 py-3 text-sm text-[#4B2A22] placeholder:text-[#D28B7B] focus:border-[#F68C7B] focus:outline-none" required>
+                    </label>
+
+                    <label class="space-y-2 text-sm font-semibold text-[#7A3E2F]">
+                        <span>Nama Tempat / Venue</span>
+                        <input type="text" name="venue_name" value="{{ old('venue_name', $event->venue_name) }}" class="w-full rounded-2xl border border-[#FFD6C7] bg-[#FFF7F3] px-4 py-3 text-sm text-[#4B2A22] placeholder:text-[#D28B7B] focus:border-[#F68C7B] focus:outline-none" required>
+                    </label>
+
+                    <label class="space-y-2 text-sm font-semibold text-[#7A3E2F]">
+                        <span>Alamat Tempat / Platform (Link jika online)</span>
+                        <input type="text" name="venue_address" value="{{ old('venue_address', $event->venue_address) }}" class="w-full rounded-2xl border border-[#FFD6C7] bg-[#FFF7F3] px-4 py-3 text-sm text-[#4B2A22] placeholder:text-[#D28B7B] focus:border-[#F68C7B] focus:outline-none" required>
                     </label>
                 </div>
             </div>
@@ -85,6 +97,7 @@
             <div class="rounded-2xl bg-gradient-to-br from-[#FFE3D2] via-[#FFD0C0] to-[#FFC3B5] p-5 text-[#4B2A22]">
                 <h3 class="text-sm font-semibold">Pratinjau Publik</h3>
                 <p class="mt-2 text-sm leading-relaxed">Cek tampilan event di katalog peserta untuk memastikan seluruh informasi tampil sesuai.</p>
+                <!-- Link ini sudah benar, menggunakan $event (bukan $event->slug) -->
                 <a href="{{ route('events.show', $event) }}" class="mt-3 inline-flex items-center gap-2 text-xs font-semibold text-[#E57255]">Buka Preview →</a>
             </div>
         </aside>

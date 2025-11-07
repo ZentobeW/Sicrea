@@ -19,7 +19,9 @@ class EventController extends Controller
                     $builder
                         ->where('title', 'like', "%{$keyword}%")
                         ->orWhere('description', 'like', "%{$keyword}%")
-                        ->orWhere('location', 'like', "%{$keyword}%");
+                        ->orWhere('venue_name', 'like', "%{$keyword}%")
+                        ->orWhere('venue_address', 'like', "%{$keyword}%")
+                        ->orWhere('tutor_name', 'like', "%{$keyword}%");
                 });
             })
             ->orderBy('start_at')
@@ -29,13 +31,12 @@ class EventController extends Controller
         return view('events.index', compact('events'));
     }
 
-    public function show(string $slug): View
+    public function show(Event $event): View
     {
-        $event = Event::query()
-            ->where('slug', $slug)
-            ->where('status', EventStatus::Published)
-            ->with(['portfolios'])->withCount('registrations')
-            ->firstOrFail();
+        if ($event->status !== EventStatus::Published) {
+            abort(404);
+        }
+        $event->load(['portfolios'])->loadCount('registrations');
 
         return view('events.show', compact('event'));
     }

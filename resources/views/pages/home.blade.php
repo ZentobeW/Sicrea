@@ -96,12 +96,12 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 11c.828 0 1.5-.672 1.5-1.5S12.828 8 12 8s-1.5.672-1.5 1.5S11.172 11 12 11z" />
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20.25 10.5c0 7.5-8.25 11.25-8.25 11.25S3.75 18 3.75 10.5a8.25 8.25 0 1116.5 0z" />
                                 </svg>
-                                <span>{{ $event->location }}</span>
+                                <span>{{ $event->venue_address }}</span>
                             </div>
                         </div>
                         <div class="mt-6 flex items-center justify-between rounded-2xl bg-[#FFF0E6] px-5 py-3 text-xs font-semibold uppercase tracking-[0.28em] text-[#A04E62]">
                             <span>Kuota tersisa: {{ $event->available_slots ?? 'Tidak terbatas' }}</span>
-                            <a href="{{ route('events.show', $event->slug) }}" class="inline-flex items-center rounded-full bg-[#FF8A64] px-4 py-2 text-white transition hover:bg-[#F9744B]">Lihat Detail</a>
+                            <a href="{{ route('events.show', $event) }}" class="inline-flex items-center rounded-full bg-[#FF8A64] px-4 py-2 text-white transition hover:bg-[#F9744B]">Lihat Detail</a>
                         </div>
                     </article>
                 @empty
@@ -136,7 +136,7 @@
                             <h3 class="text-lg font-semibold text-[#2C1E1E] group-hover:text-[#C65B74] transition">{{ $portfolio->title }}</h3>
                             <p class="text-sm leading-relaxed text-[#5F4C4C]">{{ Str::limit($portfolio->description, 110) }}</p>
                             @if ($portfolio->event)
-                                <a href="{{ route('events.show', $portfolio->event->slug) }}" class="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.3em] text-[#C65B74]">
+                                <a href="{{ route('events.show', $portfolio->event) }}" class="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.3em] text-[#C65B74]">
                                     Lihat Event
                                     <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5l7 7-7 7" />

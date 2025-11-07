@@ -9,10 +9,7 @@
                         <span>Judul Event</span>
                         <input type="text" name="title" value="{{ old('title') }}" class="w-full rounded-2xl border border-[#FFD6C7] bg-[#FFF7F3] px-4 py-3 text-sm text-[#4B2A22] placeholder:text-[#D28B7B] focus:border-[#F68C7B] focus:outline-none" required>
                     </label>
-                    <label class="space-y-2 text-sm font-semibold text-[#7A3E2F]">
-                        <span>Slug (opsional)</span>
-                        <input type="text" name="slug" value="{{ old('slug') }}" class="w-full rounded-2xl border border-[#FFD6C7] bg-[#FFF7F3] px-4 py-3 text-sm text-[#4B2A22] placeholder:text-[#D28B7B] focus:border-[#F68C7B] focus:outline-none">
-                    </label>
+                    
                     <div class="grid gap-4 md:grid-cols-2">
                         <label class="space-y-2 text-sm font-semibold text-[#7A3E2F]">
                             <span>Mulai</span>
@@ -23,9 +20,20 @@
                             <input type="datetime-local" name="end_at" value="{{ old('end_at') }}" class="w-full rounded-2xl border border-[#FFD6C7] bg-[#FFF7F3] px-4 py-3 text-sm text-[#4B2A22] focus:border-[#F68C7B] focus:outline-none" required>
                         </label>
                     </div>
+
                     <label class="space-y-2 text-sm font-semibold text-[#7A3E2F]">
-                        <span>Lokasi / Platform</span>
-                        <input type="text" name="location" value="{{ old('location') }}" class="w-full rounded-2xl border border-[#FFD6C7] bg-[#FFF7F3] px-4 py-3 text-sm text-[#4B2A22] placeholder:text-[#D28B7B] focus:border-[#F68C7B] focus:outline-none" required>
+                        <span>Nama Tutor / Pembicara</span>
+                        <input type="text" name="tutor_name" value="{{ old('tutor_name') }}" class="w-full rounded-2xl border border-[#FFD6C7] bg-[#FFF7F3] px-4 py-3 text-sm text-[#4B2A22] placeholder:text-[#D28B7B] focus:border-[#F68C7B] focus:outline-none" required>
+                    </label>
+
+                    <label class="space-y-2 text-sm font-semibold text-[#7A3E2F]">
+                        <span>Nama Tempat / Venue</span>
+                        <input type="text" name="venue_name" value="{{ old('venue_name') }}" class="w-full rounded-2xl border border-[#FFD6C7] bg-[#FFF7F3] px-4 py-3 text-sm text-[#4B2A22] placeholder:text-[#D28B7B] focus:border-[#F68C7B] focus:outline-none" required>
+                    </label>
+
+                    <label class="space-y-2 text-sm font-semibold text-[#7A3E2F]">
+                        <span>Alamat Tempat / Platform (Link jika online)</span>
+                        <input type="text" name="venue_address" value="{{ old('venue_address') }}" class="w-full rounded-2xl border border-[#FFD6C7] bg-[#FFF7F3] px-4 py-3 text-sm text-[#4B2A22] placeholder:text-[#D28B7B] focus:border-[#F68C7B] focus:outline-none" required>
                     </label>
                 </div>
             </div>
