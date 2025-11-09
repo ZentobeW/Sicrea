@@ -26,11 +26,12 @@ class EventFactory extends Factory
 
         return [
             'title' => $title,
-            'slug' => Str::slug($title) . '-' . Str::random(5),
             'description' => $this->faker->paragraphs(3, true),
             'start_at' => $startAt,
             'end_at' => $endAt,
-            'location' => $this->faker->city(),
+            'venue_name' => $this->faker->company(),
+            'venue_address' => $this->faker->address(),
+            'tutor_name' => $this->faker->name(),
             'capacity' => $capacity,
             'available_slots' => max($capacity - $booked, 0),
             'price' => $this->faker->numberBetween(100_000, 650_000),
