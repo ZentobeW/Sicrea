@@ -83,16 +83,9 @@ class RegistrationController extends Controller
 
         $refundSummary = [
             'total' => (clone $refundBase)->count(),
-            'pending' => (clone $refundBase)->where('status', RefundStatus::Pending)->count(),
             'approved' => (clone $refundBase)->whereIn('status', [RefundStatus::Approved, RefundStatus::Completed])->count(),
             'amount' => (clone $refundBase)->get()->sum(fn ($refund) => optional($refund->transaction)->amount ?? 0),
         ];
-
-        $events = \App\Models\Event::orderBy('title')->get();
-
-        return view('admin.registrations.index', [
-            'registrations' => $registrations,
-            'events' => $events,
             'registrationSummary' => $registrationSummary,
             'refundSummary' => $refundSummary,
             'isRefundView' => $isRefundView,
