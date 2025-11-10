@@ -54,8 +54,10 @@
                 <thead class="text-xs uppercase tracking-wide text-[#C16A55]">
                     <tr>
                         <th class="px-5 py-3 text-left">Event</th>
-                        <th class="px-5 py-3 text-left">Jadwal</th>
+                        <th class="px-5 py-3 text-left">Jadwal &amp; Lokasi</th>
+                        <th class="px-5 py-3 text-left">Tutor</th>
                         <th class="px-5 py-3 text-left">Kuota</th>
+                        <th class="px-5 py-3 text-left">Harga</th>
                         <th class="px-5 py-3 text-left">Status</th>
                         <th class="px-5 py-3 text-right">Aksi</th>
                     </tr>
@@ -71,7 +73,7 @@
                         <tr class="transition hover:bg-white">
                             <td class="px-5 py-4 align-top">
                                 <div class="font-semibold text-[#4B2A22]">{{ $event->title }}</div>
-                                <div class="mt-1 text-xs text-[#D28B7B]">Rp{{ number_format($event->price, 0, ',', '.') }}</div>
+                                <p class="mt-1 text-[11px] text-[#D28B7B]">Diperbarui {{ $event->updated_at->diffForHumans() }}</p>
                             </td>
                             <td class="px-5 py-4 align-top text-[#9C5A45]">
                                 <div>{{ $event->start_at->translatedFormat('d M Y H:i') }}</div>
@@ -81,7 +83,10 @@
                                     <span class="font-semibold">{{ $event->venue_name }}</span>
                                 </div>
                                 <p class="mt-1 text-[11px] text-[#D28B7B]">{{ $event->venue_address }}</p>
-                                <p class="mt-1 text-[11px] text-[#D28B7B]">Tutor: {{ $event->tutor_name }}</p>
+                            </td>
+                            <td class="px-5 py-4 align-top text-[#9C5A45]">
+                                <div class="font-semibold">{{ $event->tutor_name }}</div>
+                                <p class="text-xs text-[#D28B7B]">Instruktur utama</p>
                             </td>
                             <td class="px-5 py-4 align-top text-[#9C5A45]">
                                 <div class="font-semibold">{{ $quotaLabel }}</div>
@@ -91,30 +96,45 @@
                                     </div>
                                 @endif
                             </td>
+                            <td class="px-5 py-4 align-top text-[#9C5A45]">
+                                <div class="font-semibold">Rp{{ number_format($event->price, 0, ',', '.') }}</div>
+                                <p class="text-xs text-[#D28B7B]">Per peserta</p>
+                            </td>
                             <td class="px-5 py-4 align-top">
                                 <span @class([
                                     'inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-semibold',
                                     'bg-[#EAF9F1] text-[#2D8F64]' => $event->status->value === 'published',
                                     'bg-[#FFF0E7] text-[#C16A55]' => $event->status->value !== 'published',
                                 ])>
-                                    <span class="text-sm">{{ $event->status->value === 'published' ? '●' : '○' }}</span>
+                                    <span @class([
+                                        'block h-2 w-2 rounded-full',
+                                        'bg-[#2D8F64]' => $event->status->value === 'published',
+                                        'bg-[#E77B5F]' => $event->status->value !== 'published',
+                                    ])></span>
                                     {{ $event->status->label() }}
                                 </span>
                             </td>
                             <td class="px-5 py-4 align-top text-right">
-                                <div class="inline-flex items-center gap-2 text-xs font-semibold">
-                                    <a href="{{ route('admin.events.edit', $event) }}" class="inline-flex items-center gap-1 rounded-full bg-[#FFE8E0] px-3 py-1 text-[#C16A55] transition hover:bg-[#FFD6C7]">Edit</a>
-                                    <form method="POST" action="{{ route('admin.events.destroy', $event) }}" onsubmit="return confirm('Hapus event ini?')">
+                                <div class="inline-flex items-center justify-end gap-2">
+                                    <a href="{{ route('admin.registrations.index', ['event_id' => $event->id]) }}" class="inline-flex h-9 w-9 items-center justify-center rounded-full bg-[#FFEFE6] text-[#C16A55] shadow-inner transition hover:-translate-y-0.5 hover:bg-[#FFDCCB]" title="Lihat peserta">
+                                        <x-heroicon-o-user-group class="h-5 w-5" />
+                                    </a>
+                                    <a href="{{ route('admin.events.edit', $event) }}" class="inline-flex h-9 w-9 items-center justify-center rounded-full bg-[#FFEFE6] text-[#C16A55] shadow-inner transition hover:-translate-y-0.5 hover:bg-[#FFDCCB]" title="Edit event">
+                                        <x-heroicon-o-pencil-square class="h-5 w-5" />
+                                    </a>
+                                    <form method="POST" action="{{ route('admin.events.destroy', $event) }}" class="inline-flex" onsubmit="return confirm('Hapus event ini?')">
                                         @csrf
                                         @method('DELETE')
-                                        <button class="inline-flex items-center gap-1 rounded-full bg-[#FCE0DE] px-3 py-1 text-[#D2644B] transition hover:bg-[#F9C9C4]">Hapus</button>
+                                        <button type="submit" class="inline-flex h-9 w-9 items-center justify-center rounded-full bg-[#FCE0DE] text-[#D2644B] shadow-inner transition hover:-translate-y-0.5 hover:bg-[#F9C9C4]" title="Hapus event">
+                                            <x-heroicon-o-trash class="h-5 w-5" />
+                                        </button>
                                     </form>
                                 </div>
                             </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="5" class="px-5 py-12 text-center text-sm text-[#A35C45]">Belum ada data event.</td>
+                            <td colspan="7" class="px-5 py-12 text-center text-sm text-[#A35C45]">Belum ada data event.</td>
                         </tr>
                     @endforelse
                 </tbody>

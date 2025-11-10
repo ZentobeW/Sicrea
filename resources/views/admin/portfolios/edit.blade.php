@@ -5,7 +5,6 @@
 ])
 
 @php($event = $portfolio->event)
-@php($previewSlots = collect($portfolio->media_url ? [$portfolio->media_url] : [])->pad(3, null))
 
 <x-layouts.admin :title="'Edit Portofolio: ' . $portfolio->title" subtitle="Sempurnakan cerita visual agar audiens merasakan pengalaman workshop secara utuh." :tabs="$tabs" :back-url="route('admin.portfolios.index')">
     <div class="space-y-8">
@@ -44,7 +43,7 @@
             </div>
         </section>
 
-        <form method="POST" action="{{ route('admin.portfolios.update', $portfolio) }}" class="space-y-8">
+        <form method="POST" action="{{ route('admin.portfolios.update', $portfolio) }}" enctype="multipart/form-data" class="space-y-8">
             @csrf
             @method('PUT')
 
@@ -103,39 +102,53 @@
                 </div>
             </div>
 
-            <div class="rounded-[32px] border border-slate-200/70 bg-white/95 p-6 sm:p-8 shadow-xl shadow-orange-100/50 space-y-6">
+            <div class="rounded-[32px] border border-slate-200/70 bg-white/95 p-6 sm:p-8 shadow-xl shadow-orange-100/50 space-y-6" data-cover-uploader>
                 <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                     <div>
                         <h3 class="text-lg font-semibold text-slate-900">Dokumentasi Foto</h3>
                         <p class="text-sm text-slate-500">Pilih foto terbaik dengan resolusi tinggi. Anda dapat menyimpan tautan dokumentasi utama di bawah.</p>
                     </div>
-                    <button type="button" class="inline-flex items-center gap-2 rounded-full bg-orange-500 px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-orange-300/60 transition hover:-translate-y-0.5 hover:bg-orange-600">
+                    <label for="cover_image" class="inline-flex items-center gap-2 rounded-full bg-orange-500 px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-orange-300/60 transition hover:-translate-y-0.5 hover:bg-orange-600 cursor-pointer">
                         <x-heroicon-o-plus class="h-4 w-4" />
                         Tambah Foto
-                    </button>
+                    </label>
                 </div>
 
+                <input type="file" name="cover_image" id="cover_image" accept="image/*" class="sr-only" data-cover-input>
+
                 <div class="grid gap-4 md:grid-cols-3">
-                    @foreach ($previewSlots as $url)
-                        @if ($url)
-                            <a href="{{ $url }}" target="_blank" rel="noopener" class="group relative block overflow-hidden rounded-3xl border border-orange-200/70 bg-orange-50/60 shadow-inner">
-                                <img src="{{ $url }}" alt="Dokumentasi portofolio" class="h-40 w-full object-cover transition duration-300 group-hover:scale-105">
-                                <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-slate-900/50 via-slate-900/10 to-transparent opacity-0 transition group-hover:opacity-100"></div>
-                                <span class="pointer-events-none absolute bottom-3 right-3 inline-flex items-center gap-1 rounded-full bg-white/90 px-3 py-1 text-xs font-semibold text-slate-600 shadow">
-                                    <x-heroicon-o-arrow-up-right class="h-4 w-4" />
-                                    Preview
-                                </span>
-                            </a>
-                        @else
-                            <div class="flex h-40 flex-col items-center justify-center gap-3 rounded-3xl border border-dashed border-orange-200 bg-orange-50/40 text-slate-400">
-                                <span class="flex h-10 w-10 items-center justify-center rounded-2xl bg-white/80 text-orange-400 shadow-inner">
-                                    <x-heroicon-o-photo class="h-5 w-5" />
-                                </span>
-                                <p class="px-6 text-center text-xs font-medium text-slate-400">Siapkan dokumentasi tambahan untuk menambah daya tarik portofolio.</p>
-                            </div>
+                    <div class="group relative overflow-hidden rounded-3xl border border-orange-200/70 bg-orange-50/60 shadow-inner" data-cover-frame>
+                        <img data-cover-preview data-persistent="{{ $portfolio->media_url ? 'true' : '' }}" src="{{ $portfolio->media_url ? $portfolio->media_url : '' }}" alt="Dokumentasi portofolio" class="{{ $portfolio->media_url ? 'block' : 'hidden' }} h-40 w-full object-cover transition duration-300 group-hover:scale-105">
+                        <div data-cover-placeholder class="{{ $portfolio->media_url ? 'hidden' : 'flex' }} h-40 flex-col items-center justify-center gap-3 text-slate-400">
+                            <span class="flex h-10 w-10 items-center justify-center rounded-2xl bg-white/80 text-orange-400 shadow-inner">
+                                <x-heroicon-o-photo class="h-5 w-5" />
+                            </span>
+                            <p class="px-6 text-center text-xs font-medium text-slate-400">Unggah foto highlight kegiatan untuk menambah daya tarik portofolio.</p>
+                        </div>
+                        @if ($portfolio->media_url)
+                            <span class="pointer-events-none absolute bottom-3 right-3 inline-flex items-center gap-1 rounded-full bg-white/90 px-3 py-1 text-xs font-semibold text-slate-600 shadow">
+                                <x-heroicon-o-arrow-up-right class="h-4 w-4" />
+                                Preview
+                            </span>
                         @endif
-                    @endforeach
+                    </div>
+                    <div class="flex h-40 flex-col items-center justify-center gap-3 rounded-3xl border border-dashed border-orange-200 bg-orange-50/40 text-slate-400">
+                        <span class="flex h-10 w-10 items-center justify-center rounded-2xl bg-white/80 text-orange-400 shadow-inner">
+                            <x-heroicon-o-light-bulb class="h-5 w-5" />
+                        </span>
+                        <p class="px-6 text-center text-xs font-medium text-slate-400">Gunakan rasio 4:3 agar foto tampil maksimal pada halaman publik.</p>
+                    </div>
+                    <div class="flex h-40 flex-col items-center justify-center gap-3 rounded-3xl border border-dashed border-orange-200 bg-orange-50/40 text-slate-400">
+                        <span class="flex h-10 w-10 items-center justify-center rounded-2xl bg-white/80 text-orange-400 shadow-inner">
+                            <x-heroicon-o-video-camera class="h-5 w-5" />
+                        </span>
+                        <p class="px-6 text-center text-xs font-medium text-slate-400">Tambahkan tautan video di bawah untuk variasi konten.</p>
+                    </div>
                 </div>
+
+                @error('cover_image')
+                    <p class="text-xs font-medium text-rose-500">{{ $message }}</p>
+                @enderror
 
                 <div>
                     <label class="block text-sm font-semibold text-slate-700">Tautan Dokumentasi Utama</label>
@@ -155,4 +168,45 @@
             </div>
         </form>
     </div>
+    @push('scripts')
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                document.querySelectorAll('[data-cover-uploader]').forEach((uploader) => {
+                    if (uploader.dataset.initialized === 'true') {
+                        return;
+                    }
+
+                    const input = uploader.querySelector('[data-cover-input]');
+                    const preview = uploader.querySelector('[data-cover-preview]');
+                    const placeholder = uploader.querySelector('[data-cover-placeholder]');
+
+                    if (!input || !preview) {
+                        return;
+                    }
+
+                    const updatePreview = (file) => {
+                        if (file) {
+                            const url = URL.createObjectURL(file);
+                            preview.src = url;
+                            preview.classList.remove('hidden');
+                            placeholder?.classList.add('hidden');
+
+                            preview.onload = () => URL.revokeObjectURL(url);
+                        } else if (!preview.dataset.persistent) {
+                            preview.src = '';
+                            preview.classList.add('hidden');
+                            placeholder?.classList.remove('hidden');
+                        }
+                    };
+
+                    input.addEventListener('change', (event) => {
+                        const [file] = event.target.files || [];
+                        updatePreview(file ?? null);
+                    });
+
+                    uploader.dataset.initialized = 'true';
+                });
+            });
+        </script>
+    @endpush
 </x-layouts.admin>

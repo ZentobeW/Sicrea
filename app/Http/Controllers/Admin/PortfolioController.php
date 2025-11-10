@@ -10,6 +10,8 @@ use App\Models\Portfolio;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class PortfolioController extends Controller
 {
@@ -63,7 +65,14 @@ class PortfolioController extends Controller
 
     public function store(StorePortfolioRequest $request): RedirectResponse
     {
-        Portfolio::create($request->validated());
+        $data = $request->safe()->except('cover_image');
+
+        if ($request->hasFile('cover_image')) {
+            $path = $request->file('cover_image')->store('portfolios', 'public');
+            $data['media_url'] = Storage::url($path);
+        }
+
+        Portfolio::create($data);
 
         return redirect()->route('admin.portfolios.index')->with('status', 'Portofolio berhasil ditambahkan.');
     }
@@ -79,7 +88,18 @@ class PortfolioController extends Controller
 
     public function update(UpdatePortfolioRequest $request, Portfolio $portfolio): RedirectResponse
     {
-        $portfolio->update($request->validated());
+        $data = $request->safe()->except('cover_image');
+
+        if ($request->hasFile('cover_image')) {
+            if ($portfolio->media_url && Str::startsWith($portfolio->media_url, 'storage/')) {
+                Storage::disk('public')->delete(Str::after($portfolio->media_url, 'storage/'));
+            }
+
+            $path = $request->file('cover_image')->store('portfolios', 'public');
+            $data['media_url'] = Storage::url($path);
+        }
+
+        $portfolio->update($data);
 
         return redirect()->route('admin.portfolios.index')->with('status', 'Portofolio diperbarui.');
     }

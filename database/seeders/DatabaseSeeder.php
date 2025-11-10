@@ -12,6 +12,7 @@ use App\Models\Refund;
 use App\Models\Registration;
 use App\Models\Transaction;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -149,5 +150,105 @@ class DatabaseSeeder extends Seeder
                 }
             });
         });
+
+        $demoStart = Carbon::now()->addWeeks(4)->setTime(9, 0);
+        $demoEnd = (clone $demoStart)->addHours(6);
+
+        $demoEvent = Event::factory()
+            ->published()
+            ->for($admin, 'creator')
+            ->for($admin, 'updater')
+            ->create([
+                'title' => 'Workshop Uji Transaksi',
+                'description' => 'Sesi khusus untuk menguji alur transaksi, verifikasi, dan refund pada dashboard admin.',
+                'start_at' => $demoStart,
+                'end_at' => $demoEnd,
+                'venue_name' => 'Studio Kreasi Hangat',
+                'venue_address' => 'Jl. Demonstrasi No. 8, Jakarta Selatan',
+                'tutor_name' => 'Tim Keuangan Kreasi',
+                'capacity' => 30,
+                'price' => 275_000,
+            ]);
+
+        $transactionScenarios = [
+            [
+                'status' => PaymentStatus::Pending,
+                'registration_status' => RegistrationStatus::Pending,
+            ],
+            [
+                'status' => PaymentStatus::AwaitingVerification,
+                'registration_status' => RegistrationStatus::Pending,
+                'paid_at' => (clone $demoStart)->subDays(5)->setTime(14, 30),
+                'proof' => 'payments/demo-awaiting.jpg',
+            ],
+            [
+                'status' => PaymentStatus::Verified,
+                'registration_status' => RegistrationStatus::Confirmed,
+                'paid_at' => (clone $demoStart)->subDays(6)->setTime(10, 0),
+                'verified_at' => (clone $demoStart)->subDays(4)->setTime(11, 30),
+                'proof' => 'payments/demo-verified.jpg',
+            ],
+            [
+                'status' => PaymentStatus::Refunded,
+                'registration_status' => RegistrationStatus::Refunded,
+                'paid_at' => (clone $demoStart)->subDays(8)->setTime(9, 0),
+                'verified_at' => (clone $demoStart)->subDays(7)->setTime(9, 45),
+                'proof' => 'payments/demo-refunded.jpg',
+                'refund' => [
+                    'status' => RefundStatus::Completed,
+                    'requested_at' => (clone $demoStart)->subDays(6)->setTime(13, 15),
+                    'processed_at' => (clone $demoStart)->subDays(4)->setTime(15, 0),
+                ],
+            ],
+        ];
+
+        $users
+            ->shuffle()
+            ->take(count($transactionScenarios))
+            ->values()
+            ->each(function (User $participant, int $index) use ($transactionScenarios, $demoEvent, $faker) {
+                $scenario = $transactionScenarios[$index];
+
+                $registeredAt = $demoEvent->start_at->copy()->subDays(10)->setTime(9 + $index, 0);
+
+                $registration = Registration::factory()
+                    ->for($participant)
+                    ->for($demoEvent)
+                    ->state([
+                        'status' => $scenario['registration_status'],
+                        'registered_at' => $registeredAt,
+                        'form_data' => [
+                            'full_name' => $participant->name,
+                            'email' => $participant->email,
+                            'phone' => $faker->phoneNumber(),
+                            'organization' => $faker->company(),
+                        ],
+                    ])
+                    ->create();
+
+                $transaction = Transaction::factory()
+                    ->for($registration)
+                    ->state([
+                        'amount' => $demoEvent->price,
+                        'status' => $scenario['status'],
+                        'payment_proof_path' => $scenario['proof'] ?? (isset($scenario['paid_at']) ? 'payments/proof-' . Str::uuid() . '.jpg' : null),
+                        'paid_at' => $scenario['paid_at'] ?? null,
+                        'verified_at' => $scenario['verified_at'] ?? null,
+                    ])
+                    ->create();
+
+                if (isset($scenario['refund'])) {
+                    Refund::factory()
+                        ->for($transaction)
+                        ->state([
+                            'status' => $scenario['refund']['status'],
+                            'reason' => $faker->sentence(),
+                            'admin_note' => $faker->sentence(),
+                            'requested_at' => $scenario['refund']['requested_at'],
+                            'processed_at' => $scenario['refund']['processed_at'],
+                        ])
+                        ->create();
+                }
+            });
     }
 }

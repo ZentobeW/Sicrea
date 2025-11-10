@@ -6,7 +6,7 @@
 
 <x-layouts.admin title="Tambah Portofolio" subtitle="Abadikan momen terbaik dari workshop dan tampilkan pada galeri inspirasi." :tabs="$tabs" :back-url="route('admin.portfolios.index')">
     <div class="grid gap-8 lg:grid-cols-[2fr,1fr]">
-        <form method="POST" action="{{ route('admin.portfolios.store') }}" class="rounded-3xl border border-slate-200/60 bg-white/95 p-6 sm:p-8 shadow-xl space-y-6">
+        <form method="POST" action="{{ route('admin.portfolios.store') }}" enctype="multipart/form-data" class="rounded-3xl border border-slate-200/60 bg-white/95 p-6 sm:p-8 shadow-xl space-y-6">
             @csrf
             <div class="grid gap-5">
                 <div>
@@ -16,6 +16,29 @@
                 <div>
                     <label class="block text-sm font-semibold text-slate-700">Deskripsi</label>
                     <textarea name="description" rows="4" class="mt-2 w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm shadow-inner focus:border-indigo-500 focus:ring-indigo-500">{{ old('description') }}</textarea>
+                </div>
+                <div data-cover-uploader class="space-y-3">
+                    <div class="flex items-center justify-between">
+                        <label for="cover_image" class="block text-sm font-semibold text-slate-700">Foto Utama Portofolio</label>
+                        <span class="text-xs font-medium text-slate-400">Format JPG/PNG maks. 2MB</span>
+                    </div>
+                    <input type="file" id="cover_image" name="cover_image" accept="image/*" class="sr-only" data-cover-input>
+                    <label for="cover_image" class="inline-flex items-center gap-2 rounded-full bg-indigo-500 px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-indigo-500/30 transition hover:-translate-y-0.5 hover:bg-indigo-600 cursor-pointer">
+                        <x-heroicon-o-plus class="h-4 w-4" />
+                        Pilih Foto
+                    </label>
+                    <div class="overflow-hidden rounded-3xl border border-dashed border-indigo-200 bg-indigo-50/50" data-cover-frame>
+                        <img data-cover-preview src="" alt="Preview foto portofolio" class="hidden h-48 w-full object-cover" />
+                        <div data-cover-placeholder class="flex h-48 flex-col items-center justify-center gap-3 text-slate-400">
+                            <span class="flex h-10 w-10 items-center justify-center rounded-2xl bg-white/80 shadow-inner">
+                                <x-heroicon-o-photo class="h-5 w-5" />
+                            </span>
+                            <p class="px-6 text-center text-xs font-medium">Unggah foto highlight kegiatan untuk memperkuat cerita dokumentasi.</p>
+                        </div>
+                    </div>
+                    @error('cover_image')
+                        <p class="text-xs font-medium text-rose-500">{{ $message }}</p>
+                    @enderror
                 </div>
                 <div>
                     <label class="block text-sm font-semibold text-slate-700">URL Dokumentasi (opsional)</label>
@@ -53,4 +76,46 @@
             </div>
         </aside>
     </div>
+
+    @push('scripts')
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                document.querySelectorAll('[data-cover-uploader]').forEach((uploader) => {
+                    if (uploader.dataset.initialized === 'true') {
+                        return;
+                    }
+
+                    const input = uploader.querySelector('[data-cover-input]');
+                    const preview = uploader.querySelector('[data-cover-preview]');
+                    const placeholder = uploader.querySelector('[data-cover-placeholder]');
+
+                    if (!input || !preview) {
+                        return;
+                    }
+
+                    const updatePreview = (file) => {
+                        if (file) {
+                            const url = URL.createObjectURL(file);
+                            preview.src = url;
+                            preview.classList.remove('hidden');
+                            placeholder?.classList.add('hidden');
+
+                            preview.onload = () => URL.revokeObjectURL(url);
+                        } else {
+                            preview.src = '';
+                            preview.classList.add('hidden');
+                            placeholder?.classList.remove('hidden');
+                        }
+                    };
+
+                    input.addEventListener('change', (event) => {
+                        const [file] = event.target.files || [];
+                        updatePreview(file ?? null);
+                    });
+
+                    uploader.dataset.initialized = 'true';
+                });
+            });
+        </script>
+    @endpush
 </x-layouts.admin>
