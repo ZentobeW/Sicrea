@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 use App\Mail\PaymentVerified;
 use App\Mail\RegistrationApproved;
 use App\Models\Email;
+use App\Models\Event;
 use App\Models\Refund;
 use App\Models\Registration;
 use App\Models\Transaction;
@@ -50,7 +51,6 @@ class RegistrationController extends Controller
         $transactionSummaryBase = Transaction::query()
             ->whereHas('registration', function ($registrationQuery) use ($applyFilters, $isRefundView) {
                 $applyFilters($registrationQuery);
-
                 if ($isRefundView) {
                     $registrationQuery->whereHas('transaction.refund');
                 }
@@ -86,9 +86,16 @@ class RegistrationController extends Controller
             'approved' => (clone $refundBase)->whereIn('status', [RefundStatus::Approved, RefundStatus::Completed])->count(),
             'amount' => (clone $refundBase)->get()->sum(fn ($refund) => optional($refund->transaction)->amount ?? 0),
         ];
+
+        // 🔹 Ambil daftar event untuk dropdown filter
+        $events = Event::select('id', 'title')->orderBy('title')->get();
+
+        return view('admin.registrations.index', [
+            'registrations' => $registrations,
             'registrationSummary' => $registrationSummary,
             'refundSummary' => $refundSummary,
             'isRefundView' => $isRefundView,
+            'events' => $events,
         ]);
     }
 
