@@ -32,7 +32,10 @@ class RegistrationController extends Controller
 
         $summary = [
             'total' => Registration::count(),
-            'pendingPayment' => Registration::where('payment_status', PaymentStatus::Pending)->count(),
+            'pendingPayment' => Registration::whereIn('payment_status', [
+                PaymentStatus::Pending,
+                PaymentStatus::AwaitingVerification,
+            ])->count(),
             'verifiedPayment' => Registration::where('payment_status', PaymentStatus::Verified)->count(),
             'refundRequests' => RefundRequest::where('status', RefundStatus::Pending)->count(),
         ];

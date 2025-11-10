@@ -52,14 +52,20 @@ class ReportController extends Controller
             $participantMetrics = [
                 'total' => $registrationBase()->count(),
                 'confirmed' => $registrationBase()->where('status', RegistrationStatus::Confirmed)->count(),
-                'pending' => $registrationBase()->where('payment_status', PaymentStatus::Pending)->count(),
+                'pending' => $registrationBase()->whereIn('payment_status', [
+                    PaymentStatus::Pending,
+                    PaymentStatus::AwaitingVerification,
+                ])->count(),
                 'refund_requests' => $registrationBase()->whereHas('refundRequest', fn ($query) => $query->where('status', '!=', RefundStatus::Rejected->value))->count(),
             ];
 
             $financialMetrics = [
                 'target' => $registrationBase()->sum('amount'),
                 'received' => $registrationBase()->where('payment_status', PaymentStatus::Verified)->sum('amount'),
-                'pending' => $registrationBase()->where('payment_status', PaymentStatus::Pending)->sum('amount'),
+                'pending' => $registrationBase()->whereIn('payment_status', [
+                    PaymentStatus::Pending,
+                    PaymentStatus::AwaitingVerification,
+                ])->sum('amount'),
                 'refunded' => RefundRequest::query()
                     ->where('status', RefundStatus::Approved)
                     ->whereHas('registration', fn ($query) => $query->where('event_id', $selectedEventId))

@@ -33,7 +33,6 @@
                     <div class="flex items-center gap-3 text-sm">
                         @auth
                             <a href="{{ route('profile.show') }}" class="hidden md:inline-flex items-center rounded-full border border-[#F7C8B8] px-4 py-2 font-medium text-[#7C3A2D] bg-white/70 hover:bg-white transition">Profil Saya</a>
-                            <a href="{{ route('registrations.index') }}" class="hidden md:inline-flex items-center rounded-full border border-[#F7C8B8] px-4 py-2 font-medium text-[#7C3A2D] bg-white/70 hover:bg-white transition">Riwayat Saya</a>
                             @can('access-admin')
                                 <a href="{{ route('admin.dashboard') }}" class="hidden md:inline-flex items-center rounded-full border border-[#F7C8B8] px-4 py-2 font-medium text-[#7C3A2D] bg-white/70 hover:bg-white transition">Dashboard Admin</a>
                             @endcan
