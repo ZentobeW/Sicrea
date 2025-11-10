@@ -157,7 +157,8 @@
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-[#F7C8B8]/60 bg-white">
-                            @forelse ($recentRegistrations as $registration)
+                            @if ($recentRegistrations->isNotEmpty())
+                                @foreach ($recentRegistrations as $registration)
                                 @php
                                     $transaction = $registration->transaction;
                                     $registrationBadge = match ($registration->status) {
@@ -209,13 +210,14 @@
                                         @endif
                                     </td>
                                 </tr>
-                            @empty
+                                @endforeach
+                            @else
                                 <tr>
                                     <td colspan="4" class="px-6 py-8 text-center text-sm text-[#9A5A46]">
                                         Belum ada aktivitas yang tercatat. Mulai dengan mendaftar workshop favoritmu!
                                     </td>
                                 </tr>
-                            @endforelse
+                            @endif
                         </tbody>
                     </table>
                 </div>
