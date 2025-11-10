@@ -20,27 +20,67 @@ class RegistrationController extends Controller
 {
     public function index(Request $request): View
     {
-        $registrations = Registration::query()
-            ->with(['event', 'user'])
-            ->when($request->string('payment_status'), fn ($query, $status) => $query->where('payment_status', $status))
-            ->when($request->integer('event_id'), fn ($query, $eventId) => $query->where('event_id', $eventId))
-            ->latest()
-            ->paginate(20)
+        $applyFilters = function ($query) use ($request) {
+            return $query
+                ->when($request->string('payment_status'), fn ($query, $status) => $query->where('payment_status', $status))
+                ->when($request->integer('event_id'), fn ($query, $eventId) => $query->where('event_id', $eventId));
+        };
+
+        $isRefundView = $request->string('view') === 'refunds';
+
+        $registrationsQuery = Registration::query()
+            ->with(['event', 'user', 'refundRequest'])
+            ->when($isRefundView, fn ($query) => $query->whereHas('refundRequest'))
+            ->orderByDesc('registered_at');
+
+        $applyFilters($registrationsQuery);
+
+        $registrations = $registrationsQuery
+            ->paginate(12)
             ->withQueryString();
 
-        $events = \App\Models\Event::orderBy('title')->get();
+        $summaryBase = Registration::query()
+            ->when($isRefundView, fn ($query) => $query->whereHas('refundRequest'));
+        $applyFilters($summaryBase);
 
-        $summary = [
-            'total' => Registration::count(),
-            'pendingPayment' => Registration::whereIn('payment_status', [
+        $registrationSummary = [
+            'total' => (clone $summaryBase)->count(),
+            'awaiting' => (clone $summaryBase)->whereIn('payment_status', [
                 PaymentStatus::Pending,
                 PaymentStatus::AwaitingVerification,
             ])->count(),
-            'verifiedPayment' => Registration::where('payment_status', PaymentStatus::Verified)->count(),
-            'refundRequests' => RefundRequest::where('status', RefundStatus::Pending)->count(),
+            'verified' => (clone $summaryBase)->where('payment_status', PaymentStatus::Verified)->count(),
+            'amount' => (clone $summaryBase)->sum('amount'),
+            'pendingRefunds' => RefundRequest::query()
+                ->where('status', RefundStatus::Pending)
+                ->when($request->integer('event_id'), function ($query, $eventId) use ($applyFilters) {
+                    $query->whereHas('registration', fn ($registrationQuery) => $applyFilters($registrationQuery)->where('event_id', $eventId));
+                })
+                ->count(),
         ];
 
-        return view('admin.registrations.index', compact('registrations', 'events', 'summary'));
+        $refundBase = RefundRequest::query()
+            ->with('registration')
+            ->when($request->integer('event_id'), function ($query, $eventId) use ($applyFilters) {
+                $query->whereHas('registration', fn ($registrationQuery) => $applyFilters($registrationQuery)->where('event_id', $eventId));
+            });
+
+        $refundSummary = [
+            'total' => (clone $refundBase)->count(),
+            'pending' => (clone $refundBase)->where('status', RefundStatus::Pending)->count(),
+            'approved' => (clone $refundBase)->whereIn('status', [RefundStatus::Approved, RefundStatus::Completed])->count(),
+            'amount' => (clone $refundBase)->get()->sum(fn ($refund) => optional($refund->registration)->amount ?? 0),
+        ];
+
+        $events = \App\Models\Event::orderBy('title')->get();
+
+        return view('admin.registrations.index', [
+            'registrations' => $registrations,
+            'events' => $events,
+            'registrationSummary' => $registrationSummary,
+            'refundSummary' => $refundSummary,
+            'isRefundView' => $isRefundView,
+        ]);
     }
 
     public function show(Registration $registration): View
