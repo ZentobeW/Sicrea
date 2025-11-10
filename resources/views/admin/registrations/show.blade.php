@@ -14,6 +14,9 @@
                     <span class="font-semibold text-slate-700 block">Event</span>
                     <p class="mt-1 text-base font-semibold text-slate-900">{{ $registration->event->title }}</p>
                     <p class="text-xs text-slate-500">{{ $registration->event->start_at->translatedFormat('d M Y H:i') }}</p>
+                    <p class="text-xs text-slate-500">{{ $registration->event->venue_name }}</p>
+                    <p class="text-xs text-slate-500">{{ $registration->event->venue_address }}</p>
+                    <p class="text-[11px] text-slate-500">Tutor: {{ $registration->event->tutor_name }}</p>
                 </div>
                 <div>
                     <span class="font-semibold text-slate-700 block">Status Pendaftaran</span>

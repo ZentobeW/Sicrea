@@ -16,8 +16,22 @@ class PortfolioController extends Controller
     public function index(Request $request): View
     {
         $portfoliosQuery = Portfolio::query()
-            ->with('event')
-            ->when($request->filled('q'), fn ($query) => $query->where('title', 'like', '%' . $request->string('q')->toString() . '%'))
+            ->with(['event:id,title,start_at,venue_name,venue_address,tutor_name'])
+            ->when($request->filled('q'), function ($query) use ($request) {
+                $keyword = '%' . $request->string('q')->toString() . '%';
+
+                $query->where(function ($builder) use ($keyword) {
+                    $builder
+                        ->where('title', 'like', $keyword)
+                        ->orWhereHas('event', function ($eventQuery) use ($keyword) {
+                            $eventQuery
+                                ->where('title', 'like', $keyword)
+                                ->orWhere('venue_name', 'like', $keyword)
+                                ->orWhere('venue_address', 'like', $keyword)
+                                ->orWhere('tutor_name', 'like', $keyword);
+                        });
+                });
+            })
             ->when($request->filled('event_id'), fn ($query) => $query->where('event_id', $request->integer('event_id')))
             ->latest();
 
@@ -56,6 +70,8 @@ class PortfolioController extends Controller
 
     public function edit(Portfolio $portfolio): View
     {
+        $portfolio->load('event');
+
         $events = Event::orderBy('title')->get();
 
         return view('admin.portfolios.edit', compact('portfolio', 'events'));

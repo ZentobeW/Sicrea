@@ -15,16 +15,17 @@ return new class extends Migration
         Schema::create('events', function (Blueprint $table) {
             $table->id();
             $table->string('title');
-            $table->string('slug')->unique();
             $table->text('description')->nullable();
-            $table->dateTime('start_at');
-            $table->dateTime('end_at');
-            $table->string('location');
+            $table->dateTime('start_at')->index();
+            $table->dateTime('end_at')->index();
+            $table->string('venue_name');
+            $table->string('venue_address');
+            $table->string('tutor_name');
             $table->unsignedInteger('capacity')->nullable();
             $table->unsignedInteger('available_slots')->nullable();
             $table->unsignedInteger('price')->default(0);
-            $table->string('status')->default(EventStatus::Draft->value);
-            $table->dateTime('published_at')->nullable();
+            $table->string('status')->default(EventStatus::Draft->value)->index();
+            $table->dateTime('published_at')->nullable()->index();
             $table->foreignId('created_by')->nullable()->constrained('users')->nullOnDelete();
             $table->foreignId('updated_by')->nullable()->constrained('users')->nullOnDelete();
             $table->timestamps();

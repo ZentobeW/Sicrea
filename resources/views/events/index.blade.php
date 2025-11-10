@@ -41,7 +41,7 @@
                 <label for="q" class="sr-only">Cari event</label>
                 <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:rounded-full sm:bg-white sm:shadow-lg sm:p-2">
                     <div class="flex-1">
-                        <input id="q" type="search" name="q" value="{{ request('q') }}" placeholder="Cari event atau lokasi yang kamu minati"
+                        <input id="q" type="search" name="q" value="{{ request('q') }}" placeholder="Cari event, tutor, atau venue yang kamu minati"
                             class="w-full rounded-full border border-transparent bg-white px-6 py-3 text-sm text-slate-600 shadow-sm focus:border-[#B05A62] focus:ring-2 focus:ring-[#F7D6E0]" />
                     </div>
                     <button type="submit" class="inline-flex items-center justify-center rounded-full bg-[#B05A62] px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-[#9A4750]">
@@ -81,11 +81,18 @@
                             <p class="mt-2 text-sm text-slate-600 leading-relaxed">{{ Str::limit(strip_tags($event->description), 130) }}</p>
                         </div>
                         <div class="px-6 py-6 space-y-6">
-                            <div class="flex items-center gap-3 text-sm text-slate-500">
+                            <div class="flex items-start gap-3 text-sm text-slate-500">
                                 <svg class="h-4 w-4 text-[#B05A62]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 11.25a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3Zm0 0c4.556 0 8.25 3.694 8.25 8.25 0 0-3.694 2.25-8.25 2.25s-8.25-2.25-8.25-2.25c0-4.556 3.694-8.25 8.25-8.25Z" />
                                 </svg>
-                                <span>{{ $event->location }}</span>
+                                <div>
+                                    <p class="font-semibold text-[#5A3D31]">{{ $event->venue_name }}</p>
+                                    <p class="text-xs text-slate-500">{{ $event->venue_address }}</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-3 text-sm text-slate-500">
+                                <x-heroicon-o-user-group class="h-4 w-4 text-[#B05A62]" />
+                                <span>Pemateri: {{ $event->tutor_name }}</span>
                             </div>
                             <div class="flex items-center justify-between rounded-2xl bg-[#FFF4EC] px-4 py-3">
                                 <div>
@@ -98,7 +105,7 @@
                                 </div>
                             </div>
                             <div class="flex items-center justify-between">
-                                <a href="{{ route('events.show', $event->slug) }}" class="inline-flex items-center gap-2 rounded-full bg-[#B05A62] px-5 py-2 text-xs font-semibold uppercase tracking-[0.35em] text-white transition hover:bg-[#9A4750]">
+                                <a href="{{ route('events.show', $event) }}" class="inline-flex items-center gap-2 rounded-full bg-[#B05A62] px-5 py-2 text-xs font-semibold uppercase tracking-[0.35em] text-white transition hover:bg-[#9A4750]">
                                     Lihat Detail
                                 </a>
                                 <span class="text-xs font-medium uppercase tracking-[0.35em] text-slate-400">{{ $event->start_at->translatedFormat('H.i') }} WIB</span>

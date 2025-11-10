@@ -6,7 +6,6 @@ use App\Enums\EventStatus;
 use App\Models\Event;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Str;
 
 /**
  * @extends Factory<Event>
@@ -29,8 +28,8 @@ class EventFactory extends Factory
             'description' => $this->faker->paragraphs(3, true),
             'start_at' => $startAt,
             'end_at' => $endAt,
-            'venue_name' => $this->faker->company(),
-            'venue_address' => $this->faker->address(),
+            'venue_name' => $this->faker->company() . ' Studio',
+            'venue_address' => $this->faker->streetAddress() . ', ' . $this->faker->city(),
             'tutor_name' => $this->faker->name(),
             'capacity' => $capacity,
             'available_slots' => max($capacity - $booked, 0),

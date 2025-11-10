@@ -23,7 +23,17 @@ class EventController extends Controller
                 'registrations as confirmed_registrations_count' => fn ($query) => $query->where('status', RegistrationStatus::Confirmed),
                 'registrations as total_registrations_count',
             ])
-            ->when($request->filled('search'), fn ($query) => $query->where('title', 'like', '%' . $request->string('search') . '%'))
+            ->when($request->filled('search'), function ($query) use ($request) {
+                $keyword = '%' . $request->string('search') . '%';
+
+                $query->where(function ($builder) use ($keyword) {
+                    $builder
+                        ->where('title', 'like', $keyword)
+                        ->orWhere('venue_name', 'like', $keyword)
+                        ->orWhere('venue_address', 'like', $keyword)
+                        ->orWhere('tutor_name', 'like', $keyword);
+                });
+            })
             ->orderByDesc('start_at')
             ->paginate(10)
             ->withQueryString();

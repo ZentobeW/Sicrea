@@ -83,6 +83,8 @@
                             <td class="px-6 py-4 align-top">
                                 <div class="font-semibold text-slate-900">{{ $registration->event->title }}</div>
                                 <div class="text-xs text-slate-500">{{ optional($registration->registered_at)->translatedFormat('d M Y H:i') }}</div>
+                                <div class="text-[11px] text-slate-500">{{ $registration->event->venue_name }}</div>
+                                <div class="text-[11px] text-slate-500">Tutor: {{ $registration->event->tutor_name }}</div>
                             </td>
                             <td class="px-6 py-4 align-top">
                                 <span class="inline-flex items-center gap-2 rounded-full bg-indigo-50 px-3 py-1 text-xs font-semibold text-indigo-600">

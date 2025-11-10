@@ -76,10 +76,12 @@
                             <td class="px-5 py-4 align-top text-[#9C5A45]">
                                 <div>{{ $event->start_at->translatedFormat('d M Y H:i') }}</div>
                                 <div class="text-xs text-[#D28B7B]">s/d {{ $event->end_at->translatedFormat('d M Y H:i') }}</div>
-                                <div class="mt-2 inline-flex items-center gap-1 rounded-full bg-[#FFE8E0] px-3 py-1 text-xs text-[#C16A55]">
+                                <div class="mt-2 inline-flex items-center gap-2 rounded-full bg-[#FFE8E0] px-3 py-1 text-xs text-[#C16A55]">
                                     <x-heroicon-o-map-pin class="h-4 w-4" />
-                                    {{ $event->location }}
+                                    <span class="font-semibold">{{ $event->venue_name }}</span>
                                 </div>
+                                <p class="mt-1 text-[11px] text-[#D28B7B]">{{ $event->venue_address }}</p>
+                                <p class="mt-1 text-[11px] text-[#D28B7B]">Tutor: {{ $event->tutor_name }}</p>
                             </td>
                             <td class="px-5 py-4 align-top text-[#9C5A45]">
                                 <div class="font-semibold">{{ $quotaLabel }}</div>

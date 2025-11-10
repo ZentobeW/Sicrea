@@ -96,8 +96,10 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 11c.828 0 1.5-.672 1.5-1.5S12.828 8 12 8s-1.5.672-1.5 1.5S11.172 11 12 11z" />
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20.25 10.5c0 7.5-8.25 11.25-8.25 11.25S3.75 18 3.75 10.5a8.25 8.25 0 1116.5 0z" />
                                 </svg>
-                                <span>{{ $event->venue_address }}</span>
+                                <span>{{ $event->venue_name }}</span>
                             </div>
+                            <p class="mt-1 text-xs text-[#5F4C4C]">{{ $event->venue_address }}</p>
+                            <p class="text-xs text-[#A04E62]">Pemateri: {{ $event->tutor_name }}</p>
                         </div>
                         <div class="mt-6 flex items-center justify-between rounded-2xl bg-[#FFF0E6] px-5 py-3 text-xs font-semibold uppercase tracking-[0.28em] text-[#A04E62]">
                             <span>Kuota tersisa: {{ $event->available_slots ?? 'Tidak terbatas' }}</span>
@@ -142,6 +144,9 @@
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5l7 7-7 7" />
                                     </svg>
                                 </a>
+                                <p class="mt-1 text-[11px] text-[#A04E62]">{{ $portfolio->event->venue_name }}</p>
+                                <p class="text-[11px] text-[#A04E62]">Tutor: {{ $portfolio->event->tutor_name }}</p>
+                                <p class="text-[11px] text-[#A04E62]">{{ $portfolio->event->venue_address }}</p>
                             @endif
                         </div>
                     </article>

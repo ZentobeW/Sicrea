@@ -1,7 +1,7 @@
 <x-layouts.app :title="'Daftar Workshop'">
     <section class="bg-gradient-to-br from-[#FFE3D3] via-[#FFF3EA] to-white py-12">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-            <a href="{{ route('events.show', $event->slug) }}" class="inline-flex items-center gap-2 text-sm font-semibold text-[#C65B74] hover:text-[#A2475D]">
+            <a href="{{ route('events.show', $event) }}" class="inline-flex items-center gap-2 text-sm font-semibold text-[#C65B74] hover:text-[#A2475D]">
                 <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15.75 19.5L8.25 12l7.5-7.5" />
                 </svg>
@@ -69,7 +69,7 @@
                             <div class="flex flex-wrap items-center justify-between gap-3 pt-4">
                                 <p class="text-xs text-[#A04E62]">Dengan melanjutkan, Anda menyetujui ketentuan dan kebijakan privasi Kreasi Hangat.</p>
                                 <div class="flex items-center gap-3">
-                                    <a href="{{ route('events.show', $event->slug) }}" class="text-sm font-semibold text-[#C65B74] hover:text-[#A2475D]">Batal</a>
+                                    <a href="{{ route('events.show', $event) }}" class="text-sm font-semibold text-[#C65B74] hover:text-[#A2475D]">Batal</a>
                                     <button class="inline-flex items-center gap-2 rounded-full bg-[#FF8A64] px-6 py-3 text-sm font-semibold text-white shadow-md shadow-[#FF8A64]/30 transition hover:bg-[#F9744B]">
                                         Lanjutkan
                                         <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -99,8 +99,15 @@
                                     <dd class="text-right">{{ $event->start_at->translatedFormat('H:i') }} - {{ $event->end_at->translatedFormat('H:i') }} WIB</dd>
                                 </div>
                                 <div class="flex items-start justify-between gap-3">
-                                    <dt class="text-[#A04E62]">Lokasi</dt>
-                                    <dd class="text-right">{{ $event->location }}</dd>
+                                    <dt class="text-[#A04E62]">Venue</dt>
+                                    <dd class="text-right">
+                                        <span class="block font-semibold text-[#2C1E1E]">{{ $event->venue_name }}</span>
+                                        <span class="block text-xs text-[#5F4C4C]">{{ $event->venue_address }}</span>
+                                    </dd>
+                                </div>
+                                <div class="flex items-start justify-between gap-3">
+                                    <dt class="text-[#A04E62]">Pemateri</dt>
+                                    <dd class="text-right">{{ $event->tutor_name }}</dd>
                                 </div>
                                 <div class="flex items-start justify-between gap-3">
                                     <dt class="text-[#A04E62]">Kuota</dt>

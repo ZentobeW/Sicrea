@@ -9,7 +9,6 @@
                         <span>Judul Event</span>
                         <input type="text" name="title" value="{{ old('title') }}" class="w-full rounded-2xl border border-[#FFD6C7] bg-[#FFF7F3] px-4 py-3 text-sm text-[#4B2A22] placeholder:text-[#D28B7B] focus:border-[#F68C7B] focus:outline-none" required>
                     </label>
-                    
                     <div class="grid gap-4 md:grid-cols-2">
                         <label class="space-y-2 text-sm font-semibold text-[#7A3E2F]">
                             <span>Mulai</span>
@@ -20,19 +19,18 @@
                             <input type="datetime-local" name="end_at" value="{{ old('end_at') }}" class="w-full rounded-2xl border border-[#FFD6C7] bg-[#FFF7F3] px-4 py-3 text-sm text-[#4B2A22] focus:border-[#F68C7B] focus:outline-none" required>
                         </label>
                     </div>
-
+                    <div class="grid gap-4 md:grid-cols-2">
+                        <label class="space-y-2 text-sm font-semibold text-[#7A3E2F]">
+                            <span>Nama Venue</span>
+                            <input type="text" name="venue_name" value="{{ old('venue_name') }}" class="w-full rounded-2xl border border-[#FFD6C7] bg-[#FFF7F3] px-4 py-3 text-sm text-[#4B2A22] placeholder:text-[#D28B7B] focus:border-[#F68C7B] focus:outline-none" required>
+                        </label>
+                        <label class="space-y-2 text-sm font-semibold text-[#7A3E2F]">
+                            <span>Nama Tutor</span>
+                            <input type="text" name="tutor_name" value="{{ old('tutor_name') }}" class="w-full rounded-2xl border border-[#FFD6C7] bg-[#FFF7F3] px-4 py-3 text-sm text-[#4B2A22] placeholder:text-[#D28B7B] focus:border-[#F68C7B] focus:outline-none" required>
+                        </label>
+                    </div>
                     <label class="space-y-2 text-sm font-semibold text-[#7A3E2F]">
-                        <span>Nama Tutor / Pembicara</span>
-                        <input type="text" name="tutor_name" value="{{ old('tutor_name') }}" class="w-full rounded-2xl border border-[#FFD6C7] bg-[#FFF7F3] px-4 py-3 text-sm text-[#4B2A22] placeholder:text-[#D28B7B] focus:border-[#F68C7B] focus:outline-none" required>
-                    </label>
-
-                    <label class="space-y-2 text-sm font-semibold text-[#7A3E2F]">
-                        <span>Nama Tempat / Venue</span>
-                        <input type="text" name="venue_name" value="{{ old('venue_name') }}" class="w-full rounded-2xl border border-[#FFD6C7] bg-[#FFF7F3] px-4 py-3 text-sm text-[#4B2A22] placeholder:text-[#D28B7B] focus:border-[#F68C7B] focus:outline-none" required>
-                    </label>
-
-                    <label class="space-y-2 text-sm font-semibold text-[#7A3E2F]">
-                        <span>Alamat Tempat / Platform (Link jika online)</span>
+                        <span>Alamat Venue / Platform</span>
                         <input type="text" name="venue_address" value="{{ old('venue_address') }}" class="w-full rounded-2xl border border-[#FFD6C7] bg-[#FFF7F3] px-4 py-3 text-sm text-[#4B2A22] placeholder:text-[#D28B7B] focus:border-[#F68C7B] focus:outline-none" required>
                     </label>
                 </div>
@@ -80,7 +78,7 @@
             <div class="rounded-2xl bg-white/80 p-4">
                 <h3 class="text-sm font-semibold text-[#4B2A22]">Checklist Publikasi</h3>
                 <ul class="mt-3 space-y-2 text-sm text-[#A35C45]">
-                    <li>✔ Jadwal dan lokasi telah dikonfirmasi.</li>
+                    <li>✔ Jadwal dan venue telah dikonfirmasi.</li>
                     <li>✔ Kuota dan harga mengikuti brief.</li>
                     <li>✔ Materi promosi siap dibagikan.</li>
                 </ul>

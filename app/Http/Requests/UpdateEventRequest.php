@@ -13,16 +13,14 @@ class UpdateEventRequest extends FormRequest
 
     public function rules(): array
     {
-        $eventId = $this->route('event')->id ?? null;
-
         return [
             'title' => ['required', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
             'start_at' => ['required', 'date'],
             'end_at' => ['required', 'date', 'after_or_equal:start_at'],
-            'tutor_name' => ['required', 'string', 'max:255'],
             'venue_name' => ['required', 'string', 'max:255'],
             'venue_address' => ['required', 'string', 'max:255'],
+            'tutor_name' => ['required', 'string', 'max:255'],
             'capacity' => ['nullable', 'integer', 'min:1'],
             'available_slots' => ['nullable', 'integer', 'min:0'],
             'price' => ['required', 'integer', 'min:0'],

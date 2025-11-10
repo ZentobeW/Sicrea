@@ -12,11 +12,11 @@ return new class extends Migration
         Schema::create('refund_requests', function (Blueprint $table) {
             $table->id();
             $table->foreignId('registration_id')->constrained()->cascadeOnDelete();
-            $table->string('status')->default(RefundStatus::Pending->value);
+            $table->string('status')->default(RefundStatus::Pending->value)->index();
             $table->text('reason')->nullable();
             $table->text('admin_note')->nullable();
-            $table->dateTime('requested_at');
-            $table->dateTime('processed_at')->nullable();
+            $table->dateTime('requested_at')->index();
+            $table->dateTime('processed_at')->nullable()->index();
             $table->timestamps();
         });
     }

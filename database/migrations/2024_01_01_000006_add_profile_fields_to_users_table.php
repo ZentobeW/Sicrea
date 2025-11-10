@@ -18,6 +18,10 @@ return new class extends Migration
             $table->string('city')->nullable()->after('province');
             $table->string('address')->nullable()->after('city');
             $table->string('avatar_path')->nullable()->after('address');
+
+            $table->index(['phone']);
+            $table->index(['province']);
+            $table->index(['city']);
         });
     }
 

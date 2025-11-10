@@ -240,12 +240,15 @@
                             <h3 class="text-lg font-semibold text-[#2C1E1E]">{{ $portfolio->title }}</h3>
                             <p class="text-sm leading-relaxed text-[#5F4C4C]">{{ Str::limit($portfolio->description, 110) }}</p>
                             @if ($portfolio->event)
-                                <a href="{{ route('events.show', $portfolio->event->slug) }}" class="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.3em] text-[#C65B74]">
+                                <a href="{{ route('events.show', $portfolio->event) }}" class="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.3em] text-[#C65B74]">
                                     Lihat Event
                                     <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5l7 7-7 7" />
                                     </svg>
                                 </a>
+                                <p class="mt-1 text-[11px] text-[#A04E62]">{{ $portfolio->event->venue_name }}</p>
+                                <p class="text-[11px] text-[#A04E62]">Tutor: {{ $portfolio->event->tutor_name }}</p>
+                                <p class="text-[11px] text-[#A04E62]">{{ $portfolio->event->venue_address }}</p>
                             @endif
                         </div>
                     </article>

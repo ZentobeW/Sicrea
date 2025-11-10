@@ -18,6 +18,7 @@
                         <td class="px-4 py-3">
                             <div class="font-medium text-slate-800">{{ $registration->event->title }}</div>
                             <div class="text-xs text-slate-500">Rp{{ number_format($registration->amount, 0, ',', '.') }}</div>
+                            <div class="text-[11px] text-slate-500">{{ $registration->event->venue_name }}</div>
                         </td>
                         <td class="px-4 py-3 text-slate-600">{{ optional($registration->event->start_at)->translatedFormat('d M Y H:i') }}</td>
                         <td class="px-4 py-3">

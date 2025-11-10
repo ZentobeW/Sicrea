@@ -14,14 +14,14 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->foreignId('event_id')->constrained()->cascadeOnDelete();
-            $table->string('status')->default(RegistrationStatus::Pending->value);
-            $table->string('payment_status')->default(PaymentStatus::Pending->value);
+            $table->string('status')->default(RegistrationStatus::Pending->value)->index();
+            $table->string('payment_status')->default(PaymentStatus::Pending->value)->index();
             $table->unsignedInteger('amount');
             $table->string('payment_proof_path')->nullable();
             $table->json('form_data');
-            $table->dateTime('registered_at');
-            $table->dateTime('paid_at')->nullable();
-            $table->dateTime('verified_at')->nullable();
+            $table->dateTime('registered_at')->index();
+            $table->dateTime('paid_at')->nullable()->index();
+            $table->dateTime('verified_at')->nullable()->index();
             $table->timestamps();
         });
     }

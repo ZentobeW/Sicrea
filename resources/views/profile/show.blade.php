@@ -106,8 +106,15 @@
                                     <dd>{{ optional($upcomingRegistration->event->start_at)->translatedFormat('d F Y, H:i') }}</dd>
                                 </div>
                                 <div class="flex justify-between">
-                                    <dt>Lokasi</dt>
-                                    <dd class="text-right">{{ $upcomingRegistration->event->location }}</dd>
+                                    <dt>Venue</dt>
+                                    <dd class="text-right">
+                                        <span class="block font-semibold text-[#7C3A2D]">{{ $upcomingRegistration->event->venue_name }}</span>
+                                        <span class="block text-xs text-[#9A5A46]">{{ $upcomingRegistration->event->venue_address }}</span>
+                                    </dd>
+                                </div>
+                                <div class="flex justify-between">
+                                    <dt>Pemateri</dt>
+                                    <dd class="text-right">{{ $upcomingRegistration->event->tutor_name }}</dd>
                                 </div>
                                 <div class="flex justify-between">
                                     <dt>Status Pembayaran</dt>

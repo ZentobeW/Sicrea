@@ -66,10 +66,14 @@
                     <div class="rounded-2xl bg-white/80 px-4 py-3">
                         <p class="text-sm font-semibold text-[#5A291B]">{{ $event->title }}</p>
                         <p class="text-xs text-[#A35C45]">{{ $event->start_at->translatedFormat('d M Y, H:i') }}</p>
-                        <p class="mt-1 text-xs text-[#D16A54] flex items-center gap-1">
-                            <x-heroicon-o-map-pin class="h-4 w-4" />
-                            {{ $event->location }}
-                        </p>
+                        <div class="mt-1 flex flex-col gap-1 text-xs text-[#D16A54]">
+                            <span class="inline-flex items-center gap-1">
+                                <x-heroicon-o-map-pin class="h-4 w-4" />
+                                {{ $event->venue_name }}
+                            </span>
+                            <span>{{ $event->venue_address }}</span>
+                            <span class="text-[11px] text-[#B45A45]">Tutor: {{ $event->tutor_name }}</span>
+                        </div>
                     </div>
                 @empty
                     <div class="rounded-2xl bg-white/70 px-4 py-6 text-center text-sm text-[#A35C45]">

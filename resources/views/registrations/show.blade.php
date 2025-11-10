@@ -26,8 +26,13 @@
                     <p>{{ optional($registration->registered_at)->translatedFormat('d M Y H:i') }}</p>
                 </div>
                 <div>
-                    <span class="font-medium text-slate-700 block">Lokasi</span>
-                    <p>{{ $registration->event->location }}</p>
+                    <span class="font-medium text-slate-700 block">Venue</span>
+                    <p class="font-semibold text-slate-700">{{ $registration->event->venue_name }}</p>
+                    <p>{{ $registration->event->venue_address }}</p>
+                </div>
+                <div>
+                    <span class="font-medium text-slate-700 block">Pemateri</span>
+                    <p>{{ $registration->event->tutor_name }}</p>
                 </div>
             </div>
 

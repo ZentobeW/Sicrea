@@ -34,8 +34,11 @@
                             </dd>
                         </div>
                         <div class="rounded-2xl bg-[#FFF4EC] px-5 py-4">
-                            <dt class="text-xs uppercase tracking-[0.3em] text-[#B05A62]/70">Lokasi</dt>
-                            <dd class="mt-2 text-sm font-semibold text-[#5A3D31]">{{ $event->location }}</dd>
+                            <dt class="text-xs uppercase tracking-[0.3em] text-[#B05A62]/70">Venue</dt>
+                            <dd class="mt-2 text-sm font-semibold text-[#5A3D31]">
+                                {{ $event->venue_name }}<br>
+                                <span class="text-xs font-normal text-slate-500">{{ $event->venue_address }}</span>
+                            </dd>
                         </div>
                         <div class="rounded-2xl bg-[#FFF4EC] px-5 py-4">
                             <dt class="text-xs uppercase tracking-[0.3em] text-[#B05A62]/70">Kuota Tersisa</dt>
@@ -79,11 +82,14 @@
                         <h2 class="text-lg font-semibold text-[#5A3D31]">Instruktur</h2>
                         <div class="mt-4 flex items-center gap-4">
                             <div class="flex h-12 w-12 items-center justify-center rounded-full bg-[#FAD5B7] text-lg font-semibold text-[#B05A62]">
-                                {{ Str::substr($event->creator?->name ?? 'KH', 0, 1) }}
+                                {{ Str::substr($event->tutor_name, 0, 1) }}
                             </div>
                             <div>
-                                <p class="text-sm font-semibold text-[#5A3D31]">{{ $event->creator?->name ?? 'Tim Kreasi Hangat' }}</p>
+                                <p class="text-sm font-semibold text-[#5A3D31]">{{ $event->tutor_name }}</p>
                                 <p class="text-xs text-slate-500">Fasilitator utama program ini</p>
+                                @if ($event->creator)
+                                    <p class="mt-1 text-[11px] text-slate-400">Dikelola oleh {{ $event->creator->name }}</p>
+                                @endif
                             </div>
                         </div>
                     </div>

@@ -23,7 +23,7 @@ class ReportController extends Controller
             ])
             ->orderByDesc('start_at')
             ->orderBy('title')
-            ->get(['id', 'title', 'start_at']);
+            ->get(['id', 'title', 'start_at', 'venue_name', 'venue_address', 'tutor_name']);
 
         $selectedEventId = $request->filled('event_id') ? $request->integer('event_id') : $events->first()?->id;
         $tab = $request->string('tab')->toString() ?: 'participants';

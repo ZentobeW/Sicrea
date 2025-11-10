@@ -52,6 +52,7 @@
                                 <div>
                                     <h3 class="text-sm font-semibold leading-snug">{{ $event->title }}</h3>
                                     <p class="mt-1 text-xs text-[#A3563F]">{{ optional($event->start_at)->translatedFormat('d M Y') ?? 'Jadwal belum ditetapkan' }}</p>
+                                    <p class="text-[11px] text-[#C06245]">{{ $event->venue_name }}</p>
                                 </div>
                                 <span class="rounded-full bg-[#FFE3D2] px-2.5 py-1 text-[11px] font-semibold text-[#A3563F]">{{ $event->confirmed_registrations_count }}/{{ $event->total_registrations_count }}</span>
                             </div>
@@ -85,6 +86,9 @@
                         <p class="mt-2 text-sm text-[#874532]">
                             @if ($selectedEvent)
                                 Jadwal: {{ optional($selectedEvent->start_at)->translatedFormat('d M Y H:i') ?? 'Belum dijadwalkan' }}
+                                <br>Venue: {{ $selectedEvent->venue_name }}
+                                <br><span class="text-xs">{{ $selectedEvent->venue_address }}</span>
+                                <br>Pemateri: {{ $selectedEvent->tutor_name }}
                             @else
                                 Anda dapat beralih antar tab untuk fokus pada peserta atau keuangan.
                             @endif

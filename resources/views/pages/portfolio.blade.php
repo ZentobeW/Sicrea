@@ -78,11 +78,18 @@
                             <div class="space-y-2">
                                 <h3 class="text-xl font-semibold text-[#2C1E1E] group-hover:text-[#C65B74] transition">{{ $portfolio->title }}</h3>
                                 <p class="text-sm leading-relaxed text-[#5F4C4C]">{{ Str::limit($portfolio->description, 150) }}</p>
+                                @if ($portfolio->event)
+                                    <p class="text-xs text-[#A04E62]">{{ $portfolio->event->venue_name }} • {{ $portfolio->event->tutor_name }}</p>
+                                    <p class="text-[11px] text-[#A04E62]">{{ $portfolio->event->venue_address }}</p>
+                                @endif
                             </div>
                             <div class="mt-auto flex items-center justify-between rounded-2xl bg-[#FFF0E6] px-5 py-3 text-xs font-semibold uppercase tracking-[0.28em] text-[#C65B74]">
                                 @if ($portfolio->event)
-                                    <a href="{{ route('events.show', $portfolio->event->slug) }}" class="inline-flex items-center gap-2 text-[#C65B74] hover:text-[#A2475D]">
-                                        <span>{{ $portfolio->event->title }}</span>
+                                    <a href="{{ route('events.show', $portfolio->event) }}" class="inline-flex items-center gap-2 text-[#C65B74] hover:text-[#A2475D]">
+                                        <span>
+                                            {{ $portfolio->event->title }}
+                                            <span class="block text-[11px] font-normal text-[#A04E62]">{{ $portfolio->event->venue_name }}</span>
+                                        </span>
                                         <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5l7 7-7 7" />
                                         </svg>

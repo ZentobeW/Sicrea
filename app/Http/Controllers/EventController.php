@@ -33,10 +33,9 @@ class EventController extends Controller
 
     public function show(Event $event): View
     {
-        if ($event->status !== EventStatus::Published) {
-            abort(404);
-        }
-        $event->load(['portfolios'])->loadCount('registrations');
+        abort_unless($event->status === EventStatus::Published, 404);
+
+        $event->loadMissing(['portfolios', 'creator'])->loadCount('registrations');
 
         return view('events.show', compact('event'));
     }

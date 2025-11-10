@@ -102,6 +102,10 @@
                             @if ($portfolio->description)
                                 <p class="mt-2 text-sm text-[#874532] line-clamp-3">{{ $portfolio->description }}</p>
                             @endif
+                            @if ($portfolio->event)
+                                <p class="mt-2 text-xs text-[#A3563F]">{{ $portfolio->event->venue_name }} • {{ $portfolio->event->tutor_name }}</p>
+                                <p class="text-[11px] text-[#A3563F]">{{ $portfolio->event->venue_address }}</p>
+                            @endif
                         </div>
 
                         <div class="mt-auto flex items-center justify-between text-xs text-[#A3563F]">
