@@ -192,6 +192,7 @@
                 <tbody class="divide-y divide-[#FAD6C7]/60 bg-white/80">
                     @forelse ($registrations as $registration)
                         @php($formData = collect($registration->form_data))
+                        @php($transaction = $registration->transaction)
                         <tr class="transition hover:bg-[#FFF0E6]">
                             <td class="px-6 py-4 align-top">
                                 <div class="font-semibold text-[#2C1E1E]">#{{ str_pad($registration->id, 4, '0', STR_PAD_LEFT) }}</div>
@@ -211,16 +212,16 @@
                                 {{ $formData->get('account_number') ?? $formData->get('bank_account') ?? '—' }}
                             </td>
                             <td class="px-6 py-4 align-top">
-                                <p class="font-semibold text-[#2C1E1E]">Rp{{ number_format($registration->amount, 0, ',', '.') }}</p>
+                                <p class="font-semibold text-[#2C1E1E]">Rp{{ number_format($registration->amount ?? 0, 0, ',', '.') }}</p>
                                 <p class="text-[11px] text-[#B87A7A]">
                                     {{ $isRefundView
-                                        ? optional(optional($registration->refundRequest)->requested_at)->translatedFormat('d M Y H:i')
+                                        ? optional(optional($transaction?->refund)->requested_at)->translatedFormat('d M Y H:i')
                                         : $registration->event->start_at->translatedFormat('d M Y') }}
                                 </p>
                             </td>
                             <td class="px-6 py-4 align-top">
                                 @if ($isRefundView)
-                                    @php($refundStatus = optional($registration->refundRequest)->status)
+                                    @php($refundStatus = optional($transaction?->refund)->status)
                                     <span @class([
                                         'inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-semibold',
                                         'bg-[#FCE2CF] text-[#C65B74]' => optional($refundStatus)->value === 'pending',
@@ -239,18 +240,18 @@
                                 @else
                                     <span @class([
                                         'inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-semibold',
-                                        'bg-[#FCE2CF] text-[#C65B74]' => in_array($registration->payment_status->value, ['pending', 'awaiting_verification']),
-                                        'bg-[#E4F5E9] text-[#2F9A55]' => $registration->payment_status->value === 'verified',
-                                        'bg-[#FDE1E7] text-[#BA1B1D]' => $registration->payment_status->value === 'rejected',
-                                        'bg-[#E5E7EB] text-[#4B5563]' => ! in_array($registration->payment_status->value, ['pending', 'awaiting_verification', 'verified', 'rejected']),
+                                        'bg-[#FCE2CF] text-[#C65B74]' => in_array($transaction?->status->value ?? '', ['pending', 'awaiting_verification']),
+                                        'bg-[#E4F5E9] text-[#2F9A55]' => ($transaction?->status?->value ?? null) === 'verified',
+                                        'bg-[#FDE1E7] text-[#BA1B1D]' => ($transaction?->status?->value ?? null) === 'rejected',
+                                        'bg-[#E5E7EB] text-[#4B5563]' => ! in_array($transaction?->status?->value ?? '', ['pending', 'awaiting_verification', 'verified', 'rejected']),
                                     ])>
-                                        <span class="h-2 w-2 rounded-full {{ match ($registration->payment_status->value) {
+                                        <span class="h-2 w-2 rounded-full {{ match ($transaction?->status?->value) {
                                             'pending', 'awaiting_verification' => 'bg-[#FF8A64]',
                                             'verified' => 'bg-[#2F9A55]',
                                             'rejected' => 'bg-[#BA1B1D]',
                                             default => 'bg-[#6B7280]',
                                         } }}"></span>
-                                        {{ $registration->payment_status->label() }}
+                                        {{ $transaction?->status->label() ?? 'Tidak ada data' }}
                                     </span>
                                 @endif
                             </td>

@@ -7,8 +7,9 @@ use App\Enums\RefundStatus;
 use App\Enums\RegistrationStatus;
 use App\Http\Controllers\Controller;
 use App\Models\Event;
-use App\Models\RefundRequest;
+use App\Models\Refund;
 use App\Models\Registration;
+use App\Models\Transaction;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 
@@ -48,41 +49,50 @@ class ReportController extends Controller
 
         if ($selectedEventId) {
             $registrationBase = fn () => Registration::query()->where('event_id', $selectedEventId);
+            $transactionBase = fn () => Transaction::query()->whereHas('registration', fn ($query) => $query->where('event_id', $selectedEventId));
 
             $participantMetrics = [
                 'total' => $registrationBase()->count(),
                 'confirmed' => $registrationBase()->where('status', RegistrationStatus::Confirmed)->count(),
-                'pending' => $registrationBase()->whereIn('payment_status', [
-                    PaymentStatus::Pending,
-                    PaymentStatus::AwaitingVerification,
-                ])->count(),
-                'refund_requests' => $registrationBase()->whereHas('refundRequest', fn ($query) => $query->where('status', '!=', RefundStatus::Rejected->value))->count(),
+                'pending' => $registrationBase()->whereHas('transaction', function ($query) {
+                    $query->whereIn('status', [
+                        PaymentStatus::Pending,
+                        PaymentStatus::AwaitingVerification,
+                    ]);
+                })->count(),
+                'refund_requests' => $transactionBase()->whereHas('refund', fn ($query) => $query->where('status', '!=', RefundStatus::Rejected->value))->count(),
             ];
 
             $financialMetrics = [
-                'target' => $registrationBase()->sum('amount'),
-                'received' => $registrationBase()->where('payment_status', PaymentStatus::Verified)->sum('amount'),
-                'pending' => $registrationBase()->whereIn('payment_status', [
+                'target' => $transactionBase()->sum('amount'),
+                'received' => $transactionBase()->where('status', PaymentStatus::Verified)->sum('amount'),
+                'pending' => $transactionBase()->whereIn('status', [
                     PaymentStatus::Pending,
                     PaymentStatus::AwaitingVerification,
                 ])->sum('amount'),
-                'refunded' => RefundRequest::query()
+                'refunded' => Refund::query()
                     ->where('status', RefundStatus::Approved)
-                    ->whereHas('registration', fn ($query) => $query->where('event_id', $selectedEventId))
-                    ->with('registration:id,amount,event_id')
+                    ->whereHas('transaction.registration', fn ($query) => $query->where('event_id', $selectedEventId))
+                    ->with('transaction:id,amount,registration_id')
                     ->get()
-                    ->sum(fn ($refund) => $refund->registration?->amount ?? 0),
+                    ->sum(fn ($refund) => $refund->transaction?->amount ?? 0),
             ];
 
             $recentRegistrations = $registrationBase()
-                ->with(['user:id,name,email', 'refundRequest'])
+                ->with(['user:id,name,email', 'transaction.refund'])
                 ->latest('registered_at')
                 ->take(6)
                 ->get();
 
-            $paymentBreakdown = collect(PaymentStatus::cases())->map(function (PaymentStatus $status) use ($registrationBase) {
-                $count = $registrationBase()->where('payment_status', $status)->count();
-                $sum = $registrationBase()->where('payment_status', $status)->sum('amount');
+            $registrationIds = $registrationBase()->pluck('id')->all();
+
+            $paymentBreakdown = collect(PaymentStatus::cases())->map(function (PaymentStatus $status) use ($registrationIds) {
+                $transactionQuery = Transaction::query()
+                    ->whereIn('registration_id', $registrationIds)
+                    ->where('status', $status);
+
+                $count = (clone $transactionQuery)->count();
+                $sum = (clone $transactionQuery)->sum('amount');
 
                 return [
                     'status' => $status,

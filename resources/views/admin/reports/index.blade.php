@@ -160,6 +160,7 @@
 
                                 <div class="mt-5 space-y-3">
                                     @forelse ($recentRegistrations as $registration)
+                                        @php($transaction = $registration->transaction)
                                         <div class="flex flex-col gap-3 rounded-3xl border border-[#FFE3D2] bg-white/90 p-4 text-sm text-[#5C2518] shadow-sm sm:flex-row sm:items-center sm:justify-between">
                                             <div>
                                                 <p class="font-semibold">{{ $registration->user->name }}</p>
@@ -170,7 +171,7 @@
                                                     {{ $registration->status->label() }}
                                                 </span>
                                                 <span class="inline-flex items-center gap-2 rounded-full bg-[#FFF5EF] px-3 py-1 font-semibold text-[#C06245]">
-                                                    {{ $registration->payment_status->label() }}
+                                                    {{ $transaction?->status->label() ?? 'Tidak ada data' }}
                                                 </span>
                                                 <span class="inline-flex items-center gap-2 rounded-full bg-[#FFF1EA] px-3 py-1 font-semibold text-[#874532]">
                                                     {{ optional($registration->registered_at)->translatedFormat('d M Y H:i') }}

@@ -17,7 +17,7 @@ class PageController extends Controller
             ->where('status', EventStatus::Published)
             ->orderBy('start_at')
             ->limit(3)
-            ->get(['id', 'title', 'description', 'start_at', 'end_at', 'price', 'available_slots', 'venue_name', 'venue_address', 'tutor_name']);
+            ->get(['id', 'title', 'description', 'start_at', 'end_at', 'price', 'venue_name', 'venue_address', 'tutor_name']);
 
         $featuredPortfolios = Portfolio::query()
             ->with(['event:id,title,start_at,venue_name,venue_address,tutor_name'])

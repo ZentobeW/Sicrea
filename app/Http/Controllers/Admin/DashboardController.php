@@ -7,6 +7,7 @@ use App\Enums\PaymentStatus;
 use App\Http\Controllers\Controller;
 use App\Models\Event;
 use App\Models\Registration;
+use App\Models\Transaction;
 use Illuminate\Contracts\View\View;
 
 class DashboardController extends Controller
@@ -16,11 +17,11 @@ class DashboardController extends Controller
         $metrics = [
             'activeEvents' => Event::where('status', EventStatus::Published)->count(),
             'totalParticipants' => Registration::count(),
-            'totalRevenue' => Registration::where('payment_status', PaymentStatus::Verified)->sum('amount'),
-            'confirmedRegistrations' => Registration::where('payment_status', PaymentStatus::Verified)->count(),
+            'totalRevenue' => Transaction::where('status', PaymentStatus::Verified)->sum('amount'),
+            'confirmedRegistrations' => Registration::whereHas('transaction', fn ($query) => $query->where('status', PaymentStatus::Verified))->count(),
         ];
 
-        $recentRegistrations = Registration::with(['event', 'user'])
+        $recentRegistrations = Registration::with(['event', 'user', 'transaction'])
             ->orderByDesc('registered_at')
             ->orderByDesc('created_at')
             ->take(5)

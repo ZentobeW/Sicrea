@@ -1,7 +1,7 @@
 @component('mail::message')
 # Permintaan Refund Baru
 
-Peserta {{ $refund->registration->user->name }} mengajukan refund untuk event **{{ $refund->registration->event->title }}**.
+Peserta {{ $refund->transaction->registration->user->name }} mengajukan refund untuk event **{{ $refund->transaction->registration->event->title }}**.
 
 Alasan:
 > {{ $refund->reason ?? 'Tidak ada alasan yang diberikan.' }}

@@ -7,6 +7,7 @@ use App\Enums\RegistrationStatus;
 use App\Http\Requests\StoreRegistrationRequest;
 use App\Http\Requests\UpdatePaymentProofRequest;
 use App\Mail\PaymentProofUploaded;
+use App\Models\Email;
 use App\Models\Event;
 use App\Models\Registration;
 use Illuminate\Contracts\View\View;
@@ -18,7 +19,7 @@ class RegistrationController extends Controller
     public function index(): View
     {
         $registrations = Registration::query()
-            ->with(['event'])
+            ->with(['event', 'transaction'])
             ->where('user_id', auth()->id())
             ->latest('registered_at')
             ->paginate(10);
@@ -39,7 +40,9 @@ class RegistrationController extends Controller
     {
         $user = $request->user();
 
-        if ($event->capacity && $event->available_slots !== null && $event->available_slots <= 0) {
+        $remainingSlots = $event->remainingSlots();
+
+        if ($remainingSlots !== null && $remainingSlots <= 0) {
             return back()->withErrors(['event' => 'Kuota event sudah penuh.'])->withInput();
         }
 
@@ -49,15 +52,14 @@ class RegistrationController extends Controller
             'user_id' => $user->id,
             'event_id' => $event->id,
             'status' => RegistrationStatus::Pending,
-            'payment_status' => PaymentStatus::Pending,
-            'amount' => $event->price,
             'form_data' => $formData,
             'registered_at' => now(),
         ]);
 
-        if ($event->available_slots !== null) {
-            $event->decrement('available_slots');
-        }
+        $registration->transaction()->create([
+            'amount' => $event->price,
+            'status' => PaymentStatus::Pending,
+        ]);
 
         return redirect()->route('registrations.show', $registration)->with('status', 'Pendaftaran berhasil dibuat, silakan lakukan pembayaran.');
     }
@@ -66,7 +68,7 @@ class RegistrationController extends Controller
     {
         $this->authorize('view', $registration);
 
-        $registration->loadMissing(['event', 'refundRequest']);
+        $registration->loadMissing(['event', 'transaction.refund']);
 
         return view('registrations.show', compact('registration'));
     }
@@ -78,9 +80,9 @@ class RegistrationController extends Controller
         $proof = $request->file('payment_proof');
         $path = $proof->store('payment-proofs', 'public');
 
-        $registration->update([
+        $registration->transaction()->update([
             'payment_proof_path' => $path,
-            'payment_status' => PaymentStatus::AwaitingVerification,
+            'status' => PaymentStatus::AwaitingVerification,
             'paid_at' => now(),
         ]);
 
@@ -88,6 +90,17 @@ class RegistrationController extends Controller
 
         Mail::to(config('mail.from.address'))
             ->queue(new PaymentProofUploaded($registration));
+
+        Email::create([
+            'registration_id' => $registration->id,
+            'type' => 'payment_proof_uploaded',
+            'recipient' => config('mail.from.address'),
+            'subject' => 'Bukti Pembayaran Baru',
+            'payload' => [
+                'registration_id' => $registration->id,
+            ],
+            'sent_at' => now(),
+        ]);
 
         return back()->with('status', 'Bukti pembayaran berhasil diunggah. Menunggu verifikasi admin.');
     }

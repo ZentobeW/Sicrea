@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Enums\PaymentStatus;
 use App\Enums\RefundStatus;
 use App\Http\Requests\UpdateProfileRequest;
-use App\Models\RefundRequest;
+use App\Models\Refund;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -16,24 +16,26 @@ class ProfileController extends Controller
         $user = $request->user();
 
         $pendingRegistrations = $user->registrations()
-            ->whereIn('payment_status', [PaymentStatus::Pending, PaymentStatus::AwaitingVerification])
+            ->whereHas('transaction', function ($query) {
+                $query->whereIn('status', [PaymentStatus::Pending, PaymentStatus::AwaitingVerification]);
+            })
             ->count();
 
-        $activeRefunds = RefundRequest::query()
-            ->whereHas('registration', function ($query) use ($user) {
+        $activeRefunds = Refund::query()
+            ->whereHas('transaction.registration', function ($query) use ($user) {
                 $query->where('user_id', $user->id);
             })
             ->whereIn('status', [RefundStatus::Pending, RefundStatus::Approved])
             ->count();
 
         $recentRegistrations = $user->registrations()
-            ->with(['event', 'refundRequest'])
+            ->with(['event', 'transaction.refund'])
             ->latest('registered_at')
             ->take(5)
             ->get();
 
         $upcomingRegistration = $user->registrations()
-            ->with('event')
+            ->with(['event', 'transaction'])
             ->whereHas('event', function ($query) {
                 $query->where('start_at', '>=', now());
             })

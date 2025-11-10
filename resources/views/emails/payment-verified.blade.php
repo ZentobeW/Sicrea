@@ -10,7 +10,7 @@ Detail:
 - Venue: {{ $registration->event->venue_name }}
 - Alamat: {{ $registration->event->venue_address }}
 - Tutor: {{ $registration->event->tutor_name }}
-- Nominal: Rp{{ number_format($registration->amount, 0, ',', '.') }}
+- Nominal: Rp{{ number_format(optional($registration->transaction)->amount ?? 0, 0, ',', '.') }}
 
 Sampai jumpa di acara!
 

@@ -22,7 +22,6 @@ class UpdateEventRequest extends FormRequest
             'venue_address' => ['required', 'string', 'max:255'],
             'tutor_name' => ['required', 'string', 'max:255'],
             'capacity' => ['nullable', 'integer', 'min:1'],
-            'available_slots' => ['nullable', 'integer', 'min:0'],
             'price' => ['required', 'integer', 'min:0'],
             'publish' => ['nullable', 'boolean'],
         ];

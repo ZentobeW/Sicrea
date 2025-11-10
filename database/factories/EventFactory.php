@@ -21,7 +21,6 @@ class EventFactory extends Factory
         $endAt = Carbon::instance($startAt)->addHours($this->faker->numberBetween(2, 8));
         $status = $this->faker->randomElement(EventStatus::cases());
         $capacity = $this->faker->numberBetween(15, 80);
-        $booked = $this->faker->numberBetween(0, (int) floor($capacity * 0.7));
 
         return [
             'title' => $title,
@@ -32,7 +31,6 @@ class EventFactory extends Factory
             'venue_address' => $this->faker->streetAddress() . ', ' . $this->faker->city(),
             'tutor_name' => $this->faker->name(),
             'capacity' => $capacity,
-            'available_slots' => max($capacity - $booked, 0),
             'price' => $this->faker->numberBetween(100_000, 650_000),
             'status' => $status,
             'published_at' => $status === EventStatus::Published
@@ -51,7 +49,6 @@ class EventFactory extends Factory
             return [
                 'status' => EventStatus::Published,
                 'published_at' => Carbon::parse($attributes['published_at'] ?? $startAt)->subDays(7),
-                'available_slots' => $attributes['capacity'] ?? 40,
             ];
         });
     }

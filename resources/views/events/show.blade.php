@@ -42,7 +42,7 @@
                         </div>
                         <div class="rounded-2xl bg-[#FFF4EC] px-5 py-4">
                             <dt class="text-xs uppercase tracking-[0.3em] text-[#B05A62]/70">Kuota Tersisa</dt>
-                            <dd class="mt-2 text-sm font-semibold text-[#5A3D31]">{{ $event->available_slots ?? 'Tidak terbatas' }}</dd>
+                            <dd class="mt-2 text-sm font-semibold text-[#5A3D31]">{{ $event->remainingSlots() ?? 'Tidak terbatas' }}</dd>
                         </div>
                         <div class="rounded-2xl bg-[#FFF4EC] px-5 py-4">
                             <dt class="text-xs uppercase tracking-[0.3em] text-[#B05A62]/70">Total Pendaftar</dt>

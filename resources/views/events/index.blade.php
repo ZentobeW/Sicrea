@@ -101,7 +101,7 @@
                                 </div>
                                 <div class="text-right">
                                     <p class="text-xs uppercase tracking-[0.3em] text-[#B05A62]/70">Kuota</p>
-                                    <p class="text-sm font-semibold text-[#5A3D31]">{{ $event->available_slots ?? 'Tidak terbatas' }}</p>
+                                    <p class="text-sm font-semibold text-[#5A3D31]">{{ $event->remainingSlots() ?? 'Tidak terbatas' }}</p>
                                 </div>
                             </div>
                             <div class="flex items-center justify-between">

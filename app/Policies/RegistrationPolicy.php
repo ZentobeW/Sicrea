@@ -29,6 +29,10 @@ class RegistrationPolicy
 
     public function requestRefund(User $user, Registration $registration): bool
     {
-        return $registration->user_id === $user->id && $registration->payment_status === PaymentStatus::Verified;
+        $transaction = $registration->transaction;
+
+        return $registration->user_id === $user->id
+            && $transaction
+            && $transaction->status === PaymentStatus::Verified;
     }
 }

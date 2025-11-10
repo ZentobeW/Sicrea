@@ -40,6 +40,7 @@
             </div>
             <div class="mt-6 space-y-4">
                 @forelse ($recentRegistrations as $registration)
+                    @php($transaction = $registration->transaction)
                     <div class="flex items-start justify-between rounded-2xl bg-[#FFF6F1] px-4 py-3">
                         <div>
                             <p class="text-sm font-semibold text-[#5A291B]">{{ $registration->user->name }}</p>
@@ -47,7 +48,7 @@
                         </div>
                         <div class="text-right text-xs text-[#A35C45]">
                             <p>{{ optional($registration->registered_at ?? $registration->created_at)->translatedFormat('d M Y') }}</p>
-                            <p class="font-semibold text-[#E57255]">{{ $registration->payment_status->label() }}</p>
+                            <p class="font-semibold text-[#E57255]">{{ $transaction?->status->label() ?? 'Tidak ada data' }}</p>
                         </div>
                     </div>
                 @empty

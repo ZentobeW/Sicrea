@@ -5,10 +5,12 @@ namespace Database\Seeders;
 use App\Enums\PaymentStatus;
 use App\Enums\RefundStatus;
 use App\Enums\RegistrationStatus;
+use App\Models\Admin;
 use App\Models\Event;
 use App\Models\Portfolio;
-use App\Models\RefundRequest;
+use App\Models\Refund;
 use App\Models\Registration;
+use App\Models\Transaction;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
@@ -26,8 +28,13 @@ class DatabaseSeeder extends Seeder
         $admin = User::factory()->create([
             'name' => 'Administrator',
             'email' => 'admin@example.com',
-            'is_admin' => true,
             'password' => Hash::make('password'),
+        ]);
+
+        Admin::create([
+            'user_id' => $admin->id,
+            'role' => 'Super Admin',
+            'phone' => $faker->phoneNumber(),
         ]);
 
         $users = User::factory(15)->create();
@@ -63,48 +70,54 @@ class DatabaseSeeder extends Seeder
                     ->subDays($faker->numberBetween(7, 30))
                     ->setTime($faker->numberBetween(8, 19), $faker->numberBetween(0, 59));
 
-                $registrationState = [
-                    'amount' => $event->price,
-                    'registered_at' => $registeredAt,
-                    'form_data' => [
-                        'full_name' => $participant->name,
-                        'email' => $participant->email,
-                        'phone' => $faker->phoneNumber(),
-                        'organization' => $faker->company(),
-                    ],
-                    'status' => RegistrationStatus::Pending,
-                    'payment_status' => PaymentStatus::Pending,
-                    'payment_proof_path' => null,
-                    'paid_at' => null,
-                    'verified_at' => null,
-                ];
-
-                if ($faker->boolean(70)) {
-                    $paymentStatus = $faker->boolean(75)
-                        ? PaymentStatus::Verified
-                        : PaymentStatus::AwaitingVerification;
-
-                    $paidAt = $registeredAt->copy()->addDays($faker->numberBetween(0, 2));
-
-                    $registrationState['payment_status'] = $paymentStatus;
-                    $registrationState['payment_proof_path'] = 'payments/proof-' . Str::uuid() . '.jpg';
-                    $registrationState['paid_at'] = $paidAt;
-
-                    if ($paymentStatus === PaymentStatus::Verified) {
-                        $registrationState['status'] = RegistrationStatus::Confirmed;
-                        $registrationState['verified_at'] = $paidAt->copy()->addDay();
-                    }
-                }
-
                 $registration = Registration::factory()
                     ->for($participant)
                     ->for($event)
-                    ->state($registrationState)
+                    ->state([
+                        'registered_at' => $registeredAt,
+                        'form_data' => [
+                            'full_name' => $participant->name,
+                            'email' => $participant->email,
+                            'phone' => $faker->phoneNumber(),
+                            'organization' => $faker->company(),
+                        ],
+                    ])
                     ->create();
 
-                if ($registration->payment_status === PaymentStatus::Verified && $faker->boolean(25)) {
+                $transactionStatus = PaymentStatus::Pending;
+                $paidAt = null;
+                $verifiedAt = null;
+                $proofPath = null;
+
+                if ($faker->boolean(70)) {
+                    $transactionStatus = $faker->boolean(75)
+                        ? PaymentStatus::Verified
+                        : PaymentStatus::AwaitingVerification;
+                    $paidAt = $registeredAt->copy()->addDays($faker->numberBetween(0, 2));
+                    $proofPath = 'payments/proof-' . Str::uuid() . '.jpg';
+
+                    if ($transactionStatus === PaymentStatus::Verified) {
+                        $verifiedAt = $paidAt->copy()->addDay();
+                        $registration->update([
+                            'status' => RegistrationStatus::Confirmed,
+                        ]);
+                    }
+                }
+
+                $transaction = Transaction::factory()
+                    ->for($registration)
+                    ->state([
+                        'amount' => $event->price,
+                        'status' => $transactionStatus,
+                        'payment_proof_path' => $proofPath,
+                        'paid_at' => $paidAt,
+                        'verified_at' => $verifiedAt,
+                    ])
+                    ->create();
+
+                if ($transaction->status === PaymentStatus::Verified && $faker->boolean(25)) {
                     $refundStatus = $faker->randomElement(RefundStatus::cases());
-                    $requestedAt = ($registration->verified_at ?? $registration->registered_at)
+                    $requestedAt = ($transaction->verified_at ?? $registration->registered_at)
                         ->copy()
                         ->addDays($faker->numberBetween(1, 5));
 
@@ -116,8 +129,8 @@ class DatabaseSeeder extends Seeder
                         ? $requestedAt->copy()->addDays($faker->numberBetween(1, 5))
                         : null;
 
-                    RefundRequest::factory()
-                        ->for($registration)
+                    Refund::factory()
+                        ->for($transaction)
                         ->state([
                             'status' => $refundStatus,
                             'reason' => $faker->sentence(),
@@ -128,23 +141,13 @@ class DatabaseSeeder extends Seeder
                         ->create();
 
                     if ($refundStatus === RefundStatus::Completed) {
-                        $registration->update([
-                            'status' => RegistrationStatus::Refunded,
-                            'payment_status' => PaymentStatus::Refunded,
-                        ]);
+                        $transaction->update(['status' => PaymentStatus::Refunded]);
+                        $registration->update(['status' => RegistrationStatus::Refunded]);
                     } elseif ($refundStatus === RefundStatus::Approved) {
-                        $registration->update([
-                            'status' => RegistrationStatus::Cancelled,
-                        ]);
+                        $registration->update(['status' => RegistrationStatus::Cancelled]);
                     }
                 }
             });
-
-            if ($event->capacity) {
-                $event->forceFill([
-                    'available_slots' => max($event->capacity - $event->registrations()->count(), 0),
-                ])->save();
-            }
         });
     }
 }

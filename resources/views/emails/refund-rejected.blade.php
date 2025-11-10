@@ -1,9 +1,9 @@
 @component('mail::message')
 # Refund Ditolak
 
-Halo {{ $refund->registration->user->name }},
+Halo {{ $refund->transaction->registration->user->name }},
 
-Mohon maaf, permohonan refund kamu untuk event **{{ $refund->registration->event->title }}** belum dapat kami proses.
+Mohon maaf, permohonan refund kamu untuk event **{{ $refund->transaction->registration->event->title }}** belum dapat kami proses.
 @if($refund->admin_note)
 Alasan:
 > {{ $refund->admin_note }}

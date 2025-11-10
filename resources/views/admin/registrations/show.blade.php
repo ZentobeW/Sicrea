@@ -6,6 +6,8 @@
 
 @php use Illuminate\Support\Facades\Storage; @endphp
 
+@php($transaction = $registration->transaction)
+
 <x-layouts.admin :title="$registration->user->name" :subtitle="$registration->user->email" :tabs="$tabs" :back-url="route('admin.registrations.index')">
     <div class="grid gap-8 lg:grid-cols-[2fr,1fr]">
         <section class="space-y-6 rounded-3xl border border-slate-200/60 bg-white/95 p-6 sm:p-8 shadow-xl">
@@ -29,23 +31,23 @@
                     <span class="font-semibold text-slate-700 block">Status Pembayaran</span>
                     <span @class([
                         'mt-1 inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-semibold transition',
-                        'bg-emerald-100 text-emerald-600 ring-1 ring-emerald-500/20' => $registration->payment_status->value === 'verified',
-                        'bg-amber-100 text-amber-600 ring-1 ring-amber-500/20' => $registration->payment_status->value === 'pending',
-                        'bg-rose-100 text-rose-600 ring-1 ring-rose-500/20' => $registration->payment_status->value === 'rejected',
-                        'bg-slate-100 text-slate-600 ring-1 ring-slate-500/10' => ! in_array($registration->payment_status->value, ['verified', 'pending', 'rejected']),
+                        'bg-emerald-100 text-emerald-600 ring-1 ring-emerald-500/20' => ($transaction?->status?->value ?? null) === 'verified',
+                        'bg-amber-100 text-amber-600 ring-1 ring-amber-500/20' => ($transaction?->status?->value ?? null) === 'pending',
+                        'bg-rose-100 text-rose-600 ring-1 ring-rose-500/20' => ($transaction?->status?->value ?? null) === 'rejected',
+                        'bg-slate-100 text-slate-600 ring-1 ring-slate-500/10' => ! in_array($transaction?->status?->value ?? '', ['verified', 'pending', 'rejected']),
                     ])>
-                        <span class="h-2 w-2 rounded-full {{ match ($registration->payment_status->value) {
+                        <span class="h-2 w-2 rounded-full {{ match ($transaction?->status?->value) {
                             'verified' => 'bg-emerald-500',
                             'pending' => 'bg-amber-500',
                             'rejected' => 'bg-rose-500',
                             default => 'bg-slate-400',
                         } }}"></span>
-                        {{ $registration->payment_status->label() }}
+                        {{ $transaction?->status->label() ?? 'Tidak ada data' }}
                     </span>
                 </div>
                 <div>
                     <span class="font-semibold text-slate-700 block">Nominal</span>
-                    <p class="mt-1 text-base font-semibold text-slate-900">Rp{{ number_format($registration->amount, 0, ',', '.') }}</p>
+                    <p class="mt-1 text-base font-semibold text-slate-900">Rp{{ number_format($registration->amount ?? 0, 0, ',', '.') }}</p>
                 </div>
             </div>
 
@@ -75,7 +77,7 @@
                 <h2 class="text-base font-semibold text-slate-800">Tindakan Admin</h2>
                 <p class="mt-2 text-sm text-slate-500">Verifikasi pembayaran atau mintalah peserta mengunggah ulang jika data belum valid.</p>
                 <div class="mt-4 space-y-3">
-                    @if ($registration->payment_status->value === 'awaiting_verification')
+                    @if ($transaction?->status?->value === 'awaiting_verification')
                         <form method="POST" action="{{ route('admin.registrations.verify-payment', $registration) }}">
                             @csrf
                             <button class="w-full inline-flex items-center justify-center gap-2 rounded-full bg-emerald-500 px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-emerald-500/30 transition hover:-translate-y-0.5 hover:bg-emerald-600">Verifikasi Pembayaran</button>
@@ -90,20 +92,20 @@
                 </div>
             </div>
 
-            @if ($registration->refundRequest)
+            @if ($transaction?->refund)
                 <div class="rounded-3xl border border-white/60 bg-white/80 p-6 shadow-xl backdrop-blur">
                     <h2 class="text-base font-semibold text-slate-800">Permintaan Refund</h2>
-                    <p class="mt-2 text-sm text-slate-500">Status: <span class="font-semibold text-slate-700">{{ $registration->refundRequest->status->label() }}</span></p>
+                    <p class="mt-2 text-sm text-slate-500">Status: <span class="font-semibold text-slate-700">{{ $transaction->refund->status->label() }}</span></p>
                     <p class="mt-2 text-sm text-slate-500">Alasan peserta:</p>
-                    <p class="mt-1 rounded-2xl border border-slate-200 bg-slate-50/80 px-4 py-3 text-sm text-slate-600">{{ $registration->refundRequest->reason ?? '-' }}</p>
+                    <p class="mt-1 rounded-2xl border border-slate-200 bg-slate-50/80 px-4 py-3 text-sm text-slate-600">{{ $transaction->refund->reason ?? '-' }}</p>
 
-                    @if ($registration->refundRequest->status->value === 'pending')
+                    @if ($transaction->refund->status->value === 'pending')
                         <div class="mt-4 space-y-3">
-                            <form method="POST" action="{{ route('admin.refunds.approve', $registration->refundRequest) }}">
+                            <form method="POST" action="{{ route('admin.refunds.approve', $transaction->refund) }}">
                                 @csrf
                                 <button class="w-full inline-flex items-center justify-center gap-2 rounded-full bg-emerald-500 px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-emerald-500/30 transition hover:-translate-y-0.5 hover:bg-emerald-600">Setujui Refund</button>
                             </form>
-                            <form method="POST" action="{{ route('admin.refunds.reject', $registration->refundRequest) }}">
+                            <form method="POST" action="{{ route('admin.refunds.reject', $transaction->refund) }}">
                                 @csrf
                                 <button class="w-full inline-flex items-center justify-center gap-2 rounded-full bg-amber-500 px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-amber-500/30 transition hover:-translate-y-0.5 hover:bg-amber-600">Tolak Refund</button>
                             </form>

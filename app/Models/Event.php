@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use App\Enums\EventStatus;
+use App\Enums\PaymentStatus;
+use App\Enums\RegistrationStatus;
 use Illuminate\Database\Eloquent\Attributes\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -22,7 +24,6 @@ class Event extends Model
         'venue_address',
         'tutor_name',
         'capacity',
-        'available_slots',
         'price',
         'status',
         'published_at',
@@ -36,15 +37,6 @@ class Event extends Model
         'published_at' => 'datetime',
         'status' => EventStatus::class,
     ];
-
-    protected static function booted(): void
-    {
-        static::creating(function (Event $event) {
-            if ($event->capacity && $event->available_slots === null) {
-                $event->available_slots = $event->capacity;
-            }
-        });
-    }
 
     public function registrations(): HasMany
     {
@@ -69,6 +61,24 @@ class Event extends Model
     public function isPublished(): bool
     {
         return $this->status === EventStatus::Published;
+    }
+
+    public function remainingSlots(): ?int
+    {
+        if (! $this->capacity) {
+            return null;
+        }
+
+        $confirmed = $this->registrations()
+            ->where(function ($query) {
+                $query->where('status', RegistrationStatus::Confirmed->value)
+                    ->orWhereHas('transaction', function ($transactionQuery) {
+                        $transactionQuery->where('status', PaymentStatus::Verified->value);
+                    });
+            })
+            ->count();
+
+        return max($this->capacity - $confirmed, 0);
     }
 
     public function titleWithSchedule(): Attribute

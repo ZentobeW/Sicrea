@@ -102,7 +102,7 @@
                             <p class="text-xs text-[#A04E62]">Pemateri: {{ $event->tutor_name }}</p>
                         </div>
                         <div class="mt-6 flex items-center justify-between rounded-2xl bg-[#FFF0E6] px-5 py-3 text-xs font-semibold uppercase tracking-[0.28em] text-[#A04E62]">
-                            <span>Kuota tersisa: {{ $event->available_slots ?? 'Tidak terbatas' }}</span>
+                            <span>Kuota tersisa: {{ $event->remainingSlots() ?? 'Tidak terbatas' }}</span>
                             <a href="{{ route('events.show', $event) }}" class="inline-flex items-center rounded-full bg-[#FF8A64] px-4 py-2 text-white transition hover:bg-[#F9744B]">Lihat Detail</a>
                         </div>
                     </article>

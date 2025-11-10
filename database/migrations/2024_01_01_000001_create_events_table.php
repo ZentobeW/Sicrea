@@ -22,7 +22,6 @@ return new class extends Migration
             $table->string('venue_address');
             $table->string('tutor_name');
             $table->unsignedInteger('capacity')->nullable();
-            $table->unsignedInteger('available_slots')->nullable();
             $table->unsignedInteger('price')->default(0);
             $table->string('status')->default(EventStatus::Draft->value)->index();
             $table->dateTime('published_at')->nullable()->index();

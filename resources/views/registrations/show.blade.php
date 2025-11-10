@@ -12,14 +12,16 @@
                 </div>
             </div>
 
+            @php($transaction = $registration->transaction)
+
             <div class="grid md:grid-cols-2 gap-4 text-sm text-slate-600">
                 <div>
                     <span class="font-medium text-slate-700 block">Pembayaran</span>
-                    <span class="inline-flex rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-600">{{ $registration->payment_status->label() }}</span>
+                    <span class="inline-flex rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-600">{{ $transaction?->status->label() ?? 'Belum Dibuat' }}</span>
                 </div>
                 <div>
                     <span class="font-medium text-slate-700 block">Nominal</span>
-                    <p>Rp{{ number_format($registration->amount, 0, ',', '.') }}</p>
+                    <p>Rp{{ number_format($transaction?->amount ?? 0, 0, ',', '.') }}</p>
                 </div>
                 <div>
                     <span class="font-medium text-slate-700 block">Tanggal Daftar</span>
@@ -54,13 +56,13 @@
                 <h2 class="text-lg font-semibold text-slate-800">Pembayaran</h2>
                 <p class="text-sm text-slate-600">Silakan lakukan pembayaran dan unggah bukti untuk diproses admin.</p>
 
-                @if ($registration->payment_proof_path)
+                @if ($transaction?->payment_proof_path)
                     <div class="rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 text-sm">
-                        Bukti pembayaran telah diunggah pada {{ optional($registration->paid_at)->translatedFormat('d M Y H:i') }}.
+                        Bukti pembayaran telah diunggah pada {{ optional($transaction->paid_at)->translatedFormat('d M Y H:i') }}.
                     </div>
                 @endif
 
-                @if ($registration->payment_status->value !== 'verified')
+                @if ($transaction?->status !== \App\Enums\PaymentStatus::Verified)
                     <form method="POST" action="{{ route('registrations.payment-proof', $registration) }}" enctype="multipart/form-data" class="space-y-3">
                         @csrf
                         <div>
@@ -74,11 +76,11 @@
                 @endif
             </div>
 
-            @if ($registration->payment_status->value === 'verified')
+            @if ($transaction?->status === \App\Enums\PaymentStatus::Verified)
                 <div class="bg-white rounded-xl shadow-sm border border-slate-100 p-6 space-y-3">
                     <h2 class="text-lg font-semibold text-slate-800">Pengajuan Refund</h2>
-                    @if ($registration->refundRequest)
-                        <p class="text-sm text-slate-600">Status refund: {{ $registration->refundRequest->status->label() }}.</p>
+                    @if ($transaction?->refund)
+                        <p class="text-sm text-slate-600">Status refund: {{ $transaction->refund->status->label() }}.</p>
                     @else
                         <form method="POST" action="{{ route('registrations.refund.store', $registration) }}" class="space-y-3">
                             @csrf

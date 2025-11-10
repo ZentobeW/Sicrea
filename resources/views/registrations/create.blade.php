@@ -111,7 +111,7 @@
                                 </div>
                                 <div class="flex items-start justify-between gap-3">
                                     <dt class="text-[#A04E62]">Kuota</dt>
-                                    <dd class="text-right">{{ $event->available_slots ?? 'Tidak terbatas' }}</dd>
+                                    <dd class="text-right">{{ $event->remainingSlots() ?? 'Tidak terbatas' }}</dd>
                                 </div>
                             </dl>
                             <div class="rounded-2xl border border-dashed border-[#FAD6C7] px-4 py-3 text-sm text-[#2C1E1E]">

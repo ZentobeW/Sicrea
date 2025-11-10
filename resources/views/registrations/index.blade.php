@@ -17,7 +17,7 @@
                     <tr class="hover:bg-slate-50">
                         <td class="px-4 py-3">
                             <div class="font-medium text-slate-800">{{ $registration->event->title }}</div>
-                            <div class="text-xs text-slate-500">Rp{{ number_format($registration->amount, 0, ',', '.') }}</div>
+                            <div class="text-xs text-slate-500">Rp{{ number_format(optional($registration->transaction)->amount ?? 0, 0, ',', '.') }}</div>
                             <div class="text-[11px] text-slate-500">{{ $registration->event->venue_name }}</div>
                         </td>
                         <td class="px-4 py-3 text-slate-600">{{ optional($registration->event->start_at)->translatedFormat('d M Y H:i') }}</td>
@@ -25,7 +25,10 @@
                             <span class="inline-flex rounded-full bg-indigo-50 px-3 py-1 text-xs font-medium text-indigo-600">{{ $registration->status->label() }}</span>
                         </td>
                         <td class="px-4 py-3">
-                            <span class="inline-flex rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-600">{{ $registration->payment_status->label() }}</span>
+                            @php($transaction = $registration->transaction)
+                            <span class="inline-flex rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-600">
+                                {{ $transaction?->status->label() ?? 'Belum Dibuat' }}
+                            </span>
                         </td>
                         <td class="px-4 py-3 text-right">
                             <a href="{{ route('registrations.show', $registration) }}" class="text-indigo-600 hover:underline">Detail</a>
