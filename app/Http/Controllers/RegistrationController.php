@@ -70,7 +70,14 @@ class RegistrationController extends Controller
 
         $registration->loadMissing(['event', 'transaction.refund']);
 
-        return view('registrations.show', compact('registration'));
+        $paymentAccount = collect(config('payment.accounts', []))
+            ->firstWhere('is_primary', true)
+            ?? collect(config('payment.accounts', []))->first();
+
+        return view('registrations.show', [
+            'registration' => $registration,
+            'paymentAccount' => $paymentAccount,
+        ]);
     }
 
     public function uploadProof(UpdatePaymentProofRequest $request, Registration $registration): RedirectResponse

@@ -212,7 +212,7 @@
                                 {{ $formData->get('account_number') ?? $formData->get('bank_account') ?? '—' }}
                             </td>
                             <td class="px-6 py-4 align-top">
-                                <p class="font-semibold text-[#2C1E1E]">Rp{{ number_format($registration->amount ?? 0, 0, ',', '.') }}</p>
+                                <p class="font-semibold text-[#2C1E1E]">Rp{{ number_format($transaction?->amount ?? 0, 0, ',', '.') }}</p>
                                 <p class="text-[11px] text-[#B87A7A]">
                                     {{ $isRefundView
                                         ? optional(optional($transaction?->refund)->requested_at)->translatedFormat('d M Y H:i')

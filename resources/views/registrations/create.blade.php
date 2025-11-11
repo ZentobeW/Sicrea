@@ -22,9 +22,9 @@
                     </div>
 
                     <div class="mt-6 grid gap-3 md:grid-cols-3">
-                        <div class="rounded-2xl border border-[#FAD6C7] bg-[#FFF5EF] px-4 py-3 text-sm font-semibold text-[#C65B74]">Data Diri</div>
+                        <div class="rounded-2xl border border-[#FAD6C7] bg-[#FFF5EF] px-4 py-3 text-sm font-semibold text-[#C65B74]">Data Peserta</div>
+                        <div class="rounded-2xl border border-dashed border-[#FAD6C7]/70 px-4 py-3 text-sm font-semibold text-[#C65B74]/60">Informasi Pembayaran</div>
                         <div class="rounded-2xl border border-dashed border-[#FAD6C7]/70 px-4 py-3 text-sm font-semibold text-[#C65B74]/60">Konfirmasi</div>
-                        <div class="rounded-2xl border border-dashed border-[#FAD6C7]/70 px-4 py-3 text-sm font-semibold text-[#C65B74]/60">Pembayaran</div>
                     </div>
 
                     <div class="mt-8">
