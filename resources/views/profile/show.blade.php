@@ -157,25 +157,22 @@
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-[#F7C8B8]/60 bg-white">
-                            @if ($recentRegistrations->isNotEmpty())
-                                @foreach ($recentRegistrations as $registration)
+                            @forelse ($recentRegistrations as $registration)
                                 @php
-                                    $transaction = $registration->transaction;
                                     $registrationBadge = match ($registration->status) {
                                         \App\Enums\RegistrationStatus::Pending => 'bg-[#FFF1EC] text-[#D97862]',
                                         \App\Enums\RegistrationStatus::Confirmed => 'bg-[#E9F6EC] text-[#2F7A48]',
                                         \App\Enums\RegistrationStatus::Cancelled => 'bg-[#FFE5E5] text-[#B85454]',
                                         \App\Enums\RegistrationStatus::Refunded => 'bg-[#E8F3FF] text-[#2B6CB0]',
                                     };
-                                    $paymentBadge = match ($transaction?->status) {
+                                    $paymentBadge = match ($registration->payment_status) {
                                         \App\Enums\PaymentStatus::Pending => 'bg-[#FFF1EC] text-[#D97862]',
                                         \App\Enums\PaymentStatus::AwaitingVerification => 'bg-[#FDF7D8] text-[#B89530]',
                                         \App\Enums\PaymentStatus::Verified => 'bg-[#E9F6EC] text-[#2F7A48]',
                                         \App\Enums\PaymentStatus::Rejected => 'bg-[#FFE5E5] text-[#B85454]',
                                         \App\Enums\PaymentStatus::Refunded => 'bg-[#E8F3FF] text-[#2B6CB0]',
-                                        default => 'bg-[#EFEFEF] text-[#7C3A2D]',
                                     };
-                                    $refundStatus = $transaction?->refund?->status;
+                                    $refundStatus = $registration->refundRequest?->status;
                                     $refundBadge = $refundStatus
                                         ? match ($refundStatus) {
                                             \App\Enums\RefundStatus::Pending => 'bg-[#FDF7D8] text-[#B89530]',
@@ -197,27 +194,26 @@
                                     </td>
                                     <td class="px-6 py-4 align-top">
                                         <span class="inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold {{ $paymentBadge }}">
-                                            {{ $transaction?->status->label() ?? 'Belum Dibuat' }}
+                                            {{ $registration->payment_status->label() }}
                                         </span>
                                     </td>
                                     <td class="px-6 py-4 align-top">
                                         @if ($refundStatus)
                                             <span class="inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold {{ $refundBadge }}">
-                                                {{ $transaction->refund->status->label() }}
+                                                {{ $registration->refundRequest->status->label() }}
                                             </span>
                                         @else
                                             <span class="text-xs text-[#C99F92]">-</span>
                                         @endif
                                     </td>
                                 </tr>
-                                @endforeach
-                            @else
+                            @empty
                                 <tr>
                                     <td colspan="4" class="px-6 py-8 text-center text-sm text-[#9A5A46]">
                                         Belum ada aktivitas yang tercatat. Mulai dengan mendaftar workshop favoritmu!
                                     </td>
                                 </tr>
-                            @endif
+                            @endforelse
                         </tbody>
                     </table>
                 </div>
