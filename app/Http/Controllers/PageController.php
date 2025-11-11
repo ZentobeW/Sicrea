@@ -20,7 +20,10 @@ class PageController extends Controller
             ->get(['id', 'title', 'description', 'start_at', 'end_at', 'price', 'venue_name', 'venue_address', 'tutor_name']);
 
         $featuredPortfolios = Portfolio::query()
-            ->with(['event:id,title,start_at,venue_name,venue_address,tutor_name'])
+            ->with([
+                'event:id,title,start_at,venue_name,venue_address,tutor_name',
+                'images' => fn ($query) => $query->orderBy('display_order')->orderBy('id'),
+            ])
             ->latest('created_at')
             ->take(3)
             ->get();
@@ -40,7 +43,10 @@ class PageController extends Controller
     public function portfolio(): View
     {
         $portfolios = Portfolio::query()
-            ->with(['event:id,title,start_at,venue_name,venue_address,tutor_name'])
+            ->with([
+                'event:id,title,start_at,venue_name,venue_address,tutor_name',
+                'images' => fn ($query) => $query->orderBy('display_order')->orderBy('id'),
+            ])
             ->latest('created_at')
             ->paginate(9);
 
@@ -114,7 +120,10 @@ class PageController extends Controller
         ];
 
         $featuredPortfolios = Portfolio::query()
-            ->with(['event:id,title,start_at,venue_name,venue_address,tutor_name'])
+            ->with([
+                'event:id,title,start_at,venue_name,venue_address,tutor_name',
+                'images' => fn ($query) => $query->orderBy('display_order')->orderBy('id'),
+            ])
             ->latest('created_at')
             ->take(3)
             ->get();

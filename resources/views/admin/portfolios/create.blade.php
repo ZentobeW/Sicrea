@@ -17,28 +17,32 @@
                     <label class="block text-sm font-semibold text-slate-700">Deskripsi</label>
                     <textarea name="description" rows="4" class="mt-2 w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm shadow-inner focus:border-indigo-500 focus:ring-indigo-500">{{ old('description') }}</textarea>
                 </div>
-                <div data-cover-uploader class="space-y-3">
-                    <div class="flex items-center justify-between">
-                        <label for="cover_image" class="block text-sm font-semibold text-slate-700">Foto Utama Portofolio</label>
-                        <span class="text-xs font-medium text-slate-400">Format JPG/PNG maks. 2MB</span>
-                    </div>
-                    <input type="file" id="cover_image" name="cover_image" accept="image/*" class="sr-only" data-cover-input>
-                    <label for="cover_image" class="inline-flex items-center gap-2 rounded-full bg-indigo-500 px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-indigo-500/30 transition hover:-translate-y-0.5 hover:bg-indigo-600 cursor-pointer">
-                        <x-heroicon-o-plus class="h-4 w-4" />
-                        Pilih Foto
-                    </label>
-                    <div class="overflow-hidden rounded-3xl border border-dashed border-indigo-200 bg-indigo-50/50" data-cover-frame>
-                        <img data-cover-preview src="" alt="Preview foto portofolio" class="hidden h-48 w-full object-cover" />
-                        <div data-cover-placeholder class="flex h-48 flex-col items-center justify-center gap-3 text-slate-400">
-                            <span class="flex h-10 w-10 items-center justify-center rounded-2xl bg-white/80 shadow-inner">
-                                <x-heroicon-o-photo class="h-5 w-5" />
-                            </span>
-                            <p class="px-6 text-center text-xs font-medium">Unggah foto highlight kegiatan untuk memperkuat cerita dokumentasi.</p>
+                <div class="space-y-3" data-gallery-uploader>
+                    <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-700">Galeri Foto Workshop</label>
+                            <p class="text-xs text-slate-500">Pilih minimal satu foto highlight kegiatan. Anda dapat memilih beberapa file sekaligus.</p>
                         </div>
+                        <button type="button" class="inline-flex items-center gap-2 rounded-full bg-indigo-500 px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-indigo-500/30 transition hover:-translate-y-0.5 hover:bg-indigo-600" data-gallery-trigger>
+                            <x-heroicon-o-plus class="h-4 w-4" />
+                            Tambah Foto
+                        </button>
                     </div>
-                    @error('cover_image')
-                        <p class="text-xs font-medium text-rose-500">{{ $message }}</p>
-                    @enderror
+                    <input type="file" id="gallery" name="gallery[]" accept="image/*" multiple class="sr-only" data-gallery-input>
+                    <div class="rounded-3xl border border-dashed border-indigo-200 bg-indigo-50/50 p-4">
+                        <div class="grid gap-4 md:grid-cols-3" data-gallery-preview>
+                            <div data-gallery-empty class="col-span-full flex h-40 flex-col items-center justify-center gap-3 text-slate-400">
+                                <span class="flex h-10 w-10 items-center justify-center rounded-2xl bg-white/80 shadow-inner">
+                                    <x-heroicon-o-photo class="h-5 w-5" />
+                                </span>
+                                <p class="px-6 text-center text-xs font-medium">Belum ada foto yang dipilih. Klik tombol di atas untuk menambahkan dokumentasi.</p>
+                            </div>
+                        </div>
+                        <p class="mt-3 text-xs text-slate-500">Format yang didukung: JPG atau PNG dengan ukuran maksimal 4MB per file.</p>
+                    </div>
+                    @if ($errors->has('gallery.*'))
+                        <p class="text-xs font-medium text-rose-500">{{ $errors->first('gallery.*') }}</p>
+                    @endif
                 </div>
                 <div>
                     <label class="block text-sm font-semibold text-slate-700">URL Dokumentasi (opsional)</label>
@@ -80,40 +84,73 @@
     @push('scripts')
         <script>
             document.addEventListener('DOMContentLoaded', () => {
-                document.querySelectorAll('[data-cover-uploader]').forEach((uploader) => {
-                    if (uploader.dataset.initialized === 'true') {
+                document.querySelectorAll('[data-gallery-uploader]').forEach((wrapper) => {
+                    if (wrapper.dataset.initialized === 'true') {
                         return;
                     }
 
-                    const input = uploader.querySelector('[data-cover-input]');
-                    const preview = uploader.querySelector('[data-cover-preview]');
-                    const placeholder = uploader.querySelector('[data-cover-placeholder]');
+                    const input = wrapper.querySelector('[data-gallery-input]');
+                    const trigger = wrapper.querySelector('[data-gallery-trigger]');
+                    const preview = wrapper.querySelector('[data-gallery-preview]');
+                    const emptyState = wrapper.querySelector('[data-gallery-empty]');
 
                     if (!input || !preview) {
                         return;
                     }
 
-                    const updatePreview = (file) => {
-                        if (file) {
-                            const url = URL.createObjectURL(file);
-                            preview.src = url;
-                            preview.classList.remove('hidden');
-                            placeholder?.classList.add('hidden');
+                    const renderPreviews = () => {
+                        preview.querySelectorAll('[data-gallery-item]').forEach((item) => item.remove());
 
-                            preview.onload = () => URL.revokeObjectURL(url);
-                        } else {
-                            preview.src = '';
-                            preview.classList.add('hidden');
-                            placeholder?.classList.remove('hidden');
+                        if (!input.files.length) {
+                            emptyState?.classList.remove('hidden');
+                            return;
                         }
+
+                        emptyState?.classList.add('hidden');
+
+                        Array.from(input.files).forEach((file) => {
+                            const item = document.createElement('div');
+                            item.dataset.galleryItem = 'true';
+                            item.className = 'relative overflow-hidden rounded-2xl border border-indigo-200 bg-white shadow-sm';
+
+                            const figure = document.createElement('figure');
+                            figure.className = 'aspect-[4/3]';
+
+                            const img = document.createElement('img');
+                            img.className = 'h-full w-full object-cover';
+                            const url = URL.createObjectURL(file);
+                            img.src = url;
+                            img.onload = () => URL.revokeObjectURL(url);
+
+                            figure.appendChild(img);
+                            item.appendChild(figure);
+
+                            const caption = document.createElement('div');
+                            caption.className = 'border-t border-indigo-100 px-3 py-2 text-xs font-medium text-slate-600 truncate';
+                            caption.textContent = file.name;
+                            item.appendChild(caption);
+
+                            preview.appendChild(item);
+                        });
                     };
 
-                    input.addEventListener('change', (event) => {
-                        const [file] = event.target.files || [];
-                        updatePreview(file ?? null);
+                    const existingItems = wrapper.querySelectorAll('[data-gallery-existing-item]');
+                    existingItems.forEach((item) => {
+                        const checkbox = item.querySelector('[data-gallery-remove]');
+                        if (!checkbox) {
+                            return;
+                        }
+
+                        checkbox.addEventListener('change', () => {
+                            item.classList.toggle('ring-2', checkbox.checked);
+                            item.classList.toggle('ring-indigo-400', checkbox.checked);
+                        });
                     });
 
-                    uploader.dataset.initialized = 'true';
+                    trigger?.addEventListener('click', () => input.click());
+                    input.addEventListener('change', renderPreviews);
+
+                    wrapper.dataset.initialized = 'true';
                 });
             });
         </script>

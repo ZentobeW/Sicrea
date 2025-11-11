@@ -4,11 +4,16 @@
 
     $transaction = $registration->transaction;
     $paymentStatus = $transaction?->status;
+    $hasProof = filled($transaction?->payment_proof_path);
     $isAwaitingVerification = $paymentStatus === PaymentStatus::AwaitingVerification;
     $isVerified = $paymentStatus === PaymentStatus::Verified;
     $isRejected = $paymentStatus === PaymentStatus::Rejected;
     $isRefunded = $paymentStatus === PaymentStatus::Refunded;
     $currentStep = ($isAwaitingVerification || $isVerified || $isRefunded) ? 3 : 2;
+
+    if ($hasProof && ! $isAwaitingVerification && ! $isVerified && ! $isRefunded && ! $isRejected) {
+        $currentStep = 3;
+    }
     $steps = [
         ['label' => 'Data Peserta'],
         ['label' => 'Informasi Pembayaran'],
@@ -153,15 +158,18 @@
                                             <div>
                                                 <label class="block text-sm font-semibold text-[#2C1E1E]">Unggah Bukti Pembayaran</label>
                                                 <label class="mt-3 flex cursor-pointer flex-col items-center justify-center gap-2 rounded-[24px] border border-dashed border-[#FAD6C7] bg-[#FFF5EF] px-6 py-10 text-center text-sm font-semibold text-[#C65B74] shadow-inner transition hover:bg-[#FFE8DB]">
-                                                    <input type="file" name="payment_proof" class="hidden" accept="image/*,.pdf" required>
+                                                    <input type="file" name="payment_proof" id="payment_proof" class="hidden" accept="image/*,.pdf" required data-proof-input>
                                                     <span class="text-base">Klik untuk upload</span>
                                                     <span class="text-xs font-normal text-[#B87A7A]">Format JPG, PNG, atau PDF • Maksimal 5MB</span>
                                                 </label>
+                                                @error('payment_proof')
+                                                    <p class="mt-3 text-xs font-medium text-[#BA1B1D]">{{ $message }}</p>
+                                                @enderror
                                             </div>
 
                                             <div class="flex flex-wrap items-center justify-between gap-3">
                                                 <a href="{{ route('events.show', $registration->event) }}" class="inline-flex items-center justify-center rounded-full border border-[#FAD6C7] px-6 py-3 text-sm font-semibold text-[#C65B74] transition hover:-translate-y-0.5 hover:bg-[#FFF0E6]">Batal</a>
-                                                <button class="inline-flex items-center justify-center gap-2 rounded-full bg-[#FF8A64] px-6 py-3 text-sm font-semibold text-white shadow-md shadow-[#FF8A64]/30 transition hover:-translate-y-0.5 hover:bg-[#F9744B]">
+                                                <button type="submit" class="inline-flex items-center justify-center gap-2 rounded-full bg-[#FF8A64] px-6 py-3 text-sm font-semibold text-white shadow-md shadow-[#FF8A64]/30 transition hover:-translate-y-0.5 hover:bg-[#F9744B] disabled:cursor-not-allowed disabled:bg-[#F5B19D] disabled:text-white/70" data-proof-submit disabled>
                                                     Lanjutkan
                                                     <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5l7 7-7 7" />
@@ -173,7 +181,7 @@
                                 </div>
                             </div>
                         @else
-                            <div class="rounded-[28px] border border-[#FAD6C7] bg-white/90 px-6 py-6 shadow-inner text-sm text-[#6F4F4F]">
+                            <div id="konfirmasi" class="rounded-[28px] border border-[#FAD6C7] bg-white/90 px-6 py-6 shadow-inner text-sm text-[#6F4F4F]">
                                 <h3 class="text-base font-semibold text-[#2C1E1E]">Detail Pembayaran</h3>
                                 <dl class="mt-4 space-y-2">
                                     <div class="flex items-center justify-between">
@@ -282,3 +290,23 @@
         </div>
     </section>
 </x-layouts.app>
+
+@push('scripts')
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const input = document.querySelector('[data-proof-input]');
+            const submit = document.querySelector('[data-proof-submit]');
+
+            if (!input || !submit) {
+                return;
+            }
+
+            const toggleState = () => {
+                submit.disabled = input.files.length === 0;
+            };
+
+            input.addEventListener('change', toggleState);
+            toggleState();
+        });
+    </script>
+@endpush

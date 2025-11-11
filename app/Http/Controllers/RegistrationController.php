@@ -13,6 +13,7 @@ use App\Models\Registration;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
 
 class RegistrationController extends Controller
 {
@@ -84,14 +85,28 @@ class RegistrationController extends Controller
     {
         $this->authorize('update', $registration);
 
+        $transaction = $registration->transaction;
+
+        if (! $transaction) {
+            $transaction = $registration->transaction()->create([
+                'amount' => $registration->event->price,
+                'status' => PaymentStatus::Pending,
+            ]);
+        }
+
+        if ($transaction->payment_proof_path) {
+            Storage::disk('public')->delete($transaction->payment_proof_path);
+        }
+
         $proof = $request->file('payment_proof');
         $path = $proof->store('payment-proofs', 'public');
 
-        $registration->transaction()->update([
+        $transaction->forceFill([
             'payment_proof_path' => $path,
             'status' => PaymentStatus::AwaitingVerification,
             'paid_at' => now(),
-        ]);
+            'payment_method' => 'Transfer Bank',
+        ])->save();
 
         $registration->loadMissing(['event', 'user']);
 
@@ -109,6 +124,8 @@ class RegistrationController extends Controller
             'sent_at' => now(),
         ]);
 
-        return back()->with('status', 'Bukti pembayaran berhasil diunggah. Menunggu verifikasi admin.');
+        return redirect()
+            ->to(route('registrations.show', $registration) . '#konfirmasi')
+            ->with('status', 'Bukti pembayaran berhasil diunggah. Menunggu verifikasi admin.');
     }
 }

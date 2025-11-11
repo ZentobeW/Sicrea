@@ -60,18 +60,17 @@
 
             <div class="grid gap-8 md:grid-cols-2 xl:grid-cols-3">
                 @forelse ($portfolios as $portfolio)
+                    @php($photoCount = $portfolio->images->count())
                     <article class="group flex h-full flex-col overflow-hidden rounded-[36px] border border-[#FAD6C7] bg-white shadow-sm shadow-[#FAD6C7]/40 transition hover:-translate-y-1 hover:shadow-xl">
                         <div class="relative h-56 overflow-hidden">
-                            @if ($portfolio->media_url)
-                                <img src="{{ $portfolio->media_url }}" alt="{{ $portfolio->title }}" class="h-full w-full object-cover transition duration-500 group-hover:scale-105" />
+                            @if ($portfolio->cover_image_url)
+                                <img src="{{ $portfolio->cover_image_url }}" alt="{{ $portfolio->title }}" class="h-full w-full object-cover transition duration-500 group-hover:scale-105" />
                             @else
                                 <div class="flex h-full w-full items-center justify-center bg-[#FFE3D3] text-xs uppercase tracking-[0.35em] text-[#C65B74]/70">Dokumentasi</div>
                             @endif
                             <div class="absolute inset-x-5 bottom-5 flex items-center justify-between rounded-full bg-white/95 px-5 py-2 text-[11px] font-semibold uppercase tracking-[0.28em] text-[#C65B74] shadow-md shadow-[#FAD6C7]/60">
                                 <span>{{ $portfolio->created_at->translatedFormat('d M Y') }}</span>
-                                @if ($portfolio->event)
-                                    <span>{{ $portfolio->event->start_at?->translatedFormat('M Y') }}</span>
-                                @endif
+                                <span>{{ $photoCount }} foto</span>
                             </div>
                         </div>
                         <div class="flex flex-1 flex-col gap-4 p-6">

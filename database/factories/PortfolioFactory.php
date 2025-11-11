@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Models\Event;
 use App\Models\Portfolio;
+use App\Models\PortfolioImage;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -12,6 +13,17 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 class PortfolioFactory extends Factory
 {
     protected $model = Portfolio::class;
+
+    public function configure(): static
+    {
+        return $this->afterCreating(function (Portfolio $portfolio) {
+            $imageCount = $this->faker->numberBetween(1, 4);
+
+            PortfolioImage::factory($imageCount)->create([
+                'portfolio_id' => $portfolio->id,
+            ]);
+        });
+    }
 
     public function definition(): array
     {

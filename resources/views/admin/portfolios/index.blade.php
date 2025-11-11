@@ -83,8 +83,8 @@
             @forelse ($portfolios as $portfolio)
                 <article class="group relative flex h-full flex-col overflow-hidden rounded-[32px] border border-[#FFD1BE] bg-white/90 shadow-lg shadow-[#FFBFA8]/40 transition hover:-translate-y-1 hover:shadow-xl">
                     <div class="relative aspect-[4/3] overflow-hidden">
-                        @if ($portfolio->media_url)
-                            <img src="{{ $portfolio->media_url }}" alt="{{ $portfolio->title }}" class="h-full w-full object-cover transition duration-700 group-hover:scale-105" />
+                        @if ($portfolio->cover_image_url)
+                            <img src="{{ $portfolio->cover_image_url }}" alt="{{ $portfolio->title }}" class="h-full w-full object-cover transition duration-700 group-hover:scale-105" />
                         @else
                             <div class="h-full w-full bg-gradient-to-br from-[#FFD7C7] via-[#FFC4B4] to-[#FFAE96]"></div>
                         @endif

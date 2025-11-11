@@ -225,8 +225,8 @@
                 @forelse ($featuredPortfolios as $index => $portfolio)
                     <article class="portfolio-card reveal group overflow-hidden rounded-[32px] border border-[#FAD6C7] bg-white shadow-sm shadow-[#FAD6C7]/40" style="--reveal-delay: {{ 120 + ($index * 120) }}ms;">
                         <div class="relative h-56 overflow-hidden">
-                            @if ($portfolio->media_url)
-                                <img src="{{ $portfolio->media_url }}" alt="{{ $portfolio->title }}" class="h-full w-full object-cover transition duration-300 group-hover:scale-105" />
+                            @if ($portfolio->cover_image_url)
+                                <img src="{{ $portfolio->cover_image_url }}" alt="{{ $portfolio->title }}" class="h-full w-full object-cover transition duration-300 group-hover:scale-105" />
                             @else
                                 <div class="flex h-full w-full items-center justify-center bg-[#FFE9DC] text-xs uppercase tracking-[0.35em] text-[#C65B74]/70">
                                     Dokumentasi

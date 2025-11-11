@@ -18,7 +18,8 @@ class StorePortfolioRequest extends FormRequest
             'title' => ['required', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
             'media_url' => ['nullable', 'string', 'max:255'],
-            'cover_image' => ['nullable', 'image', 'max:2048'],
+            'gallery' => ['nullable', 'array'],
+            'gallery.*' => ['image', 'max:4096'],
         ];
     }
 }

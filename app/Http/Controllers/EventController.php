@@ -35,7 +35,10 @@ class EventController extends Controller
     {
         abort_unless($event->status === EventStatus::Published, 404);
 
-        $event->loadMissing(['portfolios', 'creator'])->loadCount('registrations');
+        $event->loadMissing([
+            'portfolios.images',
+            'creator',
+        ])->loadCount('registrations');
 
         return view('events.show', compact('event'));
     }

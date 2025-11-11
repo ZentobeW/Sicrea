@@ -99,13 +99,37 @@
                             <h2 class="text-lg font-semibold text-[#5A3D31]">Portofolio Terkait</h2>
                             <div class="space-y-3">
                                 @foreach ($event->portfolios as $portfolio)
-                                    <div class="rounded-2xl bg-[#FFF4EC] px-4 py-3">
-                                        <p class="text-sm font-semibold text-[#5A3D31]">{{ $portfolio->title }}</p>
-                                        @if ($portfolio->description)
-                                            <p class="mt-1 text-xs text-slate-500">{{ Str::limit($portfolio->description, 90) }}</p>
+                                    <div class="space-y-2 rounded-2xl bg-[#FFF4EC] px-4 py-3">
+                                        <div class="flex items-start gap-3">
+                                            @if ($portfolio->cover_image_url)
+                                                <div class="flex h-12 w-12 items-center justify-center overflow-hidden rounded-xl border border-[#FAD6C7]/60 bg-white">
+                                                    <img src="{{ $portfolio->cover_image_url }}" alt="{{ $portfolio->title }}" class="h-full w-full object-cover" />
+                                                </div>
+                                            @endif
+                                            <div class="flex-1">
+                                                <p class="text-sm font-semibold text-[#5A3D31]">{{ $portfolio->title }}</p>
+                                                @if ($portfolio->description)
+                                                    <p class="mt-1 text-xs text-slate-500">{{ Str::limit($portfolio->description, 90) }}</p>
+                                                @endif
+                                            </div>
+                                        </div>
+                                        @if ($portfolio->images->isNotEmpty())
+                                            <div class="flex gap-2 overflow-x-auto pb-1">
+                                                @foreach ($portfolio->images->take(5) as $image)
+                                                    <img src="{{ $image->url }}" alt="{{ $portfolio->title }}" class="h-14 w-20 flex-none rounded-xl object-cover" />
+                                                @endforeach
+                                                @if ($portfolio->images->count() > 5)
+                                                    <span class="flex h-14 w-20 flex-none items-center justify-center rounded-xl border border-dashed border-[#FAD6C7] text-[11px] font-semibold uppercase tracking-[0.28em] text-[#C65B74]">
+                                                        +{{ $portfolio->images->count() - 5 }}
+                                                    </span>
+                                                @endif
+                                            </div>
                                         @endif
                                         @if ($portfolio->media_url)
-                                            <a href="{{ $portfolio->media_url }}" target="_blank" class="mt-2 inline-flex text-xs font-semibold text-[#B05A62] hover:underline">Lihat dokumentasi</a>
+                                            <a href="{{ $portfolio->media_url }}" target="_blank" class="inline-flex items-center gap-2 text-xs font-semibold text-[#B05A62] hover:underline">
+                                                Lihat dokumentasi lengkap
+                                                <x-heroicon-o-arrow-up-right class="h-3.5 w-3.5" />
+                                            </a>
                                         @endif
                                     </div>
                                 @endforeach

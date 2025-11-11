@@ -116,9 +116,10 @@
                                     <dt>Pemateri</dt>
                                     <dd class="text-right">{{ $upcomingRegistration->event->tutor_name }}</dd>
                                 </div>
+                                @php($upcomingTransaction = $upcomingRegistration->transaction)
                                 <div class="flex justify-between">
                                     <dt>Status Pembayaran</dt>
-                                    <dd class="font-semibold text-[#7C3A2D]">{{ $upcomingRegistration->payment_status->label() }}</dd>
+                                    <dd class="font-semibold text-[#7C3A2D]">{{ $upcomingTransaction?->status->label() ?? 'Belum Dibuat' }}</dd>
                                 </div>
                             </dl>
                             <a href="{{ route('registrations.show', $upcomingRegistration) }}"
