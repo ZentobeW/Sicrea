@@ -113,8 +113,11 @@
                                 <div class="space-y-5">
                                     <div class="rounded-[28px] border border-[#FAD6C7] bg-[#FFF5EF] px-6 py-5 shadow-inner">
                                         <p class="text-xs font-semibold uppercase tracking-[0.3em] text-[#C65B74]">Informasi Pembayaran</p>
+                                        <p class="text-xs font-semibold uppercase tracking-[0.3em] text-[#C65B74]">Metode Pembayaran</p>
+                                        <p class="mt-1 text-sm font-semibold text-[#7C3A2D]">{{ $paymentMethod }}</p>
+
                                         @if ($paymentAccount)
-                                            <h2 class="mt-2 text-xl font-semibold text-[#2C1E1E]">Transfer Bank {{ $paymentAccount['bank'] }}</h2>
+                                            <h2 class="mt-2 text-xl font-semibold text-[#2C1E1E]">Virtual Account {{ $paymentAccount['bank'] }}</h2>
                                             <dl class="mt-4 space-y-3 text-sm text-[#5F4C4C]">
                                                 <div>
                                                     <dt class="text-[#A04E62]">Nomor Rekening</dt>
@@ -191,6 +194,10 @@
                                     <div class="flex items-center justify-between">
                                         <dt class="text-[#A04E62]">Nominal</dt>
                                         <dd class="font-semibold text-[#2C1E1E]">Rp{{ number_format($transaction?->amount ?? $registration->event->price, 0, ',', '.') }}</dd>
+                                    </div>
+                                    <div class="flex items-center justify-between">
+                                        <dt class="text-[#A04E62]">Metode</dt>
+                                        <dd class="font-medium text-[#5F4C4C]">{{ $paymentMethod }}</dd>
                                     </div>
                                     @if ($transaction?->paid_at)
                                         <div class="flex items-center justify-between">

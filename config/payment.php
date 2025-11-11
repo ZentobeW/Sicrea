@@ -1,6 +1,8 @@
 <?php
 
 return [
+    'method' => 'Virtual Account Bank Transfer',
+
     'accounts' => [
         [
             'bank' => 'BCA',

@@ -24,7 +24,7 @@ class TransactionFactory extends Factory
             'registration_id' => Registration::factory(),
             'amount' => $this->faker->numberBetween(100_000, 650_000),
             'status' => $status,
-            'payment_method' => Arr::random(['Transfer Bank', 'QRIS', 'Virtual Account']),
+            'payment_method' => config('payment.method', 'Virtual Account'),
             'payment_proof_path' => $paidAt ? 'payments/' . Arr::random(['proof1.jpg', 'proof2.jpg', 'proof3.jpg']) : null,
             'paid_at' => $paidAt,
             'verified_at' => null,

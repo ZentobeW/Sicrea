@@ -60,6 +60,7 @@ class RegistrationController extends Controller
         $registration->transaction()->create([
             'amount' => $event->price,
             'status' => PaymentStatus::Pending,
+            'payment_method' => config('payment.method', 'Virtual Account'),
         ]);
 
         return redirect()->route('registrations.show', $registration)->with('status', 'Pendaftaran berhasil dibuat, silakan lakukan pembayaran.');
@@ -71,6 +72,12 @@ class RegistrationController extends Controller
 
         $registration->loadMissing(['event', 'transaction.refund']);
 
+        $paymentMethod = config('payment.method', 'Virtual Account');
+
+        if ($registration->transaction && ! $registration->transaction->payment_method) {
+            $registration->transaction->forceFill(['payment_method' => $paymentMethod])->save();
+        }
+
         $paymentAccount = collect(config('payment.accounts', []))
             ->firstWhere('is_primary', true)
             ?? collect(config('payment.accounts', []))->first();
@@ -78,6 +85,7 @@ class RegistrationController extends Controller
         return view('registrations.show', [
             'registration' => $registration,
             'paymentAccount' => $paymentAccount,
+            'paymentMethod' => $paymentMethod,
         ]);
     }
 
@@ -87,11 +95,16 @@ class RegistrationController extends Controller
 
         $transaction = $registration->transaction;
 
+        $paymentMethod = config('payment.method', 'Virtual Account');
+
         if (! $transaction) {
             $transaction = $registration->transaction()->create([
                 'amount' => $registration->event->price,
                 'status' => PaymentStatus::Pending,
+                'payment_method' => $paymentMethod,
             ]);
+        } elseif (! $transaction->payment_method) {
+            $transaction->payment_method = $paymentMethod;
         }
 
         if ($transaction->payment_proof_path) {
@@ -105,7 +118,7 @@ class RegistrationController extends Controller
             'payment_proof_path' => $path,
             'status' => PaymentStatus::AwaitingVerification,
             'paid_at' => now(),
-            'payment_method' => 'Transfer Bank',
+            'payment_method' => $paymentMethod,
         ])->save();
 
         $registration->loadMissing(['event', 'user']);
