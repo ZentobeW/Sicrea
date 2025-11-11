@@ -1,0 +1,25 @@
+<?php
+
+namespace App\Http\Requests;
+
+use Illuminate\Foundation\Http\FormRequest;
+
+class StorePortfolioRequest extends FormRequest
+{
+    public function authorize(): bool
+    {
+        return $this->user()?->can('create', \App\Models\Portfolio::class) ?? false;
+    }
+
+    public function rules(): array
+    {
+        return [
+            'event_id' => ['nullable', 'exists:events,id'],
+            'title' => ['required', 'string', 'max:255'],
+            'description' => ['nullable', 'string'],
+            'media_url' => ['nullable', 'string', 'max:255'],
+            'gallery' => ['nullable', 'array'],
+            'gallery.*' => ['image', 'max:4096'],
+        ];
+    }
+}
