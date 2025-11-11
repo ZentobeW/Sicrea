@@ -1,0 +1,113 @@
+<?php
+
+namespace App\Http\Controllers\Admin;
+
+use App\Http\Controllers\Controller;
+use App\Http\Requests\StorePortfolioRequest;
+use App\Http\Requests\UpdatePortfolioRequest;
+use App\Models\Event;
+use App\Models\Portfolio;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
+
+class PortfolioController extends Controller
+{
+    public function index(Request $request): View
+    {
+        $portfoliosQuery = Portfolio::query()
+            ->with(['event:id,title,start_at,venue_name,venue_address,tutor_name'])
+            ->when($request->filled('q'), function ($query) use ($request) {
+                $keyword = '%' . $request->string('q')->toString() . '%';
+
+                $query->where(function ($builder) use ($keyword) {
+                    $builder
+                        ->where('title', 'like', $keyword)
+                        ->orWhereHas('event', function ($eventQuery) use ($keyword) {
+                            $eventQuery
+                                ->where('title', 'like', $keyword)
+                                ->orWhere('venue_name', 'like', $keyword)
+                                ->orWhere('venue_address', 'like', $keyword)
+                                ->orWhere('tutor_name', 'like', $keyword);
+                        });
+                });
+            })
+            ->when($request->filled('event_id'), fn ($query) => $query->where('event_id', $request->integer('event_id')))
+            ->latest();
+
+        $portfolios = $portfoliosQuery->paginate(12)->withQueryString();
+
+        $insight = [
+            'total' => Portfolio::count(),
+            'linked' => Portfolio::whereNotNull('event_id')->count(),
+        ];
+
+        $latestUpdate = Portfolio::latest('updated_at')->first();
+
+        $events = Event::orderBy('start_at')->orderBy('title')->get(['id', 'title']);
+
+        $filters = [
+            'q' => $request->string('q')->toString(),
+            'event_id' => $request->integer('event_id'),
+        ];
+
+        return view('admin.portfolios.index', compact('portfolios', 'insight', 'latestUpdate', 'events', 'filters'));
+    }
+
+    public function create(): View
+    {
+        $events = Event::orderBy('title')->get();
+
+        return view('admin.portfolios.create', compact('events'));
+    }
+
+    public function store(StorePortfolioRequest $request): RedirectResponse
+    {
+        $data = $request->safe()->except('cover_image');
+
+        if ($request->hasFile('cover_image')) {
+            $path = $request->file('cover_image')->store('portfolios', 'public');
+            $data['media_url'] = Storage::url($path);
+        }
+
+        Portfolio::create($data);
+
+        return redirect()->route('admin.portfolios.index')->with('status', 'Portofolio berhasil ditambahkan.');
+    }
+
+    public function edit(Portfolio $portfolio): View
+    {
+        $portfolio->load('event');
+
+        $events = Event::orderBy('title')->get();
+
+        return view('admin.portfolios.edit', compact('portfolio', 'events'));
+    }
+
+    public function update(UpdatePortfolioRequest $request, Portfolio $portfolio): RedirectResponse
+    {
+        $data = $request->safe()->except('cover_image');
+
+        if ($request->hasFile('cover_image')) {
+            if ($portfolio->media_url && Str::startsWith($portfolio->media_url, 'storage/')) {
+                Storage::disk('public')->delete(Str::after($portfolio->media_url, 'storage/'));
+            }
+
+            $path = $request->file('cover_image')->store('portfolios', 'public');
+            $data['media_url'] = Storage::url($path);
+        }
+
+        $portfolio->update($data);
+
+        return redirect()->route('admin.portfolios.index')->with('status', 'Portofolio diperbarui.');
+    }
+
+    public function destroy(Portfolio $portfolio): RedirectResponse
+    {
+        $portfolio->delete();
+
+        return redirect()->route('admin.portfolios.index')->with('status', 'Portofolio dihapus.');
+    }
+}
