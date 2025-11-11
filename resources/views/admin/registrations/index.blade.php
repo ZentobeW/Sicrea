@@ -256,13 +256,38 @@
                                 @endif
                             </td>
                             <td class="px-6 py-4 text-right align-top">
-                                <a
-                                    href="{{ route('admin.registrations.show', $registration) }}"
-                                    class="inline-flex items-center gap-2 rounded-full border border-[#FF8A64] bg-[#FF8A64]/10 px-4 py-2 text-xs font-semibold text-[#C65B74] transition hover:-translate-y-0.5 hover:bg-[#FF8A64]/20"
-                                >
-                                    Detail
-                                    <x-heroicon-o-arrow-up-right class="h-4 w-4" />
-                                </a>
+                                <div class="flex items-center justify-end gap-2">
+                                    @if (($transaction?->status?->value ?? null) === 'awaiting_verification')
+                                        <form method="POST" action="{{ route('admin.registrations.verify-payment', $registration) }}">
+                                            @csrf
+                                            <button
+                                                type="submit"
+                                                class="inline-flex items-center justify-center rounded-full border border-emerald-500 bg-emerald-500/10 p-2 text-emerald-600 transition hover:-translate-y-0.5 hover:bg-emerald-500/20"
+                                                title="Setujui pembayaran"
+                                            >
+                                                <x-heroicon-o-check class="h-4 w-4" />
+                                            </button>
+                                        </form>
+                                        <form method="POST" action="{{ route('admin.registrations.reject-payment', $registration) }}">
+                                            @csrf
+                                            <button
+                                                type="submit"
+                                                class="inline-flex items-center justify-center rounded-full border border-rose-500 bg-rose-500/10 p-2 text-rose-600 transition hover:-translate-y-0.5 hover:bg-rose-500/20"
+                                                title="Tolak pembayaran"
+                                            >
+                                                <x-heroicon-o-x-mark class="h-4 w-4" />
+                                            </button>
+                                        </form>
+                                    @endif
+
+                                    <a
+                                        href="{{ route('admin.registrations.show', $registration) }}"
+                                        class="inline-flex items-center gap-2 rounded-full border border-[#FF8A64] bg-[#FF8A64]/10 px-4 py-2 text-xs font-semibold text-[#C65B74] transition hover:-translate-y-0.5 hover:bg-[#FF8A64]/20"
+                                    >
+                                        Detail
+                                        <x-heroicon-o-arrow-up-right class="h-4 w-4" />
+                                    </a>
+                                </div>
                             </td>
                         </tr>
                     @empty
