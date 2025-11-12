@@ -76,7 +76,7 @@
                     <input type="text" name="tutor_name" value="{{ old('tutor_name', $event->tutor_name) }}" class="w-full rounded-3xl border border-[#FFD6C7] bg-[#FFF7F3] px-5 py-3 text-sm text-[#4B2A22] placeholder:text-[#D28B7B] focus:border-[#F68C7B] focus:outline-none" required>
                 </label>
                 <label class="space-y-2 text-sm font-semibold text-[#7A3E2F]">
-                    <span>Kuota Peserta</span>
+                    <span>Kuota Peserta (opsional)</span>
                     <input type="number" name="capacity" value="{{ old('capacity', $event->capacity) }}" min="1" class="w-full rounded-3xl border border-[#FFD6C7] bg-[#FFF7F3] px-5 py-3 text-sm text-[#4B2A22] focus:border-[#F68C7B] focus:outline-none">
                 </label>
                 <label class="space-y-2 text-sm font-semibold text-[#7A3E2F]">
