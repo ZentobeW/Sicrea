@@ -116,9 +116,10 @@
                                     <dt>Pemateri</dt>
                                     <dd class="text-right">{{ $upcomingRegistration->event->tutor_name }}</dd>
                                 </div>
+                                @php($upcomingTransaction = $upcomingRegistration->transaction)
                                 <div class="flex justify-between">
                                     <dt>Status Pembayaran</dt>
-                                    <dd class="font-semibold text-[#7C3A2D]">{{ $upcomingRegistration->payment_status->label() }}</dd>
+                                    <dd class="font-semibold text-[#7C3A2D]">{{ $upcomingTransaction?->status->label() ?? 'Belum Dibuat' }}</dd>
                                 </div>
                             </dl>
                             <a href="{{ route('registrations.show', $upcomingRegistration) }}"
@@ -156,22 +157,25 @@
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-[#F7C8B8]/60 bg-white">
-                            @forelse ($recentRegistrations as $registration)
+                            @if ($recentRegistrations->isNotEmpty())
+                                @foreach ($recentRegistrations as $registration)
                                 @php
+                                    $transaction = $registration->transaction;
                                     $registrationBadge = match ($registration->status) {
                                         \App\Enums\RegistrationStatus::Pending => 'bg-[#FFF1EC] text-[#D97862]',
                                         \App\Enums\RegistrationStatus::Confirmed => 'bg-[#E9F6EC] text-[#2F7A48]',
                                         \App\Enums\RegistrationStatus::Cancelled => 'bg-[#FFE5E5] text-[#B85454]',
                                         \App\Enums\RegistrationStatus::Refunded => 'bg-[#E8F3FF] text-[#2B6CB0]',
                                     };
-                                    $paymentBadge = match ($registration->payment_status) {
+                                    $paymentBadge = match ($transaction?->status) {
                                         \App\Enums\PaymentStatus::Pending => 'bg-[#FFF1EC] text-[#D97862]',
                                         \App\Enums\PaymentStatus::AwaitingVerification => 'bg-[#FDF7D8] text-[#B89530]',
                                         \App\Enums\PaymentStatus::Verified => 'bg-[#E9F6EC] text-[#2F7A48]',
                                         \App\Enums\PaymentStatus::Rejected => 'bg-[#FFE5E5] text-[#B85454]',
                                         \App\Enums\PaymentStatus::Refunded => 'bg-[#E8F3FF] text-[#2B6CB0]',
+                                        default => 'bg-[#EFEFEF] text-[#7C3A2D]',
                                     };
-                                    $refundStatus = $registration->refundRequest?->status;
+                                    $refundStatus = $transaction?->refund?->status;
                                     $refundBadge = $refundStatus
                                         ? match ($refundStatus) {
                                             \App\Enums\RefundStatus::Pending => 'bg-[#FDF7D8] text-[#B89530]',
@@ -193,26 +197,27 @@
                                     </td>
                                     <td class="px-6 py-4 align-top">
                                         <span class="inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold {{ $paymentBadge }}">
-                                            {{ $registration->payment_status->label() }}
+                                            {{ $transaction?->status->label() ?? 'Belum Dibuat' }}
                                         </span>
                                     </td>
                                     <td class="px-6 py-4 align-top">
                                         @if ($refundStatus)
                                             <span class="inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold {{ $refundBadge }}">
-                                                {{ $registration->refundRequest->status->label() }}
+                                                {{ $transaction->refund->status->label() }}
                                             </span>
                                         @else
                                             <span class="text-xs text-[#C99F92]">-</span>
                                         @endif
                                     </td>
                                 </tr>
-                            @empty
+                                @endforeach
+                            @else
                                 <tr>
                                     <td colspan="4" class="px-6 py-8 text-center text-sm text-[#9A5A46]">
                                         Belum ada aktivitas yang tercatat. Mulai dengan mendaftar workshop favoritmu!
                                     </td>
                                 </tr>
-                            @endforelse
+                            @endif
                         </tbody>
                     </table>
                 </div>
