@@ -89,7 +89,12 @@ class RegistrationController extends Controller
 
     public function show(Registration $registration): View
     {
-        $registration->load(['event', 'user', 'transaction.refund']);
+        $registration->load([
+            'event',
+            'user',
+            'transaction.refund',
+            'emails' => fn ($q) => $q->orderByDesc('sent_at')->orderByDesc('id'),
+        ]);
 
         return view('admin.registrations.show', compact('registration'));
     }
@@ -139,20 +144,31 @@ class RegistrationController extends Controller
     {
         $fileName = 'registrations-' . now()->format('Ymd-His') . '.csv';
         $headers = [
-            'Content-Type' => 'text/csv',
+            'Content-Type' => 'text/csv; charset=UTF-8',
             'Content-Disposition' => "attachment; filename=\"{$fileName}\"",
         ];
 
         $callback = function () use ($request) {
             $handle = fopen('php://output', 'wb');
-            fputcsv($handle, ['Event', 'Nama Peserta', 'Email', 'Status Pendaftaran', 'Status Pembayaran', 'Jumlah', 'Tanggal Daftar']);
+
+            // Ensure Excel on Windows recognizes UTF-8
+            fwrite($handle, chr(0xEF) . chr(0xBB) . chr(0xBF));
+
+            $delimiter = ';';
+
+            fputcsv($handle, ['Event', 'Nama Peserta', 'Email', 'Status Pendaftaran', 'Status Pembayaran', 'Jumlah', 'Tanggal Daftar'], $delimiter);
+
+            $status = \App\Enums\PaymentStatus::tryFrom((string) $request->string('payment_status'));
 
             Registration::query()
                 ->with(['event', 'user', 'transaction'])
-                ->when($request->string('payment_status'), function ($query, $status) {
+                ->when($request->filled('event_id'), fn ($query) => $query->where('event_id', (int) $request->integer('event_id')))
+                ->when($status, function ($query, $status) {
                     $query->whereHas('transaction', fn ($transactionQuery) => $transactionQuery->where('status', $status));
                 })
-                ->chunk(200, function ($chunk) use ($handle) {
+                ->when($request->string('view') === 'refunds', fn ($query) => $query->whereHas('transaction.refund'))
+                ->orderByDesc('registered_at')
+                ->chunk(200, function ($chunk) use ($handle, $delimiter) {
                     foreach ($chunk as $registration) {
                         $transaction = $registration->transaction;
 
@@ -164,14 +180,14 @@ class RegistrationController extends Controller
                             $transaction?->status->label() ?? '-',
                             $transaction?->amount,
                             $registration->registered_at?->format('d-m-Y H:i'),
-                        ]);
+                        ], $delimiter);
                     }
                 });
 
             fclose($handle);
         };
 
-        return response()->stream($callback, 200, $headers);
+        return response()->streamDownload($callback, $fileName, $headers);
     }
 
     public function approveRefund(Refund $refund): RedirectResponse

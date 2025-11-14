@@ -57,6 +57,11 @@ class Registration extends Model
         return $this->hasOneThrough(Refund::class, Transaction::class);
     }
 
+    public function emails()
+    {
+        return $this->hasMany(\App\Models\Email::class);
+    }
+
     public function markVerified(): void
     {
         $this->update([

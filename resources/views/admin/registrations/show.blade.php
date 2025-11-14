@@ -1,10 +1,11 @@
-@php($tabs = [
+@php($tabs = $tabs ?? [
     ['label' => 'Event', 'route' => route('admin.events.index'), 'active' => request()->routeIs('admin.events.*'), 'icon' => 'calendar'],
     ['label' => 'Pendaftaran', 'route' => route('admin.registrations.index'), 'active' => request()->routeIs('admin.registrations.*'), 'icon' => 'document-text'],
     ['label' => 'Portofolio', 'route' => route('admin.portfolios.index'), 'active' => request()->routeIs('admin.portfolios.*'), 'icon' => 'photo'],
 ])
 
 @php use Illuminate\Support\Facades\Storage; @endphp
+
 
 @php($transaction = $registration->transaction)
 
@@ -70,6 +71,55 @@
                     <a href="{{ Storage::disk('public')->url($registration->payment_proof_path) }}" target="_blank" class="mt-3 inline-flex items-center gap-2 text-sm font-semibold text-indigo-600 hover:text-indigo-700">Lihat Bukti →</a>
                 </div>
             @endif
+
+            <div class="rounded-2xl border border-dashed border-slate-200 bg-white/80 p-6">
+                <h2 class="text-sm font-semibold text-slate-700">Riwayat Aktivitas</h2>
+                <ol class="mt-4 space-y-3 text-sm text-slate-600">
+                    <li class="flex items-start gap-3">
+                        <span class="mt-1 h-2 w-2 rounded-full bg-slate-400"></span>
+                        <div>
+                            <p class="font-medium text-slate-700">Pendaftaran dibuat</p>
+                            <p class="text-xs text-slate-500">{{ optional($registration->registered_at)->translatedFormat('d M Y H:i') ?? '-' }}</p>
+                        </div>
+                    </li>
+                    @if ($transaction?->paid_at)
+                        <li class="flex items-start gap-3">
+                            <span class="mt-1 h-2 w-2 rounded-full bg-amber-500"></span>
+                            <div>
+                                <p class="font-medium text-slate-700">Bukti pembayaran diunggah</p>
+                                <p class="text-xs text-slate-500">{{ $transaction->paid_at->translatedFormat('d M Y H:i') }}</p>
+                            </div>
+                        </li>
+                    @endif
+                    @if ($transaction?->verified_at)
+                        <li class="flex items-start gap-3">
+                            <span class="mt-1 h-2 w-2 rounded-full bg-emerald-500"></span>
+                            <div>
+                                <p class="font-medium text-slate-700">Pembayaran terverifikasi</p>
+                                <p class="text-xs text-slate-500">{{ $transaction->verified_at->translatedFormat('d M Y H:i') }}</p>
+                            </div>
+                        </li>
+                    @endif
+                    @if ($transaction?->refund)
+                        <li class="flex items-start gap-3">
+                            <span class="mt-1 h-2 w-2 rounded-full bg-indigo-500"></span>
+                            <div>
+                                <p class="font-medium text-slate-700">Refund diminta</p>
+                                <p class="text-xs text-slate-500">{{ optional($transaction->refund->requested_at)->translatedFormat('d M Y H:i') ?? '-' }}</p>
+                            </div>
+                        </li>
+                        @if ($transaction->refund->processed_at)
+                            <li class="flex items-start gap-3">
+                                <span class="mt-1 h-2 w-2 rounded-full {{ in_array($transaction->refund->status->value, ['approved', 'completed']) ? 'bg-emerald-500' : 'bg-rose-500' }}"></span>
+                                <div>
+                                    <p class="font-medium text-slate-700">Refund diproses ({{ $transaction->refund->status->label() }})</p>
+                                    <p class="text-xs text-slate-500">{{ $transaction->refund->processed_at->translatedFormat('d M Y H:i') }}</p>
+                                </div>
+                            </li>
+                        @endif
+                    @endif
+                </ol>
+            </div>
         </section>
 
         <aside class="space-y-6">
@@ -113,6 +163,26 @@
                     @endif
                 </div>
             @endif
+
+            <div class="rounded-3xl border border-white/60 bg-white/80 p-6 shadow-xl backdrop-blur">
+                <h2 class="text-base font-semibold text-slate-800">Riwayat Email</h2>
+                @if($registration->emails->isEmpty())
+                    <p class="mt-2 text-sm text-slate-500">Belum ada email yang tercatat untuk pendaftaran ini.</p>
+                @else
+                    <ul class="mt-3 space-y-3 text-sm">
+                        @foreach ($registration->emails as $email)
+                            <li class="rounded-2xl border border-slate-200 bg-white/60 px-4 py-3">
+                                <div class="flex items-center justify-between">
+                                    <span class="font-medium text-slate-700">{{ $email->subject }}</span>
+                                    <span class="text-xs text-slate-500">{{ optional($email->sent_at)->translatedFormat('d M Y H:i') ?? '-' }}</span>
+                                </div>
+                                <p class="mt-1 text-xs text-slate-500">Dikirim ke: {{ $email->recipient }}</p>
+                                <p class="mt-0.5 text-[11px] text-slate-500">Tipe: {{ str_replace('_', ' ', $email->type) }}</p>
+                            </li>
+                        @endforeach
+                    </ul>
+                @endif
+            </div>
         </aside>
     </div>
 </x-layouts.admin>
