@@ -32,19 +32,23 @@
                     @method('PUT')
 
                     <div class="grid gap-8 lg:grid-cols-[auto,1fr]">
-                        <div class="flex flex-col items-center gap-4">
+                        <div class="flex flex-col items-center gap-3">
                             <div class="relative">
-                                <img src="{{ $avatarUrl }}" alt="Avatar {{ $user->name }}" class="h-32 w-32 rounded-full border-4 border-white object-cover shadow-lg shadow-[#F7C8B8]/70">
-                                <label for="avatar"
-                                    class="absolute bottom-0 right-0 inline-flex h-10 w-10 cursor-pointer items-center justify-center rounded-full bg-[#D97862] text-white shadow-lg shadow-[#D97862]/30">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-5 w-5">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M6.826 4.504A2.25 2.25 0 018.527 3h6.946a2.25 2.25 0 011.701.804l2.347 2.76a2.25 2.25 0 01.526 1.458v9.478a2.25 2.25 0 01-2.25 2.25H6.75a2.25 2.25 0 01-2.25-2.25V8.022a2.25 2.25 0 01.526-1.458l2.347-2.76z" />
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 13.5l2.25 2.25L15 12" />
-                                    </svg>
-                                </label>
-                                <input id="avatar" name="avatar" type="file" accept="image/*" class="hidden">
+                                <img id="avatar-preview" src="{{ $avatarUrl }}" data-initial="{{ $avatarUrl }}" alt="Avatar {{ $user->name }}" class="h-32 w-32 rounded-full border-4 border-white object-cover shadow-lg shadow-[#F7C8B8]/70">
                             </div>
-                            <p class="text-xs text-center text-[#9A5A46]">Unggah foto dengan format JPG/PNG ukuran maksimal 2MB.</p>
+                            <input id="avatar" name="avatar" type="file" accept="image/*" class="hidden" data-preview="avatar-preview" onchange="window.sicreaPreviewAvatar && window.sicreaPreviewAvatar(this)">
+                            <label for="avatar"
+                                class="inline-flex items-center gap-2 rounded-full bg-[#D97862] px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-[#D97862]/30 hover:bg-[#b9644f] cursor-pointer">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-4 w-4">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 7.125L16.875 4.5" />
+                                </svg>
+                                Ganti Foto
+                            </label>
+                            <p id="avatar-helper" class="text-xs text-center text-[#9A5A46]">Unggah foto JPG/PNG maksimal 2MB, lalu simpan perubahan.</p>
+                            @error('avatar')
+                                <p class="text-xs text-red-600">{{ $message }}</p>
+                            @enderror
                         </div>
 
                         <div class="grid gap-6 sm:grid-cols-2">
@@ -99,3 +103,34 @@
         </div>
     </section>
 </x-layouts.app>
+
+@once
+    <script>
+        window.sicreaPreviewAvatar = function (input) {
+            if (!input) {
+                return;
+            }
+
+            const helper = document.getElementById('avatar-helper');
+            const previewId = input.dataset.preview;
+            const preview = previewId ? document.getElementById(previewId) : null;
+            const initialSrc = preview?.dataset.initial ?? preview?.getAttribute('src');
+            const [file] = input.files ?? [];
+
+            if (file && preview) {
+                const objectUrl = URL.createObjectURL(file);
+                preview.src = objectUrl;
+                preview.onload = () => URL.revokeObjectURL(objectUrl);
+
+                if (helper) {
+                    helper.textContent = 'Foto siap disimpan. Klik "Simpan Perubahan" untuk mengunggah.';
+                }
+            } else if (preview && initialSrc) {
+                preview.src = initialSrc;
+                if (helper) {
+                    helper.textContent = 'Unggah foto JPG/PNG maksimal 2MB, lalu simpan perubahan.';
+                }
+            }
+        };
+    </script>
+@endonce

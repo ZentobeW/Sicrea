@@ -84,4 +84,5 @@ class ProfileController extends Controller
             ->route('profile.show')
             ->with('status', 'Profil berhasil diperbarui.');
     }
+
 }
