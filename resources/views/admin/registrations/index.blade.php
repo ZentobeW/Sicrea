@@ -17,7 +17,7 @@
     <x-slot name="actions">
         <a
             href="{{ route('admin.registrations.export', request()->all()) }}"
-            class="inline-flex items-center gap-2 rounded-full bg-white px-4 py-2 text-sm font-semibold text-slate-900 shadow-lg shadow-[#FFB5A7]/40 transition hover:-translate-y-0.5 hover:bg-slate-100"
+            class="inline-flex items-center gap-2 rounded-full bg-[#822021] px-4 py-2 text-sm font-semibold text-[#FAF8F1] shadow-lg shadow-[#B49F9A]/40 transition hover:-translate-y-0.5 hover:bg-[#822021]/70"
         >
             <x-heroicon-o-arrow-up-right class="h-4 w-4" />
             Export CSV
@@ -52,13 +52,13 @@
             </div>
         </div>
 
-        <div class="mt-6 inline-flex items-center gap-2 rounded-full bg-white/70 p-2 text-sm font-semibold text-[#C65B74] shadow-inner">
+        <div class="mt-6 inline-flex items-center gap-2 rounded-full bg-white p-2 text-sm font-semibold shadow-inner">
             <a
                 href="{{ route('admin.registrations.index', request()->except(['view', 'page'])) }}"
                 @class([
                     'rounded-full px-5 py-2 transition',
-                    'bg-[#FF8A64] text-white shadow-md shadow-[#FF8A64]/30' => ! request('view'),
-                    'text-[#C65B74]' => request('view'),
+                    'bg-[#822021] text-[#FAF8F1] shadow-md shadow-[#B49F9A]/30' => ! request('view'),
+                    'bg-white/70 text-[#822021]' => request('view'),
                 ])
             >
                 Kelola Pendaftaran
@@ -67,8 +67,8 @@
                 href="{{ route('admin.registrations.index', array_merge(request()->except(['page', 'view']), ['view' => 'refunds'])) }}"
                 @class([
                     'rounded-full px-5 py-2 transition',
-                    'bg-[#FF8A64] text-white shadow-md shadow-[#FF8A64]/30' => request('view') === 'refunds',
-                    'text-[#C65B74]' => request('view') !== 'refunds',
+                    'bg-[#822021] text-[#FAF8F1] shadow-md shadow-[#B49F9A]/30' => request('view') === 'refunds',
+                    'bg-white/70 text-[#822021]' => request('view') !== 'refunds',
                 ])
             >
                 Kelola Refund
@@ -91,7 +91,7 @@
                 </p>
             </div>
         </article>
-        <article class="flex items-start gap-3 rounded-3xl border border-[#FFE0CC] bg-[#FFF5EF] p-5 shadow-sm">
+        <article class="flex items-start gap-3 rounded-3xl border border-[#FFE0CC] bg-amber-100 text-amber-600 p-5 shadow-sm">
             <span class="flex h-10 w-10 items-center justify-center rounded-2xl bg-[#FFB5A7]/20 text-[#FF6F61]">
                 <x-heroicon-o-credit-card class="h-5 w-5" />
             </span>
@@ -157,7 +157,7 @@
             </select>
         </div>
         <div class="flex items-end">
-            <button class="inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#FF8A64] px-4 py-3 font-semibold text-white shadow-md shadow-[#FF8A64]/30 transition hover:-translate-y-0.5 hover:bg-[#F9744B]">
+            <button class="inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#822021] px-4 py-3 font-semibold text-[#FAF8F1] shadow-md shadow-[#B49F9A]/30 transition hover:-translate-y-0.5 hover:bg-[#822021]/70">
                 Terapkan Filter
             </button>
         </div>
@@ -262,7 +262,7 @@
                                             @csrf
                                             <button
                                                 type="submit"
-                                                class="inline-flex items-center justify-center rounded-full border border-emerald-500 bg-emerald-500/10 p-2 text-emerald-600 transition hover:-translate-y-0.5 hover:bg-emerald-500/20"
+                                                class="inline-flex items-center justify-center rounded-full p-2 bg-emerald-100 text-emerald-600 shadow-md shadow-[#B49F9A]/30 transition hover:-translate-y-0.5 hover:bg-[#822021]/70"
                                                 title="Setujui pembayaran"
                                             >
                                                 <x-heroicon-o-check class="h-4 w-4" />
@@ -272,7 +272,7 @@
                                             @csrf
                                             <button
                                                 type="submit"
-                                                class="inline-flex items-center justify-center rounded-full border border-rose-500 bg-rose-500/10 p-2 text-rose-600 transition hover:-translate-y-0.5 hover:bg-rose-500/20"
+                                                class="inline-flex items-center justify-center rounded-full p-2 bg-rose-100 text-rose-600 shadow-md shadow-[#B49F9A]/30 transition hover:-translate-y-0.5 hover:bg-[#822021]/70"
                                                 title="Tolak pembayaran"
                                             >
                                                 <x-heroicon-o-x-mark class="h-4 w-4" />
@@ -282,7 +282,7 @@
 
                                     <a
                                         href="{{ route('admin.registrations.show', $registration) }}"
-                                        class="inline-flex items-center gap-2 rounded-full border border-[#FF8A64] bg-[#FF8A64]/10 px-4 py-2 text-xs font-semibold text-[#C65B74] transition hover:-translate-y-0.5 hover:bg-[#FF8A64]/20"
+                                        class="inline-flex items-center gap-2 rounded-full px-4 py-2 text-xs font-semibold bg-[#822021] text-[#FAF8F1] shadow-md shadow-[#B49F9A]/30 transition hover:-translate-y-0.5 hover:bg-[#822021]/70"
                                     >
                                         Detail
                                         <x-heroicon-o-arrow-up-right class="h-4 w-4" />

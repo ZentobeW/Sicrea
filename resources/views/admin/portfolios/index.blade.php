@@ -6,7 +6,7 @@
 
 <x-layouts.admin title="Kelola Portofolio" subtitle="Upload dan kelola dokumentasi kegiatan agar publik dapat merasakan energi workshop secara visual." :tabs="$tabs">
     <x-slot name="actions">
-        <a href="{{ route('admin.portfolios.create') }}" class="inline-flex items-center gap-2 rounded-full bg-white/90 px-4 py-2 text-sm font-semibold text-[#6B3021] shadow-lg shadow-[#FF9F80]/30 transition hover:-translate-y-0.5 hover:bg-white">
+        <a href="{{ route('admin.portfolios.create') }}" class="inline-flex items-center gap-2 rounded-full bg-[#822021] px-5 py-3 text-sm font-semibold text-[#FAF8F1] shadow-lg shadow-[#822021]/30 transition hover:-translate-y-0.5 hover:bg-[#822021]/70 hover:text-[#FAF8F1]">
             <x-heroicon-o-plus class="h-5 w-5" />
             Tambah Portofolio
         </a>
@@ -38,7 +38,7 @@
                     </div>
                 </div>
                 <div class="flex items-end">
-                    <button type="submit" class="inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#F17259] px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-[#E25F47]/30 transition hover:-translate-y-0.5 hover:bg-[#e0634a]">
+                    <button type="submit" class="inline-flex items-center gap-2 rounded-full bg-[#822021] px-5 py-3 text-sm font-semibold text-[#FAF8F1] shadow-lg shadow-[#822021]/30 transition hover:-translate-y-0.5 hover:bg-[#822021]/70 hover:text-[#FAF8F1]">
                         Terapkan
                     </button>
                 </div>

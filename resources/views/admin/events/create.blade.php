@@ -69,8 +69,8 @@
             </div>
 
             <div class="flex flex-col gap-3 rounded-3xl bg-white p-6 shadow-[0_35px_90px_-45px_rgba(234,140,101,0.5)] sm:flex-row sm:items-center sm:justify-between">
-                <a href="{{ route('admin.events.index') }}" class="inline-flex items-center justify-center gap-2 rounded-full bg-[#FFF0E7] px-4 py-2 text-sm font-semibold text-[#C16A55] transition hover:bg-[#FFD6C7]">Batal</a>
-                <button class="inline-flex items-center justify-center gap-2 rounded-full bg-[#F68C7B] px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-[#F68C7B]/40 transition hover:-translate-y-0.5 hover:bg-[#e37b69]">Simpan Event</button>
+                <a href="{{ route('admin.events.index') }}" class="inline-flex items-center justify-center gap-2 rounded-full bg-[#FFF0E7] px-4 py-2 text-sm font-semibold text-[#822021] transition hover:bg-[#FFD6C7]">Batal</a>
+                <button class="inline-flex items-center gap-2 rounded-full bg-[#822021] px-4 py-2 text-sm font-semibold text-[#FAF8F1] shadow-sm transition hover:bg-[#822021]/70 hover:text-[#FAF8F1]">Simpan Event</button>
             </div>
         </form>
 

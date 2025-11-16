@@ -1,6 +1,6 @@
 <x-layouts.admin title="Kelola Event" subtitle="Tambahkan, edit, atau hapus event dan workshop.">
     <x-slot name="actions">
-        <a href="{{ route('admin.events.create') }}" class="inline-flex items-center gap-2 rounded-full bg-[#F68C7B] px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-[#F68C7B]/40 transition hover:-translate-y-0.5 hover:bg-[#e37b69]">
+        <a href="{{ route('admin.events.create') }}" class="inline-flex items-center gap-2 rounded-full bg-[#822021] px-5 py-3 text-sm font-semibold text-[#FAF8F1] shadow-lg shadow-[#822021]/30 transition hover:-translate-y-0.5 hover:bg-[#822021]/70 hover:text-[#FAF8F1]">
             <x-heroicon-o-plus class="h-5 w-5" />
             Tambah Event Baru
         </a>
@@ -12,12 +12,12 @@
             <p class="mt-3 text-3xl font-semibold text-[#4B2A22]">{{ $overview['total'] }}</p>
             <p class="mt-1 text-xs text-[#9C5A45]">Termasuk semua status.</p>
         </div>
-        <div class="rounded-3xl bg-[#FFF0E7] p-5 shadow-[0_25px_60px_-30px_rgba(255,176,130,0.55)]">
+        <div class="rounded-3xl bg-white p-5 shadow-[0_25px_60px_-30px_rgba(255,176,130,0.55)]">
             <p class="text-xs font-semibold uppercase tracking-[0.3em] text-[#EF935E]">Published</p>
             <p class="mt-3 text-3xl font-semibold text-[#4B2A22]">{{ $overview['published'] }}</p>
             <p class="mt-1 text-xs text-[#9C5A45]">Event yang tampil di katalog.</p>
         </div>
-        <div class="rounded-3xl bg-[#FFE5DE] p-5 shadow-[0_25px_60px_-30px_rgba(241,128,128,0.4)]">
+        <div class="rounded-3xl bg-white p-5 shadow-[0_25px_60px_-30px_rgba(241,128,128,0.4)]">
             <p class="text-xs font-semibold uppercase tracking-[0.3em] text-[#E56D5D]">Draft</p>
             <p class="mt-3 text-3xl font-semibold text-[#4B2A22]">{{ $overview['drafts'] }}</p>
             <p class="mt-1 text-xs text-[#9C5A45]">Perlu dipublikasikan.</p>
@@ -44,7 +44,7 @@
                 <x-heroicon-o-magnifying-glass class="h-5 w-5 text-[#E77B5F]" />
                 <input type="text" name="search" value="{{ $filters['search'] }}" placeholder="Cari event..." class="ml-2 flex-1 bg-transparent text-[#4B2A22] placeholder:text-[#D28B7B] focus:outline-none" />
                 @if ($filters['search'])
-                    <a href="{{ route('admin.events.index') }}" class="text-xs font-semibold text-[#D2644B]">Reset</a>
+                    <a href="{{ route('admin.events.index') }}" class="text-xs font-semibold text-[#822021] hover:text-[#822021]/70">Reset</a>
                 @endif
             </form>
         </div>
@@ -91,8 +91,8 @@
                             <td class="px-5 py-4 align-top text-[#9C5A45]">
                                 <div class="font-semibold">{{ $quotaLabel }}</div>
                                 @if ($progress)
-                                    <div class="mt-2 h-1.5 w-28 rounded-full bg-[#FFE0D6]">
-                                        <div class="h-full rounded-full bg-[#F68C7B]" style="width: {{ $progress }}%"></div>
+                                    <div class="mt-2 h-1.5 w-28 rounded-full bg-[#FFE0D6]" style="--progress: {{ $progress }};">
+                                        <div class="h-full rounded-full bg-[#F68C7B]" style="width: calc(var(--progress) * 1%);"></div>
                                     </div>
                                 @endif
                             </td>
@@ -116,16 +116,16 @@
                             </td>
                             <td class="px-5 py-4 align-top text-right">
                                 <div class="inline-flex items-center justify-end gap-2">
-                                    <a href="{{ route('admin.registrations.index', ['event_id' => $event->id]) }}" class="inline-flex h-9 w-9 items-center justify-center rounded-full bg-[#FFEFE6] text-[#C16A55] shadow-inner transition hover:-translate-y-0.5 hover:bg-[#FFDCCB]" title="Lihat peserta">
+                                    <a href="{{ route('admin.registrations.index', ['event_id' => $event->id]) }}" class="inline-flex h-9 w-9 items-center justify-center rounded-full bg-[#822021] text-[#FAF8F1] shadow-inner transition hover:-translate-y-0.5 hover:bg-[#822021]/70 hover:text-[#FAF8F1]" title="Lihat peserta">
                                         <x-heroicon-o-user-group class="h-5 w-5" />
                                     </a>
-                                    <a href="{{ route('admin.events.edit', $event) }}" class="inline-flex h-9 w-9 items-center justify-center rounded-full bg-[#FFEFE6] text-[#C16A55] shadow-inner transition hover:-translate-y-0.5 hover:bg-[#FFDCCB]" title="Edit event">
+                                    <a href="{{ route('admin.events.edit', $event) }}" class="inline-flex h-9 w-9 items-center justify-center rounded-full bg-[#822021] text-[#FAF8F1] shadow-inner transition hover:-translate-y-0.5 hover:bg-[#822021]/70 hover:text-[#FAF8F1]" title="Edit event">
                                         <x-heroicon-o-pencil-square class="h-5 w-5" />
                                     </a>
                                     <form method="POST" action="{{ route('admin.events.destroy', $event) }}" class="inline-flex" onsubmit="return confirm('Hapus event ini?')">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="inline-flex h-9 w-9 items-center justify-center rounded-full bg-[#FCE0DE] text-[#D2644B] shadow-inner transition hover:-translate-y-0.5 hover:bg-[#F9C9C4]" title="Hapus event">
+                                        <button type="submit" class="inline-flex h-9 w-9 items-center justify-center rounded-full bg-[#822021] text-[#FAF8F1] shadow-inner transition hover:-translate-y-0.5 hover:bg-[#822021]/70 hover:text-[#FAF8F1]" title="Hapus event">
                                             <x-heroicon-o-trash class="h-5 w-5" />
                                         </button>
                                     </form>
