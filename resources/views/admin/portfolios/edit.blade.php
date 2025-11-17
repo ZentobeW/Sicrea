@@ -108,7 +108,7 @@
                         <h3 class="text-lg font-semibold text-slate-900">Dokumentasi Foto</h3>
                         <p class="text-sm text-slate-500">Kelola galeri foto dengan menambahkan gambar baru atau menonaktifkan foto yang sudah tidak relevan.</p>
                     </div>
-                    <button type="button" class="inline-flex items-center gap-2 rounded-full bg-orange-500 px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-orange-300/60 transition hover:-translate-y-0.5 hover:bg-orange-600" data-gallery-trigger>
+                    <button type="button" class="inline-flex items-center gap-2 rounded-full bg-[#822021] px-4 py-2 text-sm font-semibold text-[#FAF8F1] shadow-lg shadow-[#822021]/30 transition hover:-translate-y-0.5 hover:bg-[#822021]/70 hover:text-[#FAF8F1]" data-gallery-trigger>
                         <x-heroicon-o-plus class="h-4 w-4" />
                         Tambah Foto
                     </button>
@@ -176,8 +176,8 @@
             </div>
 
             <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                <a href="{{ route('admin.portfolios.index') }}" class="inline-flex items-center justify-center gap-2 rounded-full border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-600 transition hover:border-orange-300 hover:text-orange-600">Batal</a>
-                <button type="submit" class="inline-flex items-center justify-center gap-2 rounded-full bg-orange-500 px-6 py-3 text-sm font-semibold text-white shadow-xl shadow-orange-300/60 transition hover:-translate-y-0.5 hover:bg-orange-600">
+                <a href="{{ route('admin.portfolios.index') }}" class="inline-flex items-center justify-center gap-2 rounded-full bg-[#822021] px-5 py-3 text-sm font-semibold text-[#FAF8F1] transition hover:bg-[#822021]/70 hover:text-[#FAF8F1]">Batal</a>
+                <button type="submit" class="inline-flex items-center justify-center gap-2 rounded-full bg-[#822021] px-6 py-3 text-sm font-semibold text-[#FAF8F1] shadow-xl shadow-[#822021]/30 transition hover:-translate-y-0.5 hover:bg-[#822021]/70 hover:text-[#FAF8F1]">
                     <x-heroicon-o-arrow-up-right class="h-4 w-4" />
                     Simpan Perubahan
                 </button>

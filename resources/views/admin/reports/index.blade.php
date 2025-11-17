@@ -32,7 +32,7 @@
                 <div class="mt-4 flex items-center justify-between text-xs">
                     <a
                         href="{{ route('admin.reports.index', $queryFor(null)) }}"
-                        class="inline-flex items-center gap-2 rounded-full bg-[#FFEDE5] px-3 py-1 font-semibold text-[#A3563F] transition hover:bg-[#ffdcd0]"
+                        class="inline-flex items-center gap-2 rounded-full bg-[#822021] px-3 py-1 font-semibold text-[#FAF8F1] transition hover:bg-[#822021]/70"
                     >
                         Pilih Semua
                     </a>
@@ -43,10 +43,7 @@
                     @forelse ($events as $event)
                         <a
                             href="{{ route('admin.reports.index', $queryFor($event->id)) }}"
-                            class="group block rounded-3xl border px-4 py-4 transition @class([
-                                'border-transparent bg-[#FFF5EF] shadow-inner shadow-[#FFBFA8]/30 text-[#5C2518]' => $selectedEventId === $event->id,
-                                'border-[#FFE3D2] bg-white/80 text-[#874532] hover:border-[#FFBFA8] hover:bg-[#FFF1EA]' => $selectedEventId !== $event->id,
-                            ])"
+                            class="group block rounded-3xl border px-4 py-4 transition bg-[#FFE3D2] text-[#822021] shadow-inner shadow-[#B49F9A]/20"
                         >
                             <div class="flex items-start justify-between gap-3">
                                 <div>
@@ -98,7 +95,7 @@
                         <div class="flex flex-wrap items-center gap-3">
                             <a
                                 href="{{ route('admin.registrations.export', array_filter(['event_id' => $selectedEventId], fn ($value) => filled($value))) }}"
-                                class="inline-flex items-center gap-2 rounded-full bg-[#FFE3D2] px-4 py-2 text-sm font-semibold text-[#A3563F] shadow"
+                                class="inline-flex items-center gap-2 rounded-full bg-[#822021] px-4 py-2 text-sm font-semibold text-[#FAF8F1] shadow-md shadow-[#B49F9A]/30 transition hover:bg-[#822021]/70"
                             >
                                 ⇩ Unduh CSV
                             </a>
@@ -115,7 +112,7 @@
                             href="{{ route('admin.reports.index', $queryFor($selectedEventId, $option['key'])) }}"
                             @class([
                                 'inline-flex flex-1 items-center justify-center gap-2 rounded-[22px] px-4 py-3 text-sm font-semibold transition',
-                                'bg-white text-[#5C2518] shadow-md shadow-[#FFBFA8]/40' => $tab === $option['key'],
+                                'bg-[#822021] text-[#FFE3D2] shadow-md shadow-[#FFBFA8]/40' => $tab === $option['key'],
                                 'text-[#A3563F] hover:bg-white/70' => $tab !== $option['key'],
                             ])
                         >
@@ -153,7 +150,7 @@
                                         <h3 class="text-lg font-semibold text-[#5C2518]">Registrasi Terbaru</h3>
                                         <p class="text-sm text-[#A3563F]">Gunakan data berikut sebagai dasar follow up peserta.</p>
                                     </div>
-                                    <a href="{{ route('admin.registrations.index', array_filter(['event_id' => $selectedEventId], fn ($value) => filled($value))) }}" class="inline-flex items-center gap-2 rounded-full bg-white px-4 py-2 text-xs font-semibold text-[#A3563F] shadow">
+                                    <a href="{{ route('admin.registrations.index', array_filter(['event_id' => $selectedEventId], fn ($value) => filled($value))) }}" class="inline-flex items-center gap-2 rounded-full bg-[#822021] px-4 py-2 text-xs font-semibold text-[#FAF8F1] shadow-md shadow-[#B49F9A]/30 transition hover:bg-[#822021]/70">
                                         Lihat Semua
                                     </a>
                                 </div>
@@ -242,13 +239,13 @@
                                     <div class="mt-6 flex flex-wrap items-center gap-3">
                                         <a
                                             href="{{ route('admin.registrations.export', array_filter(['event_id' => $selectedEventId], fn ($value) => filled($value))) }}"
-                                            class="inline-flex items-center gap-2 rounded-full bg-[#FFBFA8] px-5 py-2 text-sm font-semibold text-white shadow-md shadow-[#FFBFA8]/50 transition hover:bg-[#f3a98c]"
+                                            class="inline-flex items-center gap-2 rounded-full bg-[#822021] px-5 py-2 text-sm font-semibold text-[#FAF8F1] shadow-md shadow-[#B49F9A]/30 transition hover:bg-[#822021]/70"
                                         >
                                             ⇩ Unduh Laporan
                                         </a>
                                         <a
                                             href="{{ route('admin.registrations.index', array_filter(['event_id' => $selectedEventId], fn ($value) => filled($value))) }}"
-                                            class="inline-flex items-center gap-2 rounded-full border border-[#FFBFA8] px-5 py-2 text-xs font-semibold text-[#A3563F] transition hover:bg-[#FFF1EA]"
+                                            class="inline-flex items-center gap-2 rounded-full bg-[#822021] px-5 py-2 text-xs font-semibold text-[#FAF8F1] shadow-md shadow-[#B49F9A]/30 transition hover:bg-[#822021]/70"
                                         >
                                             Kelola Transaksi
                                         </a>
@@ -291,13 +288,13 @@
                             <p class="mt-3 text-sm">Silakan pilih salah satu workshop dari daftar di kiri untuk melihat ringkasan peserta atau keuangan.</p>
                         </div>
                         <div class="grid gap-6 lg:grid-cols-2">
-                            <div class="rounded-[30px] border border-[#FFD1BE] bg-white/90 p-6 text-left text-[#5C2518] shadow-lg shadow-[#FFBFA8]/30">
-                                <p class="text-xs font-semibold uppercase tracking-[0.4em] text-[#C06245]">Laporan Peserta</p>
+                            <div class="rounded-[30px] border border-[#FFD1BE] bg-[#822021]/90 p-6 text-left text-[#5C2518] shadow-lg shadow-[#FFBFA8]/30">
+                                <p class="text-xs font-semibold uppercase tracking-[0.4em] text-[#FAF8F1]">Laporan Peserta</p>
                                 <h4 class="mt-2 text-xl font-semibold">Unduh daftar hadir & status</h4>
                                 <p class="mt-2 text-sm text-[#874532]">Pilih event terlebih dahulu untuk mengakses daftar peserta lengkap dan status pembayarannya.</p>
                             </div>
                             <div class="rounded-[30px] border border-[#FFD1BE] bg-[#FFF5EF] p-6 text-left text-[#5C2518] shadow-inner">
-                                <p class="text-xs font-semibold uppercase tracking-[0.4em] text-[#C06245]">Laporan Keuangan</p>
+                                <p class="text-xs font-semibold uppercase tracking-[0.4em] text-[#FAF8F1]">Laporan Keuangan</p>
                                 <h4 class="mt-2 text-xl font-semibold">Rekap pemasukan & refund</h4>
                                 <p class="mt-2 text-sm text-[#874532]">Gunakan ringkasan keuangan untuk mendukung pelaporan bulanan dan proses rekonsiliasi tim finance.</p>
                             </div>

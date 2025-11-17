@@ -6,7 +6,7 @@
 
 <x-layouts.admin title="Tambah Portofolio" subtitle="Abadikan momen terbaik dari workshop dan tampilkan pada galeri inspirasi." :tabs="$tabs" :back-url="route('admin.portfolios.index')">
     <div class="grid gap-8 lg:grid-cols-[2fr,1fr]">
-        <form method="POST" action="{{ route('admin.portfolios.store') }}" enctype="multipart/form-data" class="rounded-3xl border border-slate-200/60 bg-white/95 p-6 sm:p-8 shadow-xl space-y-6">
+        <form method="POST" action="{{ route('admin.portfolios.store') }}" enctype="multipart/form-data" class="rounded-3xl border border-slate-200/60 bg-white p-6 sm:p-8 shadow-xl space-y-6">
             @csrf
             <div class="grid gap-5">
                 <div>
@@ -23,7 +23,7 @@
                             <label class="block text-sm font-semibold text-slate-700">Galeri Foto Workshop</label>
                             <p class="text-xs text-slate-500">Pilih minimal satu foto highlight kegiatan. Anda dapat memilih beberapa file sekaligus.</p>
                         </div>
-                        <button type="button" class="inline-flex items-center gap-2 rounded-full bg-indigo-500 px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-indigo-500/30 transition hover:-translate-y-0.5 hover:bg-indigo-600" data-gallery-trigger>
+                        <button type="button" class="inline-flex items-center gap-2 rounded-full bg-[#822021] px-4 py-2 text-sm font-semibold text-[#FAF8F1] shadow-lg shadow-[#822021]/30 transition hover:-translate-y-0.5 hover:bg-[#822021]/70 hover:text-[#FAF8F1]" data-gallery-trigger>
                             <x-heroicon-o-plus class="h-4 w-4" />
                             Tambah Foto
                         </button>
@@ -60,8 +60,8 @@
             </div>
 
             <div class="flex items-center justify-end gap-3 text-sm">
-                <a href="{{ route('admin.portfolios.index') }}" class="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2 font-medium text-slate-600 transition hover:border-slate-300">Batal</a>
-                <button class="inline-flex items-center gap-2 rounded-full bg-indigo-600 px-4 py-2 font-semibold text-white shadow-lg shadow-indigo-500/30 transition hover:-translate-y-0.5 hover:bg-indigo-700">Simpan Portofolio</button>
+                <a href="{{ route('admin.portfolios.index') }}" class="inline-flex items-center gap-2 rounded-full bg-[#822021] px-4 py-2 font-medium text-[#FAF8F1] transition hover:bg-[#822021]/70 hover:text-[#FAF8F1]">Batal</a>
+                <button class="inline-flex items-center gap-2 rounded-full bg-[#822021] px-4 py-2 font-semibold text-[#FAF8F1] shadow-lg shadow-[#822021]/30 transition hover:-translate-y-0.5 hover:bg-[#822021]/70 hover:text-[#FAF8F1]">Simpan Portofolio</button>
             </div>
         </form>
 

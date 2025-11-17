@@ -1,6 +1,6 @@
 <x-layouts.admin :title="'Edit Event: ' . $event->title" subtitle="Perbarui detail workshop agar peserta mendapatkan informasi paling relevan." :back-url="route('admin.events.index')">
     <x-slot name="actions">
-        <a href="{{ route('events.show', $event) }}" target="_blank" class="inline-flex items-center gap-2 rounded-full bg-white/70 px-4 py-2 text-sm font-semibold text-[#C16A55] shadow-sm transition hover:bg-white" title="Lihat tampilan publik">
+        <a href="{{ route('events.show', $event) }}" target="_blank" class="inline-flex items-center gap-2 rounded-full bg-[#822021] px-4 py-2 text-sm font-semibold text-[#FAF8F1] shadow-sm transition hover:bg-[#822021]/70 hover:text-[#FAF8F1]" title="Lihat tampilan publik">
             <x-heroicon-o-arrow-up-right class="h-4 w-4" />
             Pratinjau Event
         </a>
@@ -100,8 +100,8 @@
         </section>
 
         <div class="flex flex-col gap-3 rounded-[32px] bg-white/95 p-6 shadow-[0_35px_90px_-45px_rgba(234,140,101,0.45)] sm:flex-row sm:items-center sm:justify-between">
-            <a href="{{ route('admin.events.index') }}" class="inline-flex items-center justify-center gap-2 rounded-full bg-[#FFF0E7] px-5 py-3 text-sm font-semibold text-[#C16A55] transition hover:bg-[#FFD6C7]">Batal</a>
-            <button class="inline-flex items-center justify-center gap-2 rounded-full bg-[#F68C7B] px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-[#F68C7B]/40 transition hover:-translate-y-0.5 hover:bg-[#e37b69]">
+            <a href="{{ route('admin.events.index') }}" class="inline-flex items-center justify-center gap-2 rounded-full bg-[#FFF0E7] px-5 py-3 text-sm font-semibold text-[#822021] transition hover:bg-[#FFD6C7]">Batal</a>
+            <button class="inline-flex items-center justify-center gap-2 rounded-full bg-[#822021] px-6 py-3 text-sm font-semibold text-[#FAF8F1] shadow-lg shadow-[#822021]/30 transition hover:-translate-y-0.5 hover:bg-[#822021]/70 hover:text-[#FAF8F1]">
                 Simpan Perubahan
             </button>
         </div>
