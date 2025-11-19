@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -17,7 +16,7 @@ class User extends Authenticatable
     /**
      * The attributes that are mass assignable.
      *
-     * @var list<string>
+     * @var array
      */
     protected $fillable = [
         'name',
@@ -29,12 +28,15 @@ class User extends Authenticatable
         'address',
         'avatar_path',
         'password',
+        'google_id',
+        'oauth_provider',
+        'admin', // Added admin attribute
     ];
 
     /**
      * The attributes that should be hidden for serialization.
      *
-     * @var list<string>
+     * @var array
      */
     protected $hidden = [
         'password',
@@ -44,7 +46,7 @@ class User extends Authenticatable
     /**
      * Get the attributes that should be cast.
      *
-     * @return array<string, string>
+     * @return array
      */
     protected function casts(): array
     {
@@ -52,21 +54,25 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
             'birth_date' => 'date',
+            'admin' => 'boolean', // Added admin cast
         ];
     }
 
+    // Added isAdmin() method
     public function isAdmin(): bool
     {
         return (bool) $this->admin;
     }
 
-    public function registrations(): HasMany
+    // Added registrations relationship
+    public function registrations()
     {
         return $this->hasMany(\App\Models\Registration::class);
     }
 
-    public function admin(): HasOne
+    // Added admin relationship
+    public function admin()
     {
-        return $this->hasOne(Admin::class);
+        return $this->hasOne(\App\Models\Admin::class);
     }
 }

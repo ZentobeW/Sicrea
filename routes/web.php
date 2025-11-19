@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\RegistrationController as AdminRegistrationContro
 use App\Http\Controllers\Admin\ReportController as AdminReportController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\EventController;
+use App\Http\Controllers\GoogleAuthController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RefundController;
@@ -26,6 +27,12 @@ Route::middleware('guest')->group(function () {
 
     Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register');
     Route::post('/register', [AuthController::class, 'register']);
+});
+
+Route::middleware('guest')->group(function () {
+    Route::get('/auth/google', [GoogleAuthController::class, 'redirect'])->name('google.redirect');
+    Route::get('/auth/google/callback/login', [GoogleAuthController::class, 'callback'])->name('google.callback.login')->defaults('action', 'login');
+    Route::get('/auth/google/callback/register', [GoogleAuthController::class, 'callback'])->name('google.callback.register')->defaults('action', 'register');
 });
 
 Route::post('/logout', [AuthController::class, 'logout'])
