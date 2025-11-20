@@ -81,8 +81,8 @@
 
         <div class="flex-1">
             <div class="relative isolate overflow-hidden">
-                <div class="absolute inset-0 -z-10 bg-[#FFDEF8]"></div>
-                <div class="absolute right-12 top-6 -z-10 h-40 w-40 rounded-full bg-[#FFDEF8]/30 blur-2xl"></div>
+                <div class="absolute inset-0 -z-10 bg-gradient-to-b from-[#FFDEF8] to-[#FFB3E1]"></div>
+                <div class="absolute right-12 top-6 -z-10 h-40 w-40 rounded-full bg-[#FFDEF8]/50 blur-2xl"></div>
                 <div class="px-6 py-10 sm:px-10 lg:px-12">
                     <div class="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
                         <div class="space-y-3 text-[#822021]">
