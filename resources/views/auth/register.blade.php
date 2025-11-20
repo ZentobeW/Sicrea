@@ -79,7 +79,7 @@
                             </div>
 
                             {{-- Add reCAPTCHA v2 checkbox widget --}}
-                            <div class="flex justify-center">
+                            <div class="flex">
                                 <div class="g-recaptcha" data-sitekey="{{ $recaptcha_site_key }}"></div>
                             </div>
 

@@ -63,7 +63,7 @@
                     </div>
                 @endif
 
-                @if ($errors->any())
+                @if ($errors->any() && !request()->routeIs('register'))
                     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6">
                         <div class="mb-6 rounded-xl bg-red-100 border border-red-200 text-red-800 px-4 py-3">
                             <ul class="list-disc list-inside text-sm space-y-1">
