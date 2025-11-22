@@ -59,13 +59,6 @@
                     {{-- RIGHT COLUMN --}}
                     <div class="rounded-[36px] bg-white/80 backdrop-blur shadow-xl ring-1 ring-[#F7C8B8]/60 p-10">
 
-                        {{-- GOOGLE ERROR --}}
-                        @if ($errors->has('oauth'))
-                            <div class="mb-4 rounded-xl bg-red-50 border border-red-200 px-4 py-3 text-sm text-red-700">
-                                {{ $errors->first('oauth') }}
-                            </div>
-                        @endif
-
                         <div class="mb-8 space-y-2">
                             <h2 class="text-2xl font-semibold text-[#7C3A2D]">Buat Akun Baru</h2>
                             <p class="text-sm text-[#9A5A46]">

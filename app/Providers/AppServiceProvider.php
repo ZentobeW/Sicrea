@@ -25,6 +25,28 @@ class AppServiceProvider extends ServiceProvider
         Paginator::useTailwind();
         Carbon::setLocale(config('app.locale'));
 
+        /**
+         * ------------------------------------------------------------
+         * Global Facades for ALL Blade Views (fix Route, Storage, etc)
+         * ------------------------------------------------------------
+         */
+        Blade::directive('globalfacades', function () {
+            return <<<EOT
+<?php
+    use Illuminate\Support\Facades\Route;
+    use Illuminate\Support\Facades\Storage;
+    use Illuminate\Support\Facades\Auth;
+    use Illuminate\Support\Facades\Gate;
+    use Illuminate\Support\Facades\URL;
+?>
+EOT;
+        });
+
+        /**
+         * ------------------------------------------------------------
+         * Heroicons Registration (Your existing icons)
+         * ------------------------------------------------------------
+         */
         $outlineIcons = [
             'arrow-left-on-rectangle',
             'arrow-up-right',

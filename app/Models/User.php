@@ -30,7 +30,7 @@ class User extends Authenticatable
         'password',
         'google_id',
         'oauth_provider',
-        'admin', // Added admin attribute
+        'is_admin',
     ];
 
     /**
@@ -54,14 +54,20 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
             'birth_date' => 'date',
-            'admin' => 'boolean', // Added admin cast
+            'is_admin' => 'boolean',
         ];
     }
 
-    // Added isAdmin() method
     public function isAdmin(): bool
     {
-        return (bool) $this->admin;
+        // Prefer boolean flag; fallback to admin relation for older data
+        if ($this->is_admin) {
+            return true;
+        }
+
+        return $this->relationLoaded('admin')
+            ? $this->admin !== null
+            : $this->admin()->exists();
     }
 
     // Added registrations relationship

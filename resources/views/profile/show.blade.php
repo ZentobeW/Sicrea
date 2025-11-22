@@ -1,3 +1,6 @@
+@php
+    use Illuminate\Support\Facades\Storage;
+@endphp
 <x-layouts.app :title="'Profil Saya'">
     @php
         $avatarUrl = $user->avatar_path

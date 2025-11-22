@@ -26,17 +26,22 @@ class DatabaseSeeder extends Seeder
     {
         $faker = fake();
 
-        $admin = User::factory()->create([
-            'name' => 'Administrator',
-            'email' => 'admin@example.com',
-            'password' => Hash::make('password'),
-        ]);
+        $admin = User::updateOrCreate(
+            ['email' => 'admin@example.com'],
+            [
+                'name' => 'Administrator',
+                'password' => Hash::make('password'),
+                'is_admin' => true,
+            ]
+        );
 
-        Admin::create([
-            'user_id' => $admin->id,
-            'role' => 'Super Admin',
-            'phone' => $faker->phoneNumber(),
-        ]);
+        Admin::updateOrCreate(
+            ['user_id' => $admin->id],
+            [
+                'role' => 'Super Admin',
+                'phone' => $faker->phoneNumber(),
+            ]
+        );
 
         $users = User::factory(15)->create();
 
