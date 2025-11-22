@@ -9,7 +9,6 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Http;
 
 class AuthController extends Controller
 {
@@ -22,81 +21,65 @@ class AuthController extends Controller
     }
 
     /**
-     * Handle login request
+     * Handle login
      */
     public function login(Request $request): RedirectResponse
     {
-        $credentials = $request->validate([
+        $request->validate([
             'email' => ['required', 'email'],
             'password' => ['required'],
+            'g-recaptcha-response' => ['required', 'captcha'], // AUTOMATIC reCAPTCHA validation
         ]);
 
-        if (Auth::attempt($credentials)) {
+        if (Auth::attempt($request->only('email', 'password'))) {
             $request->session()->regenerate();
-            return redirect()->intended(route('home'))->with('status', 'Successfully logged in!');
+
+            return redirect()
+                ->intended(route('home'))
+                ->with('status', 'Successfully logged in!');
         }
 
-        return back()->withErrors([
-            'email' => 'Email atau password salah.',
-        ])->onlyInput('email');
+        return back()
+            ->withErrors(['email' => 'Email atau password salah.'])
+            ->onlyInput('email');
     }
 
     /**
-     * Show the register form
+     * Show register form
      */
     public function showRegisterForm(): View
     {
-        return view('auth.register', [
-            'recaptcha_site_key' => config('services.recaptcha.site_key'),
-        ]);
+        return view('auth.register'); // No need to pass site key manually; NoCaptcha handles it
     }
 
     /**
-     * Handle registration request with reCAPTCHA validation
+     * Handle register with reCAPTCHA validation
      */
     public function register(Request $request): RedirectResponse
     {
-        // <CHANGE> Validate reCAPTCHA token first
-        $recaptchaToken = $request->input('g-recaptcha-response');
-        
-        if (!$recaptchaToken) {
-            return back()->withErrors(['recaptcha' => 'Please verify that you are not a robot.'])->withInput();
-        }
-
-        // Verify reCAPTCHA token with Google
-        $recaptchaResponse = Http::post('https://www.google.com/recaptcha/api/siteverify', [
-            'secret' => config('services.recaptcha.secret_key'),
-            'response' => $recaptchaToken,
-        ]);
-
-        $recaptchaData = $recaptchaResponse->json();
-
-        if (!$recaptchaData['success'] || ($recaptchaData['score'] ?? 0) < 0.5) {
-            return back()->withErrors(['recaptcha' => 'reCAPTCHA verification failed. Please try again.'])->withInput();
-        }
-
-        // Validate form input
-        $validated = $request->validate([
+        $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'email' => ['required', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'g-recaptcha-response' => ['required', 'captcha'], // AUTOMATIC reCAPTCHA validation
         ]);
 
-        // Create new user
         $user = User::create([
-            'name' => $validated['name'],
-            'email' => $validated['email'],
-            'password' => Hash::make($validated['password']),
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
         ]);
 
         event(new Registered($user));
         Auth::login($user);
 
-        return redirect()->route('profile.edit')->with('status', 'Account created successfully! Please complete your profile.');
+        return redirect()
+            ->route('profile.edit')
+            ->with('status', 'Account created successfully! Please complete your profile.');
     }
 
     /**
-     * Handle logout request
+     * Logout
      */
     public function logout(Request $request): RedirectResponse
     {
@@ -104,6 +87,8 @@ class AuthController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect()->route('home')->with('status', 'Successfully logged out!');
+        return redirect()
+            ->route('home')
+            ->with('status', 'Successfully logged out!');
     }
 }

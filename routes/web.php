@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\EventController as AdminEventController;
 use App\Http\Controllers\Admin\PortfolioController as AdminPortfolioController;
 use App\Http\Controllers\Admin\RegistrationController as AdminRegistrationController;
 use App\Http\Controllers\Admin\ReportController as AdminReportController;
+
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\GoogleAuthController;
@@ -12,8 +13,15 @@ use App\Http\Controllers\PageController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RefundController;
 use App\Http\Controllers\RegistrationController;
+
 use Illuminate\Support\Facades\Route;
 
+
+/*
+|--------------------------------------------------------------------------
+| Public Pages
+|--------------------------------------------------------------------------
+*/
 Route::get('/', [PageController::class, 'home'])->name('home');
 Route::get('/events', [EventController::class, 'index'])->name('events.index');
 Route::get('/portfolio', [PageController::class, 'portfolio'])->name('portfolio.index');
@@ -21,52 +29,102 @@ Route::get('/partnership', [PageController::class, 'partnership'])->name('partne
 Route::get('/about', [PageController::class, 'about'])->name('about.index');
 Route::get('/events/{event}', [EventController::class, 'show'])->name('events.show');
 
+
+/*
+|--------------------------------------------------------------------------
+| Authentication (Guest Only)
+|--------------------------------------------------------------------------
+*/
 Route::middleware('guest')->group(function () {
+
+    // Login
     Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
     Route::post('/login', [AuthController::class, 'login']);
 
+    // Register
     Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register');
     Route::post('/register', [AuthController::class, 'register']);
+
+    // Google OAuth (login / register)
+    Route::get('/auth/google/{action?}', [GoogleAuthController::class, 'redirect'])
+        ->whereIn('action', ['login', 'register'])
+        ->name('google.redirect');
+
+    Route::get('/auth/google/callback', [GoogleAuthController::class, 'callback'])
+        ->name('google.callback');
 });
 
-Route::middleware('guest')->group(function () {
-    Route::get('/auth/google', [GoogleAuthController::class, 'redirect'])->name('google.redirect');
-    Route::get('/auth/google/callback/login', [GoogleAuthController::class, 'callback'])->name('google.callback.login')->defaults('action', 'login');
-    Route::get('/auth/google/callback/register', [GoogleAuthController::class, 'callback'])->name('google.callback.register')->defaults('action', 'register');
-});
 
+/*
+|--------------------------------------------------------------------------
+| Logout
+|--------------------------------------------------------------------------
+*/
 Route::post('/logout', [AuthController::class, 'logout'])
     ->middleware('auth')
     ->name('logout');
 
+
+/*
+|--------------------------------------------------------------------------
+| User Protected Routes
+|--------------------------------------------------------------------------
+*/
 Route::middleware('auth')->group(function () {
+
+    // Profile
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
     Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
 
+    // Registrations (workshops)
     Route::get('/my/workshops', [RegistrationController::class, 'index'])->name('registrations.index');
     Route::get('/events/{event}/register', [RegistrationController::class, 'create'])->name('events.register');
     Route::post('/events/{event}/register', [RegistrationController::class, 'store'])->name('events.register.store');
 
     Route::get('/registrations/{registration}', [RegistrationController::class, 'show'])->name('registrations.show');
-    Route::post('/registrations/{registration}/payment-proof', [RegistrationController::class, 'uploadProof'])->name('registrations.payment-proof');
+    Route::post('/registrations/{registration}/payment-proof', [RegistrationController::class, 'uploadProof'])
+        ->name('registrations.payment-proof');
 
-    Route::post('/registrations/{registration}/refund', [RefundController::class, 'store'])->name('registrations.refund.store');
+    Route::post('/registrations/{registration}/refund', [RefundController::class, 'store'])
+        ->name('registrations.refund.store');
 });
 
-Route::middleware(['auth', 'can:access-admin'])->prefix('admin')->name('admin.')->group(function () {
-    Route::get('/', [AdminDashboardController::class, 'index'])->name('dashboard');
 
-    Route::resource('events', AdminEventController::class)->except(['show']);
+/*
+|--------------------------------------------------------------------------
+| Admin Routes
+|--------------------------------------------------------------------------
+*/
+Route::middleware(['auth', 'can:access-admin'])
+    ->prefix('admin')
+    ->name('admin.')
+    ->group(function () {
 
-    Route::get('registrations/export', [AdminRegistrationController::class, 'export'])->name('registrations.export');
-    Route::post('registrations/{registration}/verify-payment', [AdminRegistrationController::class, 'verifyPayment'])->name('registrations.verify-payment');
-    Route::post('registrations/{registration}/reject-payment', [AdminRegistrationController::class, 'rejectPayment'])->name('registrations.reject-payment');
-    Route::post('refunds/{refund}/approve', [AdminRegistrationController::class, 'approveRefund'])->name('refunds.approve');
-    Route::post('refunds/{refund}/reject', [AdminRegistrationController::class, 'rejectRefund'])->name('refunds.reject');
-    Route::resource('registrations', AdminRegistrationController::class)->only(['index', 'show']);
+        Route::get('/', [AdminDashboardController::class, 'index'])->name('dashboard');
 
-    Route::resource('portfolios', AdminPortfolioController::class)->except(['show']);
+        // Events
+        Route::resource('events', AdminEventController::class)->except(['show']);
 
-    Route::get('reports', [AdminReportController::class, 'index'])->name('reports.index');
-});
+        // Registrations
+        Route::get('registrations/export', [AdminRegistrationController::class, 'export'])
+            ->name('registrations.export');
+        Route::post('registrations/{registration}/verify-payment', [AdminRegistrationController::class, 'verifyPayment'])
+            ->name('registrations.verify-payment');
+        Route::post('registrations/{registration}/reject-payment', [AdminRegistrationController::class, 'rejectPayment'])
+            ->name('registrations.reject-payment');
+
+        // Refund
+        Route::post('refunds/{refund}/approve', [AdminRegistrationController::class, 'approveRefund'])
+            ->name('refunds.approve');
+        Route::post('refunds/{refund}/reject', [AdminRegistrationController::class, 'rejectRefund'])
+            ->name('refunds.reject');
+
+        Route::resource('registrations', AdminRegistrationController::class)->only(['index', 'show']);
+
+        // Portfolio
+        Route::resource('portfolios', AdminPortfolioController::class)->except(['show']);
+
+        // Reports
+        Route::get('reports', [AdminReportController::class, 'index'])->name('reports.index');
+    });

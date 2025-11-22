@@ -123,4 +123,13 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
+    'aliases' => [
+        'NoCaptcha' => Anhskohbo\NoCaptcha\Facades\NoCaptcha::class,
+        'Socialite' => Laravel\Socialite\Facades\Socialite::class,
+    ],
+
+    'provider' => [
+        Anhskohbo\NoCaptcha\NoCaptchaServiceProvider::class,
+        Laravel\Socialite\SocialiteServiceProvider::class,
+    ],
 ];

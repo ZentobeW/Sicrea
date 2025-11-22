@@ -6,114 +6,113 @@ use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Session;
+use Laravel\Socialite\Facades\Socialite;
 use Illuminate\Support\Facades\Log;
 
 class GoogleAuthController extends Controller
 {
     /**
-     * Redirect user to Google OAuth consent screen
+     * Redirect ke Google OAuth
      */
     public function redirect(string $action = 'login'): RedirectResponse
     {
-        $callbackRoute = $action === 'register' ? 'google.callback.register' : 'google.callback.login';
-        
-        $query = http_build_query([
-            'client_id' => config('services.google.client_id'),
-            'redirect_uri' => route($callbackRoute),
-            'response_type' => 'code',
-            'scope' => 'openid email profile',
-            'access_type' => 'offline',
-        ]);
+        // Simpan action ke session agar dipakai di callback
+        Session::put('google_action', $action);
 
-        return redirect("https://accounts.google.com/o/oauth2/v2/auth?{$query}");
+        return Socialite::driver('google')->redirect();
     }
 
     /**
-     * Handle Google OAuth callback
+     * Callback Google OAuth (1 endpoint untuk login & register)
      */
-    public function callback(string $action = 'login'): RedirectResponse
+    public function callback(): RedirectResponse
     {
-        $code = request('code');
-        $state = request('state');
-
-        if (!$code) {
-            return redirect()->route('login')->withErrors(['oauth' => 'Google authentication failed.']);
-        }
-
         try {
-            $callbackRoute = $action === 'register' ? 'google.callback.register' : 'google.callback.login';
-            
-            // Exchange authorization code for access token
-            $response = Http::post('https://oauth2.googleapis.com/token', [
-                'client_id' => config('services.google.client_id'),
-                'client_secret' => config('services.google.client_secret'),
-                'code' => $code,
-                'grant_type' => 'authorization_code',
-                'redirect_uri' => route($callbackRoute),
-            ]);
+            // Ambil action dari session
+            $action = Session::get('google_action', 'login');
 
-            $accessToken = $response->json('access_token');
+            // Ambil data user Google
+            $googleUser = Socialite::driver('google')->user();
 
-            // Get user info from Google
-            $userResponse = Http::withToken($accessToken)->get('https://www.googleapis.com/oauth2/v2/userinfo');
-            $googleUser = $userResponse->json();
+            $googleId = $googleUser->getId();
+            $email    = $googleUser->getEmail();
+            $name     = $googleUser->getName() ?? 'User';
 
-            if (!isset($googleUser['email'])) {
-                return redirect()->route('login')->withErrors(['oauth' => 'Unable to get email from Google.']);
+            if (!$email) {
+                return redirect()->route('login')
+                    ->withErrors(['oauth' => 'Google account does not have an email.']);
             }
 
-            // Handle Sign In
+            /* =====================================================
+             | CASE 1 → LOGIN FLOW
+             ===================================================== */
             if ($action === 'login') {
-                $user = User::where('google_id', $googleUser['id'])
-                    ->orWhere('email', $googleUser['email'])
+
+                // Cari user berdasarkan google_id atau email
+                $user = User::where('google_id', $googleId)
+                    ->orWhere('email', $email)
                     ->first();
 
+                // User tidak ada → suruh daftar dulu
                 if (!$user) {
-                    return redirect()->route('login')->withErrors(['oauth' => 'No account found. Please register first.']);
+                    return redirect()->route('register')
+                        ->withErrors(['oauth' => 'Akun tidak ditemukan. Silakan daftar terlebih dahulu.']);
                 }
 
-                // Update google_id if not set
+                // Jika email cocok tapi google_id belum tersimpan → sambungkan Google
                 if (!$user->google_id) {
                     $user->update([
-                        'google_id' => $googleUser['id'],
+                        'google_id'      => $googleId,
                         'oauth_provider' => 'google',
                     ]);
                 }
 
+                // Login user
                 Auth::login($user);
 
-                return redirect()->intended(route('home'))->with('status', 'Successfully signed in with Google!');
+                return redirect()->intended(route('home'))
+                    ->with('status', 'Berhasil masuk dengan Google!');
             }
 
-            // Handle Sign Up
+
+            /* =====================================================
+             | CASE 2 → REGISTER FLOW
+             ===================================================== */
             if ($action === 'register') {
-                // Check if email already exists
-                $existingUser = User::where('email', $googleUser['email'])->first();
-                if ($existingUser) {
-                    return redirect()->route('register')->withErrors(['email' => 'Email already registered. Please login instead.']);
+
+                // Email sudah ada → minta login
+                if (User::where('email', $email)->exists()) {
+                    return redirect()->route('login')
+                        ->withErrors(['email' => 'Email sudah terdaftar. Silakan login.']);
                 }
 
-                // Create new user
+                // Buat pengguna baru dengan Google
                 $user = User::create([
-                    'name' => $googleUser['name'] ?? 'User',
-                    'email' => $googleUser['email'],
-                    'google_id' => $googleUser['id'],
+                    'name'           => $name,
+                    'email'          => $email,
+                    'google_id'      => $googleId,
                     'oauth_provider' => 'google',
-                    'password' => bcrypt(uniqid()), // Random password for OAuth users
+                    'password'       => Hash::make(uniqid()), // random password
                 ]);
 
                 event(new Registered($user));
                 Auth::login($user);
 
-                return redirect()->route('profile.edit')->with('status', 'Account created successfully! Please complete your profile.');
+                return redirect()->route('profile.edit')
+                    ->with('status', 'Akun berhasil dibuat menggunakan Google!');
             }
 
+            // fallback
             return redirect()->route('home');
 
         } catch (\Exception $e) {
+
             Log::error('Google OAuth Error: ' . $e->getMessage());
-            return redirect()->route('login')->withErrors(['oauth' => 'Authentication failed. Please try again.']);
+
+            return redirect()->route('login')
+                ->withErrors(['oauth' => 'Google authentication failed. Coba lagi.']);
         }
     }
 }

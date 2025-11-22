@@ -3,6 +3,10 @@
     'isAdmin' => false,
 ])
 
+@php
+    use Illuminate\Support\Facades\Route;
+@endphp
+
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
@@ -30,24 +34,34 @@
                         <a href="{{ route('partnership.index') }}" class="hover:text-[#7C3A2D] transition">Partnership</a>
                         <a href="{{ route('about.index') }}" class="hover:text-[#7C3A2D] transition">About Us</a>
                     </nav>
+
                     <div class="flex items-center gap-3 text-sm">
                         @auth
                             <a href="{{ route('profile.show') }}" class="hidden md:inline-flex items-center rounded-full border border-[#F7C8B8] px-4 py-2 font-medium text-[#7C3A2D] bg-white/70 hover:bg-white transition">Profil Saya</a>
+
                             @can('access-admin')
                                 <a href="{{ route('admin.dashboard') }}" class="hidden md:inline-flex items-center rounded-full border border-[#F7C8B8] px-4 py-2 font-medium text-[#7C3A2D] bg-white/70 hover:bg-white transition">Dashboard Admin</a>
                             @endcan
+
                             @if (Route::has('logout'))
                                 <form method="POST" action="{{ route('logout') }}">
                                     @csrf
-                                    <button class="inline-flex items-center rounded-full bg-[#7C3A2D] px-4 py-2 font-semibold text-white hover:bg-[#5c261d] transition">Keluar</button>
+                                    <button class="inline-flex items-center rounded-full bg-[#7C3A2D] px-4 py-2 font-semibold text-white hover:bg-[#5c261d] transition">
+                                        Keluar
+                                    </button>
                                 </form>
                             @endif
                         @else
                             @if (Route::has('login'))
-                                <a href="{{ route('login') }}" class="inline-flex items-center rounded-full border border-[#F7C8B8] px-4 py-2 font-semibold text-[#7C3A2D] bg-white/70 hover:bg-white transition">Login</a>
+                                <a href="{{ route('login') }}" class="inline-flex items-center rounded-full border border-[#F7C8B8] px-4 py-2 font-semibold text-[#7C3A2D] bg-white/70 hover:bg-white transition">
+                                    Login
+                                </a>
                             @endif
+
                             @if (Route::has('register'))
-                                <a href="{{ route('register') }}" class="inline-flex items-center rounded-full bg-[#7C3A2D] px-4 py-2 font-semibold text-white hover:bg-[#5c261d] transition">Registrasi</a>
+                                <a href="{{ route('register') }}" class="inline-flex items-center rounded-full bg-[#7C3A2D] px-4 py-2 font-semibold text-white hover:bg-[#5c261d] transition">
+                                    Registrasi
+                                </a>
                             @endif
                         @endauth
                     </div>
@@ -82,8 +96,11 @@
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 grid gap-8 md:grid-cols-3">
                     <div class="space-y-3">
                         <h3 class="text-xl font-semibold">{{ config('app.name', 'Sicrea') }}</h3>
-                        <p class="text-sm leading-relaxed text-[#F7C8B8]">Platform online untuk pendaftaran workshop, pengelolaan event, dan showcase portofolio kreatif komunitas.</p>
+                        <p class="text-sm leading-relaxed text-[#F7C8B8]">
+                            Platform online untuk pendaftaran workshop, pengelolaan event, dan showcase portofolio kreatif komunitas.
+                        </p>
                     </div>
+
                     <div class="space-y-3">
                         <h3 class="text-xl font-semibold">Kontak Kami</h3>
                         <ul class="space-y-2 text-sm text-[#F7C8B8]">
@@ -97,10 +114,13 @@
                             </li>
                             <li class="flex items-center gap-2">
                                 <x-heroicon-o-envelope class="h-5 w-5" />
-                                <a href="mailto:info@kreasihangat.com" class="underline decoration-[#F7C8B8] hover:text-white">info@kreasihangat.com</a>
+                                <a href="mailto:info@kreasihangat.com" class="underline decoration-[#F7C8B8] hover:text-white">
+                                    info@kreasihangat.com
+                                </a>
                             </li>
                         </ul>
                     </div>
+
                     <div class="space-y-3">
                         <h3 class="text-xl font-semibold">Ikuti Kami</h3>
                         <p class="text-sm text-[#F7C8B8]">@kreasihangat</p>
@@ -111,6 +131,7 @@
                         </div>
                     </div>
                 </div>
+
                 <div class="border-t border-white/10">
                     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 text-center text-sm text-[#F7C8B8]">
                         &copy; {{ now()->year }} {{ config('app.name', 'Sicrea') }}. Made with
@@ -120,6 +141,7 @@
             </footer>
         </div>
     @endif
+
     @stack('scripts')
 </body>
 </html>
