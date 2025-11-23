@@ -1,0 +1,14 @@
+### 1. Tahap Persiapan
+# Import package/library yang diperlukan
+
+import pandas as pd
+import numpy as np
+import seaborn as sns
+import matplotlib.pyplot as plt
+# untuk pre-processing teks
+import re, string
+# bag of words
+from sklearn.feature_extraction.text import TfidfVectorizer
+#untuk pembangunan model
+from sklearn.naive_bayes import MultinomialNB
+from sklearn.metrics import classification_report, f1_score, accuracy_score, confusion_matrix

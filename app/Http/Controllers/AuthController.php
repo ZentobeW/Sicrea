@@ -9,6 +9,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rules\Password;
 
 class AuthController extends Controller
 {
@@ -60,7 +61,14 @@ class AuthController extends Controller
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'password' => ['required', 'string', 'confirmed',
+                Password::min(8)       // Minimal 8 karakter
+                    ->letters()        // Wajib mengandung huruf (kecil)
+                    ->mixedCase()      // Wajib mengandung huruf kapital
+                    ->numbers()        // Wajib mengandung angka
+                    ->symbols()        // Wajib mengandung simbol
+        ],
+            'password_confirmation' => ['required', 'string', 'min:8'],
             'g-recaptcha-response' => ['required', 'captcha'], // AUTOMATIC reCAPTCHA validation
         ]);
 

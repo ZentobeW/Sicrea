@@ -30,7 +30,7 @@ class User extends Authenticatable
         'password',
         'google_id',
         'oauth_provider',
-        'admin', // Added admin attribute
+        'is_admin', // Added admin attribute
     ];
 
     /**
@@ -54,14 +54,14 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
             'birth_date' => 'date',
-            'admin' => 'boolean', // Added admin cast
+            'is_admin' => 'boolean', // Added admin cast
         ];
     }
 
     // Added isAdmin() method
     public function isAdmin(): bool
     {
-        return (bool) $this->admin;
+        return (bool) $this->is_admin;
     }
 
     // Added registrations relationship

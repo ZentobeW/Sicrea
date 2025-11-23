@@ -111,6 +111,9 @@
                                 <input id="password" type="password" name="password"
                                        class="w-full rounded-2xl border border-[#F7C8B8] bg-white/80 px-4 py-3 text-sm text-[#7C3A2D]
                                        focus:ring-2 focus:ring-[#F5A38D]" required>
+                                @error('password')
+                                    <p class="text-xs text-red-600 mt-1">{{  $message }}</p>
+                                @enderror
                             </div>
 
                             {{-- PASSWORD CONFIRM --}}
@@ -119,6 +122,9 @@
                                 <input id="password_confirmation" type="password" name="password_confirmation"
                                        class="w-full rounded-2xl border border-[#F7C8B8] bg-white/80 px-4 py-3 text-sm text-[#7C3A2D]
                                        focus:ring-2 focus:ring-[#F5A38D]" required>
+                                @error('password_confirmation')
+                                    <p class="text-xs text-red-600 mt-1">{{  $message }}</p>
+                                @enderror
                             </div>
 
                             {{-- RECAPTCHA --}}
