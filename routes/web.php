@@ -14,8 +14,10 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RefundController;
 use App\Http\Controllers\RegistrationController;
 
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-
+use Illuminate\Support\Facades\Mail;
+use App\Mail\TestSendGridMail;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,7 +30,6 @@ Route::get('/portfolio', [PageController::class, 'portfolio'])->name('portfolio.
 Route::get('/partnership', [PageController::class, 'partnership'])->name('partnership.index');
 Route::get('/about', [PageController::class, 'about'])->name('about.index');
 Route::get('/events/{event}', [EventController::class, 'show'])->name('events.show');
-
 
 /*
 |--------------------------------------------------------------------------
@@ -54,7 +55,6 @@ Route::middleware('guest')->group(function () {
         ->name('google.callback');
 });
 
-
 /*
 |--------------------------------------------------------------------------
 | Logout
@@ -63,7 +63,6 @@ Route::middleware('guest')->group(function () {
 Route::post('/logout', [AuthController::class, 'logout'])
     ->middleware('auth')
     ->name('logout');
-
 
 /*
 |--------------------------------------------------------------------------
@@ -89,7 +88,6 @@ Route::middleware('auth')->group(function () {
     Route::post('/registrations/{registration}/refund', [RefundController::class, 'store'])
         ->name('registrations.refund.store');
 });
-
 
 /*
 |--------------------------------------------------------------------------
@@ -128,3 +126,27 @@ Route::middleware(['auth', 'can:access-admin'])
         // Reports
         Route::get('reports', [AdminReportController::class, 'index'])->name('reports.index');
     });
+
+/*
+|--------------------------------------------------------------------------
+| SENDGRID SMTP TEST ROUTE (Development Mode)
+|--------------------------------------------------------------------------
+*/
+Route::get('/test-email', function (Request $request) {
+    if (! app()->environment(['local', 'development', 'testing'])) {
+        abort(404);
+    }
+
+    $to = $request->string('to')->value()
+        ?: config('mail.test_recipient')
+        ?: config('mail.admin_address')
+        ?: config('mail.from.address');
+
+    if (! $to) {
+        return 'Set MAIL_TEST_RECIPIENT di .env atau tambahkan parameter ?to=email@domain.test';
+    }
+
+    Mail::to($to)->send(new TestSendGridMail());
+
+    return "Email test berhasil dikirim ke {$to}!";
+});

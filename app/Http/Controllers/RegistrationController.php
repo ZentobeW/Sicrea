@@ -123,13 +123,16 @@ class RegistrationController extends Controller
 
         $registration->loadMissing(['event', 'user']);
 
-        Mail::to(config('mail.from.address'))
-            ->queue(new PaymentProofUploaded($registration));
+        $adminEmail = config('mail.admin_address') ?? config('mail.from.address');
+
+        if ($adminEmail) {
+            Mail::to($adminEmail)->queue(new PaymentProofUploaded($registration));
+        }
 
         Email::create([
             'registration_id' => $registration->id,
             'type' => 'payment_proof_uploaded',
-            'recipient' => config('mail.from.address'),
+            'recipient' => $adminEmail,
             'subject' => 'Bukti Pembayaran Baru',
             'payload' => [
                 'registration_id' => $registration->id,

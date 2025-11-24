@@ -34,13 +34,16 @@ class RefundController extends Controller
 
         $refund->loadMissing('transaction.registration.event', 'transaction.registration.user');
 
-        Mail::to(config('mail.from.address'))
-            ->queue(new RefundRequested($refund));
+        $adminEmail = config('mail.admin_address') ?? config('mail.from.address');
+
+        if ($adminEmail) {
+            Mail::to($adminEmail)->queue(new RefundRequested($refund));
+        }
 
         Email::create([
             'registration_id' => $registration->id,
             'type' => 'refund_requested',
-            'recipient' => config('mail.from.address'),
+            'recipient' => $adminEmail,
             'subject' => 'Permintaan Refund Baru',
             'payload' => [
                 'registration_id' => $registration->id,
