@@ -34,6 +34,15 @@ class RegistrationController extends Controller
             abort(404);
         }
 
+        $user = auth()->user();
+
+        // Wajib lengkapi profil dasar sebelum daftar
+        if (! $user->phone || ! $user->province || ! $user->city || ! $user->address) {
+            return redirect()
+                ->route('profile.edit')
+                ->with('status', 'Lengkapi nomor telepon, provinsi, kota, dan alamat sebelum mendaftar event.');
+        }
+
         return view('registrations.create', compact('event'));
     }
 

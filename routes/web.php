@@ -85,6 +85,8 @@ Route::middleware('auth')->group(function () {
     Route::post('/registrations/{registration}/payment-proof', [RegistrationController::class, 'uploadProof'])
         ->name('registrations.payment-proof');
 
+    Route::get('/registrations/{registration}/refund', [RefundController::class, 'create'])
+        ->name('registrations.refund.create');
     Route::post('/registrations/{registration}/refund', [RefundController::class, 'store'])
         ->name('registrations.refund.store');
 });

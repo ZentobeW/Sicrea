@@ -1,188 +1,173 @@
-@php($tabs = $tabs ?? [
-    ['label' => 'Event', 'route' => route('admin.events.index'), 'active' => request()->routeIs('admin.events.*'), 'icon' => 'calendar'],
-    ['label' => 'Pendaftaran', 'route' => route('admin.registrations.index'), 'active' => request()->routeIs('admin.registrations.*'), 'icon' => 'document-text'],
-    ['label' => 'Portofolio', 'route' => route('admin.portfolios.index'), 'active' => request()->routeIs('admin.portfolios.*'), 'icon' => 'photo'],
-])
+@php
+    use Illuminate\Support\Facades\Storage;
+    $transaction = $registration->transaction;
+@endphp
 
-@php use Illuminate\Support\Facades\Storage; @endphp
+<x-layouts.admin
+    title="Kelola Transaksi"
+    :back-url="route('admin.registrations.index')"
+>
+    <section class="py-12">
+        <div class="max-w-5xl mx-auto space-y-8">
+            <div class="relative overflow-hidden rounded-[32px] bg-gradient-to-br from-[#FFE3D3] via-[#FFF3EA] to-white p-6 shadow-lg shadow-[#FFD7BE]/40 sm:p-7">
+                <div class="absolute -right-10 -top-10 h-44 w-44 rounded-full bg-[#FFE3D3]/60 blur-3xl"></div>
+                <div class="absolute -left-14 bottom-0 h-36 w-36 rounded-full bg-[#FFF3EA]/70 blur-3xl"></div>
 
-
-@php($transaction = $registration->transaction)
-
-<x-layouts.admin :title="$registration->user->name" :subtitle="$registration->user->email" :tabs="$tabs" :back-url="route('admin.registrations.index')">
-    <div class="grid gap-8 lg:grid-cols-[2fr,1fr]">
-        <section class="space-y-6 rounded-3xl border border-slate-200/60 bg-white/95 p-6 sm:p-8 shadow-xl">
-            <div class="grid gap-4 md:grid-cols-2 text-sm text-slate-600">
-                <div>
-                    <span class="font-semibold text-slate-700 block">Event</span>
-                    <p class="mt-1 text-base font-semibold text-slate-900">{{ $registration->event->title }}</p>
-                    <p class="text-xs text-slate-500">{{ $registration->event->start_at->translatedFormat('d M Y H:i') }}</p>
-                    <p class="text-xs text-slate-500">{{ $registration->event->venue_name }}</p>
-                    <p class="text-xs text-slate-500">{{ $registration->event->venue_address }}</p>
-                    <p class="text-[11px] text-slate-500">Tutor: {{ $registration->event->tutor_name }}</p>
-                </div>
-                <div>
-                    <span class="font-semibold text-slate-700 block">Status Pendaftaran</span>
-                    <span class="mt-1 inline-flex items-center gap-2 rounded-full bg-indigo-50 px-3 py-1 text-xs font-semibold text-indigo-600">
-                        <span class="h-2 w-2 rounded-full bg-indigo-400"></span>
-                        {{ $registration->status->label() }}
-                    </span>
-                </div>
-                <div>
-                    <span class="font-semibold text-slate-700 block">Status Pembayaran</span>
-                    <span @class([
-                        'mt-1 inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-semibold transition',
-                        'bg-emerald-100 text-emerald-600 ring-1 ring-emerald-500/20' => ($transaction?->status?->value ?? null) === 'verified',
-                        'bg-amber-100 text-amber-600 ring-1 ring-amber-500/20' => ($transaction?->status?->value ?? null) === 'pending',
-                        'bg-rose-100 text-rose-600 ring-1 ring-rose-500/20' => ($transaction?->status?->value ?? null) === 'rejected',
-                        'bg-slate-100 text-slate-600 ring-1 ring-slate-500/10' => ! in_array($transaction?->status?->value ?? '', ['verified', 'pending', 'rejected']),
-                    ])>
-                        <span class="h-2 w-2 rounded-full {{ match ($transaction?->status?->value) {
-                            'verified' => 'bg-emerald-500',
-                            'pending' => 'bg-amber-500',
-                            'rejected' => 'bg-rose-500',
-                            default => 'bg-slate-400',
-                        } }}"></span>
-                        {{ $transaction?->status->label() ?? 'Tidak ada data' }}
-                    </span>
-                </div>
-                <div>
-                    <span class="font-semibold text-slate-700 block">Nominal</span>
-                    <p class="mt-1 text-base font-semibold text-slate-900">Rp{{ number_format($registration->amount ?? 0, 0, ',', '.') }}</p>
+                <div class="flex flex-wrap items-center justify-between gap-4">
+                    <div class="flex items-center gap-3">
+                        <a
+                            href="{{ route('admin.registrations.index') }}"
+                            class="inline-flex items-center gap-2 rounded-full bg-[#822021] px-4 py-2 text-sm font-semibold text-[#FAF8F1] shadow-md shadow-[#B49F9A]/30 transition hover:-translate-y-0.5 hover:bg-[#822021]/70"
+                        >
+                            <x-heroicon-o-arrow-left-on-rectangle class="h-4 w-4" />
+                            Kembali
+                        </a>
+                        <h1 class="text-2xl font-semibold text-[#2C1E1E] sm:text-3xl">Detail Transaksi</h1>
+                    </div>
                 </div>
             </div>
 
-            <div class="rounded-2xl border border-dashed border-slate-200 bg-white/80 p-6">
-                <h2 class="text-sm font-semibold text-slate-700">Data Peserta</h2>
-                <dl class="mt-4 grid gap-x-6 gap-y-3 md:grid-cols-2 text-sm text-slate-600">
-                    @foreach ($registration->form_data as $key => $value)
-                        <div>
-                            <dt class="font-medium text-slate-700 capitalize">{{ str_replace('_', ' ', $key) }}</dt>
-                            <dd class="mt-1">{{ $value }}</dd>
-                        </div>
-                    @endforeach
+            <div class="rounded-[28px] border border-[#FAD6C7] bg-white/95 p-6 shadow-xl shadow-[#FFD7BE]/40 sm:p-7">
+                <dl class="grid gap-x-8 gap-y-5 text-sm text-[#6F4F4F] sm:grid-cols-2">
+                    <div class="space-y-1">
+                        <dt class="text-[11px] font-semibold uppercase tracking-[0.25em] text-[#B87A7A]">ID Transaksi</dt>
+                        <dd class="text-base font-semibold text-[#2C1E1E]">#{{ str_pad($registration->id, 4, '0', STR_PAD_LEFT) }}</dd>
+                    </div>
+                    <div class="space-y-1">
+                        <dt class="text-[11px] font-semibold uppercase tracking-[0.25em] text-[#B87A7A]">Judul Event</dt>
+                        <dd class="text-base font-semibold text-[#2C1E1E]">{{ $registration->event->title }}</dd>
+                        <dd class="text-xs text-[#B87A7A]">{{ optional($registration->event->start_at)->translatedFormat('d M Y H:i') }}</dd>
+                    </div>
+                    <div class="space-y-1">
+                        <dt class="text-[11px] font-semibold uppercase tracking-[0.25em] text-[#B87A7A]">Nama Peserta</dt>
+                        <dd class="text-base font-semibold text-[#2C1E1E]">{{ $registration->user->name }}</dd>
+                    </div>
+                    <div class="space-y-1">
+                        <dt class="text-[11px] font-semibold uppercase tracking-[0.25em] text-[#B87A7A]">Email Peserta</dt>
+                        <dd class="text-base font-semibold text-[#2C1E1E]">{{ $registration->user->email }}</dd>
+                    </div>
+                    <div class="space-y-1">
+                        <dt class="text-[11px] font-semibold uppercase tracking-[0.25em] text-[#B87A7A]">Jumlah Bayar</dt>
+                        <dd class="text-base font-semibold text-[#2C1E1E]">Rp{{ number_format($transaction?->amount ?? $registration->amount ?? 0, 0, ',', '.') }}</dd>
+                    </div>
+                    <div class="space-y-1">
+                        <dt class="text-[11px] font-semibold uppercase tracking-[0.25em] text-[#B87A7A]">Metode Pembayaran</dt>
+                        <dd class="text-base font-semibold text-[#2C1E1E]">{{ $transaction?->payment_method ?? config('payment.method', 'Virtual Account') }}</dd>
+                    </div>
+                    <div class="space-y-1">
+                        <dt class="text-[11px] font-semibold uppercase tracking-[0.25em] text-[#B87A7A]">Tanggal Transaksi</dt>
+                        <dd class="text-base font-semibold text-[#2C1E1E]">
+                            {{ optional($transaction?->paid_at ?? $registration->registered_at)->translatedFormat('d M Y H:i') ?? '-' }}
+                        </dd>
+                    </div>
+                    <div class="space-y-1">
+                        <dt class="text-[11px] font-semibold uppercase tracking-[0.25em] text-[#B87A7A]">Status</dt>
+                        <dd>
+                            <span @class([
+                                'inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-semibold',
+                                'bg-[#FCE2CF] text-[#C65B74]' => in_array($transaction?->status?->value ?? '', ['pending', 'awaiting_verification']),
+                                'bg-[#E4F5E9] text-[#2F9A55]' => ($transaction?->status?->value ?? null) === 'verified',
+                                'bg-[#FDE1E7] text-[#BA1B1D]' => ($transaction?->status?->value ?? null) === 'rejected',
+                                'bg-[#E5E7EB] text-[#4B5563]' => ! in_array($transaction?->status?->value ?? '', ['pending', 'awaiting_verification', 'verified', 'rejected']),
+                            ])>
+                                <span class="h-2 w-2 rounded-full {{ match ($transaction?->status?->value) {
+                                    'pending', 'awaiting_verification' => 'bg-[#FF8A64]',
+                                    'verified' => 'bg-[#2F9A55]',
+                                    'rejected' => 'bg-[#BA1B1D]',
+                                    default => 'bg-[#6B7280]',
+                                } }}"></span>
+                                {{ $transaction?->status->label() ?? 'Tidak ada data' }}
+                            </span>
+                        </dd>
+                    </div>
                 </dl>
-            </div>
 
-            @if ($registration->payment_proof_path)
-                <div class="rounded-2xl border border-slate-200 bg-slate-50/70 p-6">
-                    <h2 class="text-sm font-semibold text-slate-700">Bukti Pembayaran</h2>
-                    <p class="mt-2 text-sm text-slate-500">Periksa kecocokan nominal dan detail transfer sebelum verifikasi.</p>
-                    <a href="{{ Storage::disk('public')->url($registration->payment_proof_path) }}" target="_blank" class="mt-3 inline-flex items-center gap-2 text-sm font-semibold bg-[#822021] text-[#FAF8F1] px-3 py-2 rounded-full hover:bg-[#822021]/70 transition">Lihat Bukti →</a>
-                </div>
-            @endif
-
-            <div class="rounded-2xl border border-dashed border-slate-200 bg-white/80 p-6">
-                <h2 class="text-sm font-semibold text-slate-700">Riwayat Aktivitas</h2>
-                <ol class="mt-4 space-y-3 text-sm text-slate-600">
-                    <li class="flex items-start gap-3">
-                        <span class="mt-1 h-2 w-2 rounded-full bg-slate-400"></span>
+                <div class="mt-6 rounded-2xl border border-[#FAD6C7] bg-[#FFF7F1]/80 px-4 py-3">
+                    <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                         <div>
-                            <p class="font-medium text-slate-700">Pendaftaran dibuat</p>
-                            <p class="text-xs text-slate-500">{{ optional($registration->registered_at)->translatedFormat('d M Y H:i') ?? '-' }}</p>
+                            <p class="text-[11px] font-semibold uppercase tracking-[0.25em] text-[#B87A7A]">Bukti Pembayaran</p>
+                            <p class="text-sm text-[#6F4F4F]">Periksa kecocokan nominal sebelum verifikasi.</p>
                         </div>
-                    </li>
-                    @if ($transaction?->paid_at)
-                        <li class="flex items-start gap-3">
-                            <span class="mt-1 h-2 w-2 rounded-full bg-amber-500"></span>
-                            <div>
-                                <p class="font-medium text-slate-700">Bukti pembayaran diunggah</p>
-                                <p class="text-xs text-slate-500">{{ $transaction->paid_at->translatedFormat('d M Y H:i') }}</p>
-                            </div>
-                        </li>
-                    @endif
-                    @if ($transaction?->verified_at)
-                        <li class="flex items-start gap-3">
-                            <span class="mt-1 h-2 w-2 rounded-full bg-emerald-500"></span>
-                            <div>
-                                <p class="font-medium text-slate-700">Pembayaran terverifikasi</p>
-                                <p class="text-xs text-slate-500">{{ $transaction->verified_at->translatedFormat('d M Y H:i') }}</p>
-                            </div>
-                        </li>
-                    @endif
-                    @if ($transaction?->refund)
-                        <li class="flex items-start gap-3">
-                            <span class="mt-1 h-2 w-2 rounded-full bg-indigo-500"></span>
-                            <div>
-                                <p class="font-medium text-slate-700">Refund diminta</p>
-                                <p class="text-xs text-slate-500">{{ optional($transaction->refund->requested_at)->translatedFormat('d M Y H:i') ?? '-' }}</p>
-                            </div>
-                        </li>
-                        @if ($transaction->refund->processed_at)
-                            <li class="flex items-start gap-3">
-                                <span class="mt-1 h-2 w-2 rounded-full {{ in_array($transaction->refund->status->value, ['approved', 'completed']) ? 'bg-emerald-500' : 'bg-rose-500' }}"></span>
-                                <div>
-                                    <p class="font-medium text-slate-700">Refund diproses ({{ $transaction->refund->status->label() }})</p>
-                                    <p class="text-xs text-slate-500">{{ $transaction->refund->processed_at->translatedFormat('d M Y H:i') }}</p>
-                                </div>
-                            </li>
+                        @if ($registration->payment_proof_path)
+                            <a
+                                href="{{ Storage::disk('public')->url($registration->payment_proof_path) }}"
+                                target="_blank"
+                                class="inline-flex items-center gap-2 rounded-full bg-[#822021] px-4 py-2 text-xs font-semibold text-[#FAF8F1] shadow-md shadow-[#B49F9A]/30 transition hover:-translate-y-0.5 hover:bg-[#822021]/70"
+                            >
+                                Lihat Bukti
+                                <x-heroicon-o-arrow-up-right class="h-4 w-4" />
+                            </a>
+                        @else
+                            <p class="text-sm font-semibold text-[#C65B74]">Belum ada bukti pembayaran yang diunggah.</p>
                         @endif
-                    @endif
-                </ol>
-            </div>
-        </section>
-
-        <aside class="space-y-6">
-            <div class="rounded-3xl border border-white/60 bg-white/80 p-6 shadow-xl backdrop-blur">
-                <h2 class="text-base font-semibold text-slate-800">Tindakan Admin</h2>
-                <p class="mt-2 text-sm text-slate-500">Verifikasi pembayaran atau mintalah peserta mengunggah ulang jika data belum valid.</p>
-                <div class="mt-4 space-y-3">
-                    @if ($transaction?->status?->value === 'awaiting_verification')
-                        <form method="POST" action="{{ route('admin.registrations.verify-payment', $registration) }}">
-                            @csrf
-                            <button class="w-full inline-flex items-center justify-center gap-2 rounded-full bg-[#822021] px-4 py-2 text-sm font-semibold text-[#FAF8F1] shadow-lg shadow-[#B49F9A]/30 transition hover:-translate-y-0.5 hover:bg-[#822021]/70">Verifikasi Pembayaran</button>
-                        </form>
-                        <form method="POST" action="{{ route('admin.registrations.reject-payment', $registration) }}">
-                            @csrf
-                            <button class="w-full inline-flex items-center justify-center gap-2 rounded-full bg-[#822021] px-4 py-2 text-sm font-semibold text-[#FAF8F1] shadow-lg shadow-[#B49F9A]/30 transition hover:-translate-y-0.5 hover:bg-[#822021]/70">Tolak Pembayaran</button>
-                        </form>
-                    @else
-                        <p class="text-sm text-slate-500">Pembayaran telah diproses. Anda dapat mengelola refund jika diperlukan.</p>
-                    @endif
+                    </div>
                 </div>
             </div>
+        </div>
+    </section>
 
-            @if ($transaction?->refund)
-                <div class="rounded-3xl border border-white/60 bg-white/80 p-6 shadow-xl backdrop-blur">
-                    <h2 class="text-base font-semibold text-slate-800">Permintaan Refund</h2>
-                    <p class="mt-2 text-sm text-slate-500">Status: <span class="font-semibold text-slate-700">{{ $transaction->refund->status->label() }}</span></p>
-                    <p class="mt-2 text-sm text-slate-500">Alasan peserta:</p>
-                    <p class="mt-1 rounded-2xl border border-slate-200 bg-slate-50/80 px-4 py-3 text-sm text-slate-600">{{ $transaction->refund->reason ?? '-' }}</p>
-
-                    @if ($transaction->refund->status->value === 'pending')
-                        <div class="mt-4 space-y-3">
-                            <form method="POST" action="{{ route('admin.refunds.approve', $transaction->refund) }}">
-                                @csrf
-                                <button class="w-full inline-flex items-center justify-center gap-2 rounded-full bg-[#822021] px-4 py-2 text-sm font-semibold text-[#FAF8F1] shadow-lg shadow-[#B49F9A]/30 transition hover:-translate-y-0.5 hover:bg-[#822021]/70">Setujui Refund</button>
-                            </form>
-                            <form method="POST" action="{{ route('admin.refunds.reject', $transaction->refund) }}">
-                                @csrf
-                                <button class="w-full inline-flex items-center justify-center gap-2 rounded-full bg-[#822021] px-4 py-2 text-sm font-semibold text-[#FAF8F1] shadow-lg shadow-[#B49F9A]/30 transition hover:-translate-y-0.5 hover:bg-[#822021]/70">Tolak Refund</button>
-                            </form>
-                        </div>
-                    @endif
+    @if ($transaction?->refund)
+        @php($refund = $transaction->refund)
+        <section class="py-6">
+            <div class="max-w-5xl mx-auto rounded-[28px] border border-[#FAD6C7] bg-white/95 p-6 shadow-xl shadow-[#FFD7BE]/40 sm:p-7">
+                <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                    <div>
+                        <p class="text-[11px] font-semibold uppercase tracking-[0.3em] text-[#C65B74]">Detail Refund</p>
+                        <h2 class="text-xl font-semibold text-[#2C1E1E]">Alasan & Catatan Admin</h2>
+                        <p class="text-xs text-[#9A5A46]">Kelola status refund, alasan peserta, dan catatan admin.</p>
+                    </div>
+                    <span @class([
+                        'inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-semibold',
+                        'bg-[#FCE2CF] text-[#C65B74]' => $refund->status->value === 'pending',
+                        'bg-[#E4F5E9] text-[#2F9A55]' => in_array($refund->status->value, ['approved', 'completed']),
+                        'bg-[#FDE1E7] text-[#BA1B1D]' => $refund->status->value === 'rejected',
+                        'bg-[#E5E7EB] text-[#4B5563]' => ! in_array($refund->status->value, ['pending', 'approved', 'completed', 'rejected']),
+                    ])>
+                        <span class="h-2 w-2 rounded-full {{ match ($refund->status->value) {
+                            'pending' => 'bg-[#FF8A64]',
+                            'approved', 'completed' => 'bg-[#2F9A55]',
+                            'rejected' => 'bg-[#BA1B1D]',
+                            default => 'bg-[#6B7280]',
+                        } }}"></span>
+                        {{ $refund->status->label() }}
+                    </span>
                 </div>
-            @endif
 
-            <div class="rounded-3xl border border-white/60 bg-white/80 p-6 shadow-xl backdrop-blur">
-                <h2 class="text-base font-semibold text-slate-800">Riwayat Email</h2>
-                @if($registration->emails->isEmpty())
-                    <p class="mt-2 text-sm text-slate-500">Belum ada email yang tercatat untuk pendaftaran ini.</p>
-                @else
-                    <ul class="mt-3 space-y-3 text-sm">
-                        @foreach ($registration->emails as $email)
-                            <li class="rounded-2xl border border-slate-200 bg-white/60 px-4 py-3">
-                                <div class="flex items-center justify-between">
-                                    <span class="font-medium text-slate-700">{{ $email->subject }}</span>
-                                    <span class="text-xs text-slate-500">{{ optional($email->sent_at)->translatedFormat('d M Y H:i') ?? '-' }}</span>
-                                </div>
-                                <p class="mt-1 text-xs text-slate-500">Dikirim ke: {{ $email->recipient }}</p>
-                                <p class="mt-0.5 text-[11px] text-slate-500">Tipe: {{ str_replace('_', ' ', $email->type) }}</p>
-                            </li>
-                        @endforeach
-                    </ul>
+                <div class="mt-5 grid gap-4 text-sm text-[#6F4F4F] sm:grid-cols-2">
+                    <div class="space-y-2 rounded-2xl bg-[#FFF5EF] px-4 py-3">
+                        <p class="text-[11px] font-semibold uppercase tracking-[0.3em] text-[#C65B74]">Alasan Peserta</p>
+                        <p class="text-sm text-[#2C1E1E]">{{ $refund->reason ?: 'Tidak ada alasan yang diisi.' }}</p>
+                        <p class="text-[11px] text-[#9A5A46]">Diajukan: {{ optional($refund->requested_at)->translatedFormat('d M Y H:i') ?? '-' }}</p>
+                    </div>
+                    <div class="space-y-2 rounded-2xl bg-[#F7FFF9] px-4 py-3">
+                        <p class="text-[11px] font-semibold uppercase tracking-[0.3em] text-[#2F9A55]">Catatan Admin</p>
+                        <p class="text-sm text-[#2C1E1E]">{{ $refund->admin_note ?: 'Belum ada catatan admin.' }}</p>
+                        <p class="text-[11px] text-[#9A5A46]">Diproses: {{ optional($refund->processed_at)->translatedFormat('d M Y H:i') ?? '-' }}</p>
+                    </div>
+                </div>
+
+                @if ($refund->status->value === 'pending')
+                    <div class="mt-6 grid gap-3 sm:grid-cols-2">
+                        <form method="POST" action="{{ route('admin.refunds.approve', $refund) }}" class="space-y-3 rounded-2xl border border-[#E4F5E9] bg-[#F7FFF9] px-4 py-4 shadow-sm">
+                            @csrf
+                            <label class="block text-sm font-semibold text-[#2C1E1E]">Catatan Admin</label>
+                            <textarea name="admin_note" rows="3" class="w-full rounded-xl border border-[#D1F2DC] bg-white/80 px-3 py-2 text-sm text-[#2C1E1E] focus:border-[#2F9A55] focus:outline-none focus:ring-2 focus:ring-[#2F9A55]/30" placeholder="Catatan persetujuan">{{ old('admin_note') }}</textarea>
+                            <button class="inline-flex items-center justify-center gap-2 rounded-full bg-emerald-600 px-4 py-2 text-xs font-semibold text-white shadow-md shadow-emerald-500/30 transition hover:-translate-y-0.5 hover:bg-emerald-700">
+                                Setujui Refund
+                            </button>
+                        </form>
+
+                        <form method="POST" action="{{ route('admin.refunds.reject', $refund) }}" class="space-y-3 rounded-2xl border border-[#FDE1E7] bg-[#FFF5F7] px-4 py-4 shadow-sm">
+                            @csrf
+                            <label class="block text-sm font-semibold text-[#2C1E1E]">Catatan Admin</label>
+                            <textarea name="admin_note" rows="3" class="w-full rounded-xl border border-[#FBD5DF] bg-white/80 px-3 py-2 text-sm text-[#2C1E1E] focus:border-[#E11D48] focus:outline-none focus:ring-2 focus:ring-[#E11D48]/20" placeholder="Catatan penolakan">{{ old('admin_note') }}</textarea>
+                            <button class="inline-flex items-center justify-center gap-2 rounded-full bg-rose-600 px-4 py-2 text-xs font-semibold text-white shadow-md shadow-rose-500/30 transition hover:-translate-y-0.5 hover:bg-rose-700">
+                                Tolak Refund
+                            </button>
+                        </form>
+                    </div>
                 @endif
             </div>
-        </aside>
-    </div>
+        </section>
+    @endif
 </x-layouts.admin>

@@ -22,9 +22,15 @@ class RegistrationController extends Controller
 {
     public function index(Request $request): View
     {
-        $isRefundView = $request->string('view') === 'refunds';
+        $view = (string) $request->query('view', '');
+        $isRefundView = in_array($view, ['refund', 'refunds'], true);
         $eventId = $request->integer('event_id');
-        $statusFilter = PaymentStatus::tryFrom((string) $request->string('payment_status'));
+        $statusFilter = ! $isRefundView
+            ? PaymentStatus::tryFrom((string) $request->query('payment_status', ''))
+            : null;
+        $refundStatusFilter = $isRefundView
+            ? RefundStatus::tryFrom((string) $request->query('refund_status', ''))
+            : null;
 
         $registrationBase = Registration::query()
             ->when($eventId, fn ($query) => $query->where('event_id', $eventId))
@@ -67,7 +73,16 @@ class RegistrationController extends Controller
         $refundBase = Refund::query()
             ->with('transaction.registration')
             ->when($eventId, fn ($query) => $query->whereHas('transaction.registration', fn ($registration) => $registration->where('event_id', $eventId)))
-            ->when($statusFilter, fn ($query) => $query->whereHas('transaction', fn ($transaction) => $transaction->where('status', $statusFilter)));
+            ->when($refundStatusFilter, fn ($query) => $query->where('status', $refundStatusFilter));
+
+        $refunds = null;
+        if ($isRefundView) {
+            $refunds = (clone $refundBase)
+                ->with(['transaction.registration.event', 'transaction.registration.user'])
+                ->orderByDesc('requested_at')
+                ->paginate(12)
+                ->withQueryString();
+        }
 
         $refundSummary = [
             'total' => (clone $refundBase)->count(),
@@ -84,6 +99,7 @@ class RegistrationController extends Controller
             'registrationSummary' => $registrationSummary,
             'refundSummary' => $refundSummary,
             'isRefundView' => $isRefundView,
+            'refunds' => $refunds,
         ]);
     }
 
@@ -166,7 +182,7 @@ class RegistrationController extends Controller
                 ->when($status, function ($query, $status) {
                     $query->whereHas('transaction', fn ($transactionQuery) => $transactionQuery->where('status', $status));
                 })
-                ->when($request->string('view') === 'refunds', fn ($query) => $query->whereHas('transaction.refund'))
+                ->when(in_array($request->string('view'), ['refund', 'refunds'], true), fn ($query) => $query->whereHas('transaction.refund'))
                 ->orderByDesc('registered_at')
                 ->chunk(200, function ($chunk) use ($handle, $delimiter) {
                     foreach ($chunk as $registration) {
@@ -190,11 +206,14 @@ class RegistrationController extends Controller
         return response()->streamDownload($callback, $fileName, $headers);
     }
 
-    public function approveRefund(Refund $refund): RedirectResponse
+    public function approveRefund(Request $request, Refund $refund): RedirectResponse
     {
+        $adminNote = $request->string('admin_note', '')->limit(500)->toString();
+
         $refund->update([
             'status' => RefundStatus::Approved,
             'processed_at' => now(),
+            'admin_note' => $adminNote,
         ]);
 
         $refund->transaction?->update([
@@ -225,11 +244,14 @@ class RegistrationController extends Controller
         return back()->with('status', 'Refund peserta disetujui dan ditandai selesai.');
     }
 
-    public function rejectRefund(Refund $refund): RedirectResponse
+    public function rejectRefund(Request $request, Refund $refund): RedirectResponse
     {
+        $adminNote = $request->string('admin_note', '')->limit(500)->toString();
+
         $refund->update([
             'status' => RefundStatus::Rejected,
             'processed_at' => now(),
+            'admin_note' => $adminNote,
         ]);
 
         $refund->loadMissing('transaction.registration.event', 'transaction.registration.user');

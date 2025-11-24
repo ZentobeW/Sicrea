@@ -25,12 +25,21 @@ class ProfileController extends Controller
             ->whereHas('transaction.registration', function ($query) use ($user) {
                 $query->where('user_id', $user->id);
             })
-            ->whereIn('status', [RefundStatus::Pending, RefundStatus::Approved])
+            ->whereIn('status', [RefundStatus::Pending])
             ->count();
 
         $recentRegistrations = $user->registrations()
             ->with(['event', 'transaction.refund'])
             ->latest('registered_at')
+            ->take(5)
+            ->get();
+
+        $recentRefunds = Refund::query()
+            ->with(['transaction.registration.event'])
+            ->whereHas('transaction.registration', function ($query) use ($user) {
+                $query->where('user_id', $user->id);
+            })
+            ->latest('requested_at')
             ->take(5)
             ->get();
 
@@ -52,6 +61,7 @@ class ProfileController extends Controller
             'pendingRegistrations' => $pendingRegistrations,
             'activeRefunds' => $activeRefunds,
             'recentRegistrations' => $recentRegistrations,
+            'recentRefunds' => $recentRefunds,
             'upcomingRegistration' => $upcomingRegistration,
         ]);
     }

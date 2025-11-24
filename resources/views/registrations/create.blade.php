@@ -53,7 +53,25 @@
                                 </div>
                                 <div class="space-y-2">
                                     <label class="block text-sm font-semibold text-[#2C1E1E]">Nomor Telepon</label>
-                                    <input type="text" name="form_data[phone]" value="{{ old('form_data.phone') }}" required class="w-full rounded-2xl border border-[#FAD6C7] bg-white/80 px-4 py-3 text-sm text-[#2C1E1E] placeholder:text-[#B07A7A] focus:border-[#FF8A64] focus:outline-none focus:ring-2 focus:ring-[#FF8A64]/40" placeholder="0812-xxxx-xxxx">
+                                    <input type="text" name="form_data[phone]" value="{{ old('form_data.phone', auth()->user()->phone) }}" required class="w-full rounded-2xl border border-[#FAD6C7] bg-white/80 px-4 py-3 text-sm text-[#2C1E1E] placeholder:text-[#B07A7A] focus:border-[#FF8A64] focus:outline-none focus:ring-2 focus:ring-[#FF8A64]/40" placeholder="0812-xxxx-xxxx">
+                                </div>
+                                <div class="space-y-2">
+                                    <label class="block text-sm font-semibold text-[#2C1E1E]">Jenis Bank</label>
+                                    <select name="form_data[bank_name]" required class="w-full rounded-2xl border border-[#FAD6C7] bg-white/80 px-4 py-3 text-sm text-[#2C1E1E] focus:border-[#FF8A64] focus:outline-none focus:ring-2 focus:ring-[#FF8A64]/40">
+                                        <option value="" disabled {{ old('form_data.bank_name') ? '' : 'selected' }}>Pilih bank</option>
+                                        @php
+                                            $banks = [
+                                                'BCA', 'Mandiri', 'BRI', 'BNI', 'BTN', 'CIMB Niaga', 'Permata', 'BSI', 'OCBC NISP', 'Danamon', 'Bank Jatim', 'Bank Jateng', 'Bank BJB', 'Bank Mega', 'Maybank', 'Panin', 'Sinarmas'
+                                            ];
+                                        @endphp
+                                        @foreach ($banks as $bank)
+                                            <option value="{{ $bank }}" @selected(old('form_data.bank_name') === $bank)>{{ $bank }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="space-y-2">
+                                    <label class="block text-sm font-semibold text-[#2C1E1E]">Nomor Rekening</label>
+                                    <input type="text" name="form_data[account_number]" value="{{ old('form_data.account_number') }}" required class="w-full rounded-2xl border border-[#FAD6C7] bg-white/80 px-4 py-3 text-sm text-[#2C1E1E] placeholder:text-[#B07A7A] focus:border-[#FF8A64] focus:outline-none focus:ring-2 focus:ring-[#FF8A64]/40" placeholder="1234 5678 9000">
                                 </div>
                                 <div class="space-y-2">
                                     <label class="block text-sm font-semibold text-[#2C1E1E]">Instansi / Perusahaan <span class="text-[#C65B74]/70">(opsional)</span></label>

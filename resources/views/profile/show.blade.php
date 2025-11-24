@@ -6,6 +6,7 @@
         $avatarUrl = $user->avatar_path
             ? Storage::disk('public')->url($user->avatar_path)
             : 'https://ui-avatars.com/api/?name=' . urlencode($user->name) . '&background=FFE1D0&color=7C3A2D';
+        $isRefundView = request('tab') === 'refund';
     @endphp
 
     <section class="bg-gradient-to-b from-[#FFF2E7] via-[#FFE2CF] to-[#F8C0A7] py-16">
@@ -134,84 +135,148 @@
             </div>
 
             <div class="rounded-3xl bg-white/90 p-8 shadow-xl shadow-[#F4B59E]/40 ring-1 ring-[#F7C8B8]/60">
-                <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                     <div>
                         <h2 class="text-2xl font-semibold text-[#7C3A2D]">Riwayat Aktivitas</h2>
                         <p class="text-sm text-[#9A5A46]">Pantau perkembangan pendaftaran, status pembayaran, dan refund terbaru.</p>
                     </div>
+                    <div class="inline-flex rounded-full bg-[#FFF0E6] p-1 text-sm font-semibold text-[#C65B74] shadow-inner">
+                        <a href="{{ route('profile.show') }}"
+                            @class([
+                                'rounded-full px-4 py-2 transition',
+                                'bg-white text-[#7C3A2D] shadow-sm' => ! $isRefundView,
+                                'text-[#C65B74]' => $isRefundView,
+                            ])>
+                            Pendaftaran
+                        </a>
+                        <a href="{{ route('profile.show', ['tab' => 'refund']) }}"
+                            @class([
+                                'rounded-full px-4 py-2 transition',
+                                'bg-white text-[#7C3A2D] shadow-sm' => $isRefundView,
+                                'text-[#C65B74]' => ! $isRefundView,
+                            ])>
+                            Refund
+                        </a>
+                    </div>
                 </div>
 
-                <div class="mt-6 overflow-hidden rounded-2xl border border-[#F7C8B8]/80">
-                    <table class="min-w-full divide-y divide-[#F7C8B8] text-sm">
-                        <thead class="bg-[#FFEDE0] text-[#7C3A2D]">
-                            <tr>
-                                <th scope="col" class="px-6 py-3 text-left font-semibold">Event</th>
-                                <th scope="col" class="px-6 py-3 text-left font-semibold">Pendaftaran</th>
-                                <th scope="col" class="px-6 py-3 text-left font-semibold">Pembayaran</th>
-                                <th scope="col" class="px-6 py-3 text-left font-semibold">Refund</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-[#F7C8B8]/60 bg-white">
-                            @forelse ($recentRegistrations as $registration)
-                                @php
-                                    $registrationBadge = match ($registration->status) {
-                                        \App\Enums\RegistrationStatus::Pending => 'bg-[#FFF1EC] text-[#D97862]',
-                                        \App\Enums\RegistrationStatus::Confirmed => 'bg-[#E9F6EC] text-[#2F7A48]',
-                                        \App\Enums\RegistrationStatus::Cancelled => 'bg-[#FFE5E5] text-[#B85454]',
-                                        \App\Enums\RegistrationStatus::Refunded => 'bg-[#E8F3FF] text-[#2B6CB0]',
-                                    };
-                                    $paymentBadge = match ($registration->payment_status) {
-                                        \App\Enums\PaymentStatus::Pending => 'bg-[#FFF1EC] text-[#D97862]',
-                                        \App\Enums\PaymentStatus::AwaitingVerification => 'bg-[#FDF7D8] text-[#B89530]',
-                                        \App\Enums\PaymentStatus::Verified => 'bg-[#E9F6EC] text-[#2F7A48]',
-                                        \App\Enums\PaymentStatus::Rejected => 'bg-[#FFE5E5] text-[#B85454]',
-                                        \App\Enums\PaymentStatus::Refunded => 'bg-[#E8F3FF] text-[#2B6CB0]',
-                                    };
-                                    $refundStatus = $registration->refundRequest?->status;
-                                    $refundBadge = $refundStatus
-                                        ? match ($refundStatus) {
+                @if (! $isRefundView)
+                    <div class="mt-6 overflow-hidden rounded-2xl border border-[#F7C8B8]/80">
+                        <table class="min-w-full divide-y divide-[#F7C8B8] text-sm">
+                            <thead class="bg-[#FFEDE0] text-[#7C3A2D]">
+                                <tr>
+                                    <th scope="col" class="px-6 py-3 text-left font-semibold">Event</th>
+                                    <th scope="col" class="px-6 py-3 text-left font-semibold">Tanggal</th>
+                                    <th scope="col" class="px-6 py-3 text-left font-semibold">Total</th>
+                                    <th scope="col" class="px-6 py-3 text-left font-semibold">Status</th>
+                                    <th scope="col" class="px-6 py-3 text-right font-semibold">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-[#F7C8B8]/60 bg-white">
+                                @forelse ($recentRegistrations as $registration)
+                                    @php
+                                        $paymentBadge = match ($registration->payment_status) {
+                                            \App\Enums\PaymentStatus::Pending => 'bg-[#FFF1EC] text-[#D97862]',
+                                            \App\Enums\PaymentStatus::AwaitingVerification => 'bg-[#FDF7D8] text-[#B89530]',
+                                            \App\Enums\PaymentStatus::Verified => 'bg-[#E9F6EC] text-[#2F7A48]',
+                                            \App\Enums\PaymentStatus::Rejected => 'bg-[#FFE5E5] text-[#B85454]',
+                                            \App\Enums\PaymentStatus::Refunded => 'bg-[#E8F3FF] text-[#2B6CB0]',
+                                        };
+                                    @endphp
+                                    <tr class="text-[#7C3A2D]">
+                                        <td class="px-6 py-4 align-top">
+                                            <div class="font-semibold">{{ $registration->event->title }}</div>
+                                            <div class="text-[11px] text-[#C99F92]">ID: reg{{ $registration->id }}</div>
+                                        </td>
+                                        <td class="px-6 py-4 align-top text-sm text-[#9A5A46]">
+                                            {{ optional($registration->registered_at)->translatedFormat('d F Y') }}
+                                        </td>
+                                        <td class="px-6 py-4 align-top font-semibold text-[#7C3A2D]">
+                                            Rp{{ number_format($registration->transaction?->amount ?? $registration->event->price, 0, ',', '.') }}
+                                        </td>
+                                        <td class="px-6 py-4 align-top">
+                                            <span class="inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold {{ $paymentBadge }}">
+                                                {{ $registration->payment_status->label() }}
+                                            </span>
+                                        </td>
+                                        <td class="px-6 py-4 align-top text-right">
+                                            <a href="{{ route('registrations.show', $registration) }}"
+                                                class="inline-flex items-center gap-2 rounded-full bg-[#FF8A64] px-4 py-2 text-xs font-semibold text-white shadow-md shadow-[#FF8A64]/30 transition hover:bg-[#F9744B]">
+                                                Lihat Tiket
+                                            </a>
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="5" class="px-6 py-8 text-center text-sm text-[#9A5A46]">
+                                            Belum ada aktivitas pendaftaran. Mulai dengan mendaftar workshop favoritmu!
+                                        </td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
+                @else
+                    <div class="mt-6 overflow-hidden rounded-2xl border border-[#F7C8B8]/80">
+                        <table class="min-w-full divide-y divide-[#F7C8B8] text-sm">
+                            <thead class="bg-[#FFEDE0] text-[#7C3A2D]">
+                                <tr>
+                                    <th scope="col" class="px-6 py-3 text-left font-semibold">Event</th>
+                                    <th scope="col" class="px-6 py-3 text-left font-semibold">No. Rekening</th>
+                                    <th scope="col" class="px-6 py-3 text-left font-semibold">Jumlah</th>
+                                    <th scope="col" class="px-6 py-3 text-left font-semibold">Tanggal</th>
+                                    <th scope="col" class="px-6 py-3 text-left font-semibold">Status</th>
+                                    <th scope="col" class="px-6 py-3 text-right font-semibold">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-[#F7C8B8]/60 bg-white">
+                                @forelse ($recentRefunds as $refund)
+                                    @php
+                                        $registration = $refund->transaction->registration;
+                                        $statusClass = match ($refund->status) {
                                             \App\Enums\RefundStatus::Pending => 'bg-[#FDF7D8] text-[#B89530]',
                                             \App\Enums\RefundStatus::Approved => 'bg-[#E9F6EC] text-[#2F7A48]',
                                             \App\Enums\RefundStatus::Rejected => 'bg-[#FFE5E5] text-[#B85454]',
                                             \App\Enums\RefundStatus::Completed => 'bg-[#E8F3FF] text-[#2B6CB0]',
-                                        }
-                                        : null;
-                                @endphp
-                                <tr class="text-[#7C3A2D]">
-                                    <td class="px-6 py-4 align-top">
-                                        <div class="font-semibold">{{ $registration->event->title }}</div>
-                                        <div class="text-xs text-[#9A5A46] mt-1">{{ optional($registration->registered_at)->translatedFormat('d F Y') }}</div>
-                                    </td>
-                                    <td class="px-6 py-4 align-top">
-                                        <span class="inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold {{ $registrationBadge }}">
-                                            {{ $registration->status->label() }}
-                                        </span>
-                                    </td>
-                                    <td class="px-6 py-4 align-top">
-                                        <span class="inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold {{ $paymentBadge }}">
-                                            {{ $registration->payment_status->label() }}
-                                        </span>
-                                    </td>
-                                    <td class="px-6 py-4 align-top">
-                                        @if ($refundStatus)
-                                            <span class="inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold {{ $refundBadge }}">
-                                                {{ $registration->refundRequest->status->label() }}
+                                        };
+                                    @endphp
+                                    <tr class="text-[#7C3A2D]">
+                                        <td class="px-6 py-4 align-top">
+                                            <div class="font-semibold">{{ $registration->event->title }}</div>
+                                            <div class="text-[11px] text-[#C99F92]">ID: ref{{ $refund->id }}</div>
+                                        </td>
+                                        <td class="px-6 py-4 align-top text-sm text-[#9A5A46]">
+                                            {{ data_get($registration->form_data, 'account_number', '-') }}
+                                        </td>
+                                        <td class="px-6 py-4 align-top font-semibold text-[#7C3A2D]">
+                                            Rp{{ number_format($refund->transaction->amount ?? 0, 0, ',', '.') }}
+                                        </td>
+                                        <td class="px-6 py-4 align-top text-sm text-[#9A5A46]">
+                                            {{ optional($refund->requested_at)->translatedFormat('d F Y') ?? '-' }}
+                                        </td>
+                                        <td class="px-6 py-4 align-top">
+                                            <span class="inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold {{ $statusClass }}">
+                                                {{ $refund->status->label() }}
                                             </span>
-                                        @else
-                                            <span class="text-xs text-[#C99F92]">-</span>
-                                        @endif
-                                    </td>
-                                </tr>
-                            @empty
-                                <tr>
-                                    <td colspan="4" class="px-6 py-8 text-center text-sm text-[#9A5A46]">
-                                        Belum ada aktivitas yang tercatat. Mulai dengan mendaftar workshop favoritmu!
-                                    </td>
-                                </tr>
-                            @endforelse
-                        </tbody>
-                    </table>
-                </div>
+                                        </td>
+                                        <td class="px-6 py-4 align-top text-right">
+                                            <a href="{{ route('registrations.show', $registration) }}"
+                                                class="inline-flex items-center gap-2 rounded-full bg-[#FF8A64] px-4 py-2 text-xs font-semibold text-white shadow-md shadow-[#FF8A64]/30 transition hover:bg-[#F9744B]">
+                                                Lihat Tiket
+                                            </a>
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="6" class="px-6 py-8 text-center text-sm text-[#9A5A46]">
+                                            Belum ada data refund. Ajukan refund dari tiket yang sudah terverifikasi.
+                                        </td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
+                @endif
             </div>
         </div>
     </section>
