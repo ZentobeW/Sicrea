@@ -38,7 +38,7 @@
             </a>
 
             @if ($showTicket)
-                <div class="space-y-6">
+                <div id="tiket" class="space-y-6">
                     <div>
                         <p class="text-sm font-semibold uppercase tracking-[0.3em] text-[#C65B74]">Detail Tiket Event</p>
                         <h1 class="mt-2 text-3xl font-semibold text-[#2C1E1E]">{{ $registration->event->title }}</h1>
@@ -176,7 +176,7 @@
                     </div>
                 </div>
             @else
-                <div class="grid gap-8 lg:grid-cols-[minmax(0,2fr),minmax(0,1fr)]">
+                <div id="tiket" class="grid gap-8 lg:grid-cols-[minmax(0,2fr),minmax(0,1fr)]">
                     <div class="rounded-[32px] border border-[#FAD6C7] bg-white/95 p-8 shadow-xl shadow-[#FAD6C7]/40 backdrop-blur">
                         <div class="flex flex-wrap items-center justify-between gap-4">
                             <div>

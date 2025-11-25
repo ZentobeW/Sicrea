@@ -36,6 +36,17 @@ class RegistrationController extends Controller
 
         $user = auth()->user();
 
+        $existingRegistration = $event->registrations()
+            ->where('user_id', $user->id)
+            ->latest('registered_at')
+            ->first();
+
+        if ($existingRegistration) {
+            return redirect()
+                ->to(route('registrations.show', $existingRegistration) . '#tiket')
+                ->with('status', 'Anda sudah terdaftar di event ini. Kami arahkan ke tiket Anda.');
+        }
+
         // Wajib lengkapi profil dasar sebelum daftar
         if (! $user->phone || ! $user->province || ! $user->city || ! $user->address) {
             return redirect()
@@ -49,6 +60,17 @@ class RegistrationController extends Controller
     public function store(StoreRegistrationRequest $request, Event $event): RedirectResponse
     {
         $user = $request->user();
+
+        $existingRegistration = $event->registrations()
+            ->where('user_id', $user->id)
+            ->latest('registered_at')
+            ->first();
+
+        if ($existingRegistration) {
+            return redirect()
+                ->to(route('registrations.show', $existingRegistration) . '#tiket')
+                ->with('status', 'Anda sudah terdaftar di event ini. Kami arahkan ke tiket Anda.');
+        }
 
         $remainingSlots = $event->remainingSlots();
 

@@ -40,7 +40,14 @@ class EventController extends Controller
             'creator',
         ])->loadCount('registrations');
 
-        return view('events.show', compact('event'));
+        $existingRegistration = auth()->check()
+            ? $event->registrations()
+                ->where('user_id', auth()->id())
+                ->latest('registered_at')
+                ->first()
+            : null;
+
+        return view('events.show', compact('event', 'existingRegistration'));
     }
 
     public function publish(Event $event): RedirectResponse

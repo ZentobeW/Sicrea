@@ -77,9 +77,6 @@
                         {{-- RECAPTCHA --}}
                         <div class="mt-4">
                             {!! NoCaptcha::display() !!}
-                            @error('g-recaptcha-response')
-                                <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-                            @enderror
                         </div>
 
                         {{-- REMEMBER + REGISTER --}}

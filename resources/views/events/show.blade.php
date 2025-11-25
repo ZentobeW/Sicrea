@@ -1,5 +1,7 @@
 @php
     use Illuminate\Support\Str;
+
+    $existingRegistration ??= null;
 @endphp
 
 <x-layouts.app :title="$event->title">
@@ -64,9 +66,16 @@
                         <p class="mt-2 text-sm text-slate-500">Termasuk materi dan akses rekaman sesi (jika tersedia).</p>
                         <div class="mt-6 space-y-3">
                             @auth
-                                <a href="{{ route('events.register', $event) }}" class="inline-flex w-full items-center justify-center rounded-full bg-[#B05A62] px-6 py-3 text-sm font-semibold text-white transition hover:bg-[#9A4750]">
-                                    Daftar Sekarang
-                                </a>
+                                @if ($existingRegistration)
+                                    <a href="{{ route('registrations.show', $existingRegistration) }}#tiket" class="inline-flex w-full items-center justify-center rounded-full bg-[#0F766E] px-6 py-3 text-sm font-semibold text-white transition hover:bg-[#0B5F59]">
+                                        Lihat Tiket Saya
+                                    </a>
+                                    <p class="text-center text-xs font-semibold text-[#0F766E]">Anda sudah terdaftar untuk event ini.</p>
+                                @else
+                                    <a href="{{ route('events.register', $event) }}" class="inline-flex w-full items-center justify-center rounded-full bg-[#B05A62] px-6 py-3 text-sm font-semibold text-white transition hover:bg-[#9A4750]">
+                                        Daftar Sekarang
+                                    </a>
+                                @endif
                             @else
                                 <a href="{{ route('login') }}" class="inline-flex w-full items-center justify-center rounded-full bg-[#B05A62] px-6 py-3 text-sm font-semibold text-white transition hover:bg-[#9A4750]">
                                     Login untuk Daftar
