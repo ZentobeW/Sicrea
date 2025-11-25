@@ -158,13 +158,27 @@ class RegistrationController extends Controller
 
     public function export(Request $request): StreamedResponse
     {
-        $fileName = 'registrations-' . now()->format('Ymd-His') . '.csv';
+        $reportType = $request->string('report')->toString();
+        $reportType = in_array($reportType, ['finance', 'participants'], true) ? $reportType : 'participants';
+
+        $eventIds = collect((array) $request->input('event_ids', []))
+            ->map(fn ($id) => (int) $id)
+            ->filter()
+            ->unique()
+            ->values();
+
+        if ($request->filled('event_id')) {
+            $eventIds->push((int) $request->integer('event_id'));
+            $eventIds = $eventIds->unique()->values();
+        }
+
+        $fileName = sprintf('%s-%s.csv', $reportType, now()->format('Ymd-His'));
         $headers = [
             'Content-Type' => 'text/csv; charset=UTF-8',
             'Content-Disposition' => "attachment; filename=\"{$fileName}\"",
         ];
 
-        $callback = function () use ($request) {
+        $callback = function () use ($request, $reportType, $eventIds) {
             $handle = fopen('php://output', 'wb');
 
             // Ensure Excel on Windows recognizes UTF-8
@@ -172,31 +186,58 @@ class RegistrationController extends Controller
 
             $delimiter = ';';
 
-            fputcsv($handle, ['Event', 'Nama Peserta', 'Email', 'Status Pendaftaran', 'Status Pembayaran', 'Jumlah', 'Tanggal Daftar'], $delimiter);
+            if ($reportType === 'finance') {
+                fputcsv($handle, [
+                    'Event',
+                    'Nama Peserta',
+                    'Email',
+                    'Status Pembayaran',
+                    'Jumlah',
+                    'Dibayar Pada',
+                    'Terverifikasi Pada',
+                    'Status Refund',
+                ], $delimiter);
+            } else {
+                fputcsv($handle, ['Event', 'Nama Peserta', 'Email', 'No. Telepon', 'Status Pendaftaran', 'Status Pembayaran', 'Tanggal Daftar'], $delimiter);
+            }
 
             $status = \App\Enums\PaymentStatus::tryFrom((string) $request->string('payment_status'));
 
             Registration::query()
-                ->with(['event', 'user', 'transaction'])
-                ->when($request->filled('event_id'), fn ($query) => $query->where('event_id', (int) $request->integer('event_id')))
+                ->with(['event', 'user', 'transaction.refund'])
+                ->when($eventIds->isNotEmpty(), fn ($query) => $query->whereIn('event_id', $eventIds))
                 ->when($status, function ($query, $status) {
                     $query->whereHas('transaction', fn ($transactionQuery) => $transactionQuery->where('status', $status));
                 })
                 ->when(in_array($request->string('view'), ['refund', 'refunds'], true), fn ($query) => $query->whereHas('transaction.refund'))
                 ->orderByDesc('registered_at')
-                ->chunk(200, function ($chunk) use ($handle, $delimiter) {
+                ->chunk(200, function ($chunk) use ($handle, $delimiter, $reportType) {
                     foreach ($chunk as $registration) {
                         $transaction = $registration->transaction;
+                        $refund = $transaction?->refund;
 
-                        fputcsv($handle, [
-                            $registration->event->title,
-                            $registration->user->name,
-                            $registration->user->email,
-                            $registration->status->label(),
-                            $transaction?->status->label() ?? '-',
-                            $transaction?->amount,
-                            $registration->registered_at?->format('d-m-Y H:i'),
-                        ], $delimiter);
+                        if ($reportType === 'finance') {
+                            fputcsv($handle, [
+                                $registration->event->title,
+                                $registration->user->name,
+                                $registration->user->email,
+                                $transaction?->status->label() ?? '-',
+                                $transaction?->amount ?? 0,
+                                optional($transaction?->paid_at)?->format('d-m-Y H:i'),
+                                optional($transaction?->verified_at)?->format('d-m-Y H:i'),
+                                $refund?->status?->label() ?? '-',
+                            ], $delimiter);
+                        } else {
+                            fputcsv($handle, [
+                                $registration->event->title,
+                                $registration->user->name,
+                                $registration->user->email,
+                                $registration->user->phone,
+                                $registration->status->label(),
+                                $transaction?->status->label() ?? '-',
+                                $registration->registered_at?->format('d-m-Y H:i'),
+                            ], $delimiter);
+                        }
                     }
                 });
 

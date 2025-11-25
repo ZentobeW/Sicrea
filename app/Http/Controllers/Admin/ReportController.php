@@ -27,8 +27,8 @@ class ReportController extends Controller
             ->get(['id', 'title', 'start_at', 'venue_name', 'venue_address', 'tutor_name']);
 
         $selectedEventId = $request->filled('event_id') ? $request->integer('event_id') : $events->first()?->id;
-        $tab = $request->string('tab')->toString() ?: 'participants';
-        $tab = in_array($tab, ['participants', 'finance'], true) ? $tab : 'participants';
+        $reportType = $request->string('report')->toString() ?: 'participants';
+        $reportType = in_array($reportType, ['participants', 'finance'], true) ? $reportType : 'participants';
 
         $selectedEvent = $events->firstWhere('id', $selectedEventId);
 
@@ -106,7 +106,7 @@ class ReportController extends Controller
             'events' => $events,
             'selectedEvent' => $selectedEvent,
             'selectedEventId' => $selectedEventId,
-            'tab' => $tab,
+            'reportType' => $reportType,
             'participantMetrics' => $participantMetrics,
             'financialMetrics' => $financialMetrics,
             'recentRegistrations' => $recentRegistrations,

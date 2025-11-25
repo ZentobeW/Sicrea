@@ -25,12 +25,6 @@
             'active' => request()->routeIs('admin.portfolios.*'),
         ],
         [
-            'label' => 'Laporan & Analitik',
-            'icon' => 'chart-bar-square',
-            'route' => route('admin.reports.index'),
-            'active' => request()->routeIs('admin.reports.*'),
-        ],
-        [
             'label' => 'Kelola Transaksi',
             'icon' => 'credit-card',
             'route' => route('admin.registrations.index'),
