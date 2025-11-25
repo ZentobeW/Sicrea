@@ -134,21 +134,30 @@ Route::middleware(['auth', 'can:access-admin'])
 | SENDGRID SMTP TEST ROUTE (Development Mode)
 |--------------------------------------------------------------------------
 */
-Route::get('/test-email', function (Request $request) {
-    if (! app()->environment(['local', 'development', 'testing'])) {
-        abort(404);
-    }
+//Route::get('/test-email', function (Request $request) {
+//    if (! app()->environment(['local', 'development', 'testing'])) {
+//        abort(404);
+//    }
+//
+//    $to = $request->string('to')->value()
+//        ?: config('mail.test_recipient')
+//        ?: config('mail.admin_address')
+//        ?: config('mail.from.address');
+//
+//    if (! $to) {
+//        return 'Set MAIL_TEST_RECIPIENT di .env atau tambahkan parameter ?to=email@domain.test';
+//    }
+//
+//    Mail::to($to)->send(new TestSendGridMail());
+//
+//    return "Email test berhasil dikirim ke {$to}!";
+//});
 
-    $to = $request->string('to')->value()
-        ?: config('mail.test_recipient')
-        ?: config('mail.admin_address')
-        ?: config('mail.from.address');
+Route::get('/test-brevo', function () {
+    Mail::raw('Test email from Brevo SMTP (Laravel)', function ($msg) {
+        $msg->to('yourrecipient@example.com')
+            ->subject('Brevo SMTP Testing');
+    });
 
-    if (! $to) {
-        return 'Set MAIL_TEST_RECIPIENT di .env atau tambahkan parameter ?to=email@domain.test';
-    }
-
-    Mail::to($to)->send(new TestSendGridMail());
-
-    return "Email test berhasil dikirim ke {$to}!";
+    return 'Email sent!';
 });
