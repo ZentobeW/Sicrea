@@ -59,7 +59,11 @@
                     </select>
                     <span class="text-xs text-[#C16A55]">Centang event yang ingin digabung lalu klik unduh.</span>
                 </div>
-                <div class="flex flex-wrap items-center gap-3">
+                <div class="flex flex-wrap items-center gap-4">
+                    <label for="select-all-events" class="inline-flex items-center gap-2 rounded-full bg-white px-3 py-2 text-xs font-semibold text-[#822021] shadow-inner shadow-[#F7C8B8]/40">
+                        <input id="select-all-events" type="checkbox" class="h-4 w-4 rounded border-[#E77B5F] text-[#822021] focus:ring-[#822021]" checked>
+                        <span>Pilih semua event</span>
+                    </label>
                     <button type="submit" class="inline-flex items-center gap-2 rounded-full bg-[#822021] px-5 py-2 text-sm font-semibold text-[#FAF8F1] shadow-md shadow-[#B49F9A]/30 transition hover:-translate-y-0.5 hover:bg-[#822021]/70">
                         ⇩ Unduh Laporan Terpilih
                     </button>
@@ -92,7 +96,7 @@
                             @endphp
                             <tr class="transition hover:bg-white">
                                 <td class="px-5 py-4 align-top">
-                                    <input type="checkbox" name="event_ids[]" value="{{ $event->id }}" class="h-4 w-4 rounded border-[#E77B5F] text-[#822021] focus:ring-[#822021]" />
+                                    <input type="checkbox" name="event_ids[]" value="{{ $event->id }}" class="event-checkbox h-4 w-4 rounded border-[#E77B5F] text-[#822021] focus:ring-[#822021]" checked />
                                 </td>
                                 <td class="px-5 py-4 align-top">
                                     <div class="font-semibold text-[#4B2A22]">{{ $event->title }}</div>
@@ -185,4 +189,23 @@
             <div class="sm:ml-auto">{{ $events->links() }}</div>
         </div>
     </div>
+
+    @push('scripts')
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                const master = document.getElementById('select-all-events');
+                const checkboxes = Array.from(document.querySelectorAll('.event-checkbox'));
+
+                const sync = (checked) => {
+                    checkboxes.forEach((cb) => cb.checked = checked);
+                };
+
+                if (master) {
+                    master.addEventListener('change', (e) => sync(e.target.checked));
+                    // default: semua tercentang
+                    sync(true);
+                }
+            });
+        </script>
+    @endpush
 </x-layouts.admin>
