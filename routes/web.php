@@ -13,6 +13,8 @@ use App\Http\Controllers\PageController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RefundController;
 use App\Http\Controllers\RegistrationController;
+use App\Http\Controllers\Auth\PasswordResetLinkController; 
+use App\Http\Controllers\Auth\NewPasswordController;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -46,6 +48,17 @@ Route::middleware('guest')->group(function () {
     Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register');
     Route::post('/register', [AuthController::class, 'register']);
 
+    // Lupa password
+    Route::get('forgot-password', [PasswordResetLinkController::class, 'create'])
+        ->name('password.request');
+    Route::post('forgot-password', [PasswordResetLinkController::class, 'store'])
+        ->middleware('throttle:5,1')
+        ->name('password.email');
+    Route::get('reset-password/{token}', [NewPasswordController::class, 'create'])
+        ->name('password.reset');
+    Route::post('reset-password', [NewPasswordController::class, 'store'])
+        ->name('password.update');
+    
     // Google OAuth (login / register)
     Route::get('/auth/google/{action?}', [GoogleAuthController::class, 'redirect'])
         ->whereIn('action', ['login', 'register'])
