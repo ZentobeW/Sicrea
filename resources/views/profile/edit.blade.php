@@ -77,13 +77,17 @@
                             </div>
                             <div class="space-y-2">
                                 <label for="province" class="text-sm font-semibold text-[#7C3A2D]">Provinsi</label>
-                                <input id="province" name="province" type="text" value="{{ old('province', $user->province) }}"
+                                <select id="province" name="province" required
                                     class="w-full rounded-2xl border border-[#F7C8B8] bg-white/70 px-4 py-3 text-sm text-[#7C3A2D] placeholder:text-[#D9A497] focus:border-[#D97862] focus:outline-none focus:ring-2 focus:ring-[#F5A38D]">
+                                    <option value="" disabled selected>Pilih provinsi</option>
+                                </select>
                             </div>
                             <div class="space-y-2">
                                 <label for="city" class="text-sm font-semibold text-[#7C3A2D]">Kabupaten/Kota</label>
-                                <input id="city" name="city" type="text" value="{{ old('city', $user->city) }}"
+                                <select id="city" name="city" required
                                     class="w-full rounded-2xl border border-[#F7C8B8] bg-white/70 px-4 py-3 text-sm text-[#7C3A2D] placeholder:text-[#D9A497] focus:border-[#D97862] focus:outline-none focus:ring-2 focus:ring-[#F5A38D]">
+                                    <option value="" disabled selected>Pilih kabupaten/kota</option>
+                                </select>
                             </div>
                             <div class="space-y-2 sm:col-span-2">
                                 <label for="address" class="text-sm font-semibold text-[#7C3A2D]">Alamat Lengkap</label>
@@ -135,5 +139,87 @@
                 }
             }
         };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const provinceSelect = document.getElementById('province');
+            const citySelect = document.getElementById('city');
+            const selectedProvinceName = @json(old('province', $user->province));
+            const selectedCityName = @json(old('city', $user->city));
+            let provinces = [];
+
+            const setLoading = (select, message) => {
+                select.innerHTML = `<option value=\"\" disabled selected>${message}</option>`;
+            };
+
+            const populateProvinces = () => {
+                setLoading(provinceSelect, 'Memuat provinsi...');
+                fetch('https://www.emsifa.com/api-wilayah-indonesia/api/provinces.json')
+                    .then((res) => res.json())
+                    .then((data) => {
+                        provinces = data;
+                        provinceSelect.innerHTML = '<option value=\"\" disabled selected>Pilih provinsi</option>';
+                        provinces.forEach((province) => {
+                            const option = document.createElement('option');
+                            option.value = province.name;
+                            option.textContent = province.name;
+                            option.dataset.id = province.id;
+                            provinceSelect.appendChild(option);
+                        });
+
+                        if (selectedProvinceName) {
+                            const matched = provinces.find((p) => p.name === selectedProvinceName);
+                            if (matched) {
+                                provinceSelect.value = matched.name;
+                                populateCities(matched.id);
+                            }
+                        }
+                    })
+                    .catch(() => {
+                        provinceSelect.innerHTML = '<option value=\"\" disabled selected>Gagal memuat provinsi</option>';
+                    });
+            };
+
+            const populateCities = (provinceId) => {
+                setLoading(citySelect, 'Memuat kabupaten/kota...');
+                if (!provinceId) {
+                    citySelect.innerHTML = '<option value=\"\" disabled selected>Pilih kabupaten/kota</option>';
+                    return;
+                }
+
+                fetch(`https://www.emsifa.com/api-wilayah-indonesia/api/regencies/${provinceId}.json`)
+                    .then((res) => res.json())
+                    .then((data) => {
+                        citySelect.innerHTML = '<option value=\"\" disabled selected>Pilih kabupaten/kota</option>';
+                        data.forEach((city) => {
+                            const option = document.createElement('option');
+                            option.value = city.name;
+                            option.textContent = city.name;
+                            option.dataset.id = city.id;
+                            citySelect.appendChild(option);
+                        });
+
+                        if (selectedCityName) {
+                            const matchedCity = data.find((c) => c.name === selectedCityName);
+                            if (matchedCity) {
+                                citySelect.value = matchedCity.name;
+                            }
+                        }
+                    })
+                    .catch(() => {
+                        citySelect.innerHTML = '<option value=\"\" disabled selected>Gagal memuat kabupaten/kota</option>';
+                    });
+            };
+
+            if (provinceSelect && citySelect) {
+                populateProvinces();
+
+                provinceSelect.addEventListener('change', (event) => {
+                    const selectedOption = event.target.selectedOptions[0];
+                    const provinceId = selectedOption?.dataset.id;
+                    citySelect.value = '';
+                    populateCities(provinceId);
+                });
+            }
+        });
     </script>
 @endonce
