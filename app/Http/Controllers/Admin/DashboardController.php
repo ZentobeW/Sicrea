@@ -4,10 +4,12 @@ namespace App\Http\Controllers\Admin;
 
 use App\Enums\EventStatus;
 use App\Enums\PaymentStatus;
+use App\Enums\RefundStatus;
 use App\Http\Controllers\Controller;
 use App\Models\Event;
 use App\Models\Registration;
 use App\Models\Transaction;
+use App\Models\Refund;
 use Illuminate\Contracts\View\View;
 
 class DashboardController extends Controller
@@ -21,16 +23,22 @@ class DashboardController extends Controller
             'confirmedRegistrations' => Registration::whereHas('transaction', fn ($query) => $query->where('status', PaymentStatus::Verified))->count(),
         ];
 
-        $recentRegistrations = Registration::with(['event', 'user', 'transaction'])
+        $awaitingVerification = Registration::with(['event', 'user', 'transaction'])
+            ->whereHas('transaction', fn ($query) => $query->where('status', PaymentStatus::AwaitingVerification))
             ->orderByDesc('registered_at')
-            ->orderByDesc('created_at')
+            ->take(5)
+            ->get();
+
+        $pendingRefunds = Refund::with(['transaction.registration.event', 'transaction.registration.user'])
+            ->where('status', RefundStatus::Pending)
+            ->orderByDesc('requested_at')
             ->take(5)
             ->get();
 
         $upcomingEvents = Event::where('status', EventStatus::Published)
             ->where('start_at', '>=', now())
             ->orderBy('start_at')
-            ->take(4)
+            ->take(10) 
             ->get();
 
         $quickActions = [
@@ -51,6 +59,12 @@ class DashboardController extends Controller
             ],
         ];
 
-        return view('admin.dashboard.index', compact('metrics', 'recentRegistrations', 'upcomingEvents', 'quickActions'));
+        return view('admin.dashboard.index', compact(
+            'awaitingVerification', 
+            'pendingRefunds', 
+            'metrics', 
+            'upcomingEvents', 
+            'quickActions'
+        ));
     }
 }
