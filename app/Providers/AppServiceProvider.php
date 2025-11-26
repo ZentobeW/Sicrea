@@ -74,6 +74,7 @@ EOT;
             'ticket',
             'user-group',
             'video-camera',
+            'eye',
         ];
 
         foreach ($outlineIcons as $icon) {

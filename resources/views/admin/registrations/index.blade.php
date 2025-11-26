@@ -132,8 +132,12 @@
         </article>
     </section>
 
-    {{-- FILTER FORM (AUTO SUBMIT) --}}
-    <form method="GET" class="mt-8 grid gap-4 rounded-[28px] border border-[#FAD6C7] bg-white/90 p-6 shadow-lg shadow-[#FFD7BE]/40 md:grid-cols-2 text-sm">
+    {{-- FILTER FORM (AUTO SUBMIT + AJAX) --}}
+    <form 
+        method="GET" 
+        data-ajax-target="#registration-list" 
+        class="mt-8 grid gap-4 rounded-[28px] border border-[#FAD6C7] bg-white/90 p-6 shadow-lg shadow-[#FFD7BE]/40 md:grid-cols-[repeat(auto-fit,minmax(240px,1fr))] text-sm"
+    >
         @if ($isRefundView)
             <input type="hidden" name="view" value="refunds">
         @endif
@@ -172,10 +176,27 @@
                 @endif
             </select>
         </div>
+        <div class="md:col-span-2">
+            <label class="block text-sm font-semibold text-[#2C1E1E]">Cari Peserta / Event</label>
+            <div class="mt-2 flex items-center gap-3 rounded-2xl border border-[#FAD6C7] bg-white/80 px-4 py-3 shadow-inner ring-1 ring-transparent focus-within:ring-[#FF8A64]">
+                <x-heroicon-o-magnifying-glass class="h-5 w-5 text-[#FF8A64]" />
+                <input
+                    type="text"
+                    name="search"
+                    value="{{ $filters['search'] ?? request('search') }}"
+                    data-auto-search
+                    placeholder="Ketik nama peserta, email, atau judul event..."
+                    class="w-full border-0 bg-transparent text-sm text-[#2C1E1E] placeholder:text-[#C97A64] focus:ring-0"
+                    autocomplete="off"
+                />
+                @if (($filters['search'] ?? request('search')))
+                    <a href="{{ route('admin.registrations.index', array_filter(request()->except(['search', 'page']), fn ($v) => $v !== null && $v !== '')) }}" class="rounded-full p-1 text-[#C97A64] hover:bg-[#FFE3D2] hover:text-[#822021]" title="Hapus Pencarian">
+                        <x-heroicon-o-x-mark class="h-4 w-4" />
+                    </a>
+                @endif
+            </div>
+        </div>
     </form>
-
-    @php($items = $isRefundView ? ($refunds ?? collect()) : $registrations)
-    @php($list = $items)
 
     <section class="mt-8 rounded-[32px] border border-[#FAD6C7] bg-white/95 shadow-xl shadow-[#FFD7BE]/40">
         <header class="flex flex-col gap-4 border-b border-[#FAD6C7]/70 px-6 py-6 sm:flex-row sm:items-center sm:justify-between">
@@ -190,183 +211,12 @@
                 </p>
             </div>
         </header>
-        <div class="overflow-x-auto">
-            <table class="min-w-full divide-y divide-[#FAD6C7]/70 text-sm">
-                <thead class="bg-[#FFF5EF] text-xs font-semibold uppercase tracking-widest text-[#B87A7A]">
-                    <tr>
-                        <th class="px-6 py-3 text-left">{{ $isRefundView ? 'ID Refund' : 'ID Daftar' }}</th>
-                        <th class="px-6 py-3 text-left">Event</th>
-                        <th class="px-6 py-3 text-left">Peserta</th>
-                        <th class="px-6 py-3 text-left">No. Rekening</th>
-                        <th class="px-6 py-3 text-left">Jumlah</th>
-                        <th class="px-6 py-3 text-left">{{ $isRefundView ? 'Status Refund' : 'Status' }}</th>
-                        <th class="px-6 py-3 text-right">Aksi</th>
-                    </tr>
-                </thead>
-                <tbody class="divide-y divide-[#FAD6C7]/60 bg-white/80">
-                    @forelse ($list as $row)
-                        @if ($isRefundView)
-                            @php($refund = $row)
-                            @php($registration = optional($refund->transaction)->registration)
-                            @php($formData = collect($registration?->form_data))
-                            @php($transaction = $refund->transaction)
-                        @else
-                            @php($registration = $row)
-                            @php($refund = optional($registration->transaction)->refund)
-                            @php($formData = collect($registration->form_data))
-                            @php($transaction = $registration->transaction)
-                        @endif
-                        <tr class="transition hover:bg-[#FFF0E6]">
-                            <td class="px-6 py-4 align-top">
-                                    <div class="font-semibold text-[#2C1E1E]">
-                                        #{{ str_pad($isRefundView ? $refund->id : $registration->id, 4, '0', STR_PAD_LEFT) }}
-                                    </div>
-                                    <div class="text-xs text-[#B87A7A]">
-                                        {{ $isRefundView ? optional($refund->requested_at)->translatedFormat('d M Y H:i') : optional($registration->registered_at)->translatedFormat('d M Y H:i') }}
-                                    </div>
-                            </td>
-                            <td class="px-6 py-4 align-top">
-                                    <p class="font-semibold text-[#2C1E1E]">{{ $registration?->event->title }}</p>
-                                    <p class="text-xs text-[#B87A7A]">{{ $registration?->event->venue_name }}</p>
-                                    <p class="text-[11px] text-[#B87A7A]">Tutor: {{ $registration?->event->tutor_name }}</p>
-                            </td>
-                            <td class="px-6 py-4 align-top">
-                                    <p class="font-semibold text-[#2C1E1E]">{{ $registration?->user->name }}</p>
-                                    <p class="text-xs text-[#B87A7A]">{{ $formData->get('phone', $registration?->user->phone ?? '-') }}</p>
-                                    <p class="text-[11px] text-[#B87A7A]">{{ $registration?->user->email }}</p>
-                            </td>
-                            <td class="px-6 py-4 align-top text-[#2C1E1E]">
-                                    {{ $formData->get('account_number') ?? $formData->get('bank_account') ?? '-' }}
-                            </td>
-                            <td class="px-6 py-4 align-top">
-                                    <p class="font-semibold text-[#2C1E1E]">Rp{{ number_format($transaction?->amount ?? 0, 0, ',', '.') }}</p>
-                                    <p class="text-[11px] text-[#B87A7A]">
-                                        {{ $isRefundView
-                                            ? optional($refund->requested_at)->translatedFormat('d M Y H:i')
-                                            : $registration?->event->start_at->translatedFormat('d M Y') }}
-                                    </p>
-                            </td>
-                            <td class="px-6 py-4 align-top">
-                                    @if ($isRefundView)
-                                        @php($refundStatus = $refund->status)
-                                        <span @class([
-                                            'inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-semibold',
-                                            'bg-[#FCE2CF] text-[#C65B74]' => optional($refundStatus)->value === 'pending',
-                                            'bg-[#E4F5E9] text-[#2F9A55]' => in_array(optional($refundStatus)->value, ['approved', 'completed']),
-                                            'bg-[#FDE1E7] text-[#BA1B1D]' => optional($refundStatus)->value === 'rejected',
-                                            'bg-[#E5E7EB] text-[#4B5563]' => ! in_array(optional($refundStatus)->value, ['pending', 'approved', 'completed', 'rejected']),
-                                        ])>
-                                            <span class="h-2 w-2 rounded-full {{ match (optional($refundStatus)->value) {
-                                                'pending' => 'bg-[#FF8A64]',
-                                                'approved', 'completed' => 'bg-[#2F9A55]',
-                                                'rejected' => 'bg-[#BA1B1D]',
-                                                default => 'bg-[#6B7280]',
-                                            } }}"></span>
-                                            {{ optional($refundStatus)->label() ?? 'Tidak ada data' }}
-                                        </span>
-                                    @else
-                                        <span @class([
-                                            'inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-semibold',
-                                            'bg-[#FCE2CF] text-[#C65B74]' => in_array($transaction?->status->value ?? '', ['pending', 'awaiting_verification']),
-                                            'bg-[#E4F5E9] text-[#2F9A55]' => ($transaction?->status?->value ?? null) === 'verified',
-                                            'bg-[#FDE1E7] text-[#BA1B1D]' => ($transaction?->status?->value ?? null) === 'rejected',
-                                            'bg-[#E5E7EB] text-[#4B5563]' => ! in_array($transaction?->status?->value ?? '', ['pending', 'awaiting_verification', 'verified', 'rejected']),
-                                        ])>
-                                            <span class="h-2 w-2 rounded-full {{ match ($transaction?->status?->value) {
-                                                'pending', 'awaiting_verification' => 'bg-[#FF8A64]',
-                                                'verified' => 'bg-[#2F9A55]',
-                                                'rejected' => 'bg-[#BA1B1D]',
-                                                default => 'bg-[#6B7280]',
-                                            } }}"></span>
-                                            {{ $transaction?->status->label() ?? 'Tidak ada data' }}
-                                        </span>
-                                    @endif
-                                </td>
-                                <td class="px-6 py-4 text-right align-top">
-                                    <div class="flex items-center justify-end gap-2">
-                                        @if ($isRefundView)
-                                            <a
-                                                href="{{ $registration ? route('admin.registrations.show', $registration) : '#' }}"
-                                                class="inline-flex items-center gap-2 rounded-full px-4 py-2 text-xs font-semibold bg-[#822021] text-[#FAF8F1] shadow-md shadow-[#B49F9A]/30 transition hover:-translate-y-0.5 hover:bg-[#822021]/70"
-                                            >
-                                                Detail
-                                                <x-heroicon-o-arrow-up-right class="h-4 w-4" />
-                                            </a>
-                                            @if ($refund->status === \App\Enums\RefundStatus::Pending)
-                                                <form method="POST" action="{{ route('admin.refunds.approve', $refund) }}">
-                                                    @csrf
-                                                    <button
-                                                        type="submit"
-                                                        class="inline-flex items-center justify-center rounded-full p-2 bg-emerald-100 text-emerald-600 shadow-md shadow-[#B49F9A]/30 transition hover:-translate-y-0.5 hover:bg-[#822021]/70"
-                                                        title="Setujui refund"
-                                                    >
-                                                        <x-heroicon-o-check class="h-4 w-4" />
-                                                    </button>
-                                                </form>
-                                                <form method="POST" action="{{ route('admin.refunds.reject', $refund) }}">
-                                                    @csrf
-                                                    <button
-                                                        type="submit"
-                                                        class="inline-flex items-center justify-center rounded-full p-2 bg-rose-100 text-rose-600 shadow-md shadow-[#B49F9A]/30 transition hover:-translate-y-0.5 hover:bg-[#822021]/70"
-                                                        title="Tolak refund"
-                                                    >
-                                                        <x-heroicon-o-x-mark class="h-4 w-4" />
-                                                    </button>
-                                                </form>
-                                            @endif
-                                        @else
-                                            @if (($transaction?->status?->value ?? null) === 'awaiting_verification')
-                                                <form method="POST" action="{{ route('admin.registrations.verify-payment', $registration) }}">
-                                                    @csrf
-                                                    <button
-                                                        type="submit"
-                                                        class="inline-flex items-center justify-center rounded-full p-2 bg-emerald-100 text-emerald-600 shadow-md shadow-[#B49F9A]/30 transition hover:-translate-y-0.5 hover:bg-[#822021]/70"
-                                                        title="Setujui pembayaran"
-                                                    >
-                                                        <x-heroicon-o-check class="h-4 w-4" />
-                                                    </button>
-                                                </form>
-                                                <form method="POST" action="{{ route('admin.registrations.reject-payment', $registration) }}">
-                                                    @csrf
-                                                    <button
-                                                        type="submit"
-                                                        class="inline-flex items-center justify-center rounded-full p-2 bg-rose-100 text-rose-600 shadow-md shadow-[#B49F9A]/30 transition hover:-translate-y-0.5 hover:bg-[#822021]/70"
-                                                        title="Tolak pembayaran"
-                                                    >
-                                                        <x-heroicon-o-x-mark class="h-4 w-4" />
-                                                    </button>
-                                                </form>
-                                            @endif
-
-                                            <a
-                                                href="{{ route('admin.registrations.show', $registration) }}"
-                                                class="inline-flex items-center gap-2 rounded-full px-4 py-2 text-xs font-semibold bg-[#822021] text-[#FAF8F1] shadow-md shadow-[#B49F9A]/30 transition hover:-translate-y-0.5 hover:bg-[#822021]/70"
-                                            >
-                                                Detail
-                                                <x-heroicon-o-arrow-up-right class="h-4 w-4" />
-                                            </a>
-                                        @endif
-                                    </div>
-                                </td>
-                            </tr>
-                    @empty
-                        <tr>
-                            <td colspan="7" class="px-6 py-12 text-center text-sm text-[#B87A7A]">Belum ada data {{ $isRefundView ? 'refund' : 'pendaftaran' }} pada filter ini.</td>
-                        </tr>
-                    @endforelse
-                </tbody>
-            </table>
+        <div id="registration-list" data-ajax-pagination="true">
+            @include('admin.registrations.partials.table', [
+                'items' => $isRefundView ? ($refunds ?? collect()) : $registrations,
+                'isRefundView' => $isRefundView,
+                'filters' => $filters ?? [],
+            ])
         </div>
     </section>
-
-    <div class="mt-6 flex flex-col gap-3 text-sm text-[#6F4F4F] sm:flex-row sm:items-center sm:justify-between">
-        <p>
-            Menampilkan
-            <span class="font-semibold text-[#C65B74]">{{ $items->firstItem() }}-{{ $items->lastItem() }}</span>
-            dari
-            <span class="font-semibold text-[#C65B74]">{{ $items->total() }}</span>
-            {{ $isRefundView ? 'permintaan refund' : 'pendaftaran' }}.
-        </p>
-        <div class="sm:ml-auto">{{ $items->links() }}</div>
-    </div>
 </x-layouts.admin>

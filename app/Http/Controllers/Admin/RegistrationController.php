@@ -25,6 +25,7 @@ class RegistrationController extends Controller
         $view = $request->input('view', '');
         $isRefundView = in_array($view, ['refund', 'refunds'], true);
         $eventId = $request->input('event_id') ? (int)$request->input('event_id') : null;
+        $search = trim((string) $request->input('search', ''));
         
         $statusFilter = ! $isRefundView
             ? PaymentStatus::tryFrom((string) $request->input('payment_status', ''))
@@ -35,6 +36,18 @@ class RegistrationController extends Controller
 
         $registrationBase = Registration::query()
             ->when($eventId, fn ($query) => $query->where('event_id', $eventId))
+            ->when($search, function ($query, $keyword) {
+                $like = '%' . $keyword . '%';
+                $query->where(function ($builder) use ($like) {
+                    $builder
+                        ->whereHas('user', fn ($user) => $user
+                            ->where('name', 'like', $like)
+                            ->orWhere('email', 'like', $like)
+                            ->orWhere('phone', 'like', $like)
+                        )
+                        ->orWhereHas('event', fn ($event) => $event->where('title', 'like', $like)->orWhere('venue_name', 'like', $like)->orWhere('tutor_name', 'like', $like));
+                });
+            })
             ->when($statusFilter, fn ($query) => $query->whereHas('transaction', fn ($transaction) => $transaction->where('status', $statusFilter)))
             ->when($isRefundView, fn ($query) => $query->whereHas('transaction.refund'));
 
@@ -74,6 +87,18 @@ class RegistrationController extends Controller
         $refundBase = Refund::query()
             ->with('transaction.registration')
             ->when($eventId, fn ($query) => $query->whereHas('transaction.registration', fn ($registration) => $registration->where('event_id', $eventId)))
+            ->when($search, function ($query, $keyword) {
+                $like = '%' . $keyword . '%';
+                $query->whereHas('transaction.registration', function ($registration) use ($like) {
+                    $registration
+                        ->whereHas('user', fn ($user) => $user
+                            ->where('name', 'like', $like)
+                            ->orWhere('email', 'like', $like)
+                            ->orWhere('phone', 'like', $like)
+                        )
+                        ->orWhereHas('event', fn ($event) => $event->where('title', 'like', $like)->orWhere('venue_name', 'like', $like)->orWhere('tutor_name', 'like', $like));
+                });
+            })
             ->when($refundStatusFilter, fn ($query) => $query->where('status', $refundStatusFilter));
 
         $refunds = null;
@@ -94,6 +119,22 @@ class RegistrationController extends Controller
 
         $events = \App\Models\Event::orderBy('title')->get();
 
+        $filters = [
+            'event_id' => $eventId,
+            'payment_status' => $statusFilter?->value,
+            'refund_status' => $refundStatusFilter?->value,
+            'view' => $isRefundView ? 'refunds' : null,
+            'search' => $search,
+        ];
+
+        if ($request->ajax()) {
+            return view('admin.registrations.partials.table', [
+                'items' => $isRefundView ? ($refunds ?? collect()) : $registrations,
+                'isRefundView' => $isRefundView,
+                'filters' => $filters,
+            ]);
+        }
+
         return view('admin.registrations.index', [
             'registrations' => $registrations,
             'events' => $events,
@@ -101,6 +142,7 @@ class RegistrationController extends Controller
             'refundSummary' => $refundSummary,
             'isRefundView' => $isRefundView,
             'refunds' => $refunds,
+            'filters' => $filters,
         ]);
     }
 

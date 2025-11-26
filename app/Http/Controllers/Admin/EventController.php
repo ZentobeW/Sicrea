@@ -55,6 +55,10 @@ class EventController extends Controller
             'search' => $search,
         ];
 
+        if ($request->ajax()) {
+            return view('admin.events.partials.table', compact('events', 'filters'));
+        }
+
         return view('admin.events.index', compact('events', 'overview', 'nextEvent', 'filters'));
     }
 

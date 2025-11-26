@@ -61,6 +61,10 @@ class PortfolioController extends Controller
             'event_id' => $eventId,
         ];
 
+        if ($request->ajax()) {
+            return view('admin.portfolios.partials.list', compact('portfolios'));
+        }
+
         return view('admin.portfolios.index', compact('portfolios', 'insight', 'latestUpdate', 'events', 'filters'));
     }
 
