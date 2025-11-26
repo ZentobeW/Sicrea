@@ -11,32 +11,32 @@ use App\Models\Event;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class EventController extends Controller
 {
     public function index(Request $request): View
     {
+        // 1. Ambil kata kunci pencarian
+        $search = $request->input('search'); // Gunakan input() agar dapat null/string biasa
+
         $events = Event::query()
             ->withCount([
                 'registrations as confirmed_registrations_count' => fn ($query) => $query->where('status', RegistrationStatus::Confirmed),
                 'registrations as total_registrations_count',
             ])
-            ->when($request->filled('search'), function ($query) use ($request) {
-                $keyword = '%' . $request->string('search') . '%';
-
+            // 2. Filter Query
+            ->when($search, function ($query, $keyword) {
                 $query->where(function ($builder) use ($keyword) {
-                    $builder
-                        ->where('title', 'like', $keyword)
-                        ->orWhere('venue_name', 'like', $keyword)
-                        ->orWhere('venue_address', 'like', $keyword)
-                        ->orWhere('tutor_name', 'like', $keyword);
+                    $builder->where('title', 'like', "%{$keyword}%")
+                        ->orWhere('venue_name', 'like', "%{$keyword}%")
+                        ->orWhere('venue_address', 'like', "%{$keyword}%")
+                        ->orWhere('tutor_name', 'like', "%{$keyword}%");
                 });
             })
             ->orderByDesc('start_at')
             ->paginate(10)
-            ->withQueryString();
+            ->withQueryString(); // Penting: Simpan filter saat pindah halaman (pagination)
 
         $overview = [
             'total' => Event::count(),
@@ -50,8 +50,9 @@ class EventController extends Controller
             ->orderBy('start_at')
             ->first();
 
+        // 3. Kirim data filter ke View agar input tidak kosong setelah reload
         $filters = [
-            'search' => $request->string('search'),
+            'search' => $search,
         ];
 
         return view('admin.events.index', compact('events', 'overview', 'nextEvent', 'filters'));

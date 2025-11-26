@@ -16,14 +16,18 @@ class PortfolioController extends Controller
 {
     public function index(Request $request): View
     {
+        // 1. Ambil nilai filter dari Request
+        $searchQuery = $request->input('q');
+        $eventId = $request->input('event_id');
+
         $portfoliosQuery = Portfolio::query()
             ->with([
                 'event:id,title,start_at,venue_name,venue_address,tutor_name',
                 'images' => fn ($query) => $query->orderBy('display_order')->orderBy('id'),
             ])
-            ->when($request->filled('q'), function ($query) use ($request) {
-                $keyword = '%' . $request->string('q')->toString() . '%';
-
+            // 2. Filter Pencarian Teks
+            ->when($searchQuery, function ($query) use ($searchQuery) {
+                $keyword = '%' . $searchQuery . '%';
                 $query->where(function ($builder) use ($keyword) {
                     $builder
                         ->where('title', 'like', $keyword)
@@ -36,7 +40,8 @@ class PortfolioController extends Controller
                         });
                 });
             })
-            ->when($request->filled('event_id'), fn ($query) => $query->where('event_id', $request->integer('event_id')))
+            // 3. Filter Dropdown Event
+            ->when($eventId, fn ($query) => $query->where('event_id', $eventId))
             ->latest();
 
         $portfolios = $portfoliosQuery->paginate(12)->withQueryString();
@@ -50,14 +55,16 @@ class PortfolioController extends Controller
 
         $events = Event::orderBy('start_at')->orderBy('title')->get(['id', 'title']);
 
+        // 4. Kirim data filter kembali ke View
         $filters = [
-            'q' => $request->string('q')->toString(),
-            'event_id' => $request->integer('event_id'),
+            'q' => $searchQuery,
+            'event_id' => $eventId,
         ];
 
         return view('admin.portfolios.index', compact('portfolios', 'insight', 'latestUpdate', 'events', 'filters'));
     }
 
+    // ... (method create, store, edit, update, destroy tetap sama seperti sebelumnya) ...
     public function create(): View
     {
         $events = Event::orderBy('title')->get();

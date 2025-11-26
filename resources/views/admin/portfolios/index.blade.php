@@ -18,30 +18,51 @@
             <h2 class="text-xl font-semibold">Kurasi Dokumentasi Terbaik</h2>
             <p class="mt-2 max-w-2xl text-sm text-[#7A3D2A]">Gunakan pencarian untuk menemukan portofolio tertentu atau filter berdasarkan event agar mudah mengatur konten landing page.</p>
 
-            <form method="GET" class="mt-6 grid gap-4 rounded-[28px] bg-white/80 p-6 shadow-lg shadow-[#FF9F80]/20 md:grid-cols-[minmax(0,1.2fr)_minmax(0,0.8fr)_auto]">
+            {{-- SEARCH & FILTER FORM --}}
+            <form method="GET" action="{{ route('admin.portfolios.index') }}" class="mt-6 grid gap-4 rounded-[28px] bg-white/80 p-6 shadow-lg shadow-[#FF9F80]/20 md:grid-cols-[minmax(0,1.2fr)_minmax(0,0.8fr)]">
+                
+                {{-- 1. SEARCH INPUT (Auto Search) --}}
                 <div>
                     <label for="search" class="text-xs font-semibold uppercase tracking-wide text-[#A3563F]">Cari Portofolio</label>
-                    <div class="mt-2 flex items-center gap-3 rounded-2xl border border-[#FFD1BE] bg-white px-4 py-2.5 shadow-inner">
+                    <div class="mt-2 flex items-center gap-3 rounded-2xl border border-[#FFD1BE] bg-white px-4 py-2.5 shadow-inner ring-1 ring-transparent focus-within:ring-[#FF8A65]">
                         <x-heroicon-o-magnifying-glass class="h-5 w-5 text-[#FF8A65]" />
-                        <input id="search" type="text" name="q" value="{{ $filters['q'] }}" placeholder="Cari portofolio berdasarkan judul atau nama event" class="w-full border-0 bg-transparent text-sm text-[#5C2518] placeholder:text-[#C97A64] focus:ring-0" />
+                        <input 
+                            id="search" 
+                            type="text" 
+                            name="q" 
+                            value="{{ $filters['q'] }}" 
+                            data-auto-search 
+                            placeholder="Cari judul atau nama event..." 
+                            class="w-full border-0 bg-transparent text-sm text-[#5C2518] placeholder:text-[#C97A64] focus:ring-0" 
+                            autocomplete="off"
+                        />
+                        @if ($filters['q'])
+                            <a href="{{ route('admin.portfolios.index', ['event_id' => $filters['event_id']]) }}" class="ml-1 rounded-full p-1 text-[#C97A64] hover:bg-[#FFE3D2] hover:text-[#822021]" title="Hapus Pencarian">
+                                <x-heroicon-o-x-mark class="h-4 w-4" />
+                            </a>
+                        @endif
                     </div>
                 </div>
+
+                {{-- 2. EVENT FILTER (Auto Submit on Change) --}}
                 <div>
                     <label for="event" class="text-xs font-semibold uppercase tracking-wide text-[#A3563F]">Filter Event</label>
-                    <div class="mt-2 rounded-2xl border border-[#FFD1BE] bg-white px-4 py-2.5 shadow-inner">
-                        <select id="event" name="event_id" class="w-full border-0 bg-transparent text-sm text-[#5C2518] focus:ring-0">
+                    <div class="mt-2 rounded-2xl border border-[#FFD1BE] bg-white px-4 py-2.5 shadow-inner ring-1 ring-transparent focus-within:ring-[#FF8A65]">
+                        <select 
+                            id="event" 
+                            name="event_id" 
+                            data-auto-submit 
+                            class="w-full border-0 bg-transparent text-sm text-[#5C2518] focus:ring-0 cursor-pointer"
+                        >
                             <option value="">Semua Event</option>
                             @foreach ($events as $event)
-                                <option value="{{ $event->id }}" @selected($filters['event_id'] === $event->id)>{{ $event->title }}</option>
+                                <option value="{{ $event->id }}" @selected($filters['event_id'] == $event->id)>{{ $event->title }}</option>
                             @endforeach
                         </select>
                     </div>
                 </div>
-                <div class="flex items-end">
-                    <button type="submit" class="inline-flex items-center gap-2 rounded-full bg-[#822021] px-5 py-3 text-sm font-semibold text-[#FAF8F1] shadow-lg shadow-[#822021]/30 transition hover:-translate-y-0.5 hover:bg-[#822021]/70 hover:text-[#FAF8F1]">
-                        Terapkan
-                    </button>
-                </div>
+
+                {{-- Tombol "Terapkan" Dihapus karena sudah otomatis --}}
             </form>
 
             <dl class="mt-6 grid gap-4 text-sm text-[#6B3021] sm:grid-cols-2 lg:grid-cols-4">

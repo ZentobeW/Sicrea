@@ -22,14 +22,15 @@ class RegistrationController extends Controller
 {
     public function index(Request $request): View
     {
-        $view = (string) $request->query('view', '');
+        $view = $request->input('view', '');
         $isRefundView = in_array($view, ['refund', 'refunds'], true);
-        $eventId = $request->integer('event_id');
+        $eventId = $request->input('event_id') ? (int)$request->input('event_id') : null;
+        
         $statusFilter = ! $isRefundView
-            ? PaymentStatus::tryFrom((string) $request->query('payment_status', ''))
+            ? PaymentStatus::tryFrom((string) $request->input('payment_status', ''))
             : null;
         $refundStatusFilter = $isRefundView
-            ? RefundStatus::tryFrom((string) $request->query('refund_status', ''))
+            ? RefundStatus::tryFrom((string) $request->input('refund_status', ''))
             : null;
 
         $registrationBase = Registration::query()
@@ -103,6 +104,7 @@ class RegistrationController extends Controller
         ]);
     }
 
+    // Method lain tetap sama (show, verifyPayment, rejectPayment, export, approveRefund, rejectRefund)
     public function show(Registration $registration): View
     {
         $registration->load([

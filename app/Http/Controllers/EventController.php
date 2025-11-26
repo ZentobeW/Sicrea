@@ -3,34 +3,43 @@
 namespace App\Http\Controllers;
 
 use App\Enums\EventStatus;
+use App\Enums\RegistrationStatus;
+use App\Http\Controllers\Controller;
 use App\Models\Event;
 use Illuminate\Contracts\View\View;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\RedirectResponse;
 
 class EventController extends Controller
 {
     public function index(Request $request): View
     {
         $events = Event::query()
+            ->withCount([
+                'registrations as confirmed_registrations_count' => fn ($query) => $query->where('status', RegistrationStatus::Confirmed),
+                'registrations as total_registrations_count',
+            ])
             ->where('status', EventStatus::Published)
-            ->when($request->string('q'), function ($query, string $keyword) {
+            
+            // Filter Pencarian (Search)
+            ->when($request->filled('q'), function ($query) use ($request) {
+                $keyword = '%' . $request->string('q') . '%';
                 $query->where(function ($builder) use ($keyword) {
                     $builder
-                        ->where('title', 'like', "%{$keyword}%")
-                        ->orWhere('description', 'like', "%{$keyword}%")
-                        ->orWhere('venue_name', 'like', "%{$keyword}%")
-                        ->orWhere('venue_address', 'like', "%{$keyword}%")
-                        ->orWhere('tutor_name', 'like', "%{$keyword}%");
+                        ->where('title', 'like', $keyword)
+                        ->orWhere('venue_name', 'like', $keyword)
+                        ->orWhere('venue_address', 'like', $keyword)
+                        ->orWhere('tutor_name', 'like', $keyword);
                 });
             })
-            ->orderBy('start_at')
-            ->paginate(9)
+            
+           ->orderBy('start_at') // Urutkan berdasarkan tanggal terdekat
+            ->paginate(9) // Tampilkan 9 event per halaman
             ->withQueryString();
-
         return view('events.index', compact('events'));
     }
 
+    // Method show, publish, unpublish tetap sama seperti sebelumnya...
     public function show(Event $event): View
     {
         abort_unless($event->status === EventStatus::Published, 404);
