@@ -132,15 +132,18 @@
         </article>
     </section>
 
-    <form method="GET" class="mt-8 grid gap-4 rounded-[28px] border border-[#FAD6C7] bg-white/90 p-6 shadow-lg shadow-[#FFD7BE]/40 md:grid-cols-4 text-sm">
+    {{-- FILTER FORM (AUTO SUBMIT) --}}
+    <form method="GET" class="mt-8 grid gap-4 rounded-[28px] border border-[#FAD6C7] bg-white/90 p-6 shadow-lg shadow-[#FFD7BE]/40 md:grid-cols-2 text-sm">
         @if ($isRefundView)
             <input type="hidden" name="view" value="refunds">
         @endif
-        <div class="md:col-span-2">
+        
+        <div>
             <label class="block text-sm font-semibold text-[#2C1E1E]">Filter Event</label>
             <select
                 name="event_id"
-                class="mt-2 w-full rounded-2xl border border-[#FAD6C7] bg-white/80 px-4 py-3 text-sm text-[#2C1E1E] focus:border-[#FF8A64] focus:outline-none focus:ring-2 focus:ring-[#FF8A64]/30"
+                data-auto-submit
+                class="mt-2 w-full rounded-2xl border border-[#FAD6C7] bg-white/80 px-4 py-3 text-sm text-[#2C1E1E] focus:border-[#FF8A64] focus:outline-none focus:ring-2 focus:ring-[#FF8A64]/30 cursor-pointer"
             >
                 <option value="">Semua Event</option>
                 @foreach ($events as $event)
@@ -154,7 +157,8 @@
             </label>
             <select
                 name="{{ $isRefundView ? 'refund_status' : 'payment_status' }}"
-                class="mt-2 w-full rounded-2xl border border-[#FAD6C7] bg-white/80 px-4 py-3 text-sm text-[#2C1E1E] focus:border-[#FF8A64] focus:outline-none focus:ring-2 focus:ring-[#FF8A64]/30"
+                data-auto-submit
+                class="mt-2 w-full rounded-2xl border border-[#FAD6C7] bg-white/80 px-4 py-3 text-sm text-[#2C1E1E] focus:border-[#FF8A64] focus:outline-none focus:ring-2 focus:ring-[#FF8A64]/30 cursor-pointer"
             >
                 <option value="">{{ $isRefundView ? 'Semua Status Refund' : 'Semua Status' }}</option>
                 @if ($isRefundView)
@@ -167,11 +171,6 @@
                     @endforeach
                 @endif
             </select>
-        </div>
-        <div class="flex items-end">
-            <button class="inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#822021] px-4 py-3 font-semibold text-[#FAF8F1] shadow-md shadow-[#B49F9A]/30 transition hover:-translate-y-0.5 hover:bg-[#822021]/70">
-                Terapkan Filter
-            </button>
         </div>
     </form>
 

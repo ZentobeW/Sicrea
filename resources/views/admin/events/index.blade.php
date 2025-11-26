@@ -6,6 +6,7 @@
         </a>
     </x-slot>
 
+    {{-- OVERVIEW CARDS --}}
     <div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         <div class="rounded-3xl bg-white p-5 shadow-[0_25px_60px_-30px_rgba(243,140,118,0.55)]">
             <p class="text-xs font-semibold uppercase tracking-[0.3em] text-[#E77B5F]">Total Event</p>
@@ -34,21 +35,35 @@
         </div>
     </div>
 
+    {{-- LIST & SEARCH --}}
     <div class="rounded-3xl bg-white p-6 shadow-[0_35px_90px_-45px_rgba(240,128,128,0.55)]">
         <div class="flex flex-col gap-4 border-b border-[#FFE0D6] pb-6 sm:flex-row sm:items-center sm:justify-between">
             <div>
                 <h2 class="text-lg font-semibold text-[#4B2A22]">Daftar Event</h2>
                 <p class="text-sm text-[#A35C45]">Kelola event yang sedang berjalan maupun yang akan datang.</p>
             </div>
-            <form method="GET" class="flex w-full max-w-sm items-center rounded-full bg-[#FFF5F0] px-4 py-2 text-sm shadow-inner">
+            
+            {{-- FORM PENCARIAN (Perhatikan atribut data-auto-search) --}}
+            <form method="GET" action="{{ route('admin.events.index') }}" class="flex w-full max-w-sm items-center rounded-full bg-[#FFF5F0] px-4 py-2 text-sm shadow-inner ring-1 ring-[#F7C8B8]/30 focus-within:ring-[#E77B5F]">
                 <x-heroicon-o-magnifying-glass class="h-5 w-5 text-[#E77B5F]" />
-                <input type="text" name="search" value="{{ $filters['search'] }}" placeholder="Cari event..." class="ml-2 flex-1 bg-transparent text-[#4B2A22] placeholder:text-[#D28B7B] focus:outline-none" />
+                <input 
+                    type="text" 
+                    name="search" 
+                    value="{{ $filters['search'] }}" 
+                    data-auto-search
+                    placeholder="Cari judul, venue, atau tutor..." 
+                    class="ml-2 flex-1 bg-transparent text-[#4B2A22] placeholder:text-[#D28B7B] focus:outline-none" 
+                    autocomplete="off"
+                />
                 @if ($filters['search'])
-                    <a href="{{ route('admin.events.index') }}" class="text-xs font-semibold text-[#822021] hover:text-[#822021]/70">Reset</a>
+                    <a href="{{ route('admin.events.index') }}" class="ml-2 rounded-full bg-[#FFE0D6] p-1 text-[#C16A55] hover:bg-[#FFD1BE] hover:text-[#822021]" title="Hapus Filter">
+                        <x-heroicon-o-x-mark class="h-4 w-4" />
+                    </a>
                 @endif
             </form>
         </div>
 
+        {{-- EXPORT ACTIONS --}}
         <form method="GET" action="{{ route('admin.registrations.export') }}" class="mt-6 space-y-4">
             <div class="flex flex-col gap-3 rounded-2xl bg-[#FFF5F0] px-4 py-3 text-sm text-[#9C5A45] lg:flex-row lg:items-center lg:justify-between">
                 <div class="flex flex-wrap items-center gap-3">
@@ -70,6 +85,7 @@
                 </div>
             </div>
 
+            {{-- TABLE --}}
             <div class="overflow-x-auto">
                 <table class="min-w-full divide-y divide-[#FFE0D6] text-sm">
                     <thead class="text-xs uppercase tracking-wide text-[#C16A55]">
@@ -170,7 +186,14 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="8" class="px-5 py-12 text-center text-sm text-[#A35C45]">Belum ada data event.</td>
+                                <td colspan="8" class="px-5 py-12 text-center text-sm text-[#A35C45]">
+                                    @if ($filters['search'])
+                                        Tidak ditemukan event dengan kata kunci "<strong>{{ $filters['search'] }}</strong>".
+                                        <a href="{{ route('admin.events.index') }}" class="underline hover:text-[#822021]">Reset filter</a>
+                                    @else
+                                        Belum ada data event.
+                                    @endif
+                                </td>
                             </tr>
                         @endforelse
                     </tbody>
