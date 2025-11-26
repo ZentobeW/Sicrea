@@ -9,23 +9,6 @@
 >
     <section class="py-12">
         <div class="max-w-5xl mx-auto space-y-8">
-            <div class="relative overflow-hidden rounded-[32px] bg-gradient-to-br from-[#FFE3D3] via-[#FFF3EA] to-white p-6 shadow-lg shadow-[#FFD7BE]/40 sm:p-7">
-                <div class="absolute -right-10 -top-10 h-44 w-44 rounded-full bg-[#FFE3D3]/60 blur-3xl"></div>
-                <div class="absolute -left-14 bottom-0 h-36 w-36 rounded-full bg-[#FFF3EA]/70 blur-3xl"></div>
-
-                <div class="flex flex-wrap items-center justify-between gap-4">
-                    <div class="flex items-center gap-3">
-                        <a
-                            href="{{ route('admin.registrations.index') }}"
-                            class="inline-flex items-center gap-2 rounded-full bg-[#822021] px-4 py-2 text-sm font-semibold text-[#FAF8F1] shadow-md shadow-[#B49F9A]/30 transition hover:-translate-y-0.5 hover:bg-[#822021]/70"
-                        >
-                            <x-heroicon-o-arrow-left-on-rectangle class="h-4 w-4" />
-                            Kembali
-                        </a>
-                        <h1 class="text-2xl font-semibold text-[#2C1E1E] sm:text-3xl">Detail Transaksi</h1>
-                    </div>
-                </div>
-            </div>
 
             <div class="rounded-[28px] border border-[#FAD6C7] bg-white/95 p-6 shadow-xl shadow-[#FFD7BE]/40 sm:p-7">
                 <dl class="grid gap-x-8 gap-y-5 text-sm text-[#6F4F4F] sm:grid-cols-2">
@@ -103,6 +86,45 @@
                     </div>
                 </div>
             </div>
+
+            {{-- START: BLOK TINDAK LANJUT PEMBAYARAN (Satu Notes Field) --}}
+            @if ($transaction && $transaction->status->value === 'awaiting_verification')
+                <div x-data="{ adminNote: '' }" class="mt-6 space-y-3 rounded-[28px] border border-[#FFD1BE] bg-white/95 p-6 shadow-xl shadow-[#FFD7BE]/40 sm:p-7">
+                    <h3 class="text-xl font-semibold text-[#2C1E1E]">Tindak Lanjut Pembayaran</h3>
+                    <p class="text-sm text-[#9A5A46]">Tinjau bukti bayar dan ambil keputusan. Catatan admin akan disimpan ke pendaftaran.</p>
+
+                    {{-- KOTAK NOTES TERPUSAT --}}
+                    <div class="space-y-2">
+                        <label class="block text-sm font-semibold text-[#2C1E1E]">Catatan Admin (Opsional/Wajib Tolak)</label>
+                        <textarea x-model="adminNote" id="admin_note_field_payment" rows="3" class="w-full rounded-xl border border-[#FFD1BE] bg-white/80 px-3 py-2 text-sm text-[#2C1E1E] focus:border-[#FF8A64] focus:outline-none focus:ring-2 focus:ring-[#FF8A64]/30" placeholder="Tuliskan catatan persetujuan atau alasan penolakan"></textarea>
+                    </div>
+
+                    <div class="grid gap-3 sm:grid-cols-2 pt-2">
+                        {{-- Form 1: Setujui Pembayaran (Verify) --}}
+                        <form id="verify-form" method="POST" action="{{ route('admin.registrations.verify-payment', $registration) }}">
+                            @csrf
+                            {{-- Hidden input untuk transfer nilai catatan --}}
+                            <input type="hidden" name="admin_note" x-bind:value="adminNote">
+                            <button type="submit" class="w-full inline-flex items-center justify-center gap-2 rounded-full bg-emerald-600 px-4 py-3 text-sm font-semibold text-white shadow-md shadow-emerald-500/30 transition hover:-translate-y-0.5 hover:bg-emerald-700">
+                                <x-heroicon-o-check class="h-4 w-4" /> Setujui Pembayaran
+                            </button>
+                        </form>
+
+                        {{-- Form 2: Tolak Pembayaran (Reject) --}}
+                        <form id="reject-form" method="POST" action="{{ route('admin.registrations.reject-payment', $registration) }}" 
+                            onsubmit="if (!document.getElementById('admin_note_field_payment').value.trim()) { alert('Catatan penolakan wajib diisi!'); return false; } return true;">
+                            @csrf
+                            {{-- Hidden input untuk transfer nilai catatan --}}
+                            <input type="hidden" name="admin_note" x-bind:value="adminNote">
+                            <button type="submit" class="w-full inline-flex items-center justify-center gap-2 rounded-full bg-rose-600 px-4 py-3 text-sm font-semibold text-white shadow-md shadow-rose-500/30 transition hover:-translate-y-0.5 hover:bg-rose-700">
+                                <x-heroicon-o-x-mark class="h-4 w-4" /> Tolak Pembayaran
+                            </button>
+                        </form>
+                    </div>
+                    <p class="text-xs text-[#B49F9A] mt-2">Catatan: Untuk **Penolakan**, kolom di atas wajib diisi.</p>
+                </div>
+            @endif
+            {{-- END: BLOK TINDAK LANJUT PEMBAYARAN --}}
         </div>
     </section>
 
@@ -146,27 +168,42 @@
                     </div>
                 </div>
 
+                {{-- START: BLOK TINDAK LANJUT REFUND (Satu Notes Field) --}}
                 @if ($refund->status->value === 'pending')
-                    <div class="mt-6 grid gap-3 sm:grid-cols-2">
-                        <form method="POST" action="{{ route('admin.refunds.approve', $refund) }}" class="space-y-3 rounded-2xl border border-[#E4F5E9] bg-[#F7FFF9] px-4 py-4 shadow-sm">
-                            @csrf
-                            <label class="block text-sm font-semibold text-[#2C1E1E]">Catatan Admin</label>
-                            <textarea name="admin_note" rows="3" class="w-full rounded-xl border border-[#D1F2DC] bg-white/80 px-3 py-2 text-sm text-[#2C1E1E] focus:border-[#2F9A55] focus:outline-none focus:ring-2 focus:ring-[#2F9A55]/30" placeholder="Catatan persetujuan">{{ old('admin_note') }}</textarea>
-                            <button class="inline-flex items-center justify-center gap-2 rounded-full bg-emerald-600 px-4 py-2 text-xs font-semibold text-white shadow-md shadow-emerald-500/30 transition hover:-translate-y-0.5 hover:bg-emerald-700">
-                                Setujui Refund
-                            </button>
-                        </form>
+                    <div x-data="{ refundNote: '' }" class="mt-6 space-y-4 rounded-[28px] border border-[#FFD1BE] bg-white/95 p-6 shadow-xl shadow-[#FFD7BE]/40 sm:p-7">
+                        <h3 class="text-xl font-semibold text-[#2C1E1E]">Tindak Lanjut Refund</h3>
+                        <p class="text-sm text-[#9A5A46]">Tinjau permohonan refund dan berikan catatan sebelum mengambil keputusan.</p>
 
-                        <form method="POST" action="{{ route('admin.refunds.reject', $refund) }}" class="space-y-3 rounded-2xl border border-[#FDE1E7] bg-[#FFF5F7] px-4 py-4 shadow-sm">
-                            @csrf
-                            <label class="block text-sm font-semibold text-[#2C1E1E]">Catatan Admin</label>
-                            <textarea name="admin_note" rows="3" class="w-full rounded-xl border border-[#FBD5DF] bg-white/80 px-3 py-2 text-sm text-[#2C1E1E] focus:border-[#E11D48] focus:outline-none focus:ring-2 focus:ring-[#E11D48]/20" placeholder="Catatan penolakan">{{ old('admin_note') }}</textarea>
-                            <button class="inline-flex items-center justify-center gap-2 rounded-full bg-rose-600 px-4 py-2 text-xs font-semibold text-white shadow-md shadow-rose-500/30 transition hover:-translate-y-0.5 hover:bg-rose-700">
-                                Tolak Refund
-                            </button>
-                        </form>
+                        {{-- KOTAK NOTES TERPUSAT --}}
+                        <div class="space-y-2">
+                            <label class="block text-sm font-semibold text-[#2C1E1E]">Catatan Admin (Opsional/Wajib Tolak)</label>
+                            <textarea x-model="refundNote" id="admin_note_field_refund" rows="3" class="w-full rounded-xl border border-[#FFD1BE] bg-white/80 px-3 py-2 text-sm text-[#2C1E1E] focus:border-[#FF8A64] focus:outline-none focus:ring-2 focus:ring-[#FF8A64]/30" placeholder="Tuliskan catatan persetujuan atau alasan penolakan"></textarea>
+                        </div>
+                        
+                        <div class="grid gap-3 sm:grid-cols-2 pt-2">
+                            {{-- Form 1: Setujui Refund (Approve) --}}
+                            <form method="POST" action="{{ route('admin.refunds.approve', $refund) }}">
+                                @csrf
+                                <input type="hidden" name="admin_note" x-bind:value="refundNote">
+                                <button class="w-full inline-flex items-center justify-center gap-2 rounded-full bg-emerald-600 px-4 py-3 text-sm font-semibold text-white shadow-md shadow-emerald-500/30 transition hover:-translate-y-0.5 hover:bg-emerald-700">
+                                    Setujui Refund
+                                </button>
+                            </form>
+
+                            {{-- Form 2: Tolak Refund (Reject) --}}
+                            <form method="POST" action="{{ route('admin.refunds.reject', $refund) }}"
+                                onsubmit="if (!document.getElementById('admin_note_field_refund').value.trim()) { alert('Catatan penolakan wajib diisi!'); return false; } return true;">
+                                @csrf
+                                <input type="hidden" name="admin_note" x-bind:value="refundNote">
+                                <button class="w-full inline-flex items-center justify-center gap-2 rounded-full bg-rose-600 px-4 py-3 text-sm font-semibold text-white shadow-md shadow-rose-500/30 transition hover:-translate-y-0.5 hover:bg-rose-700">
+                                    Tolak Refund
+                                </button>
+                            </form>
+                        </div>
+                        <p class="text-xs text-[#B49F9A] mt-2">Catatan: Untuk **Penolakan**, kolom di atas wajib diisi.</p>
                     </div>
                 @endif
+                {{-- END: BLOK TINDAK LANJUT REFUND --}}
             </div>
         </section>
     @endif

@@ -121,6 +121,13 @@ class RegistrationController extends Controller
     {
         $registration->markVerified();
 
+        $adminNote = $request->string('admin_note', '')->limit(500)->toString();
+        if (filled($adminNote)) {
+            $registration->update([
+                'notes' => $adminNote,
+            ]);
+        }
+
         $registration->loadMissing(['event', 'user', 'transaction']);
 
         Mail::to($registration->user->email)->queue(new PaymentVerified($registration));
@@ -151,8 +158,18 @@ class RegistrationController extends Controller
 
     public function rejectPayment(Registration $registration): RedirectResponse
     {
+        $adminNote = $request->string('admin_note', '')->limit(500)->toString();
+
+        if (! filled($adminNote)) {
+            return back()->withErrors(['admin_note' => 'Catatan penolakan wajib diisi.'])->onlyInput('admin_note');
+        }
+
         $registration->transaction?->update([
             'status' => PaymentStatus::Rejected,
+        ]);
+
+        $registration->update([
+            'notes' => $adminNote,
         ]);
 
         return back()->with('status', 'Pembayaran ditandai sebagai ditolak. Peserta akan diminta mengunggah ulang bukti.');
