@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\RegistrationController as AdminRegistrationContro
 use App\Http\Controllers\Admin\ReportController as AdminReportController;
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\EmailVerificationController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\GoogleAuthController;
 use App\Http\Controllers\PageController;
@@ -46,7 +47,12 @@ Route::middleware('guest')->group(function () {
 
     // Register
     Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register');
-    Route::post('/register', [AuthController::class, 'register']);
+    Route::post('/register', [AuthController::class, 'register'])->middleware('throttle:5,1');
+
+    // Email verification with OTP
+    Route::get('/verify-email', [EmailVerificationController::class, 'show'])->name('verification.notice');
+    Route::post('/verify-email', [EmailVerificationController::class, 'verify'])->name('verification.verify')->middleware('throttle:6,1');
+    Route::post('/verify-email/resend', [EmailVerificationController::class, 'resend'])->name('verification.resend')->middleware('throttle:3,1');
 
     // Lupa password
     Route::get('forgot-password', [PasswordResetLinkController::class, 'create'])
@@ -82,7 +88,7 @@ Route::post('/logout', [AuthController::class, 'logout'])
 | User Protected Routes
 |--------------------------------------------------------------------------
 */
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', 'verified.email'])->group(function () {
 
     // Profile
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
@@ -109,7 +115,7 @@ Route::middleware('auth')->group(function () {
 | Admin Routes
 |--------------------------------------------------------------------------
 */
-Route::middleware(['auth', 'can:access-admin'])
+Route::middleware(['auth', 'verified.email', 'can:access-admin'])
     ->prefix('admin')
     ->name('admin.')
     ->group(function () {

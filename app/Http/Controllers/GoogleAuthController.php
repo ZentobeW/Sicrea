@@ -66,7 +66,10 @@ class GoogleAuthController extends Controller
                     $user->update([
                         'google_id'      => $googleId,
                         'oauth_provider' => 'google',
+                        'email_verified_at' => now(),
                     ]);
+                } elseif (! $user->hasVerifiedEmail()) {
+                    $user->markEmailAsVerified();
                 }
 
                 // Login user
@@ -95,6 +98,7 @@ class GoogleAuthController extends Controller
                     'google_id'      => $googleId,
                     'oauth_provider' => 'google',
                     'password'       => Hash::make(uniqid()), // random password
+                    'email_verified_at' => now(),
                 ]);
 
                 event(new Registered($user));

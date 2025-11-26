@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Rules\DisposableEmail;
+use App\Services\EmailOtpService;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Contracts\View\View;
@@ -9,9 +11,15 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rules\Password;
 
 class AuthController extends Controller
 {
+    public function __construct(
+        private readonly EmailOtpService $otpService
+    ) {
+    }
+
     /**
      * Show the login form
      */
@@ -59,8 +67,13 @@ class AuthController extends Controller
     {
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'email' => ['required', 'email:rfc,dns', 'max:255', 'unique:users', new DisposableEmail],
+            'password' => [
+                'required',
+                Password::min(8)->mixedCase()->numbers()->symbols(),
+                'confirmed',
+            ],
+            'website' => ['present', 'max:0'], // honeypot
             'g-recaptcha-response' => ['required', 'captcha'], // AUTOMATIC reCAPTCHA validation
         ]);
 
@@ -71,11 +84,13 @@ class AuthController extends Controller
         ]);
 
         event(new Registered($user));
-        Auth::login($user);
+
+        $this->otpService->send($user);
+        $request->session()->put('pending_verification_user_id', $user->id);
 
         return redirect()
-            ->route('profile.edit')
-            ->with('status', 'Account created successfully! Please complete your profile.');
+            ->route('verification.notice')
+            ->with('status', 'Akun dibuat. Kami mengirim OTP ke email kamu untuk verifikasi.');
     }
 
     /**

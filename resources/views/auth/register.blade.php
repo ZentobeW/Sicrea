@@ -64,6 +64,9 @@
                             <p class="text-sm text-[#9A5A46]">
                                 Isi data berikut untuk mulai mendaftar workshop Kreasi Hangat.
                             </p>
+                            <p class="text-xs text-[#D97862]">
+                                Setelah daftar, kami kirim OTP 6-digit ke email kamu untuk verifikasi.
+                            </p>
                         </div>
 
                         {{-- VALIDATION ERRORS --}}
@@ -79,39 +82,56 @@
                         @endif
 
                         {{-- FORM --}}
-                        <form method="POST" action="{{ route('register') }}" class="space-y-6">
+                        <form id="register-form" method="POST" action="{{ route('register') }}" class="space-y-6" novalidate>
                             @csrf
+                            <div class="absolute left-[-9999px] top-auto h-0 overflow-hidden">
+                                <label for="website" class="sr-only">Website</label>
+                                <input type="text" name="website" id="website" tabindex="-1" autocomplete="off">
+                            </div>
 
                             {{-- NAME --}}
                             <div class="space-y-2">
                                 <label for="name" class="text-sm font-medium text-[#7C3A2D]">Nama Lengkap</label>
-                                <input id="name" type="text" name="name" value="{{ old('name') }}"
+                                <input id="name" type="text" name="name" value="{{ old('name') }}" autocomplete="name"
                                        class="w-full rounded-2xl border border-[#F7C8B8] bg-white/80 px-4 py-3 text-sm text-[#7C3A2D]
                                        focus:ring-2 focus:ring-[#F5A38D]" required>
+                                <p id="name-feedback" class="text-xs text-[#D97862] min-h-[18px]" aria-live="polite"></p>
                             </div>
 
                             {{-- EMAIL --}}
                             <div class="space-y-2">
                                 <label for="email" class="text-sm font-medium text-[#7C3A2D]">Alamat E-mail</label>
-                                <input id="email" type="email" name="email" value="{{ old('email') }}"
+                                <input id="email" type="email" name="email" value="{{ old('email') }}" autocomplete="email"
                                        class="w-full rounded-2xl border border-[#F7C8B8] bg-white/80 px-4 py-3 text-sm text-[#7C3A2D]
                                        focus:ring-2 focus:ring-[#F5A38D]" required>
+                                <p id="email-feedback" class="text-xs text-[#D97862] min-h-[18px]" aria-live="polite"></p>
                             </div>
 
                             {{-- PASSWORD --}}
                             <div class="space-y-2">
                                 <label for="password" class="text-sm font-medium text-[#7C3A2D]">Kata Sandi</label>
-                                <input id="password" type="password" name="password"
+                                <input id="password" type="password" name="password" autocomplete="new-password"
                                        class="w-full rounded-2xl border border-[#F7C8B8] bg-white/80 px-4 py-3 text-sm text-[#7C3A2D]
                                        focus:ring-2 focus:ring-[#F5A38D]" required>
+                                <div class="flex items-center gap-3">
+                                    <div class="h-2 flex-1 rounded-full bg-[#FDE1E7] overflow-hidden">
+                                        <div id="password-strength-bar" class="h-full w-0 bg-[#F5A38D] transition-all duration-300"></div>
+                                    </div>
+                                    <span id="password-strength-label" class="text-xs text-[#9A5A46]">Kekuatan sandi</span>
+                                </div>
+                                <p class="text-xs text-[#9A5A46]">
+                                    Min. 8 karakter dengan huruf besar, angka, dan simbol.
+                                </p>
+                                <p id="password-feedback" class="text-xs text-[#D97862] min-h-[18px]" aria-live="polite"></p>
                             </div>
 
                             {{-- PASSWORD CONFIRM --}}
                             <div class="space-y-2">
                                 <label for="password_confirmation" class="text-sm font-medium text-[#7C3A2D]">Konfirmasi Kata Sandi</label>
-                                <input id="password_confirmation" type="password" name="password_confirmation"
+                                <input id="password_confirmation" type="password" name="password_confirmation" autocomplete="new-password"
                                        class="w-full rounded-2xl border border-[#F7C8B8] bg-white/80 px-4 py-3 text-sm text-[#7C3A2D]
                                        focus:ring-2 focus:ring-[#F5A38D]" required>
+                                <p id="confirm-feedback" class="text-xs text-[#D97862] min-h-[18px]" aria-live="polite"></p>
                             </div>
 
                             {{-- RECAPTCHA --}}
@@ -124,8 +144,13 @@
 
                             {{-- SUBMIT --}}
                             <button type="submit"
-                                class="w-full rounded-full bg-[#D97862] px-6 py-3 text-sm font-semibold text-white shadow-lg transition hover:bg-[#b9644f]">
-                                Daftar Sekarang
+                                id="register-submit"
+                                class="w-full inline-flex items-center justify-center gap-2 rounded-full bg-[#D97862] px-6 py-3 text-sm font-semibold text-white shadow-lg transition hover:bg-[#b9644f] disabled:opacity-70 disabled:cursor-not-allowed">
+                                <svg id="submit-spinner" class="h-4 w-4 animate-spin text-white hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+                                </svg>
+                                <span id="submit-text">Daftar Sekarang</span>
                             </button>
                         </form>
 
@@ -173,4 +198,142 @@
         </div>
     </section>
 
+@push('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const form = document.getElementById('register-form');
+        if (!form) return;
+
+        const nameInput = document.getElementById('name');
+        const emailInput = document.getElementById('email');
+        const passwordInput = document.getElementById('password');
+        const confirmInput = document.getElementById('password_confirmation');
+        const submitBtn = document.getElementById('register-submit');
+        const submitSpinner = document.getElementById('submit-spinner');
+        const submitText = document.getElementById('submit-text');
+        const strengthBar = document.getElementById('password-strength-bar');
+        const strengthLabel = document.getElementById('password-strength-label');
+
+        const feedback = {
+            name: document.getElementById('name-feedback'),
+            email: document.getElementById('email-feedback'),
+            password: document.getElementById('password-feedback'),
+            confirm: document.getElementById('confirm-feedback'),
+        };
+
+        const disposableDomains = [
+            'mailinator.com',
+            '10minutemail.com',
+            'guerrillamail.com',
+            'temp-mail.org',
+            'yopmail.com',
+            'getnada.com',
+            'trashmail.com',
+            'fakemail.net',
+            'dispostable.com',
+        ];
+
+        const setFeedback = (input, target, message = '', isValid = true) => {
+            if (!target) return;
+            target.textContent = message;
+            if (input) {
+                input.style.borderColor = isValid ? '#F7C8B8' : '#ef4444';
+            }
+            target.style.color = isValid ? '#D97862' : '#BA1B1D';
+        };
+
+        const passwordScore = (value) => {
+            const checks = [
+                value.length >= 8,
+                /[A-Z]/.test(value) && /[a-z]/.test(value),
+                /\d/.test(value),
+                /[^A-Za-z0-9]/.test(value),
+            ];
+            return checks.filter(Boolean).length;
+        };
+
+        const renderStrength = (score) => {
+            const percent = (score / 4) * 100;
+            const colors = ['#F87171', '#F97316', '#F59E0B', '#22C55E', '#16A34A'];
+            strengthBar.style.width = `${percent}%`;
+            strengthBar.style.backgroundColor = colors[score] ?? colors[colors.length - 1];
+
+            const labels = ['Sangat lemah', 'Lemah', 'Cukup', 'Kuat', 'Sangat kuat'];
+            strengthLabel.textContent = labels[score] ?? 'Kekuatan sandi';
+        };
+
+        const validateName = () => {
+            const value = nameInput.value.trim();
+            const isValid = value.length >= 3;
+            setFeedback(nameInput, feedback.name, isValid ? '' : 'Nama minimal 3 karakter.', isValid);
+            return isValid;
+        };
+
+        const validateEmail = () => {
+            const value = emailInput.value.trim();
+            const pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            let message = '';
+            let isValid = pattern.test(value);
+
+            if (isValid) {
+                const domain = value.split('@')[1]?.toLowerCase();
+                if (domain && disposableDomains.includes(domain)) {
+                    isValid = false;
+                    message = 'Gunakan email permanen, bukan temporary email.';
+                }
+            } else if (value.length) {
+                message = 'Format email belum benar.';
+            }
+
+            setFeedback(emailInput, feedback.email, message, isValid || !value.length);
+            return isValid;
+        };
+
+        const validatePassword = () => {
+            const value = passwordInput.value;
+            const score = passwordScore(value);
+            renderStrength(score);
+
+            const requirements = [];
+            if (value.length < 8) requirements.push('8 karakter');
+            if (!/[A-Z]/.test(value) || !/[a-z]/.test(value)) requirements.push('huruf besar & kecil');
+            if (!/\d/.test(value)) requirements.push('angka');
+            if (!/[^A-Za-z0-9]/.test(value)) requirements.push('simbol');
+
+            const isValid = requirements.length === 0;
+            const message = isValid ? '' : `Tambahkan ${requirements.join(', ')}.`;
+
+            setFeedback(passwordInput, feedback.password, message, isValid || !value.length);
+            return isValid;
+        };
+
+        const validateConfirm = () => {
+            const isValid = passwordInput.value === confirmInput.value && confirmInput.value.length > 0;
+            const message = isValid || !confirmInput.value.length ? '' : 'Konfirmasi kata sandi belum cocok.';
+            setFeedback(confirmInput, feedback.confirm, message, isValid || !confirmInput.value.length);
+            return isValid;
+        };
+
+        nameInput?.addEventListener('input', validateName);
+        emailInput?.addEventListener('input', validateEmail);
+        passwordInput?.addEventListener('input', () => {
+            validatePassword();
+            validateConfirm();
+        });
+        confirmInput?.addEventListener('input', validateConfirm);
+
+        form.addEventListener('submit', (event) => {
+            const allValid = [validateName(), validateEmail(), validatePassword(), validateConfirm()].every(Boolean);
+            if (!allValid) {
+                event.preventDefault();
+                return;
+            }
+
+            submitBtn.disabled = true;
+            submitSpinner.classList.remove('hidden');
+            submitText.textContent = 'Memproses...';
+        });
+    });
+</script>
+@endpush
 </x-layouts.app>
