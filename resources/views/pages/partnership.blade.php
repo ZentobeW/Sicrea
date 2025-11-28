@@ -2,335 +2,301 @@
     use Illuminate\Support\Str;
 @endphp
 
-@push('styles')
-    <style>
-        @keyframes floatPulse {
-            0%,
-            100% {
-                transform: translateY(0);
-            }
-
-            50% {
-                transform: translateY(-6px);
-            }
-        }
-
-        .reveal {
-            opacity: 0;
-            transform: translateY(32px);
-            transition: opacity 0.6s ease, transform 0.6s ease;
-            transition-delay: var(--reveal-delay, 0ms);
-        }
-
-        .reveal.is-visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .hero-card {
-            background: linear-gradient(180deg, rgba(255, 255, 255, 0.85) 0%, rgba(255, 255, 255, 0.95) 100%);
-            box-shadow: 0 30px 60px -28px rgba(199, 112, 88, 0.45);
-            animation: floatPulse 5s ease-in-out infinite;
-        }
-
-        .hero-bubble {
-            position: absolute;
-            border-radius: 999px;
-            filter: blur(60px);
-            opacity: 0.7;
-        }
-
-        .hero-bubble--left {
-            width: 240px;
-            height: 240px;
-            left: -60px;
-            top: -80px;
-            background: rgba(255, 196, 164, 0.65);
-        }
-
-        .hero-bubble--right {
-            width: 280px;
-            height: 280px;
-            right: -80px;
-            bottom: -100px;
-            background: rgba(255, 176, 201, 0.5);
-        }
-
-        .partnership-nav a {
-            transition: all 0.2s ease;
-        }
-
-        .partnership-nav a:hover,
-        .partnership-nav a:focus {
-            background: rgba(255, 255, 255, 0.4);
-            color: #c35a63;
-        }
-
-        .benefit-card,
-        .model-card,
-        .portfolio-card {
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .benefit-card:hover,
-        .model-card:hover,
-        .portfolio-card:hover {
-            transform: translateY(-6px);
-            box-shadow: 0 20px 40px -24px rgba(194, 90, 99, 0.55);
-        }
-    </style>
-@endpush
-
-@push('scripts')
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach((entry) => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('is-visible');
-                        observer.unobserve(entry.target);
-                    }
-                });
-            }, { threshold: 0.2 });
-
-            document.querySelectorAll('.reveal').forEach((element) => observer.observe(element));
-
-            const navLinks = document.querySelectorAll('[data-scroll-target]');
-            navLinks.forEach((link) => {
-                link.addEventListener('click', (event) => {
-                    event.preventDefault();
-
-                    const targetId = link.getAttribute('data-scroll-target');
-                    const targetElement = document.getElementById(targetId);
-
-                    if (!targetElement) {
-                        return;
-                    }
-
-                    const headerOffset = 96;
-                    const elementPosition = targetElement.getBoundingClientRect().top;
-                    const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
-
-                    window.scrollTo({
-                        top: offsetPosition,
-                        behavior: 'smooth',
-                    });
-                });
-            });
-        });
-    </script>
-@endpush
-
 <x-layouts.app :title="'Kemitraan Sicrea'">
-    <section id="hero" class="relative overflow-hidden bg-gradient-to-br from-[#FFE0D0] via-[#FFEDE2] to-[#FFF7F1]">
-        <span class="hero-bubble hero-bubble--left"></span>
-        <span class="hero-bubble hero-bubble--right"></span>
-
-        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-16">
-            <div class="grid gap-12 lg:grid-cols-[1.1fr,0.9fr] items-center">
-                <div class="space-y-8 reveal" style="--reveal-delay: 0ms;">
-                    <div class="inline-flex items-center gap-2 rounded-full bg-white/70 px-5 py-2 text-xs font-semibold uppercase tracking-[0.4em] text-[#C65B74]">
-                        Partnership
+    <!-- Hero Section -->
+    <section class="relative bg-gradient-to-br from-[#FCF5E6] via-[#FAF8F1] to-white py-20 lg:py-32">
+        <div class="container mx-auto px-4 lg:px-8">
+            <div class="grid lg:grid-cols-2 gap-12 items-center">
+                <div>
+                    <div class="inline-flex items-center gap-2 bg-white px-4 py-2 rounded-full shadow-sm mb-6 border border-[#FFB3E1]">
+                        <svg class="w-4 h-4 text-[#822021]" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                        </svg>
+                        <span class="text-sm text-gray-600">Partnership & Kolaborasi</span>
                     </div>
-                    <div class="space-y-4">
-                        <h1 class="text-4xl md:text-5xl font-semibold leading-tight text-[#2C1E1E]">
-                            Mari Berkolaborasi Mengembangkan Ekosistem Kreatif
-                        </h1>
-                        <p class="text-base md:text-lg leading-relaxed text-[#5F4C4C] max-w-2xl">
-                            Sicrea menghadirkan pendekatan menyeluruh untuk menghadirkan pengalaman kreatif yang relevan. Kami siap mendampingi brand, komunitas, dan institusi dari perencanaan hingga aktivasi multi kanal.
-                        </p>
-                    </div>
-                    <div class="flex flex-wrap items-center gap-4">
-                        <a href="mailto:partnership@sicrea.id" class="inline-flex items-center rounded-full bg-[#FF8A64] px-7 py-3 text-sm font-semibold text-white shadow-lg shadow-[#FF8A64]/40 transition hover:bg-[#F9744B]">
-                            Hubungi Kami
-                        </a>
-                        <a href="{{ route('events.index') }}" class="inline-flex items-center gap-2 rounded-full bg-white/80 px-6 py-3 text-sm font-semibold text-[#C65B74] shadow-sm shadow-[#FFB6A0]/30 transition hover:bg-white">
-                            Lihat Agenda Program
-                            <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5l7 7-7 7" />
+                    
+                    <h1 class="text-4xl lg:text-5xl xl:text-6xl mb-6 text-[#822021] font-bold">
+                        Mari Berkolaborasi Mengembangkan Ekosistem Kreatif
+                    </h1>
+                    
+                    <p class="text-lg text-gray-600 mb-8 leading-relaxed">
+                        Bergabunglah dengan kami untuk menciptakan dampak positif bagi komunitas kreatif Indonesia. 
+                        Berbagai model kerjasama yang dapat disesuaikan dengan kebutuhan bisnis Anda.
+                    </p>
+                    
+                    <div class="flex flex-wrap gap-4">
+                        <a href="{{ asset('storage/proposal-kemitraan.pdf') }}" target="_blank" class="inline-flex items-center bg-[#822021] hover:bg-[#822021]/90 text-white px-6 py-3 rounded-lg text-base font-semibold">
+                            <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd"/>
                             </svg>
+                            Unduh Proposal
                         </a>
-                    </div>
-                    <div class="partnership-nav flex flex-wrap gap-3 pt-4">
-                        <a href="#benefits" data-scroll-target="benefits" class="inline-flex items-center gap-2 rounded-full bg-white/60 px-4 py-2 text-xs font-semibold uppercase tracking-[0.3em] text-[#A04E62]">
-                            Benefit
-                        </a>
-                        <a href="#portfolio" data-scroll-target="portfolio" class="inline-flex items-center gap-2 rounded-full bg-white/60 px-4 py-2 text-xs font-semibold uppercase tracking-[0.3em] text-[#A04E62]">
-                            Portfolio
-                        </a>
-                        <a href="#models" data-scroll-target="models" class="inline-flex items-center gap-2 rounded-full bg-white/60 px-4 py-2 text-xs font-semibold uppercase tracking-[0.3em] text-[#A04E62]">
-                            Model Kolaborasi
-                        </a>
-                        <a href="#contact" data-scroll-target="contact" class="inline-flex items-center gap-2 rounded-full bg-white/60 px-4 py-2 text-xs font-semibold uppercase tracking-[0.3em] text-[#A04E62]">
-                            Hubungi Kami
+                        <a href="https://wa.me/6281234567890" target="_blank" class="inline-flex items-center border border-gray-300 hover:border-gray-400 text-gray-700 px-6 py-3 rounded-lg text-base font-semibold">
+                            <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.338-3.123C2.493 12.767 2 11.434 2 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM7 9H5v2h2V9zm8 0h-2v2h2V9zM9 9h2v2H9V9z" clip-rule="evenodd"/>
+                            </svg>
+                            Diskusi via WhatsApp
                         </a>
                     </div>
                 </div>
-                <div class="reveal lg:justify-self-end w-full max-w-xl" style="--reveal-delay: 120ms;">
-                    <div class="hero-card relative rounded-[40px] border border-white/60 p-6 backdrop-blur">
-                        <div class="aspect-[4/5] overflow-hidden rounded-[32px] bg-[#FCD9CA] flex items-center justify-center text-sm uppercase tracking-[0.35em] text-[#C65B74]/70">
-                            Dokumentasi Kolaborasi
-                        </div>
-                        <div class="absolute -bottom-8 left-10 rounded-3xl bg-white px-5 py-4 shadow-xl shadow-[#FFB6A0]/40">
-                            <p class="text-xs font-semibold uppercase tracking-[0.3em] text-[#C65B74]/70">Highlight</p>
-                            <p class="mt-1 text-sm font-medium text-[#2C1E1E]">Pendekatan end-to-end untuk setiap kemitraan.</p>
-                        </div>
+                
+                <div class="relative">
+                    <div class="relative rounded-2xl overflow-hidden shadow-2xl">
+                        <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=800&h=600&fit=crop" alt="Partnership" class="w-full h-[500px] object-cover">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
                     </div>
                 </div>
-            </div>
-
-            <dl class="mt-16 grid gap-6 sm:grid-cols-3">
-                @foreach ($highlightStats as $index => $stat)
-                    <div class="reveal rounded-3xl bg-white/80 p-6 shadow-sm shadow-[#FFB6A0]/30 backdrop-blur" style="--reveal-delay: {{ 140 + ($index * 120) }}ms;">
-                        <dt class="text-sm font-medium text-[#A04E62]">{{ $stat['label'] }}</dt>
-                        <dd class="mt-3 text-3xl font-semibold text-[#2C1E1E]">{{ $stat['value'] }}</dd>
-                        <p class="mt-2 text-sm text-[#5F4C4C]">{{ $stat['description'] }}</p>
-                    </div>
-                @endforeach
-            </dl>
-        </div>
-    </section>
-
-    <section id="benefits" class="bg-white">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 space-y-12">
-            <div class="space-y-4 text-center reveal" style="--reveal-delay: 60ms;">
-                <span class="inline-flex items-center gap-2 rounded-full bg-[#FFF0E6] px-4 py-1 text-xs font-semibold uppercase tracking-[0.3em] text-[#C65B74]">Mengapa Bermitra</span>
-                <h2 class="text-3xl font-semibold text-[#2C1E1E]">Mengapa Bermitra dengan Kami?</h2>
-                <p class="mx-auto max-w-2xl text-sm leading-relaxed text-[#5F4C4C]">Tim Sicrea membantu Anda menyiapkan program yang berdampak, mulai dari strategi kreatif, produksi konten, hingga analisis performa untuk kolaborasi berkelanjutan.</p>
-            </div>
-
-            <div class="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
-                @foreach ($partnershipBenefits as $index => $benefit)
-                    <article class="benefit-card reveal h-full rounded-[28px] border border-[#FAD6C7] bg-[#FFFAF6] p-6" style="--reveal-delay: {{ 120 + ($index * 100) }}ms;">
-                        <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-white text-xl shadow-sm shadow-[#FAD6C7]/60">
-                            <x-dynamic-component :component="'heroicon-o-' . $benefit['icon']" class="h-7 w-7 text-[#C65B74]" />
-                        </div>
-                        <h3 class="mt-6 text-lg font-semibold text-[#2C1E1E]">{{ $benefit['title'] }}</h3>
-                        <p class="mt-3 text-sm leading-relaxed text-[#5F4C4C]">{{ $benefit['description'] }}</p>
-                    </article>
-                @endforeach
             </div>
         </div>
     </section>
 
-    <section id="portfolio" class="bg-[#FFF7F2]">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 space-y-12">
-            <div class="text-center space-y-3 reveal" style="--reveal-delay: 80ms;">
-                <span class="inline-flex items-center gap-2 rounded-full bg-white px-4 py-1 text-xs font-semibold uppercase tracking-[0.3em] text-[#C65B74]">Portofolio</span>
-                <h2 class="text-3xl font-semibold text-[#2C1E1E]">Portofolio Terbaik Kami</h2>
-                <p class="mx-auto max-w-2xl text-sm leading-relaxed text-[#5F4C4C]">Lihat beberapa dokumentasi kolaborasi yang berhasil membantu partner memperluas audiens dan menghadirkan pengalaman baru.</p>
+    <!-- Benefits Section -->
+    <section class="py-20 bg-[#FCF5E6]">
+        <div class="container mx-auto px-4 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl lg:text-4xl mb-4 font-bold text-[#822021]">Mengapa Bermitra dengan Kami?</h2>
+                <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+                    Dapatkan berbagai keuntungan dari kolaborasi strategis dengan Kreasi Hangat
+                </p>
             </div>
+            
+            <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="border-2 border-[#FFB3E1]/30 hover:border-[#822021] transition-colors rounded-lg bg-white">
+                    <div class="p-6">
+                        <div class="bg-gradient-to-br from-[#FCF5E6] to-[#FFDEF8] w-14 h-14 rounded-xl flex items-center justify-center mb-4 border border-[#FFB3E1] mx-auto">
+                            <svg class="w-7 h-7 text-[#FFB3E1]" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3z"/>
+                            </svg>
+                        </div>
+                        <h3 class="mb-2 text-center font-semibold text-[#822021]">Jangkauan Luas</h3>
+                        <p class="text-sm text-gray-600 text-center">2,500+ peserta aktif dan 50+ instruktur expert di berbagai bidang kreatif</p>
+                    </div>
+                </div>
+                
+                <div class="border-2 border-[#FFB3E1]/30 hover:border-[#822021] transition-colors rounded-lg bg-white">
+                    <div class="p-6">
+                        <div class="bg-gradient-to-br from-[#FCF5E6] to-[#FFDEF8] w-14 h-14 rounded-xl flex items-center justify-center mb-4 border border-[#FFB3E1] mx-auto">
+                            <svg class="w-7 h-7 text-[#FFB3E1]" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M12 7a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0V8.414l-4.293 4.293a1 1 0 01-1.414 0L8 10.414l-4.293 4.293a1 1 0 01-1.414-1.414l5-5a1 1 0 011.414 0L11 10.586 14.586 7H12z" clip-rule="evenodd"/>
+                            </svg>
+                        </div>
+                        <h3 class="mb-2 text-center font-semibold text-[#822021]">Track Record Terbukti</h3>
+                        <p class="text-sm text-gray-600 text-center">150+ event terselenggara dengan tingkat kepuasan peserta 95%</p>
+                    </div>
+                </div>
+                
+                <div class="border-2 border-[#FFB3E1]/30 hover:border-[#822021] transition-colors rounded-lg bg-white">
+                    <div class="p-6">
+                        <div class="bg-gradient-to-br from-[#FCF5E6] to-[#FFDEF8] w-14 h-14 rounded-xl flex items-center justify-center mb-4 border border-[#FFB3E1] mx-auto">
+                            <svg class="w-7 h-7 text-[#FFB3E1]" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                            </svg>
+                        </div>
+                        <h3 class="mb-2 text-center font-semibold text-[#822021]">Kualitas Terjamin</h3>
+                        <p class="text-sm text-gray-600 text-center">Standar penyelenggaraan workshop profesional dengan fasilitas lengkap</p>
+                    </div>
+                </div>
+                
+                <div class="border-2 border-[#FFB3E1]/30 hover:border-[#822021] transition-colors rounded-lg bg-white">
+                    <div class="p-6">
+                        <div class="bg-gradient-to-br from-[#FCF5E6] to-[#FFDEF8] w-14 h-14 rounded-xl flex items-center justify-center mb-4 border border-[#FFB3E1] mx-auto">
+                            <svg class="w-7 h-7 text-[#FFB3E1]" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                            </svg>
+                        </div>
+                        <h3 class="mb-2 text-center font-semibold text-[#822021]">Kolaborasi Fleksibel</h3>
+                        <p class="text-sm text-gray-600 text-center">Berbagai model kerjasama yang dapat disesuaikan dengan kebutuhan mitra</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-            <div class="grid gap-6 md:grid-cols-3">
-                @forelse ($featuredPortfolios as $index => $portfolio)
-                    <article class="portfolio-card reveal group overflow-hidden rounded-[32px] border border-[#FAD6C7] bg-white shadow-sm shadow-[#FAD6C7]/40" style="--reveal-delay: {{ 120 + ($index * 120) }}ms;">
-                        <div class="relative h-56 overflow-hidden">
+    <!-- Portfolio Preview Section -->
+    <section class="py-20 bg-gradient-to-b from-white to-[#FCF5E6]/30">
+        <div class="container mx-auto px-4 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl lg:text-4xl mb-4 font-bold text-[#822021]">Portfolio Terbaik Kami</h2>
+                <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+                    Lihat hasil kolaborasi dan event yang telah kami selenggarakan
+                </p>
+            </div>
+            
+            <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+                @forelse ($featuredPortfolios as $portfolio)
+                    <div class="group cursor-pointer">
+                        <div class="relative overflow-hidden rounded-xl mb-4 aspect-[4/3]">
                             @if ($portfolio->cover_image_url)
-                                <img src="{{ $portfolio->cover_image_url }}" alt="{{ $portfolio->title }}" class="h-full w-full object-cover transition duration-300 group-hover:scale-105" />
+                                <img src="{{ $portfolio->cover_image_url }}" alt="{{ $portfolio->title }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
                             @else
-                                <div class="flex h-full w-full items-center justify-center bg-[#FFE9DC] text-xs uppercase tracking-[0.35em] text-[#C65B74]/70">
-                                    Dokumentasi
+                                <div class="w-full h-full bg-[#FCF5E6] flex items-center justify-center">
+                                    <span class="text-gray-400">No Image</span>
                                 </div>
                             @endif
-                            <div class="absolute inset-x-5 bottom-5 rounded-full bg-white/90 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.3em] text-[#C65B74] shadow-sm shadow-[#FAD6C7]/60">
-                                {{ $portfolio->event?->title ?? 'Program Internal' }}
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
+                                <div class="text-white">
+                                    <p class="text-sm mb-1">{{ $portfolio->event?->title ?? 'Program Internal' }}</p>
+                                    <p class="line-clamp-2">{{ Str::limit($portfolio->description, 80) }}</p>
+                                </div>
+                            </div>
+                            <div class="absolute top-3 right-3">
+                                <div class="bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs">
+                                    {{ date('Y') }}
+                                </div>
                             </div>
                         </div>
-                        <div class="p-6 space-y-3">
-                            <h3 class="text-lg font-semibold text-[#2C1E1E]">{{ $portfolio->title }}</h3>
-                            <p class="text-sm leading-relaxed text-[#5F4C4C]">{{ Str::limit($portfolio->description, 110) }}</p>
-                            @if ($portfolio->event)
-                                <a href="{{ route('events.show', $portfolio->event) }}" class="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.3em] text-[#C65B74]">
-                                    Lihat Event
-                                    <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5l7 7-7 7" />
-                                    </svg>
-                                </a>
-                                <p class="mt-1 text-[11px] text-[#A04E62]">{{ $portfolio->event->venue_name }}</p>
-                                <p class="text-[11px] text-[#A04E62]">Tutor: {{ $portfolio->event->tutor_name }}</p>
-                                <p class="text-[11px] text-[#A04E62]">{{ $portfolio->event->venue_address }}</p>
-                            @endif
-                        </div>
-                    </article>
+                        <h3 class="group-hover:text-[#822021] transition-colors text-center font-semibold">{{ $portfolio->title }}</h3>
+                    </div>
                 @empty
-                    <div class="reveal md:col-span-3 rounded-[32px] border border-dashed border-[#FAD6C7] bg-white/80 py-16" style="--reveal-delay: 120ms;">
-                        <p class="text-sm text-[#5F4C4C]">Belum ada portofolio yang dapat ditampilkan saat ini.</p>
+                    <div class="col-span-full text-center py-12">
+                        <p class="text-gray-500">Belum ada portfolio yang tersedia</p>
                     </div>
                 @endforelse
             </div>
 
-            <div class="text-center reveal" style="--reveal-delay: 160ms;">
-                <a href="{{ route('portfolio.index') }}" class="inline-flex items-center rounded-full bg-[#FF8A64] px-7 py-3 text-sm font-semibold text-white shadow-md shadow-[#FF8A64]/30 transition hover:bg-[#F9744B]">
+            <div class="text-center">
+                <a href="{{ route('portfolio.index') }}" class="inline-flex items-center bg-[#822021] hover:bg-[#822021]/90 text-white px-7 py-3 rounded-lg font-semibold">
                     Jelajahi Semua Portofolio
                 </a>
             </div>
         </div>
     </section>
 
-    <section id="models" class="bg-white">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 space-y-12">
-            <div class="space-y-4 text-center reveal" style="--reveal-delay: 60ms;">
-                <span class="inline-flex items-center gap-2 rounded-full bg-[#FFF0E6] px-4 py-1 text-xs font-semibold uppercase tracking-[0.3em] text-[#C65B74]">Model Kolaborasi</span>
-                <h2 class="text-3xl font-semibold text-[#2C1E1E]">Model Kolaborasi yang Dapat Dipilih</h2>
-                <p class="mx-auto max-w-2xl text-sm leading-relaxed text-[#5F4C4C]">Pilih format kerjasama yang paling sesuai dengan objektif brand Anda atau diskusikan konsep khusus bersama tim kami.</p>
+    <!-- Collaboration Models Section -->
+    <section class="py-20 bg-[#FCF5E6]">
+        <div class="container mx-auto px-4 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl lg:text-4xl mb-4 font-bold text-[#822021]">Model Kolaborasi</h2>
+                <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+                    Berbagai pilihan kerjasama yang dapat disesuaikan dengan kebutuhan Anda
+                </p>
             </div>
-
-            <div class="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
-                @foreach ($partnershipSupports as $index => $support)
-                    <article class="model-card reveal h-full rounded-[28px] border border-dashed border-[#FAD6C7] bg-[#FFF7F2] p-6" style="--reveal-delay: {{ 120 + ($index * 100) }}ms;">
-                        <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-white text-xl shadow-sm shadow-[#FAD6C7]/60">
-                            <x-dynamic-component :component="'heroicon-o-' . $support['icon']" class="h-7 w-7 text-[#C65B74]" />
+            
+            <div class="grid lg:grid-cols-3 gap-8">
+                <div class="border-2 border-[#FFB3E1]/30 hover:shadow-xl transition-all hover:border-[#822021] rounded-lg bg-white">
+                    <div class="p-8">
+                        <div class="bg-gradient-to-br from-[#FFB3E1] to-[#FFBE8E] text-white w-10 h-10 rounded-lg flex items-center justify-center mb-4 mx-auto">
+                            <span class="font-semibold">1</span>
                         </div>
-                        <h3 class="mt-6 text-lg font-semibold text-[#2C1E1E]">{{ $support['title'] }}</h3>
-                        <p class="mt-3 text-sm leading-relaxed text-[#5F4C4C]">{{ $support['description'] }}</p>
-                    </article>
-                @endforeach
+                        <h3 class="mb-3 text-center font-semibold text-[#822021]">Maximizing Brand Exposure</h3>
+                        <p class="text-gray-600 mb-6 text-justify max-w-sm mx-auto">Jadikan lokasi Anda sebagai pusat kreativitas!</p>
+                        <div class="space-y-3 text-left">
+                            <div class="flex items-start gap-2">
+                                <svg class="w-5 h-5 text-[#FFB3E1] flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                                </svg>
+                                <span class="text-sm text-gray-600">Akses eksklusif untuk penyediaan tempat workshop.</span>
+                            </div>
+                            <div class="flex items-start gap-2">
+                                <svg class="w-5 h-5 text-[#FFB3E1] flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                                </svg>
+                                <span class="text-sm text-gray-600">Cafe/mall mendapatkan dukungan promosi masif dari channel kami.</span>
+                            </div>
+                            <div class="flex items-start gap-2">
+                                <svg class="w-5 h-5 text-[#FFB3E1] flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                                </svg>
+                                <span class="text-sm text-gray-600">Opsi integrasi menu khusus cafe/mall dalam paket pendaftaran workshop.</span>
+                            </div>
+                            <div class="flex items-start gap-2">
+                                <svg class="w-5 h-5 text-[#FFB3E1] flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                                </svg>
+                                <span class="text-sm text-gray-600">Model bisnis transparan (sistem bagi hasil).</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="border-2 border-[#FFB3E1]/30 hover:shadow-xl transition-all hover:border-[#822021] rounded-lg bg-white">
+                    <div class="p-8">
+                        <div class="bg-gradient-to-br from-[#FFB3E1] to-[#FFBE8E] text-white w-10 h-10 rounded-lg flex items-center justify-center mb-4 mx-auto">
+                            <span class="font-semibold">2</span>
+                        </div>
+                        <h3 class="mb-3 text-center font-semibold text-[#822021]">Empowering Expertise</h3>
+                        <p class="text-gray-600 mb-6 text-justify max-w-sm mx-auto">Bergabunglah sebagai Tim Instruktur kami!</p>
+                        <div class="space-y-3 text-left">
+                            <div class="flex items-start gap-2">
+                                <svg class="w-5 h-5 text-[#FFB3E1] flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                                </svg>
+                                <span class="text-sm text-gray-600">Kesempatan untuk memberikan materi berkualitas dan memandu workshop yang diminati.</span>
+                            </div>
+                            <div class="flex items-start gap-2">
+                                <svg class="w-5 h-5 text-[#FFB3E1] flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                                </svg>
+                                <span class="text-sm text-gray-600">Honorarium yang fleksibel, dapat disepakati melalui sistem bagi hasil atau fee tetap.</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="border-2 border-[#FFB3E1]/30 hover:shadow-xl transition-all hover:border-[#822021] rounded-lg bg-white">
+                    <div class="p-8">
+                        <div class="bg-gradient-to-br from-[#FFB3E1] to-[#FFBE8E] text-white w-10 h-10 rounded-lg flex items-center justify-center mb-4 mx-auto">
+                            <span class="font-semibold">3</span>
+                        </div>
+                        <h3 class="mb-3 text-center font-semibold text-[#822021]">Strategic Promotion & Media Blitz</h3>
+                        <p class="text-gray-600 mb-6 text-justify max-w-sm mx-auto">Pastikan acara Anda dilihat oleh ribuan orang!</p>
+                        <div class="space-y-3 text-left">
+                            <div class="flex items-start gap-2">
+                                <svg class="w-5 h-5 text-[#FFB3E1] flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                                </svg>
+                                <span class="text-sm text-gray-600">Promosi multi-channel melalui media sosial Kreasi Hangat, partner cafe/mall, dan tutor/instruktur.</span>
+                            </div>
+                            <div class="flex items-start gap-2">
+                                <svg class="w-5 h-5 text-[#FFB3E1] flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                                </svg>
+                                <span class="text-sm text-gray-600">Pembuatan konten teaser dan dokumentasi acara.</span>
+                            </div>
+                            <div class="flex items-start gap-2">
+                                <svg class="w-5 h-5 text-[#FFB3E1] flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                                </svg>
+                                <span class="text-sm text-gray-600">Kolaborasi strategis dengan media atau influencer untuk meningkatkan jangkauan.</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
 
-    <section id="contact" class="bg-gradient-to-r from-[#FFE1D2] via-[#FFD4B6] to-[#FFEDE1]">
-        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-            <div class="grid gap-10 lg:grid-cols-[1.1fr,0.9fr] items-center">
-                <div class="reveal space-y-4" style="--reveal-delay: 80ms;">
-                    <span class="inline-flex items-center gap-2 rounded-full bg-white/70 px-4 py-1 text-xs font-semibold uppercase tracking-[0.3em] text-[#C65B74]">Tertarik Kolaborasi?</span>
-                    <h2 class="text-3xl font-semibold text-[#2C1E1E]">Tertarik untuk Berkolaborasi?</h2>
-                    <p class="text-sm leading-relaxed text-[#5F4C4C] max-w-xl">Mari diskusikan kebutuhan Anda lebih lanjut. Tim kami akan membantu memetakan tujuan program, audiens, hingga format eksekusi yang paling sesuai.</p>
-                    <div class="space-y-2 text-sm text-[#5F4C4C]">
-                        <div class="flex items-start gap-3">
-                            <x-heroicon-o-map-pin class="mt-1 h-5 w-5 text-[#C65B74]" />
-                            <span>{{ $contactInfo['address'] }}</span>
-                        </div>
-                        <div class="flex items-start gap-3">
-                            <x-heroicon-o-phone class="mt-1 h-5 w-5 text-[#C65B74]" />
-                            <span>{{ $contactInfo['phone'] }}</span>
-                        </div>
-                        <div class="flex items-start gap-3">
-                            <x-heroicon-o-envelope class="mt-1 h-5 w-5 text-[#C65B74]" />
-                            <a href="mailto:{{ $contactInfo['email'] }}" class="underline decoration-[#C65B74]/50 hover:text-[#C65B74]">{{ $contactInfo['email'] }}</a>
-                        </div>
-                    </div>
+    <!-- CTA Section -->
+    <section class="py-20 bg-gradient-to-br from-[#FFB3E1] to-[#FFBE8E] text-white">
+        <div class="container mx-auto px-4 lg:px-8">
+            <div class="max-w-3xl mx-auto text-center">
+                <h2 class="text-3xl lg:text-4xl mb-4 font-bold">
+                    Tertarik untuk Berkolaborasi?
+                </h2>
+                <p class="text-lg text-white/90 mb-8">
+                    Hubungi kami untuk mendiskusikan peluang kerjasama yang saling menguntungkan. 
+                    Tim kami siap membantu mewujudkan kolaborasi terbaik.
+                </p>
+                <div class="flex flex-wrap gap-4 justify-center">
+                    <a href="{{ asset('storage/proposal-kemitraan.pdf') }}" target="_blank" class="inline-flex items-center bg-white text-[#822021] hover:bg-white/90 px-8 py-3 rounded-lg font-semibold">
+                        <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                        </svg>
+                        Unduh Proposal Partnership
+                    </a>
+                    <a href="https://wa.me/6281234567890" target="_blank" class="inline-flex items-center bg-white text-[#822021] hover:bg-white/90 px-8 py-3 rounded-lg font-semibold">
+                        <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.338-3.123C2.493 12.767 2 11.434 2 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM7 9H5v2h2V9zm8 0h-2v2h2V9zM9 9h2v2H9V9z" clip-rule="evenodd"/>
+                        </svg>
+                        Hubungi Kami
+                        <svg class="w-4 h-4 ml-2" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                        </svg>
+                    </a>
                 </div>
-                <div class="reveal" style="--reveal-delay: 140ms;">
-                    <div class="rounded-[32px] bg-white/80 p-8 shadow-xl shadow-[#FFB6A0]/40 backdrop-blur">
-                        <h3 class="text-lg font-semibold text-[#2C1E1E]">Siap Mulai?</h3>
-                        <p class="mt-3 text-sm leading-relaxed text-[#5F4C4C]">Kirimkan detail singkat mengenai kebutuhan kolaborasi Anda dan tim kami akan menghubungi dalam 1x24 jam kerja.</p>
-                        <div class="mt-6 space-y-4">
-                            <a href="mailto:{{ $contactInfo['email'] }}" class="flex items-center justify-between rounded-2xl border border-[#FAD6C7] bg-white px-5 py-3 text-sm font-semibold text-[#C65B74]">
-                                Kirim Brief Melalui Email
-                                <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 7l5 5-5 5M6 12h12" />
-                                </svg>
-                            </a>
-                            <a href="https://wa.me/{{ $contactInfo['whatsapp'] }}" target="_blank" rel="noreferrer" class="flex items-center justify-between rounded-2xl bg-[#FF8A64] px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-[#FF8A64]/40 transition hover:bg-[#F9744B]">
-                                Chat via WhatsApp
-                                <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 10h.01M12 10h.01M16 10h.01M9 16h6a3 3 0 003-3V8a3 3 0 00-3-3H9a3 3 0 00-3 3v5a3 3 0 003 3z" />
-                                </svg>
-                            </a>
-                        </div>
-                    </div>
-                </div>
+                <p class="text-sm text-white/80 mt-6">
+                    Email: kreasihangat@gmail.com | WhatsApp: +62 812 3456 7890
+                </p>
             </div>
         </div>
     </section>

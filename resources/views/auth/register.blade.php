@@ -3,34 +3,34 @@
     {{-- Load reCAPTCHA --}}
     {!! NoCaptcha::renderJs() !!}
 
-    <section class="bg-gradient-to-b from-[#FFF6ED] via-[#FFE3D4] to-[#F7BFA5] py-16">
+    <section class="bg-[#FCF5E6] py-16">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
 
             <div class="flex flex-col items-center gap-12">
 
                 {{-- TITLE --}}
                 <div class="text-center space-y-3 max-w-2xl">
-                    <p class="text-sm uppercase tracking-[0.4em] text-[#D97862]">Mulai Perjalananmu</p>
-                    <h1 class="text-3xl sm:text-4xl font-semibold text-[#7C3A2D]">
+                    <p class="text-sm uppercase tracking-[0.4em] text-[#B49F9A]">Mulai Perjalananmu</p>
+                    <h1 class="text-3xl sm:text-4xl font-semibold text-[#822021]">
                         Buat akun Kreasi Hangat dan ikuti workshop favoritmu
                     </h1>
-                    <p class="text-sm text-[#9A5A46]">
+                    <p class="text-sm text-[#B49F9A]">
                         Daftarkan dirimu untuk mengakses katalog event, kelola portofolio kelas, dan pantau status pembayaran.
                     </p>
                 </div>
 
                 {{-- TWO COLUMN WRAPPER --}}
-                <div class="w-full max-w-5xl grid gap-8 lg:grid-cols-[minmax(0,1fr),minmax(0,1.1fr)]">
+                <div class="w-full max-w-2xl grid gap-8 lg:grid-cols-[minmax(0,1fr),minmax(0,1.1fr)]">
 
                     {{-- LEFT COLUMN --}}
-                    <div class="rounded-[36px] border border-[#F7C8B8] bg-white/60 p-8 shadow-xl shadow-[#FAD6C7]/40 backdrop-blur">
+                    <div class="rounded-[36px] border border-[#FFBE8E] bg-white/60 p-8 shadow-xl shadow-[#FFBE8E]/40 backdrop-blur">
 
                         <div class="flex items-center justify-between">
                             <div class="space-y-2">
-                                <h2 class="text-2xl font-semibold text-[#7C3A2D]">Mengapa bergabung?</h2>
-                                <p class="text-sm text-[#9A5A46]">Gabung dengan komunitas kreatif kami.</p>
+                                <h2 class="text-2xl font-semibold text-[#822021]">Mengapa bergabung?</h2>
+                                <p class="text-sm text-[#B49F9A]">Gabung dengan komunitas kreatif kami.</p>
                             </div>
-                            <span class="inline-flex h-14 w-14 items-center justify-center rounded-full bg-[#FFE8DB] text-[#D97862]">
+                            <span class="inline-flex h-14 w-14 items-center justify-center rounded-full bg-[#FFB3E1] text-[#822021]">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none"
                                      viewBox="0 0 24 24" stroke-width="1.5"
                                      stroke="currentColor" class="h-7 w-7">
@@ -40,31 +40,31 @@
                             </span>
                         </div>
 
-                        <ul class="mt-8 space-y-4 text-sm text-[#7C3A2D]">
+                        <ul class="mt-8 space-y-4 text-sm text-[#822021]">
                             <li class="flex items-start gap-3">
-                                <span class="mt-1 inline-flex h-6 w-6 items-center justify-center rounded-full bg-[#FFCCB6] text-[#7C3A2D]">1</span>
+                                <span class="mt-1 inline-flex h-6 w-6 items-center justify-center rounded-full bg-[#FFBE8E] text-[#822021]">1</span>
                                 Telusuri kurasi workshop terbaru.
                             </li>
                             <li class="flex items-start gap-3">
-                                <span class="mt-1 inline-flex h-6 w-6 items-center justify-center rounded-full bg-[#FFCCB6] text-[#7C3A2D]">2</span>
+                                <span class="mt-1 inline-flex h-6 w-6 items-center justify-center rounded-full bg-[#FFBE8E] text-[#822021]">2</span>
                                 Kelola riwayat pendaftaran & status pembayaran.
                             </li>
                             <li class="flex items-start gap-3">
-                                <span class="mt-1 inline-flex h-6 w-6 items-center justify-center rounded-full bg-[#FFCCB6] text-[#7C3A2D]">3</span>
+                                <span class="mt-1 inline-flex h-6 w-6 items-center justify-center rounded-full bg-[#FFBE8E] text-[#822021]">3</span>
                                 Dapatkan notifikasi otomatis melalui email.
                             </li>
                         </ul>
                     </div>
 
                     {{-- RIGHT COLUMN --}}
-                    <div class="rounded-[36px] bg-white/80 backdrop-blur shadow-xl ring-1 ring-[#F7C8B8]/60 p-10">
+                    <div class="rounded-[36px] bg-white/80 backdrop-blur shadow-xl ring-1 ring-[#FFBE8E]/60 p-10">
 
                         <div class="mb-8 space-y-2">
-                            <h2 class="text-2xl font-semibold text-[#7C3A2D]">Buat Akun Baru</h2>
-                            <p class="text-sm text-[#9A5A46]">
+                            <h2 class="text-2xl font-semibold text-[#822021]">Buat Akun Baru</h2>
+                            <p class="text-sm text-[#B49F9A]">
                                 Isi data berikut untuk mulai mendaftar workshop Kreasi Hangat.
                             </p>
-                            <p class="text-xs text-[#D97862]">
+                            <p class="text-xs text-[#FFB3E1]">
                                 Setelah daftar, kami kirim OTP 6-digit ke email kamu untuk verifikasi.
                             </p>
                         </div>
@@ -91,51 +91,51 @@
 
                             {{-- NAME --}}
                             <div class="space-y-2">
-                                <label for="name" class="text-sm font-medium text-[#7C3A2D]">Nama Lengkap</label>
+                                <label for="name" class="text-sm font-medium text-[#822021]">Nama Lengkap</label>
                                 <input id="name" type="text" name="name" value="{{ old('name') }}" autocomplete="name"
-                                       class="w-full rounded-2xl border border-[#F7C8B8] bg-white/80 px-4 py-3 text-sm text-[#7C3A2D]
-                                       focus:ring-2 focus:ring-[#F5A38D]" required>
-                                <p id="name-feedback" class="text-xs text-[#D97862] min-h-[18px]" aria-live="polite"></p>
+                                       class="w-full rounded-2xl border border-[#FFBE8E] bg-white/80 px-4 py-3 text-sm text-[#822021]
+                                       focus:ring-2 focus:ring-[#FFB3E1]" required>
+                                <p id="name-feedback" class="text-xs text-[#FFB3E1] min-h-[18px]" aria-live="polite"></p>
                             </div>
 
                             {{-- EMAIL --}}
                             <div class="space-y-2">
-                                <label for="email" class="text-sm font-medium text-[#7C3A2D]">Alamat E-mail</label>
+                                <label for="email" class="text-sm font-medium text-[#822021]">Alamat E-mail</label>
                                 <input id="email" type="email" name="email" value="{{ old('email') }}" autocomplete="email"
-                                       class="w-full rounded-2xl border border-[#F7C8B8] bg-white/80 px-4 py-3 text-sm text-[#7C3A2D]
-                                       focus:ring-2 focus:ring-[#F5A38D]" required>
-                                <p id="email-feedback" class="text-xs text-[#D97862] min-h-[18px]" aria-live="polite"></p>
+                                       class="w-full rounded-2xl border border-[#FFBE8E] bg-white/80 px-4 py-3 text-sm text-[#822021]
+                                       focus:ring-2 focus:ring-[#FFB3E1]" required>
+                                <p id="email-feedback" class="text-xs text-[#FFB3E1] min-h-[18px]" aria-live="polite"></p>
                             </div>
 
                             {{-- PASSWORD --}}
                             <div class="space-y-2">
-                                <label for="password" class="text-sm font-medium text-[#7C3A2D]">Kata Sandi</label>
+                                <label for="password" class="text-sm font-medium text-[#822021]">Kata Sandi</label>
                                 <input id="password" type="password" name="password" autocomplete="new-password"
-                                       class="w-full rounded-2xl border border-[#F7C8B8] bg-white/80 px-4 py-3 text-sm text-[#7C3A2D]
-                                       focus:ring-2 focus:ring-[#F5A38D]" required>
+                                       class="w-full rounded-2xl border border-[#FFBE8E] bg-white/80 px-4 py-3 text-sm text-[#822021]
+                                       focus:ring-2 focus:ring-[#FFB3E1]" required>
                                 <div class="flex items-center gap-3">
-                                    <div class="h-2 flex-1 rounded-full bg-[#FDE1E7] overflow-hidden">
-                                        <div id="password-strength-bar" class="h-full w-0 bg-[#F5A38D] transition-all duration-300"></div>
+                                    <div class="h-2 flex-1 rounded-full bg-[#FFBE8E]/30 overflow-hidden">
+                                        <div id="password-strength-bar" class="h-full w-0 bg-[#FFB3E1] transition-all duration-300"></div>
                                     </div>
-                                    <span id="password-strength-label" class="text-xs text-[#9A5A46]">Kekuatan sandi</span>
+                                    <span id="password-strength-label" class="text-xs text-[#B49F9A]">Kekuatan sandi</span>
                                 </div>
-                                <p class="text-xs text-[#9A5A46]">
+                                <p class="text-xs text-[#B49F9A]">
                                     Min. 8 karakter dengan huruf besar, angka, dan simbol.
                                 </p>
-                                <p id="password-feedback" class="text-xs text-[#D97862] min-h-[18px]" aria-live="polite"></p>
+                                <p id="password-feedback" class="text-xs text-[#FFB3E1] min-h-[18px]" aria-live="polite"></p>
                             </div>
 
                             {{-- PASSWORD CONFIRM --}}
                             <div class="space-y-2">
-                                <label for="password_confirmation" class="text-sm font-medium text-[#7C3A2D]">Konfirmasi Kata Sandi</label>
+                                <label for="password_confirmation" class="text-sm font-medium text-[#822021]">Konfirmasi Kata Sandi</label>
                                 <input id="password_confirmation" type="password" name="password_confirmation" autocomplete="new-password"
-                                       class="w-full rounded-2xl border border-[#F7C8B8] bg-white/80 px-4 py-3 text-sm text-[#7C3A2D]
-                                       focus:ring-2 focus:ring-[#F5A38D]" required>
-                                <p id="confirm-feedback" class="text-xs text-[#D97862] min-h-[18px]" aria-live="polite"></p>
+                                       class="w-full rounded-2xl border border-[#FFBE8E] bg-white/80 px-4 py-3 text-sm text-[#822021]
+                                       focus:ring-2 focus:ring-[#FFB3E1]" required>
+                                <p id="confirm-feedback" class="text-xs text-[#FFB3E1] min-h-[18px]" aria-live="polite"></p>
                             </div>
 
                             {{-- RECAPTCHA --}}
-                            <div class="mt-2">
+                            <div class="mt-2 flex justify-center">
                                 {!! NoCaptcha::display() !!}
                                 @error('g-recaptcha-response')
                                     <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
@@ -145,7 +145,7 @@
                             {{-- SUBMIT --}}
                             <button type="submit"
                                 id="register-submit"
-                                class="w-full inline-flex items-center justify-center gap-2 rounded-full bg-[#D97862] px-6 py-3 text-sm font-semibold text-white shadow-lg transition hover:bg-[#b9644f] disabled:opacity-70 disabled:cursor-not-allowed">
+                                class="w-full inline-flex items-center justify-center gap-2 rounded-full bg-[#FFB3E1] px-6 py-3 text-sm font-semibold text-white shadow-lg transition hover:bg-[#e89dd1] disabled:opacity-70 disabled:cursor-not-allowed">
                                 <svg id="submit-spinner" class="h-4 w-4 animate-spin text-white hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                                     <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                                     <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
@@ -156,25 +156,25 @@
 
                         {{-- DIVIDER --}}
                         <div class="mt-6 flex items-center gap-3">
-                            <div class="flex-1 border-t border-[#F7C8B8]"></div>
-                            <span class="text-xs text-[#9A5A46]">ATAU</span>
-                            <div class="flex-1 border-t border-[#F7C8B8]"></div>
+                            <div class="flex-1 border-t border-[#FFBE8E]"></div>
+                            <span class="text-xs text-[#B49F9A]">ATAU</span>
+                            <div class="flex-1 border-t border-[#FFBE8E]"></div>
                         </div>
 
                         {{-- SIGN UP WITH GOOGLE --}}
                         <a href="{{ route('google.redirect', ['action' => 'register']) }}"
-                           class="mt-6 flex w-full items-center justify-center gap-2 rounded-full border border-[#F7C8B8]
-                           bg-white/50 px-6 py-3 text-sm font-semibold text-[#7C3A2D] hover:bg-white/80 transition">
+                           class="mt-6 flex w-full items-center justify-center gap-2 rounded-full border border-[#FFBE8E]
+                           bg-white/50 px-6 py-3 text-sm font-semibold text-[#822021] hover:bg-white/80 transition">
 
                             <img src="https://www.svgrepo.com/show/475656/google-color.svg" class="h-5 w-5" />
                             Daftar dengan Google
                         </a>
 
                         {{-- LOGIN LINK --}}
-                        <div class="mt-8 flex items-center justify-between text-sm text-[#9A5A46]">
-                            <span>Sudah punya akun?</span>
+                        <div class="mt-8 text-center text-sm text-[#B49F9A]">
+                            <span>Sudah punya akun? </span>
                             <a href="{{ route('login') }}"
-                                class="font-semibold text-[#D97862] hover:text-[#b9644f] transition">
+                                class="font-semibold text-[#FFB3E1] hover:text-[#e89dd1] transition">
                                 Masuk di sini
                             </a>
                         </div>
@@ -184,7 +184,7 @@
 
                 {{-- BACK TO HOME --}}
                 <a href="{{ route('home') }}"
-                    class="inline-flex items-center gap-2 text-sm font-semibold text-[#7C3A2D] hover:text-[#5c261d] mt-6">
+                    class="inline-flex items-center gap-2 text-sm font-semibold text-[#822021] hover:text-[#6b1a1b] mt-6">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none"
                          viewBox="0 0 24 24" stroke-width="1.5"
                          stroke="currentColor" class="h-4 w-4">
@@ -237,9 +237,9 @@
             if (!target) return;
             target.textContent = message;
             if (input) {
-                input.style.borderColor = isValid ? '#F7C8B8' : '#ef4444';
+                input.style.borderColor = isValid ? '#FFBE8E' : '#ef4444';
             }
-            target.style.color = isValid ? '#D97862' : '#BA1B1D';
+            target.style.color = isValid ? '#FFB3E1' : '#BA1B1D';
         };
 
         const passwordScore = (value) => {
