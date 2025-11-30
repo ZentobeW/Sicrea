@@ -12,6 +12,9 @@ use App\Models\Event;
 use App\Models\Registration;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Auth; 
+use Illuminate\Support\Facades\DB;   
+use Illuminate\Support\Facades\Log;  
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 
@@ -80,21 +83,26 @@ class RegistrationController extends Controller
 
         $formData = $request->safe()->only('form_data')['form_data'] ?? [];
 
-        $registration = Registration::create([
-            'user_id' => $user->id,
-            'event_id' => $event->id,
-            'status' => RegistrationStatus::Pending,
-            'form_data' => $formData,
-            'registered_at' => now(),
-        ]);
+        // Gunakan DB Transaction agar aman
+        return DB::transaction(function () use ($user, $event, $formData) {
+            $registration = Registration::create([
+                'user_id' => $user->id,
+                'event_id' => $event->id,
+                'status' => RegistrationStatus::Pending,
+                'form_data' => $formData,
+                'registered_at' => now(),
+            ]);
 
-        $registration->transaction()->create([
-            'amount' => $event->price,
-            'status' => PaymentStatus::Pending,
-            'payment_method' => config('payment.method', 'Virtual Account'),
-        ]);
+            $registration->transaction()->create([
+                'amount' => $event->price,
+                'status' => PaymentStatus::Pending,
+                'payment_method' => config('payment.method', 'Virtual Account'),
+            ]);
 
-        return redirect()->route('registrations.show', $registration)->with('status', 'Pendaftaran berhasil dibuat, silakan lakukan pembayaran.');
+            return redirect()
+                ->route('registrations.show', $registration)
+                ->with('status', 'Pendaftaran berhasil dibuat, silakan lakukan pembayaran.');
+        });
     }
 
     public function show(Registration $registration): View
@@ -125,9 +133,9 @@ class RegistrationController extends Controller
         $this->authorize('update', $registration);
 
         $transaction = $registration->transaction;
-
         $paymentMethod = config('payment.method', 'Virtual Account');
 
+        // 1. UPDATE DATABASE (Data Gambar)
         if (! $transaction) {
             $transaction = $registration->transaction()->create([
                 'amount' => $registration->event->price,
@@ -138,13 +146,16 @@ class RegistrationController extends Controller
             $transaction->payment_method = $paymentMethod;
         }
 
+        // Hapus file lama jika ada
         if ($transaction->payment_proof_path) {
             Storage::disk('public')->delete($transaction->payment_proof_path);
         }
 
+        // Upload file baru
         $proof = $request->file('payment_proof');
         $path = $proof->store('payment-proofs', 'public');
 
+        // Simpan path ke database
         $transaction->forceFill([
             'payment_proof_path' => $path,
             'status' => PaymentStatus::AwaitingVerification,
@@ -152,25 +163,47 @@ class RegistrationController extends Controller
             'payment_method' => $paymentMethod,
         ])->save();
 
-        $registration->loadMissing(['event', 'user']);
-
-        $adminEmail = config('mail.admin_address') ?? config('mail.from.address');
-
-        if ($adminEmail) {
-            Mail::to($adminEmail)->queue(new PaymentProofUploaded($registration));
-        }
-
-        Email::create([
-            'registration_id' => $registration->id,
-            'type' => 'payment_proof_uploaded',
-            'recipient' => $adminEmail,
-            'subject' => 'Bukti Pembayaran Baru',
-            'payload' => [
-                'registration_id' => $registration->id,
-            ],
-            'sent_at' => now(),
+        // Update status registrasi juga agar konsisten
+        $registration->update([
+            'payment_status' => PaymentStatus::AwaitingVerification,
+            'payment_proof_path' => $path
         ]);
 
+        // 2. KIRIM EMAIL (DIBUNGKUS TRY-CATCH)
+        // Ini bagian kuncinya. Jika SMTP error, dia akan masuk ke 'catch' dan TIDAK bikin crash.
+        try {
+            $registration->loadMissing(['event', 'user']);
+            $adminEmail = config('mail.admin_address') ?? config('mail.from.address');
+
+            if ($adminEmail) {
+                // Gunakan send() jika queue driver 'sync', atau queue() jika driver database/redis
+                Mail::to($adminEmail)->send(new PaymentProofUploaded($registration));
+            }
+
+            Email::create([
+                'user_id' => $registration->user_id, // Tambahkan user_id agar tidak error
+                'registration_id' => $registration->id,
+                'type' => 'payment_proof_uploaded',
+                'recipient' => $adminEmail,
+                'subject' => 'Bukti Pembayaran Baru',
+                'payload' => [
+                    'registration_id' => $registration->id,
+                ],
+                'sent_at' => now(),
+            ]);
+
+        } catch (\Exception $e) {
+            // Jika error, catat di log sistem tapi biarkan user lanjut redirect
+            Log::error("Gagal kirim email bukti bayar: " . $e->getMessage());
+            
+            // Redirect dengan pesan peringatan (bukan error 500)
+            return redirect()
+                ->route('registrations.show', $registration) // PENTING: Gunakan route explicit, jangan back()
+                ->with('status', 'Bukti berhasil diunggah! (Notifikasi email ke admin tertunda karena gangguan koneksi).');
+        }
+
+        // 3. REDIRECT SUKSES
+        // Pastikan redirect ke 'registrations.show' (GET route), bukan kembali ke POST route.
         return redirect()
             ->to(route('registrations.show', $registration) . '#konfirmasi')
             ->with('status', 'Bukti pembayaran berhasil diunggah. Menunggu verifikasi admin.');

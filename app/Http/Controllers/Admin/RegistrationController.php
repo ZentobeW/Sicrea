@@ -15,6 +15,7 @@ use App\Models\Transaction;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
@@ -146,7 +147,6 @@ class RegistrationController extends Controller
         ]);
     }
 
-    // Method lain tetap sama (show, verifyPayment, rejectPayment, export, approveRefund, rejectRefund)
     public function show(Registration $registration): View
     {
         $registration->load([
@@ -159,7 +159,8 @@ class RegistrationController extends Controller
         return view('admin.registrations.show', compact('registration'));
     }
 
-    public function verifyPayment(Registration $registration): RedirectResponse
+    // PERBAIKAN: Menambahkan Request $request & Try-Catch
+    public function verifyPayment(Request $request, Registration $registration): RedirectResponse
     {
         $registration->markVerified();
 
@@ -170,35 +171,41 @@ class RegistrationController extends Controller
             ]);
         }
 
-        $registration->loadMissing(['event', 'user', 'transaction']);
+        try {
+            $registration->loadMissing(['event', 'user', 'transaction']);
 
-        Mail::to($registration->user->email)->queue(new PaymentVerified($registration));
-        Mail::to($registration->user->email)->queue(new RegistrationApproved($registration));
+            Mail::to($registration->user->email)->send(new PaymentVerified($registration));
+            Mail::to($registration->user->email)->send(new RegistrationApproved($registration));
 
-        Email::create([
-            'user_id' => $registration->user_id,
-            'registration_id' => $registration->id,
-            'type' => 'payment_verified',
-            'recipient' => $registration->user->email,
-            'subject' => 'Pembayaran Terverifikasi',
-            'payload' => ['registration_id' => $registration->id],
-            'sent_at' => now(),
-        ]);
+            Email::create([
+                'user_id' => $registration->user_id,
+                'registration_id' => $registration->id,
+                'type' => 'payment_verified',
+                'recipient' => $registration->user->email,
+                'subject' => 'Pembayaran Terverifikasi',
+                'payload' => ['registration_id' => $registration->id],
+                'sent_at' => now(),
+            ]);
 
-        Email::create([
-            'user_id' => $registration->user_id,
-            'registration_id' => $registration->id,
-            'type' => 'registration_approved',
-            'recipient' => $registration->user->email,
-            'subject' => 'Pendaftaran Diterima',
-            'payload' => ['registration_id' => $registration->id],
-            'sent_at' => now(),
-        ]);
+            Email::create([
+                'user_id' => $registration->user_id,
+                'registration_id' => $registration->id,
+                'type' => 'registration_approved',
+                'recipient' => $registration->user->email,
+                'subject' => 'Pendaftaran Diterima',
+                'payload' => ['registration_id' => $registration->id],
+                'sent_at' => now(),
+            ]);
+        } catch (\Exception $e) {
+            Log::error("Email verifikasi gagal: " . $e->getMessage());
+            return back()->with('status', 'Pembayaran diverifikasi, namun email gagal terkirim (Cek SMTP).');
+        }
 
         return back()->with('status', 'Pembayaran berhasil diverifikasi. Peserta menerima konfirmasi otomatis.');
     }
 
-    public function rejectPayment(Registration $registration): RedirectResponse
+    // PERBAIKAN: Menambahkan Request $request
+    public function rejectPayment(Request $request, Registration $registration): RedirectResponse
     {
         $adminNote = $request->string('admin_note', '')->limit(500)->toString();
 
@@ -308,6 +315,7 @@ class RegistrationController extends Controller
         return response()->streamDownload($callback, $fileName, $headers);
     }
 
+    // PERBAIKAN: Menambahkan Request $request & Try-Catch
     public function approveRefund(Request $request, Refund $refund): RedirectResponse
     {
         $adminNote = $request->string('admin_note', '')->limit(500)->toString();
@@ -326,26 +334,32 @@ class RegistrationController extends Controller
             'status' => RegistrationStatus::Refunded,
         ]);
 
-        $refund->loadMissing('transaction.registration.event', 'transaction.registration.user');
+        try {
+            $refund->loadMissing('transaction.registration.event', 'transaction.registration.user');
 
-        if ($refund->transaction?->registration?->user) {
-            $email = $refund->transaction->registration->user->email;
-            Mail::to($email)->queue(new \App\Mail\RefundApproved($refund));
+            if ($refund->transaction?->registration?->user) {
+                $email = $refund->transaction->registration->user->email;
+                Mail::to($email)->send(new \App\Mail\RefundApproved($refund));
 
-            Email::create([
-                'user_id' => $refund->transaction->registration->user_id,
-                'registration_id' => $refund->transaction->registration->id,
-                'type' => 'refund_approved',
-                'recipient' => $email,
-                'subject' => 'Refund Disetujui',
-                'payload' => ['refund_id' => $refund->id],
-                'sent_at' => now(),
-            ]);
+                Email::create([
+                    'user_id' => $refund->transaction->registration->user_id,
+                    'registration_id' => $refund->transaction->registration->id,
+                    'type' => 'refund_approved',
+                    'recipient' => $email,
+                    'subject' => 'Refund Disetujui',
+                    'payload' => ['refund_id' => $refund->id],
+                    'sent_at' => now(),
+                ]);
+            }
+        } catch (\Exception $e) {
+            Log::error("Gagal kirim email refund disetujui: " . $e->getMessage());
+            return back()->with('status', 'Refund disetujui, namun email notifikasi gagal terkirim.');
         }
 
         return back()->with('status', 'Refund peserta disetujui dan ditandai selesai.');
     }
 
+    // PERBAIKAN: Menambahkan Request $request & Try-Catch
     public function rejectRefund(Request $request, Refund $refund): RedirectResponse
     {
         $adminNote = $request->string('admin_note', '')->limit(500)->toString();
@@ -362,19 +376,24 @@ class RegistrationController extends Controller
             'status' => PaymentStatus::Verified,
         ]);
 
-        if ($refund->transaction?->registration?->user) {
-            $email = $refund->transaction->registration->user->email;
-            Mail::to($email)->queue(new \App\Mail\RefundRejected($refund));
+        try {
+            if ($refund->transaction?->registration?->user) {
+                $email = $refund->transaction->registration->user->email;
+                Mail::to($email)->send(new \App\Mail\RefundRejected($refund));
 
-            Email::create([
-                'user_id' => $refund->transaction->registration->user_id,
-                'registration_id' => $refund->transaction->registration->id,
-                'type' => 'refund_rejected',
-                'recipient' => $email,
-                'subject' => 'Refund Ditolak',
-                'payload' => ['refund_id' => $refund->id],
-                'sent_at' => now(),
-            ]);
+                Email::create([
+                    'user_id' => $refund->transaction->registration->user_id,
+                    'registration_id' => $refund->transaction->registration->id,
+                    'type' => 'refund_rejected',
+                    'recipient' => $email,
+                    'subject' => 'Refund Ditolak',
+                    'payload' => ['refund_id' => $refund->id],
+                    'sent_at' => now(),
+                ]);
+            }
+        } catch (\Exception $e) {
+            Log::error("Gagal kirim email refund ditolak: " . $e->getMessage());
+            return back()->with('status', 'Refund ditolak, namun email notifikasi gagal terkirim.');
         }
 
         return back()->with('status', 'Refund ditolak dan peserta menerima notifikasi.');

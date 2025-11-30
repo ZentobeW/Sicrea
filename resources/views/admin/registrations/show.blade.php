@@ -7,7 +7,8 @@
     title="Kelola Transaksi"
     :back-url="route('admin.registrations.index')"
 >
-    <section class="py-12">
+    {{-- Inisialisasi AlpineJS di sini --}}
+    <section class="py-12" x-data="{ showProofModal: false, proofUrl: '' }">
         <div class="max-w-5xl mx-auto space-y-8">
 
             <div class="rounded-[28px] border border-[#FAD6C7] bg-white/95 p-6 shadow-xl shadow-[#FFD7BE]/40 sm:p-7">
@@ -72,14 +73,15 @@
                             <p class="text-sm text-[#6F4F4F]">Periksa kecocokan nominal sebelum verifikasi.</p>
                         </div>
                         @if ($registration->payment_proof_path)
-                            <a
-                                href="{{ Storage::disk('public')->url($registration->payment_proof_path) }}"
-                                target="_blank"
-                                class="inline-flex items-center gap-2 rounded-full bg-[#822021] px-4 py-2 text-xs font-semibold text-[#FAF8F1] shadow-md shadow-[#B49F9A]/30 transition hover:-translate-y-0.5 hover:bg-[#822021]/70"
+                            {{-- BUTTON YANG MENTRIGGER MODAL --}}
+                            <button
+                                type="button"
+                                @click="proofUrl = '{{ Storage::disk('public')->url($registration->payment_proof_path) }}'; showProofModal = true"
+                                class="inline-flex items-center gap-2 rounded-full bg-[#822021] px-4 py-2 text-xs font-semibold text-[#FAF8F1] shadow-md shadow-[#B49F9A]/30 transition hover:-translate-y-0.5 hover:bg-[#822021]/70 cursor-pointer"
                             >
                                 Lihat Bukti
-                                <x-heroicon-o-arrow-up-right class="h-4 w-4" />
-                            </a>
+                                <x-heroicon-o-eye class="h-4 w-4" />
+                            </button>
                         @else
                             <p class="text-sm font-semibold text-[#C65B74]">Belum ada bukti pembayaran yang diunggah.</p>
                         @endif
@@ -87,34 +89,29 @@
                 </div>
             </div>
 
-            {{-- START: BLOK TINDAK LANJUT PEMBAYARAN (Satu Notes Field) --}}
+            {{-- START: BLOK TINDAK LANJUT PEMBAYARAN --}}
             @if ($transaction && $transaction->status->value === 'awaiting_verification')
                 <div x-data="{ adminNote: '' }" class="mt-6 space-y-3 rounded-[28px] border border-[#FFD1BE] bg-white/95 p-6 shadow-xl shadow-[#FFD7BE]/40 sm:p-7">
                     <h3 class="text-xl font-semibold text-[#2C1E1E]">Tindak Lanjut Pembayaran</h3>
                     <p class="text-sm text-[#9A5A46]">Tinjau bukti bayar dan ambil keputusan. Catatan admin akan disimpan ke pendaftaran.</p>
 
-                    {{-- KOTAK NOTES TERPUSAT --}}
                     <div class="space-y-2">
                         <label class="block text-sm font-semibold text-[#2C1E1E]">Catatan Admin (Opsional/Wajib Tolak)</label>
                         <textarea x-model="adminNote" id="admin_note_field_payment" rows="3" class="w-full rounded-xl border border-[#FFD1BE] bg-white/80 px-3 py-2 text-sm text-[#2C1E1E] focus:border-[#FF8A64] focus:outline-none focus:ring-2 focus:ring-[#FF8A64]/30" placeholder="Tuliskan catatan persetujuan atau alasan penolakan"></textarea>
                     </div>
 
                     <div class="grid gap-3 sm:grid-cols-2 pt-2">
-                        {{-- Form 1: Setujui Pembayaran (Verify) --}}
                         <form id="verify-form" method="POST" action="{{ route('admin.registrations.verify-payment', $registration) }}">
                             @csrf
-                            {{-- Hidden input untuk transfer nilai catatan --}}
                             <input type="hidden" name="admin_note" x-bind:value="adminNote">
                             <button type="submit" class="w-full inline-flex items-center justify-center gap-2 rounded-full bg-emerald-600 px-4 py-3 text-sm font-semibold text-white shadow-md shadow-emerald-500/30 transition hover:-translate-y-0.5 hover:bg-emerald-700">
                                 <x-heroicon-o-check class="h-4 w-4" /> Setujui Pembayaran
                             </button>
                         </form>
 
-                        {{-- Form 2: Tolak Pembayaran (Reject) --}}
                         <form id="reject-form" method="POST" action="{{ route('admin.registrations.reject-payment', $registration) }}" 
                             onsubmit="if (!document.getElementById('admin_note_field_payment').value.trim()) { alert('Catatan penolakan wajib diisi!'); return false; } return true;">
                             @csrf
-                            {{-- Hidden input untuk transfer nilai catatan --}}
                             <input type="hidden" name="admin_note" x-bind:value="adminNote">
                             <button type="submit" class="w-full inline-flex items-center justify-center gap-2 rounded-full bg-rose-600 px-4 py-3 text-sm font-semibold text-white shadow-md shadow-rose-500/30 transition hover:-translate-y-0.5 hover:bg-rose-700">
                                 <x-heroicon-o-x-mark class="h-4 w-4" /> Tolak Pembayaran
@@ -126,6 +123,45 @@
             @endif
             {{-- END: BLOK TINDAK LANJUT PEMBAYARAN --}}
         </div>
+
+        {{-- MODAL PREVIEW GAMBAR --}}
+        <div
+            x-show="showProofModal"
+            style="display: none;"
+            class="fixed inset-0 z-[999] flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm"
+            x-transition:enter="transition ease-out duration-300"
+            x-transition:enter-start="opacity-0"
+            x-transition:enter-end="opacity-100"
+            x-transition:leave="transition ease-in duration-200"
+            x-transition:leave-start="opacity-100"
+            x-transition:leave-end="opacity-0"
+        >
+            {{-- Wrapper Modal --}}
+            <div
+                @click.away="showProofModal = false"
+                class="relative w-full max-w-4xl overflow-hidden rounded-2xl bg-white shadow-2xl flex flex-col max-h-[90vh]"
+            >
+                <div class="flex items-center justify-between border-b border-gray-100 bg-[#FFF7F1] px-4 py-3 shrink-0">
+                    <h3 class="font-semibold text-[#822021]">Preview Bukti Pembayaran</h3>
+                    <button @click="showProofModal = false" class="rounded-full bg-white p-1 text-[#C65B74] hover:bg-[#FFE3D3] transition">
+                        <x-heroicon-o-x-mark class="h-6 w-6" />
+                    </button>
+                </div>
+                
+                {{-- Area Gambar (Scrollable jika terlalu tinggi) --}}
+                <div class="flex items-center justify-center bg-[#2C1E1E]/5 p-4 overflow-auto flex-1">
+                    <img :src="proofUrl" alt="Bukti Pembayaran" class="max-w-full h-auto rounded-lg shadow-lg object-contain">
+                </div>
+
+                <div class="bg-white px-4 py-3 text-center border-t border-gray-100 shrink-0">
+                    <a :href="proofUrl" target="_blank" class="text-sm font-semibold text-[#822021] hover:underline">
+                        Buka gambar di tab baru
+                    </a>
+                </div>
+            </div>
+        </div>
+        {{-- END MODAL --}}
+
     </section>
 
     @if ($transaction?->refund)
@@ -168,20 +204,17 @@
                     </div>
                 </div>
 
-                {{-- START: BLOK TINDAK LANJUT REFUND (Satu Notes Field) --}}
                 @if ($refund->status->value === 'pending')
                     <div x-data="{ refundNote: '' }" class="mt-6 space-y-4 rounded-[28px] border border-[#FFD1BE] bg-white/95 p-6 shadow-xl shadow-[#FFD7BE]/40 sm:p-7">
                         <h3 class="text-xl font-semibold text-[#2C1E1E]">Tindak Lanjut Refund</h3>
                         <p class="text-sm text-[#9A5A46]">Tinjau permohonan refund dan berikan catatan sebelum mengambil keputusan.</p>
 
-                        {{-- KOTAK NOTES TERPUSAT --}}
                         <div class="space-y-2">
                             <label class="block text-sm font-semibold text-[#2C1E1E]">Catatan Admin (Opsional/Wajib Tolak)</label>
                             <textarea x-model="refundNote" id="admin_note_field_refund" rows="3" class="w-full rounded-xl border border-[#FFD1BE] bg-white/80 px-3 py-2 text-sm text-[#2C1E1E] focus:border-[#FF8A64] focus:outline-none focus:ring-2 focus:ring-[#FF8A64]/30" placeholder="Tuliskan catatan persetujuan atau alasan penolakan"></textarea>
                         </div>
                         
                         <div class="grid gap-3 sm:grid-cols-2 pt-2">
-                            {{-- Form 1: Setujui Refund (Approve) --}}
                             <form method="POST" action="{{ route('admin.refunds.approve', $refund) }}">
                                 @csrf
                                 <input type="hidden" name="admin_note" x-bind:value="refundNote">
@@ -190,7 +223,6 @@
                                 </button>
                             </form>
 
-                            {{-- Form 2: Tolak Refund (Reject) --}}
                             <form method="POST" action="{{ route('admin.refunds.reject', $refund) }}"
                                 onsubmit="if (!document.getElementById('admin_note_field_refund').value.trim()) { alert('Catatan penolakan wajib diisi!'); return false; } return true;">
                                 @csrf
@@ -203,7 +235,6 @@
                         <p class="text-xs text-[#B49F9A] mt-2">Catatan: Untuk **Penolakan**, kolom di atas wajib diisi.</p>
                     </div>
                 @endif
-                {{-- END: BLOK TINDAK LANJUT REFUND --}}
             </div>
         </section>
     @endif
