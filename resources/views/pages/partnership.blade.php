@@ -3,6 +3,21 @@
 @endphp
 
 <x-layouts.app :title="'Kemitraan Sicrea'">
+    <style>
+        .interactive-grid{ position: relative; }
+        .interactive-card{ transition: transform .28s cubic-bezier(.2,.8,.2,1), filter .28s ease, box-shadow .28s ease; will-change: transform, filter; }
+        .interactive-grid:hover .interactive-card{ filter: blur(4px); }
+        .interactive-card:hover{ filter: none !important; transform: translateY(-6px) scale(1.04); box-shadow: 0 18px 40px rgba(0,0,0,0.12); z-index: 10; }
+        @media (prefers-reduced-motion: reduce){ .interactive-card{ transition: none; } }
+        .portfolio-modal{ display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 50; align-items: center; justify-content: center; padding: 1rem; }
+        .portfolio-modal.active{ display: flex; }
+        .portfolio-modal-content{ background: white; border-radius: 1.5rem; max-width: 600px; width: 100%; max-height: 80vh; overflow-y: auto; animation: slideUp .3s ease-out; }
+        @keyframes slideUp{ from{ transform: translateY(2rem); opacity: 0; } to{ transform: translateY(0); opacity: 1; } }
+        .portfolio-modal-close{ position: absolute; top: 1.5rem; right: 1.5rem; background: white; border: none; width: 2.5rem; height: 2.5rem; border-radius: 9999px; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(0,0,0,0.15); transition: background .18s ease; z-index: 10; }
+        .portfolio-modal-close:hover{ background: #f3f4f6; }
+        .btn-download{ transition: transform .28s cubic-bezier(.2,.8,.2,1), background .28s ease, color .28s ease, box-shadow .28s ease; }
+        .btn-download:hover{ transform: scale(1.08); box-shadow: 0 12px 24px rgba(0,0,0,0.15); }
+    </style>
     <!-- Hero Section -->
     <section class="relative bg-gradient-to-br from-[#FCF5E6] via-[#FAF8F1] to-white py-20 lg:py-32">
         <div class="container mx-auto px-4 lg:px-8">
@@ -25,13 +40,13 @@
                     </p>
                     
                     <div class="flex flex-wrap gap-4">
-                        <a href="{{ asset('storage/proposal-kemitraan.pdf') }}" target="_blank" class="inline-flex items-center bg-[#822021] hover:bg-[#822021]/90 text-white px-6 py-3 rounded-lg text-base font-semibold">
+                        <a href="{{ asset('storage/proposal-kemitraan.pdf') }}" target="_blank" class="btn-download inline-flex items-center bg-[#822021] text-[#FCF5E6] px-6 py-3 rounded-lg text-base font-semibold">
                             <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
                                 <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd"/>
                             </svg>
                             Unduh Proposal
                         </a>
-                        <a href="https://wa.me/6281234567890" target="_blank" class="inline-flex items-center border border-gray-300 hover:border-gray-400 text-gray-700 px-6 py-3 rounded-lg text-base font-semibold">
+                        <a href="https://wa.me/6285871497367" target="_blank" class="btn-download inline-flex items-center border border-gray-300 text-gray-700 px-6 py-3 rounded-lg text-base font-semibold">
                             <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
                                 <path fill-rule="evenodd" d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.338-3.123C2.493 12.767 2 11.434 2 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM7 9H5v2h2V9zm8 0h-2v2h2V9zM9 9h2v2H9V9z" clip-rule="evenodd"/>
                             </svg>
@@ -60,8 +75,8 @@
                 </p>
             </div>
             
-            <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                <div class="border-2 border-[#FFB3E1]/30 hover:border-[#822021] transition-colors rounded-lg bg-white">
+            <div class="interactive-grid grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="interactive-card border-2 border-[#FFB3E1]/30 hover:border-[#822021] transition-colors rounded-lg bg-white">
                     <div class="p-6">
                         <div class="bg-gradient-to-br from-[#FCF5E6] to-[#FFDEF8] w-14 h-14 rounded-xl flex items-center justify-center mb-4 border border-[#FFB3E1] mx-auto">
                             <svg class="w-7 h-7 text-[#FFB3E1]" fill="currentColor" viewBox="0 0 20 20">
@@ -73,7 +88,7 @@
                     </div>
                 </div>
                 
-                <div class="border-2 border-[#FFB3E1]/30 hover:border-[#822021] transition-colors rounded-lg bg-white">
+                <div class="interactive-card border-2 border-[#FFB3E1]/30 hover:border-[#822021] transition-colors rounded-lg bg-white">
                     <div class="p-6">
                         <div class="bg-gradient-to-br from-[#FCF5E6] to-[#FFDEF8] w-14 h-14 rounded-xl flex items-center justify-center mb-4 border border-[#FFB3E1] mx-auto">
                             <svg class="w-7 h-7 text-[#FFB3E1]" fill="currentColor" viewBox="0 0 20 20">
@@ -85,7 +100,7 @@
                     </div>
                 </div>
                 
-                <div class="border-2 border-[#FFB3E1]/30 hover:border-[#822021] transition-colors rounded-lg bg-white">
+                <div class="interactive-card border-2 border-[#FFB3E1]/30 hover:border-[#822021] transition-colors rounded-lg bg-white">
                     <div class="p-6">
                         <div class="bg-gradient-to-br from-[#FCF5E6] to-[#FFDEF8] w-14 h-14 rounded-xl flex items-center justify-center mb-4 border border-[#FFB3E1] mx-auto">
                             <svg class="w-7 h-7 text-[#FFB3E1]" fill="currentColor" viewBox="0 0 20 20">
@@ -97,7 +112,7 @@
                     </div>
                 </div>
                 
-                <div class="border-2 border-[#FFB3E1]/30 hover:border-[#822021] transition-colors rounded-lg bg-white">
+                <div class="interactive-card border-2 border-[#FFB3E1]/30 hover:border-[#822021] transition-colors rounded-lg bg-white">
                     <div class="p-6">
                         <div class="bg-gradient-to-br from-[#FCF5E6] to-[#FFDEF8] w-14 h-14 rounded-xl flex items-center justify-center mb-4 border border-[#FFB3E1] mx-auto">
                             <svg class="w-7 h-7 text-[#FFB3E1]" fill="currentColor" viewBox="0 0 20 20">
@@ -122,9 +137,9 @@
                 </p>
             </div>
             
-            <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+            <div class="interactive-grid grid sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
                 @forelse ($featuredPortfolios as $portfolio)
-                    <div class="group cursor-pointer">
+                    <div class="interactive-card group cursor-pointer" onclick="openPortfolioModal(event, '{{ $portfolio->id }}', '{{ addslashes($portfolio->title) }}', '{{ $portfolio->cover_image_url ?? '' }}', '{{ addslashes($portfolio->event?->title ?? 'Program Internal') }}')">
                         <div class="relative overflow-hidden rounded-xl mb-4 aspect-[4/3]">
                             @if ($portfolio->cover_image_url)
                                 <img src="{{ $portfolio->cover_image_url }}" alt="{{ $portfolio->title }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
@@ -172,8 +187,8 @@
                 </p>
             </div>
             
-            <div class="grid lg:grid-cols-3 gap-8">
-                <div class="border-2 border-[#FFB3E1]/30 hover:shadow-xl transition-all hover:border-[#822021] rounded-lg bg-white">
+            <div class="interactive-grid grid lg:grid-cols-3 gap-8">
+                <div class="interactive-card border-2 border-[#FFB3E1]/30 hover:shadow-xl transition-all hover:border-[#822021] rounded-lg bg-white">
                     <div class="p-8">
                         <div class="bg-gradient-to-br from-[#FFB3E1] to-[#FFBE8E] text-white w-10 h-10 rounded-lg flex items-center justify-center mb-4 mx-auto">
                             <span class="font-semibold">1</span>
@@ -209,7 +224,7 @@
                     </div>
                 </div>
                 
-                <div class="border-2 border-[#FFB3E1]/30 hover:shadow-xl transition-all hover:border-[#822021] rounded-lg bg-white">
+                <div class="interactive-card border-2 border-[#FFB3E1]/30 hover:shadow-xl transition-all hover:border-[#822021] rounded-lg bg-white">
                     <div class="p-8">
                         <div class="bg-gradient-to-br from-[#FFB3E1] to-[#FFBE8E] text-white w-10 h-10 rounded-lg flex items-center justify-center mb-4 mx-auto">
                             <span class="font-semibold">2</span>
@@ -233,7 +248,7 @@
                     </div>
                 </div>
                 
-                <div class="border-2 border-[#FFB3E1]/30 hover:shadow-xl transition-all hover:border-[#822021] rounded-lg bg-white">
+                <div class="interactive-card border-2 border-[#FFB3E1]/30 hover:shadow-xl transition-all hover:border-[#822021] rounded-lg bg-white">
                     <div class="p-8">
                         <div class="bg-gradient-to-br from-[#FFB3E1] to-[#FFBE8E] text-white w-10 h-10 rounded-lg flex items-center justify-center mb-4 mx-auto">
                             <span class="font-semibold">3</span>
@@ -267,24 +282,24 @@
     </section>
 
     <!-- CTA Section -->
-    <section class="py-20 bg-gradient-to-br from-[#FFB3E1] to-[#FFBE8E] text-white">
+    <section class="py-20 bg-gradient-to-br from-[#FFB3E1] to-[#FFBE8E]">
         <div class="container mx-auto px-4 lg:px-8">
             <div class="max-w-3xl mx-auto text-center">
-                <h2 class="text-3xl lg:text-4xl mb-4 font-bold">
+                <h2 class="text-3xl lg:text-4xl mb-4 font-bold text-[#822021]">
                     Tertarik untuk Berkolaborasi?
                 </h2>
-                <p class="text-lg text-white/90 mb-8">
+                <p class="text-lg text-[#822021] mb-8">
                     Hubungi kami untuk mendiskusikan peluang kerjasama yang saling menguntungkan. 
                     Tim kami siap membantu mewujudkan kolaborasi terbaik.
                 </p>
                 <div class="flex flex-wrap gap-4 justify-center">
-                    <a href="{{ asset('storage/proposal-kemitraan.pdf') }}" target="_blank" class="inline-flex items-center bg-white text-[#822021] hover:bg-white/90 px-8 py-3 rounded-lg font-semibold">
+                    <a href="{{ asset('storage/proposal-kemitraan.pdf') }}" target="_blank" class="btn-download inline-flex items-center bg-[#822021] text-[#FCF5E6] px-8 py-3 rounded-lg font-semibold">
                         <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
                             <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd"/>
                         </svg>
                         Unduh Proposal Partnership
                     </a>
-                    <a href="https://wa.me/6281234567890" target="_blank" class="inline-flex items-center bg-white text-[#822021] hover:bg-white/90 px-8 py-3 rounded-lg font-semibold">
+                    <a href="https://wa.me/6285871497367" target="_blank" class="btn-download inline-flex items-center bg-white text-[#822021] px-8 py-3 rounded-lg font-semibold">
                         <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
                             <path fill-rule="evenodd" d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.338-3.123C2.493 12.767 2 11.434 2 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM7 9H5v2h2V9zm8 0h-2v2h2V9zM9 9h2v2H9V9z" clip-rule="evenodd"/>
                         </svg>
@@ -294,10 +309,30 @@
                         </svg>
                     </a>
                 </div>
-                <p class="text-sm text-white/80 mt-6">
-                    Email: kreasihangat@gmail.com | WhatsApp: +62 812 3456 7890
+                <p class="text-sm text-[#822021] mt-6">
+                    Email: kreasihangat@gmail.com | WhatsApp: +62 858 7149 7367
                 </p>
             </div>
         </div>
     </section>
+
+    <!-- Portfolio Modal -->
+    <div id="portfolioModal" class="portfolio-modal" onclick="if(event.target===this)closePortfolioModal()">
+        <div class="portfolio-modal-content relative">
+            <button class="portfolio-modal-close" onclick="closePortfolioModal()" aria-label="Close modal"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
+            <div class="aspect-4/3 bg-gray-200 rounded-t-2xl overflow-hidden">
+                <img id="portfolioImage" src="" alt="Portfolio image" class="w-full h-full object-cover">
+            </div>
+            <div class="p-6">
+                <span id="portfolioCategory" class="bg-[#FCF5E6] text-[#822021] text-xs font-semibold px-3 py-1 rounded-full inline-block mb-4"></span>
+                <h2 id="portfolioTitle" class="text-2xl font-bold text-[#822021]"></h2>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function openPortfolioModal(e,id,title,img,cat){e.stopPropagation();document.getElementById('portfolioImage').src=img||'';document.getElementById('portfolioTitle').textContent=title;document.getElementById('portfolioCategory').textContent=cat;document.getElementById('portfolioModal').classList.add('active');document.body.style.overflow='hidden'}
+        function closePortfolioModal(){document.getElementById('portfolioModal').classList.remove('active');document.body.style.overflow='auto'}
+        document.addEventListener('keydown',function(e){if(e.key==='Escape'&&document.getElementById('portfolioModal').classList.contains('active'))closePortfolioModal()})
+    </script>
 </x-layouts.app>
