@@ -1,206 +1,295 @@
-@php
-    $formatStat = static function (int $value): string {
-        if ($value >= 1000) {
-            return rtrim(number_format($value / 1000, 1), '.0') . 'K+';
-        }
+<x-layouts.app :title="'About Us'">
+    <!-- Hero Section -->
+    <section class="py-20 bg-[#FCF5E6] relative">
+        <div class="container mx-auto px-4 lg:px-8">
+            <div class="max-w-4xl mx-auto text-center">
+                <h1 class="text-4xl lg:text-5xl mb-6 font-bold text-[#822021]">Who Is Kreasi Hangat?</h1>
+                <p class="text-lg text-gray-600 leading-relaxed mb-8 max-w-3xl mx-auto">
+                    Kreasi Hangat adalah platform online yang menghubungkan para pembelajar dengan berbagai 
+                    workshop, event, dan kegiatan kreatif. Kami percaya bahwa setiap orang memiliki potensi 
+                    kreatif yang dapat dikembangkan melalui pembelajaran yang tepat dan lingkungan yang mendukung.
+                </p>
+                <div class="relative rounded-2xl overflow-hidden shadow-2xl">
+                    <img src="https://images.unsplash.com/photo-1758522274463-67ef9e5e88b1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxhcnQlMjBjbGFzcyUyMGNvbW11bml0eXxlbnwxfHx8fDE3NTkyOTE1MTl8MA&ixlib=rb-4.1.0&q=80&w=1080" alt="About Kreasi Hangat" class="w-full h-96 object-cover">
+                </div>
+            </div>
+        </div>
+    </section>
 
-        return $value . ($value > 0 ? '+' : '');
-    };
-@endphp
+    <!-- Mission & Vision -->
+    <section class="py-20 bg-[#FCF5E6]">
+        <div class="container mx-auto px-4 lg:px-8">
+            <div class="interactive-grid grid md:grid-cols-2 gap-8 max-w-6xl mx-auto">
+                <!-- Visi Card -->
+                <div class="interactive-card bg-white rounded-2xl p-8 shadow-sm border border-gray-100">
+                    <div class="flex items-center gap-4 mb-6">
+                        <img src="{{ asset('images/Konsep Desain KH - 8.png') }}" alt="Visi Icon" class="w-16 h-16 object-contain">
+                        <h2 class="text-2xl font-bold text-[#822021]">Visi Kami</h2>
+                    </div>
+                    <p class="text-gray-600 leading-relaxed">
+                        Menjadi komunitas kreatif dan inklusif yang memberikan ruang bagi semua individu untuk berekspresi, belajar, dan berkembang melalui berbagai kegiatan seni dan workshop.
+                    </p>
+                </div>
 
-@push('styles')
+                <!-- Misi Card -->
+                <div class="interactive-card bg-white rounded-2xl p-8 shadow-sm border border-gray-100">
+                    <div class="flex items-center gap-4 mb-6">
+                        <img src="{{ asset('images/Konsep Desain KH - 8.png') }}" alt="Misi Icon" class="w-16 h-16 object-contain">
+                        <h2 class="text-2xl font-bold text-[#822021]">Misi Kami</h2>
+                    </div>
+                    <ul class="list-disc pl-5 text-gray-600 leading-relaxed space-y-2">
+                        <li>Menghadirkan <em>workshop</em> kreatif yang inspiratif dan edukatif bagi berbagai kalangan.</li>
+                        <li>Membangun komunitas yang mendukung pengembangan keterampilan seni dan kreativitas.</li>
+                        <li>Berkolaborasi dengan berbagai pihak untuk menciptakan acara yang bermanfaat dan menarik.</li>
+                        <li>Memberikan nilai tambah bagi mitra melalui promosi dan <em>engagement</em> komunitas.</li>
+                        <li>Mengembangkan program-program inovatif yang dapat diakses oleh lebih banyak orang.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Values -->
     <style>
-        @keyframes floatPulse {
-            0%,
-            100% {
-                transform: translateY(0);
-            }
+        /* Interactive hover for value cards: hovered card zooms, siblings blur */
+        .values-grid{ position: relative; }
+        .value-card{ transition: transform .28s cubic-bezier(.2,.8,.2,1), filter .28s ease, box-shadow .28s ease; will-change: transform, filter; }
+        .values-grid:hover .value-card{ filter: blur(4px); }
+        .value-card:hover{ filter: none !important; transform: translateY(-6px) scale(1.04); box-shadow: 0 18px 40px rgba(0,0,0,0.12); z-index: 10; }
 
-            50% {
-                transform: translateY(-8px);
-            }
-        }
+        /* Generic interactive grid/card (for Visi/Misi and Team) */
+        .interactive-grid{ position: relative; }
+        .interactive-card{ transition: transform .28s cubic-bezier(.2,.8,.2,1), filter .28s ease, box-shadow .28s ease; will-change: transform, filter; }
+        .interactive-grid:hover .interactive-card{ filter: blur(4px); }
+        .interactive-card:hover{ filter: none !important; transform: translateY(-6px) scale(1.04); box-shadow: 0 18px 40px rgba(0,0,0,0.12); z-index: 10; }
 
-        .reveal {
-            opacity: 0;
-            transform: translateY(32px);
-            transition: opacity 0.6s ease, transform 0.6s ease;
-            transition-delay: var(--reveal-delay, 0ms);
-        }
-
-        .reveal.is-visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .floating-card {
-            animation: floatPulse 6s ease-in-out infinite;
-        }
+        @media (prefers-reduced-motion: reduce){ .value-card, .interactive-card{ transition: none; } }
     </style>
-@endpush
-
-@push('scripts')
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach((entry) => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('is-visible');
-                        observer.unobserve(entry.target);
-                    }
-                });
-            }, { threshold: 0.2 });
-
-            document.querySelectorAll('.reveal').forEach((element) => observer.observe(element));
-        });
-    </script>
-@endpush
-
-<x-layouts.app :title="'Tentang Sicrea'">
-    <section class="relative overflow-hidden bg-gradient-to-b from-[#FFF4EB] via-white to-white">
-        <div class="absolute inset-x-0 -top-24 flex justify-center" aria-hidden="true">
-            <div class="h-56 w-[480px] rounded-full bg-gradient-to-r from-[#FDC5B3]/60 to-[#F8E3D4]/40 blur-3xl"></div>
-        </div>
-
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-28 pb-24">
-            <div class="grid gap-16 lg:grid-cols-[1.15fr,0.85fr] items-center">
-                <div class="reveal space-y-6" style="--reveal-delay: 60ms;">
-                    <span class="inline-flex items-center rounded-full border border-amber-200 bg-white/70 px-5 py-2 text-xs font-semibold uppercase tracking-[0.3em] text-amber-600">Tentang Kami</span>
-                    <h1 class="text-4xl md:text-5xl font-semibold text-slate-900 leading-tight">Tentang Kreasi Hangat</h1>
-                    <p class="text-base md:text-lg text-slate-600 leading-relaxed max-w-xl">Kami menghadirkan ruang belajar dan kolaborasi lintas disiplin yang hangat dan relevan bagi talenta kreatif Indonesia. Program kami dirancang humanis, terukur, dan berdampak pada komunitas.</p>
-
-                    <div class="grid gap-4 sm:grid-cols-2">
-                        <div class="flex items-center gap-4 rounded-3xl bg-white/80 p-5 shadow-sm ring-1 ring-white/60">
-                            <div class="inline-flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-[#FF8B64] to-[#FF5E7A] text-white text-base font-semibold">{{ $formatStat($stats['published_events']) }}</div>
-                            <div>
-                                <p class="text-xs uppercase tracking-[0.25em] text-slate-400">Program Rutin</p>
-                                <p class="text-sm font-medium text-slate-700">Selama satu tahun terakhir</p>
-                            </div>
-                        </div>
-                        <div class="flex items-center gap-4 rounded-3xl bg-white/80 p-5 shadow-sm ring-1 ring-white/60">
-                            <div class="inline-flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-[#7F9CF5] to-[#6C63FF] text-white text-base font-semibold">{{ $formatStat($stats['confirmed_participants']) }}</div>
-                            <div>
-                                <p class="text-xs uppercase tracking-[0.25em] text-slate-400">Alumni Aktif</p>
-                                <p class="text-sm font-medium text-slate-700">Berkolaborasi dalam jaringan kami</p>
-                            </div>
-                        </div>
+    <section class="py-20 bg-white">
+        <div class="container mx-auto px-4 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl lg:text-4xl mb-4 font-bold text-[#822021]">Our Values</h2>
+                <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+                    Prinsip yang menjadi fondasi dalam setiap kegiatan yang kami selenggarakan
+                </p>
+            </div>
+            <div class="values-grid grid sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
+                <div class="value-card bg-white border border-[#FFB3E1]/70 rounded-2xl p-6 text-center hover:shadow-lg">
+                    <div class="w-16 h-16 bg-[#FCF5E6] rounded-full flex items-center justify-center mx-auto mb-4">
+                        <svg class="w-8 h-8 text-[#FFB3E1]" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clip-rule="evenodd"/>
+                        </svg>
                     </div>
-
-                    <div class="flex flex-wrap items-center gap-4 pt-2">
-                        <a href="{{ route('events.index') }}" class="inline-flex items-center rounded-full bg-gradient-to-r from-[#FF8B64] to-[#FF5E7A] px-7 py-3 text-sm font-semibold text-white shadow-md shadow-amber-200/60 transition hover:shadow-lg hover:shadow-amber-200/80">Jelajahi Program</a>
-                        <a href="{{ route('partnership.index') }}" class="inline-flex items-center rounded-full border border-amber-200/80 px-7 py-3 text-sm font-semibold text-amber-600 transition hover:border-amber-400 hover:text-amber-700">Kolaborasi dengan Kami</a>
-                    </div>
+                    <h3 class="mb-2 font-semibold text-[#822021]">Fokus pada Kualitas</h3>
+                    <p class="text-sm text-gray-600 leading-relaxed">
+                        Setiap workshop dirancang dengan kurikulum berkualitas dan instruktur berpengalaman
+                    </p>
                 </div>
-
-                <div class="reveal" style="--reveal-delay: 160ms;">
-                    <div class="relative">
-                        <div class="aspect-[4/3] rounded-[32px] bg-gradient-to-br from-[#FFE4D6] via-[#FFF1E5] to-white p-4 shadow-xl">
-                            <div class="flex h-full w-full items-center justify-center rounded-[24px] border border-dashed border-amber-200 bg-white/60 text-xs uppercase tracking-[0.35em] text-amber-400">Galeri Kreasi Hangat</div>
-                        </div>
-                        <div class="floating-card absolute -bottom-8 left-8 w-56 rounded-3xl bg-white/95 p-6 shadow-lg ring-1 ring-amber-100">
-                            <p class="text-xs uppercase tracking-[0.35em] text-amber-400">Cerita Kami</p>
-                            <p class="mt-3 text-sm font-semibold text-slate-800 leading-relaxed">Menghubungkan kreator, mentor, dan brand untuk pengalaman belajar yang lebih hangat.</p>
-                        </div>
+                <div class="value-card bg-white border border-[#FFB3E1]/70 rounded-2xl p-6 text-center hover:shadow-lg">
+                    <div class="w-16 h-16 bg-[#FCF5E6] rounded-full flex items-center justify-center mx-auto mb-4">
+                        <svg class="w-8 h-8 text-[#FFB3E1]" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"/>
+                        </svg>
                     </div>
+                    <h3 class="mb-2 font-semibold text-[#822021]">Lingkungan Supportif</h3>
+                    <p class="text-sm text-gray-600 leading-relaxed">
+                        Menciptakan ruang belajar yang nyaman, ramah, dan mendukung pertumbuhan kreatif
+                    </p>
+                </div>
+                <div class="value-card bg-white border border-[#FFB3E1]/70 rounded-2xl p-6 text-center hover:shadow-lg">
+                    <div class="w-16 h-16 bg-[#FCF5E6] rounded-full flex items-center justify-center mx-auto mb-4">
+                        <svg class="w-8 h-8 text-[#FFB3E1]" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3z"/>
+                        </svg>
+                    </div>
+                    <h3 class="mb-2 font-semibold text-[#822021]">Komunitas Kreatif</h3>
+                    <p class="text-sm text-gray-600 leading-relaxed">
+                        Membangun jaringan komunitas yang saling mendukung dan berbagi inspirasi
+                    </p>
+                </div>
+                <div class="value-card bg-white border border-[#FFB3E1]/70 rounded-2xl p-6 text-center hover:shadow-lg">
+                    <div class="w-16 h-16 bg-[#FCF5E6] rounded-full flex items-center justify-center mx-auto mb-4">
+                        <svg class="w-8 h-8 text-[#FFB3E1]" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V4a2 2 0 00-2-2H6zm1 2a1 1 0 000 2h6a1 1 0 100-2H7zm6 7a1 1 0 011 1v3a1 1 0 11-2 0v-3a1 1 0 011-1zm-3 3a1 1 0 100 2h.01a1 1 0 100-2H10zm-4 1a1 1 0 011-1h.01a1 1 0 110 2H7a1 1 0 01-1-1zm1-4a1 1 0 100 2h.01a1 1 0 100-2H7zm2 0a1 1 0 100 2h.01a1 1 0 100-2H9zm2 0a1 1 0 100 2h.01a1 1 0 100-2H11z" clip-rule="evenodd"/>
+                        </svg>
+                    </div>
+                    <h3 class="mb-2 font-semibold text-[#822021]">Pengembangan Berkelanjutan</h3>
+                    <p class="text-sm text-gray-600 leading-relaxed">
+                        Komitmen untuk terus menghadirkan program yang relevan trend terkini
+                    </p>
                 </div>
             </div>
         </div>
     </section>
 
-    <section class="bg-white">
-        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-            <div class="grid gap-10 lg:grid-cols-[1.05fr,1fr] items-start">
-                <div class="reveal space-y-6" style="--reveal-delay: 80ms;">
-                    <span class="text-xs font-semibold uppercase tracking-[0.35em] text-amber-500">Visi &amp; Misi</span>
-                    <h2 class="text-3xl font-semibold text-slate-900 leading-snug">Mewujudkan pengalaman belajar kreatif yang hangat, relevan, dan inklusif.</h2>
-                    <p class="text-base text-slate-600 leading-relaxed">Setiap program Kreasi Hangat dikurasi untuk menjawab kebutuhan praktis para kreator dan mitra. Kami percaya proses kreatif terbaik lahir dari rasa kebersamaan, dukungan komunitas, dan pendampingan berkelanjutan.</p>
+    <!-- Team Section -->
+    <section class="py-20 bg-[#FCF5E6]">
+        <div class="container mx-auto px-4 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl lg:text-4xl mb-4 font-bold text-[#822021]">Our Teams</h2>
+                <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+                    Para ahli berpengalaman yang siap membimbing perjalanan kreatif Anda
+                </p>
+            </div>
+
+            <!-- Desktop Grid (6 columns) -->
+            <div class="interactive-grid hidden lg:grid lg:grid-cols-6 gap-6">
+                <div class="interactive-card text-center">
+                    <div class="relative mb-4 overflow-hidden rounded-2xl aspect-square">
+                        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=300&h=300&fit=crop" alt="Adella Marshanda" class="w-full h-full object-cover">
+                    </div>
+                    <h3 class="font-semibold text-[#822021] mb-1">Adella Marshanda</h3>
+                    <p class="text-sm text-gray-500">Founder</p>
                 </div>
 
-                <div class="grid gap-5 sm:grid-cols-2">
-                    <div class="reveal rounded-3xl bg-[#FFF6EF] p-8 shadow-sm ring-1 ring-white" style="--reveal-delay: 140ms;">
-                        <p class="text-sm font-semibold uppercase tracking-[0.3em] text-amber-400">Visi Kami</p>
-                        <p class="mt-4 text-base text-slate-700 leading-relaxed">Menjadi ruang aman bagi talenta kreatif untuk bertumbuh bersama, saling berbagi praktik terbaik, dan menghasilkan karya yang berdampak.</p>
+                <div class="interactive-card text-center">
+                    <div class="relative mb-4 overflow-hidden rounded-2xl aspect-square">
+                        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=300&h=300&fit=crop" alt="Farkha Mutiara" class="w-full h-full object-cover">
                     </div>
-                    <div class="reveal rounded-3xl bg-[#EEF2FF] p-8 shadow-sm ring-1 ring-white" style="--reveal-delay: 200ms;">
-                        <p class="text-sm font-semibold uppercase tracking-[0.3em] text-indigo-400">Misi Kami</p>
-                        <p class="mt-4 text-base text-slate-700 leading-relaxed">Menghadirkan workshop tematik, mentoring, dan kemitraan strategis yang memberdayakan komunitas serta membuka peluang baru.</p>
+                    <h3 class="font-semibold text-[#822021] mb-1">Farkha Mutiara</h3>
+                    <p class="text-sm text-gray-500">Co-Founder</p>
+                </div>
+
+                <div class="interactive-card text-center">
+                    <div class="relative mb-4 overflow-hidden rounded-2xl aspect-square">
+                        <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=300&h=300&fit=crop" alt="Syehri Reza Dwi A" class="w-full h-full object-cover">
                     </div>
+                    <h3 class="font-semibold text-[#822021] mb-1">Syehri Reza Dwi A</h3>
+                    <p class="text-sm text-gray-500">Tim Tutor</p>
+                </div>
+
+                <div class="interactive-card text-center">
+                    <div class="relative mb-4 overflow-hidden rounded-2xl aspect-square">
+                        <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=300&h=300&fit=crop" alt="Koerunnisa" class="w-full h-full object-cover">
+                    </div>
+                    <h3 class="font-semibold text-[#822021] mb-1">Koerunnisa</h3>
+                    <p class="text-sm text-gray-500">Tim Tutor</p>
+                </div>
+
+                <div class="interactive-card text-center">
+                    <div class="relative mb-4 overflow-hidden rounded-2xl aspect-square">
+                        <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=300&h=300&fit=crop" alt="Syavira" class="w-full h-full object-cover">
+                    </div>
+                    <h3 class="font-semibold text-[#822021] mb-1">Syavira</h3>
+                    <p class="text-sm text-gray-500">Tim Tutor</p>
+                </div>
+
+                <div class="interactive-card text-center">
+                    <div class="relative mb-4 overflow-hidden rounded-2xl aspect-square">
+                        <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=300&h=300&fit=crop" alt="Putri Ajeng" class="w-full h-full object-cover">
+                    </div>
+                    <h3 class="font-semibold text-[#822021] mb-1">Putri Ajeng</h3>
+                    <p class="text-sm text-gray-500">Tim Tutor</p>
                 </div>
             </div>
+
+            <!-- Mobile Carousel -->
+            <div class="lg:hidden relative">
+                <button class="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white text-[#822021] p-3 rounded-full shadow-lg border border-[#FFB3E1]">
+                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                    </svg>
+                </button>
+
+                <div class="flex overflow-x-auto gap-6 pb-4 px-12" style="scrollbar-width: none; -ms-overflow-style: none;">
+                    <div class="min-w-[200px] text-center flex-shrink-0 interactive-card">
+                        <div class="relative mb-4 overflow-hidden rounded-2xl aspect-square">
+                            <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=300&h=300&fit=crop" alt="Adella Marshanda" class="w-full h-full object-cover">
+                        </div>
+                        <h3 class="font-semibold text-[#822021] mb-1">Adella Marshanda</h3>
+                        <p class="text-sm text-gray-500">Founder</p>
+                    </div>
+
+                    <div class="min-w-[200px] text-center flex-shrink-0 interactive-card">
+                        <div class="relative mb-4 overflow-hidden rounded-2xl aspect-square">
+                            <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=300&h=300&fit=crop" alt="Farkha Mutiara" class="w-full h-full object-cover">
+                        </div>
+                        <h3 class="font-semibold text-[#822021] mb-1">Farkha Mutiara</h3>
+                        <p class="text-sm text-gray-500">Co-Founder</p>
+                    </div>
+
+                    <div class="min-w-[200px] text-center flex-shrink-0 interactive-card">
+                        <div class="relative mb-4 overflow-hidden rounded-2xl aspect-square">
+                            <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=300&h=300&fit=crop" alt="Syehri Reza Dwi A" class="w-full h-full object-cover">
+                        </div>
+                        <h3 class="font-semibold text-[#822021] mb-1">Syehri Reza Dwi A</h3>
+                        <p class="text-sm text-gray-500">Tim Tutor</p>
+                    </div>
+
+                    <div class="min-w-[200px] text-center flex-shrink-0 interactive-card">
+                        <div class="relative mb-4 overflow-hidden rounded-2xl aspect-square">
+                            <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=300&h=300&fit=crop" alt="Koerunnisa" class="w-full h-full object-cover">
+                        </div>
+                        <h3 class="font-semibold text-[#822021] mb-1">Koerunnisa</h3>
+                        <p class="text-sm text-gray-500">Tim Tutor</p>
+                    </div>
+
+                    <div class="min-w-[200px] text-center flex-shrink-0 interactive-card">
+                        <div class="relative mb-4 overflow-hidden rounded-2xl aspect-square">
+                            <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=300&h=300&fit=crop" alt="Syavira" class="w-full h-full object-cover">
+                        </div>
+                        <h3 class="font-semibold text-[#822021] mb-1">Syavira</h3>
+                        <p class="text-sm text-gray-500">Tim Tutor</p>
+                    </div>
+
+                    <div class="min-w-[200px] text-center flex-shrink-0 interactive-card">
+                        <div class="relative mb-4 overflow-hidden rounded-2xl aspect-square">
+                            <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=300&h=300&fit=crop" alt="Putri Ajeng" class="w-full h-full object-cover">
+                        </div>
+                        <h3 class="font-semibold text-[#822021] mb-1">Putri Ajeng</h3>
+                        <p class="text-sm text-gray-500">Tim Tutor</p>
+                    </div>
+                </div>
+
+                <button class="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white text-[#822021] p-3 rounded-full shadow-lg border border-[#FFB3E1]">
+                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"/>
+                    </svg>
+                </button>
+            </div>
         </div>
     </section>
 
-    <section class="bg-[#FFF9F4]">
-        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-20 space-y-12">
-            <div class="reveal text-center space-y-4" style="--reveal-delay: 100ms;">
-                <span class="text-xs font-semibold uppercase tracking-[0.4em] text-amber-500">Nilai-Nilai Kami</span>
-                <h2 class="text-3xl font-semibold text-slate-900">Budaya kolaboratif yang kami rayakan setiap hari</h2>
-                <p class="text-base text-slate-600 leading-relaxed max-w-2xl mx-auto">Nilai ini menjadi dasar pengambilan keputusan kami dalam merancang pengalaman belajar yang relevan, empatik, dan berdampak untuk seluruh ekosistem.</p>
-            </div>
+    <!-- Contact Section -->
+    <section class="py-20 bg-gradient-to-br from-[#FFB3E1] to-[#FFBE8E] text-white">
+        <div class="container mx-auto px-4 lg:px-8">
+            <div class="max-w-4xl mx-auto text-center">
+                <h2 class="text-3xl lg:text-4xl mb-4 font-bold text-[#822021]">Contact Us</h2>
+                <p class="text-lg mb-12 text-[#822021]">
+                    Punya pertanyaan atau ingin tahu lebih lanjut? Kami siap membantumu.
+                </p>
 
-            <div class="grid gap-6 md:grid-cols-3">
-                @foreach ($values as $index => $value)
-                    <div class="reveal rounded-[28px] bg-white/90 p-8 shadow-md shadow-amber-100/50 ring-1 ring-white/80 transition hover:-translate-y-1 hover:shadow-lg" style="--reveal-delay: {{ 140 + ($index * 80) }}ms;">
-                        <div class="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-[#FF8B64] to-[#FF5E7A] text-white text-sm font-semibold">{{ $index + 1 }}</div>
-                        <h3 class="mt-5 text-lg font-semibold text-slate-900">{{ $value['title'] }}</h3>
-                        <p class="mt-3 text-sm text-slate-600 leading-relaxed">{{ $value['description'] }}</p>
-                    </div>
-                @endforeach
-            </div>
-        </div>
-    </section>
+                <div class="grid sm:grid-cols-2 gap-6">
+                    <!-- <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20">
+                        <svg class="w-8 h-8 mx-auto mb-3" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"/>
+                        </svg>
+                        <h4 class="mb-2 font-semibold">Alamat</h4>
+                        <p class="text-sm text-[#822021]">
+                            Jl. Kreatif No. 123<br>Jakarta Selatan 12345
+                        </p>
+                    </div> -->
 
-    <section class="bg-white">
-        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-20 space-y-10">
-            <div class="reveal text-center space-y-4" style="--reveal-delay: 100ms;">
-                <span class="text-xs font-semibold uppercase tracking-[0.35em] text-indigo-400">Tim Instruktur Kami</span>
-                <h2 class="text-3xl font-semibold text-slate-900">Berkenalan dengan wajah di balik Kreasi Hangat</h2>
-                <p class="text-base text-slate-600 leading-relaxed max-w-2xl mx-auto">Mereka adalah praktisi dengan pengalaman industri dan hati yang tulus untuk berbagi. Setiap sesi didampingi secara personal dan hangat.</p>
-            </div>
+                    <a href="https://wa.me/6281234567890" target="_blank" class="bg-white/30 backdrop-blur-sm rounded-2xl p-6 border border-white/20 block hover:bg-white/40 transition-colors">
+                        <svg class="w-8 h-8 mx-auto mb-3" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"/>
+                        </svg>
+                        <h4 class="mb-2 font-semibold text-[#822021]">WhatsApp</h4>
+                        <p class="text-sm text-[#822021]">
+                            +62 858 7149 7367
+                        </p>
+                    </a>
 
-            <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                @foreach ($teamMembers as $index => $member)
-                    <div class="reveal space-y-5 rounded-[28px] bg-[#F7F8FF] p-8 text-center shadow-sm ring-1 ring-white" style="--reveal-delay: {{ 140 + ($index * 80) }}ms;">
-                        <div class="mx-auto flex h-28 w-28 items-center justify-center rounded-full bg-gradient-to-br from-[#7F9CF5] to-[#6C63FF] text-xs uppercase tracking-[0.4em] text-white">Foto</div>
-                        <div class="space-y-2">
-                            <p class="text-base font-semibold text-slate-900">{{ $member['name'] }}</p>
-                            <p class="text-xs uppercase tracking-[0.3em] text-indigo-400">{{ $member['role'] }}</p>
-                        </div>
-                        <p class="text-sm text-slate-600 leading-relaxed">Memimpin sesi dengan pendekatan yang membumi, mendorong peserta bereksperimen dan berjejaring.</p>
-                    </div>
-                @endforeach
-            </div>
-        </div>
-    </section>
-
-    <section class="relative overflow-hidden">
-        <div class="absolute inset-0 bg-gradient-to-br from-[#FF8B64] via-[#FF5E7A] to-[#7F9CF5]"></div>
-        <div class="relative">
-            <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-                <div class="reveal grid gap-10 lg:grid-cols-[1.1fr,0.9fr] items-center text-white" style="--reveal-delay: 120ms;">
-                    <div class="space-y-6">
-                        <span class="inline-flex items-center rounded-full bg-white/10 px-5 py-2 text-xs font-semibold uppercase tracking-[0.35em]">Hubungi Kami</span>
-                        <h2 class="text-3xl font-semibold leading-snug">Mari rancang kolaborasi hangat bersama tim Kreasi Hangat</h2>
-                        <p class="text-base leading-relaxed text-white/80">Tim kami siap mendengarkan kebutuhan komunitas maupun brand Anda. Sampaikan rencana program, kami bantu wujudkan dengan pendekatan yang terkurasi.</p>
-                    </div>
-
-                    <div class="grid gap-6 sm:grid-cols-2">
-                        <div class="rounded-3xl bg-white/10 p-6 shadow-lg">
-                            <p class="text-sm uppercase tracking-[0.3em] text-white/80">Studio</p>
-                            <p class="mt-3 text-base font-semibold">Kreasi Hangat</p>
-                            <p class="mt-2 text-sm text-white/80 leading-relaxed">Jl. Bahagia No. 12, Bandung<br>Jawa Barat, Indonesia</p>
-                        </div>
-                        <div class="rounded-3xl bg-white/10 p-6 shadow-lg">
-                            <p class="text-sm uppercase tracking-[0.3em] text-white/80">Kontak</p>
-                            <p class="mt-3 text-base font-semibold">hello@kreasihangat.id</p>
-                            <p class="mt-2 text-sm text-white/80">+62 812-1234-5678</p>
-                        </div>
-                        <div class="sm:col-span-2 rounded-3xl bg-white/10 p-6 shadow-lg">
-                            <p class="text-sm uppercase tracking-[0.3em] text-white/80">Sosial Media</p>
-                            <p class="mt-3 text-base font-semibold">Instagram &bull; TikTok &bull; YouTube</p>
-                            <p class="mt-2 text-sm text-white/80">Ikuti perjalanan kami dalam menghangatkan industri kreatif.</p>
-                        </div>
-                    </div>
+                    <a href="mailto:kreasihangat@gmail.com" class="bg-white/30 backdrop-blur-sm rounded-2xl p-6 border border-white/20 block hover:bg-white/40 transition-colors">
+                        <svg class="w-8 h-8 mx-auto mb-3" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"/>
+                            <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"/>
+                        </svg>
+                        <h4 class="mb-2 font-semibold text-[#822021]">Email</h4>
+                        <p class="text-sm text-[#822021]">
+                            kreasihangat@gmail.com
+                        </p>
+                    </a>
                 </div>
             </div>
         </div>
