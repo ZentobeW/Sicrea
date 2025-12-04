@@ -9,16 +9,12 @@
         $isRefundView = request('tab') === 'refund';
     @endphp
 
-    <section class="bg-gradient-to-b from-[#FFF2E7] via-[#FFE2CF] to-[#F8C0A7] py-16">
-        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
-            <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-                <div>
-                    <p class="text-sm uppercase tracking-[0.35em] text-[#D97862]">Area Pengguna</p>
-                    <h1 class="mt-2 text-4xl font-semibold text-[#7C3A2D]">Profil Saya</h1>
-                    <p class="mt-2 text-sm text-[#9A5A46]">Kelola data pribadi, pantau status pendaftaran, dan lihat aktivitas workshop terbaru.</p>
-                </div>
+    <section class="relative overflow-hidden bg-gradient-to-br from-[#FFBE8E] to-[#FCF5E6] py-8 sm:py-12 lg:py-16">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-4 sm:space-y-5 lg:space-y-6">
+            <div class="flex items-center justify-between">
+                <h1 class="text-2xl sm:text-3xl lg:text-4xl font-semibold text-[#822021] font-['Cousine']">Profil Saya</h1>
                 <a href="{{ route('profile.edit') }}"
-                    class="inline-flex items-center gap-2 rounded-full bg-white/80 px-5 py-2.5 text-sm font-semibold text-[#7C3A2D] shadow-lg shadow-[#F4B59E]/30 transition hover:bg-white">
+                    class="inline-flex items-center gap-2 rounded-full bg-white/80 px-5 py-2.5 text-sm font-semibold text-[#822021] shadow-lg shadow-[#F4B59E]/30 transition hover:bg-white whitespace-nowrap font-['Open_Sans']">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-4 w-4">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931z" />
                         <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 7.125L16.875 4.5" />
@@ -27,99 +23,95 @@
                     Edit Profil
                 </a>
             </div>
+            <p class="mt-0.5 text-sm text-[#B49F9A] font-['Open_Sans']">Kelola data pribadi, pantau status pendaftaran, dan lihat aktivitas workshop terbaru.</p>
 
-            <div class="grid gap-5 md:grid-cols-2">
-                <div class="rounded-3xl bg-white/90 p-6 shadow-lg shadow-[#F4B59E]/40 ring-1 ring-[#F7C8B8]/60">
-                    <div class="flex items-start justify-between gap-4">
-                        <div>
-                            <p class="text-xs uppercase tracking-[0.3em] text-[#D97862]">Notifikasi Status Pendaftaran</p>
-                            <h2 class="mt-2 text-2xl font-semibold text-[#7C3A2D]">{{ $pendingRegistrations }} Pendaftaran</h2>
-                            <p class="mt-2 text-sm text-[#9A5A46]">Menunggu konfirmasi admin. Kami akan mengabari melalui e-mail saat pembayaran terverifikasi.</p>
-                        </div>
-                        <span class="inline-flex h-12 w-12 items-center justify-center rounded-full bg-[#FFE4D6] text-[#D97862]">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5" />
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                            </svg>
-                        </span>
+            <div class="grid gap-4 sm:gap-5 md:grid-cols-2">
+                <div class="rounded-3xl bg-white/90 p-4 sm:p-6 shadow-lg shadow-[#F4B59E]/40 ring-1 ring-[#F7C8B8]/60 relative">
+                    <span class="absolute top-4 right-4 inline-flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-full bg-[#FFE4D6] text-[#D97862]">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5" />
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                    </span>
+                    <div class="pr-16">
+                        <p class="text-xs uppercase tracking-[0.3em] text-[#B49F9A]">Notifikasi Status Pendaftaran</p>
+                        <h2 class="mt-2 text-xl sm:text-2xl font-semibold text-[#822021] font-['Cousine']">{{ $pendingRegistrations }} Pendaftaran</h2>
+                        <p class="mt-2 text-sm text-[#B49F9A] font-['Open_Sans']">Menunggu konfirmasi admin. Admin akan segera memverifikasi Pembayaran Anda.</p>
                     </div>
                 </div>
-                <div class="rounded-3xl bg-white/90 p-6 shadow-lg shadow-[#F4B59E]/40 ring-1 ring-[#F7C8B8]/60">
-                    <div class="flex items-start justify-between gap-4">
-                        <div>
-                            <p class="text-xs uppercase tracking-[0.3em] text-[#D97862]">Notifikasi Status Refund</p>
-                            <h2 class="mt-2 text-2xl font-semibold text-[#7C3A2D]">{{ $activeRefunds }} Permohonan</h2>
-                            <p class="mt-2 text-sm text-[#9A5A46]">Sedang diproses oleh tim keuangan. Estimasi penyelesaian 3–5 hari kerja.</p>
-                        </div>
-                        <span class="inline-flex h-12 w-12 items-center justify-center rounded-full bg-[#FFE4D6] text-[#D97862]">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 12A8.25 8.25 0 0112 3.75v0A8.25 8.25 0 0120.25 12v0A8.25 8.25 0 0112 20.25v0A8.25 8.25 0 013.75 12z" />
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6" />
-                            </svg>
-                        </span>
+                <div class="rounded-3xl bg-white/90 p-4 sm:p-6 shadow-lg shadow-[#F4B59E]/40 ring-1 ring-[#F7C8B8]/60 relative">
+                    <span class="absolute top-4 right-4 inline-flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-full bg-[#FFE4D6] text-[#D97862]">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z" />
+                        </svg>
+                    </span>
+                    <div class="pr-16">
+                        <p class="text-xs uppercase tracking-[0.3em] text-[#B49F9A]">Notifikasi Status Refund</p>
+                        <h2 class="mt-2 text-xl sm:text-2xl font-semibold text-[#822021] font-['Cousine']">{{ $activeRefunds }} Permohonan</h2>
+                        <p class="mt-2 text-sm text-[#B49F9A] font-['Open_Sans']">Sedang diproses. Estimasi penyelesaian 1–3 hari kerja.</p>
                     </div>
                 </div>
             </div>
 
             <div class="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
-                <div class="rounded-3xl bg-white/90 p-8 shadow-xl shadow-[#F4B59E]/40 ring-1 ring-[#F7C8B8]/60">
-                    <div class="flex flex-col gap-6 lg:flex-row lg:items-center">
-                        <div class="flex items-center gap-4">
-                            <img src="{{ $avatarUrl }}" alt="Avatar {{ $user->name }}" class="h-24 w-24 rounded-full border-4 border-white object-cover shadow-lg shadow-[#F7C8B8]/70">
-                            <div>
-                                <h2 class="text-2xl font-semibold text-[#7C3A2D]">{{ $user->name }}</h2>
-                                <p class="text-sm text-[#9A5A46]">{{ $user->email }}</p>
+                <div class="rounded-3xl bg-white/90 p-4 sm:p-6 lg:p-8 shadow-xl shadow-[#F4B59E]/40 ring-1 ring-[#F7C8B8]/60">
+                    <div class="flex flex-col gap-4 sm:gap-6 lg:flex-row lg:items-center">
+                        <div class="flex flex-col sm:flex-row items-center gap-4">
+                            <img src="{{ $avatarUrl }}" alt="Avatar {{ $user->name }}" class="h-20 w-20 sm:h-24 sm:w-24 rounded-full border-4 border-white object-cover shadow-lg shadow-[#F7C8B8]/70">
+                            <div class="text-center sm:text-left">
+                                <h2 class="text-xl sm:text-2xl font-semibold text-[#822021] font-['Cousine']">{{ $user->name }}</h2>
+                                <p class="text-sm text-[#B49F9A] break-all font-['Open_Sans']">{{ $user->email }}</p>
                                 @if ($user->phone)
-                                    <p class="text-sm text-[#9A5A46] mt-1">{{ $user->phone }}</p>
+                                    <p class="text-sm text-[#B49F9A] mt-1 font-['Open_Sans']">{{ $user->phone }}</p>
                                 @endif
                             </div>
                         </div>
                     </div>
 
-                    <div class="mt-8 grid gap-4 sm:grid-cols-2">
-                        <div class="rounded-2xl bg-[#FFF5EF] p-4">
-                            <p class="text-xs uppercase tracking-[0.3em] text-[#D97862]">Tanggal Lahir</p>
-                            <p class="mt-2 text-sm font-semibold text-[#7C3A2D]">{{ optional($user->birth_date)->translatedFormat('d F Y') ?? 'Belum diisi' }}</p>
+                    <div class="mt-6 sm:mt-8 grid gap-3 sm:gap-4 grid-cols-1 sm:grid-cols-2">
+                        <div class="rounded-2xl bg-[#FFF5EF] p-3 sm:p-4">
+                            <p class="text-xs uppercase tracking-[0.3em] text-[#B49F9A]">Tanggal Lahir</p>
+                            <p class="mt-2 text-sm font-semibold text-[#822021] break-words font-['Open_Sans']">{{ optional($user->birth_date)->translatedFormat('d F Y') ?? 'Belum diisi' }}</p>
                         </div>
-                        <div class="rounded-2xl bg-[#FFF5EF] p-4">
-                            <p class="text-xs uppercase tracking-[0.3em] text-[#D97862]">Provinsi</p>
-                            <p class="mt-2 text-sm font-semibold text-[#7C3A2D]">{{ $user->province ?? 'Belum diisi' }}</p>
+                        <div class="rounded-2xl bg-[#FFF5EF] p-3 sm:p-4">
+                            <p class="text-xs uppercase tracking-[0.3em] text-[#B49F9A]">Provinsi</p>
+                            <p class="mt-2 text-sm font-semibold text-[#822021] break-words font-['Open_Sans']">{{ $user->province ?? 'Belum diisi' }}</p>
                         </div>
-                        <div class="rounded-2xl bg-[#FFF5EF] p-4">
-                            <p class="text-xs uppercase tracking-[0.3em] text-[#D97862]">Kabupaten/Kota</p>
-                            <p class="mt-2 text-sm font-semibold text-[#7C3A2D]">{{ $user->city ?? 'Belum diisi' }}</p>
+                        <div class="rounded-2xl bg-[#FFF5EF] p-3 sm:p-4">
+                            <p class="text-xs uppercase tracking-[0.3em] text-[#B49F9A]">Kabupaten/Kota</p>
+                            <p class="mt-2 text-sm font-semibold text-[#822021] break-words font-['Open_Sans']">{{ $user->city ?? 'Belum diisi' }}</p>
                         </div>
-                        <div class="rounded-2xl bg-[#FFF5EF] p-4">
-                            <p class="text-xs uppercase tracking-[0.3em] text-[#D97862]">Alamat</p>
-                            <p class="mt-2 text-sm font-semibold text-[#7C3A2D]">{{ $user->address ?? 'Belum diisi' }}</p>
+                        <div class="rounded-2xl bg-[#FFF5EF] p-3 sm:p-4">
+                            <p class="text-xs uppercase tracking-[0.3em] text-[#B49F9A]">Alamat</p>
+                            <p class="mt-2 text-sm font-semibold text-[#822021] break-words font-['Open_Sans']">{{ $user->address ?? 'Belum diisi' }}</p>
                         </div>
                     </div>
                 </div>
 
-                <div class="rounded-3xl bg-white/90 p-8 shadow-xl shadow-[#F4B59E]/40 ring-1 ring-[#F7C8B8]/60">
-                    <h2 class="text-2xl font-semibold text-[#7C3A2D]">Tiket Event</h2>
-                    <p class="mt-2 text-sm text-[#9A5A46]">Detail event yang akan kamu ikuti selanjutnya.</p>
+                <div class="rounded-3xl bg-white/90 p-4 sm:p-6 lg:p-8 shadow-xl shadow-[#F4B59E]/40 ring-1 ring-[#F7C8B8]/60">
+                    <h2 class="text-xl sm:text-2xl font-semibold text-[#822021] font-['Cousine']">Tiket Event</h2>
+                    <p class="mt-2 text-sm text-[#B49F9A] font-['Open_Sans']">Detail event yang akan kamu ikuti selanjutnya.</p>
 
                     @if ($upcomingRegistration)
                         <div class="mt-6 rounded-2xl bg-[#FFF1EC] p-5 shadow-inner">
-                            <p class="text-xs uppercase tracking-[0.3em] text-[#D97862]">Event Berikutnya</p>
-                            <h3 class="mt-3 text-lg font-semibold text-[#7C3A2D]">{{ $upcomingRegistration->event->title }}</h3>
-                            <dl class="mt-4 space-y-2 text-sm text-[#9A5A46]">
-                                <div class="flex justify-between">
-                                    <dt>Tanggal</dt>
-                                    <dd>{{ optional($upcomingRegistration->event->start_at)->translatedFormat('d F Y, H:i') }}</dd>
+                            <p class="text-xs uppercase tracking-[0.3em] text-[#B49F9A]">Event Berikutnya</p>
+                            <h3 class="mt-3 text-lg font-semibold text-[#822021] font-['Cousine']">{{ $upcomingRegistration->event->title }}</h3>
+                            <dl class="mt-4 space-y-2 text-sm text-[#B49F9A] font-['Open_Sans']">
+                                <div class="flex flex-col sm:flex-row sm:justify-between gap-1">
+                                    <dt class="font-medium">Tanggal</dt>
+                                    <dd class="sm:text-right">{{ optional($upcomingRegistration->event->start_at)->translatedFormat('d F Y, H:i') }}</dd>
                                 </div>
-                                <div class="flex justify-between">
-                                    <dt>Lokasi</dt>
-                                    <dd class="text-right">{{ $upcomingRegistration->event->location }}</dd>
+                                <div class="flex flex-col sm:flex-row sm:justify-between gap-1">
+                                    <dt class="font-medium">Lokasi</dt>
+                                    <dd class="sm:text-right break-words">{{ $upcomingRegistration->event->location }}</dd>
                                 </div>
-                                <div class="flex justify-between">
-                                    <dt>Status Pembayaran</dt>
-                                    <dd class="font-semibold text-[#7C3A2D]">{{ $upcomingRegistration->payment_status->label() }}</dd>
+                                <div class="flex flex-col sm:flex-row sm:justify-between gap-1">
+                                    <dt class="font-medium">Status Pembayaran</dt>
+                                    <dd class="font-semibold text-[#822021] sm:text-right">{{ $upcomingRegistration->payment_status->label() }}</dd>
                                 </div>
                             </dl>
                             <a href="{{ route('registrations.show', $upcomingRegistration) }}"
-                                class="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-[#D97862] hover:text-[#b9644f]">
+                                class="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-[#FFBE8E] hover:text-[#822021]">
                                 Lihat Detail
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-4 w-4">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
@@ -127,33 +119,33 @@
                             </a>
                         </div>
                     @else
-                        <div class="mt-6 rounded-2xl border border-dashed border-[#F7C8B8] p-6 text-sm text-[#9A5A46]">
-                            Belum ada event terjadwal. Yuk jelajahi <a href="{{ route('events.index') }}" class="font-semibold text-[#D97862]">daftar event</a> dan amankan tempatmu!
+                        <div class="mt-6 rounded-2xl border border-dashed border-[#FFBE8E] p-6 text-sm text-[#B49F9A]">
+                            Belum ada event terjadwal. Yuk jelajahi <a href="{{ route('events.index') }}" class="font-semibold text-[#822021]">daftar event</a> dan amankan tempatmu!
                         </div>
                     @endif
                 </div>
             </div>
 
-            <div class="rounded-3xl bg-white/90 p-8 shadow-xl shadow-[#F4B59E]/40 ring-1 ring-[#F7C8B8]/60">
+            <div class="rounded-3xl bg-white/90 p-4 sm:p-6 lg:p-8 shadow-xl shadow-[#F4B59E]/40 ring-1 ring-[#F7C8B8]/60">
                 <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                     <div>
-                        <h2 class="text-2xl font-semibold text-[#7C3A2D]">Riwayat Aktivitas</h2>
-                        <p class="text-sm text-[#9A5A46]">Pantau perkembangan pendaftaran, status pembayaran, dan refund terbaru.</p>
+                        <h2 class="text-xl sm:text-2xl font-semibold text-[#822021] font-['Cousine']">Riwayat Aktivitas</h2>
+                        <p class="text-sm text-[#B49F9A] font-['Open_Sans']">Pantau perkembangan pendaftaran, status pembayaran, dan refund terbaru.</p>
                     </div>
-                    <div class="inline-flex rounded-full bg-[#FFF0E6] p-1 text-sm font-semibold text-[#C65B74] shadow-inner">
+                    <div class="inline-flex rounded-full bg-[#FCF5E6] p-1 text-sm font-semibold text-[#822021] shadow-inner w-full sm:w-auto">
                         <a href="{{ route('profile.show') }}"
                             @class([
-                                'rounded-full px-4 py-2 transition',
-                                'bg-white text-[#7C3A2D] shadow-sm' => ! $isRefundView,
-                                'text-[#C65B74]' => $isRefundView,
+                                'rounded-full px-3 sm:px-4 py-2 transition flex-1 sm:flex-none text-center',
+                                'bg-white text-[#822021] shadow-sm' => ! $isRefundView,
+                                'text-[#B49F9A]' => $isRefundView,
                             ])>
                             Pendaftaran
                         </a>
                         <a href="{{ route('profile.show', ['tab' => 'refund']) }}"
                             @class([
-                                'rounded-full px-4 py-2 transition',
-                                'bg-white text-[#7C3A2D] shadow-sm' => $isRefundView,
-                                'text-[#C65B74]' => ! $isRefundView,
+                                'rounded-full px-3 sm:px-4 py-2 transition flex-1 sm:flex-none text-center',
+                                'bg-white text-[#822021] shadow-sm' => $isRefundView,
+                                'text-[#B49F9A]' => ! $isRefundView,
                             ])>
                             Refund
                         </a>
@@ -161,15 +153,15 @@
                 </div>
 
                 @if (! $isRefundView)
-                    <div class="mt-6 overflow-hidden rounded-2xl border border-[#F7C8B8]/80">
+                    <div class="mt-6 overflow-x-auto rounded-2xl border border-[#F7C8B8]/80">
                         <table class="min-w-full divide-y divide-[#F7C8B8] text-sm">
-                            <thead class="bg-[#FFEDE0] text-[#7C3A2D]">
+                            <thead class="bg-[#FCF5E6] text-[#822021]">
                                 <tr>
-                                    <th scope="col" class="px-6 py-3 text-left font-semibold">Event</th>
-                                    <th scope="col" class="px-6 py-3 text-left font-semibold">Tanggal</th>
-                                    <th scope="col" class="px-6 py-3 text-left font-semibold">Total</th>
-                                    <th scope="col" class="px-6 py-3 text-left font-semibold">Status</th>
-                                    <th scope="col" class="px-6 py-3 text-right font-semibold">Aksi</th>
+                                    <th scope="col" class="px-3 sm:px-6 py-3 text-center font-semibold whitespace-nowrap">Event</th>
+                                    <th scope="col" class="px-3 sm:px-6 py-3 text-center font-semibold whitespace-nowrap hidden sm:table-cell">Tanggal</th>
+                                    <th scope="col" class="px-3 sm:px-6 py-3 text-center font-semibold whitespace-nowrap">Total</th>
+                                    <th scope="col" class="px-3 sm:px-6 py-3 text-center font-semibold whitespace-nowrap">Status</th>
+                                    <th scope="col" class="px-3 sm:px-6 py-3 text-center font-semibold whitespace-nowrap">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-[#F7C8B8]/60 bg-white">
@@ -183,32 +175,36 @@
                                             \App\Enums\PaymentStatus::Refunded => 'bg-[#E8F3FF] text-[#2B6CB0]',
                                         };
                                     @endphp
-                                    <tr class="text-[#7C3A2D]">
-                                        <td class="px-6 py-4 align-top">
-                                            <div class="font-semibold">{{ $registration->event->title }}</div>
-                                            <div class="text-[11px] text-[#C99F92]">ID: reg{{ $registration->id }}</div>
+                                    <tr class="text-[#822021]">
+                                        <td class="px-3 sm:px-6 py-4 align-top">
+                                            <div class="font-semibold text-sm break-words">{{ $registration->event->title }}</div>
+                                            <div class="text-[11px] text-[#B49F9A]">ID: reg{{ $registration->id }}</div>
+                                            <div class="text-xs text-[#B49F9A] sm:hidden mt-1">
+                                                {{ optional($registration->registered_at)->translatedFormat('d M Y') }}
+                                            </div>
                                         </td>
-                                        <td class="px-6 py-4 align-top text-sm text-[#9A5A46]">
+                                        <td class="px-3 sm:px-6 py-4 align-top text-sm text-[#B49F9A] hidden sm:table-cell">
                                             {{ optional($registration->registered_at)->translatedFormat('d F Y') }}
                                         </td>
-                                        <td class="px-6 py-4 align-top font-semibold text-[#7C3A2D]">
+                                        <td class="px-3 sm:px-6 py-4 align-top font-semibold text-[#822021] text-sm">
                                             Rp{{ number_format($registration->transaction?->amount ?? $registration->event->price, 0, ',', '.') }}
                                         </td>
-                                        <td class="px-6 py-4 align-top">
-                                            <span class="inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold {{ $paymentBadge }}">
+                                        <td class="px-3 sm:px-6 py-4 align-top text-center">
+                                            <span class="inline-flex items-center rounded-full px-2 sm:px-3 py-1 text-xs font-semibold {{ $paymentBadge }}">
                                                 {{ $registration->payment_status->label() }}
                                             </span>
                                         </td>
-                                        <td class="px-6 py-4 align-top text-right">
+                                        <td class="px-3 sm:px-6 py-4 align-top text-center">
                                             <a href="{{ route('registrations.show', $registration) }}"
-                                                class="inline-flex items-center gap-2 rounded-full bg-[#FF8A64] px-4 py-2 text-xs font-semibold text-white shadow-md shadow-[#FF8A64]/30 transition hover:bg-[#F9744B]">
-                                                Lihat Tiket
+                                                class="inline-flex items-center gap-1 sm:gap-2 rounded-full bg-[#FFBE8E] px-3 sm:px-4 py-2 text-xs font-semibold text-white shadow-md shadow-[#FFBE8E]/30 transition hover:bg-[#822021] whitespace-nowrap">
+                                                <span class="hidden sm:inline">Lihat Tiket</span>
+                                                <span class="sm:hidden">Tiket</span>
                                             </a>
                                         </td>
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="5" class="px-6 py-8 text-center text-sm text-[#9A5A46]">
+                                        <td colspan="5" class="px-3 sm:px-6 py-8 text-center text-sm text-[#B49F9A]">
                                             Belum ada aktivitas pendaftaran. Mulai dengan mendaftar workshop favoritmu!
                                         </td>
                                     </tr>
@@ -216,17 +212,22 @@
                             </tbody>
                         </table>
                     </div>
+                    @if ($recentRegistrations->hasPages())
+                        <div class="mt-4 px-3 sm:px-6">
+                            {{ $recentRegistrations->appends(request()->query())->links() }}
+                        </div>
+                    @endif
                 @else
-                    <div class="mt-6 overflow-hidden rounded-2xl border border-[#F7C8B8]/80">
+                    <div class="mt-6 overflow-x-auto rounded-2xl border border-[#F7C8B8]/80">
                         <table class="min-w-full divide-y divide-[#F7C8B8] text-sm">
-                            <thead class="bg-[#FFEDE0] text-[#7C3A2D]">
+                            <thead class="bg-[#FCF5E6] text-[#822021]">
                                 <tr>
-                                    <th scope="col" class="px-6 py-3 text-left font-semibold">Event</th>
-                                    <th scope="col" class="px-6 py-3 text-left font-semibold">No. Rekening</th>
-                                    <th scope="col" class="px-6 py-3 text-left font-semibold">Jumlah</th>
-                                    <th scope="col" class="px-6 py-3 text-left font-semibold">Tanggal</th>
-                                    <th scope="col" class="px-6 py-3 text-left font-semibold">Status</th>
-                                    <th scope="col" class="px-6 py-3 text-right font-semibold">Aksi</th>
+                                    <th scope="col" class="px-3 sm:px-6 py-3 text-center font-semibold whitespace-nowrap">Event</th>
+                                    <th scope="col" class="px-3 sm:px-6 py-3 text-center font-semibold whitespace-nowrap hidden lg:table-cell">No. Rekening</th>
+                                    <th scope="col" class="px-3 sm:px-6 py-3 text-center font-semibold whitespace-nowrap">Jumlah</th>
+                                    <th scope="col" class="px-3 sm:px-6 py-3 text-center font-semibold whitespace-nowrap hidden sm:table-cell">Tanggal</th>
+                                    <th scope="col" class="px-3 sm:px-6 py-3 text-center font-semibold whitespace-nowrap">Status</th>
+                                    <th scope="col" class="px-3 sm:px-6 py-3 text-center font-semibold whitespace-nowrap">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-[#F7C8B8]/60 bg-white">
@@ -240,35 +241,42 @@
                                             \App\Enums\RefundStatus::Completed => 'bg-[#E8F3FF] text-[#2B6CB0]',
                                         };
                                     @endphp
-                                    <tr class="text-[#7C3A2D]">
-                                        <td class="px-6 py-4 align-top">
-                                            <div class="font-semibold">{{ $registration->event->title }}</div>
-                                            <div class="text-[11px] text-[#C99F92]">ID: ref{{ $refund->id }}</div>
+                                    <tr class="text-[#822021]">
+                                        <td class="px-3 sm:px-6 py-4 align-top">
+                                            <div class="font-semibold text-sm break-words">{{ $registration->event->title }}</div>
+                                            <div class="text-[11px] text-[#B49F9A]">ID: ref{{ $refund->id }}</div>
+                                            <div class="text-xs text-[#B49F9A] sm:hidden lg:hidden mt-1">
+                                                {{ data_get($registration->form_data, 'account_number', '-') }}
+                                            </div>
+                                            <div class="text-xs text-[#B49F9A] sm:hidden mt-1">
+                                                {{ optional($refund->requested_at)->translatedFormat('d M Y') ?? '-' }}
+                                            </div>
                                         </td>
-                                        <td class="px-6 py-4 align-top text-sm text-[#9A5A46]">
+                                        <td class="px-3 sm:px-6 py-4 align-top text-sm text-[#B49F9A] hidden lg:table-cell">
                                             {{ data_get($registration->form_data, 'account_number', '-') }}
                                         </td>
-                                        <td class="px-6 py-4 align-top font-semibold text-[#7C3A2D]">
+                                        <td class="px-3 sm:px-6 py-4 align-top font-semibold text-[#822021] text-sm">
                                             Rp{{ number_format($refund->transaction->amount ?? 0, 0, ',', '.') }}
                                         </td>
-                                        <td class="px-6 py-4 align-top text-sm text-[#9A5A46]">
+                                        <td class="px-3 sm:px-6 py-4 align-top text-sm text-[#B49F9A] hidden sm:table-cell">
                                             {{ optional($refund->requested_at)->translatedFormat('d F Y') ?? '-' }}
                                         </td>
-                                        <td class="px-6 py-4 align-top">
-                                            <span class="inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold {{ $statusClass }}">
+                                        <td class="px-3 sm:px-6 py-4 align-top text-center">
+                                            <span class="inline-flex items-center rounded-full px-2 sm:px-3 py-1 text-xs font-semibold {{ $statusClass }}">
                                                 {{ $refund->status->label() }}
                                             </span>
                                         </td>
-                                        <td class="px-6 py-4 align-top text-right">
+                                        <td class="px-3 sm:px-6 py-4 align-top text-center">
                                             <a href="{{ route('registrations.show', $registration) }}"
-                                                class="inline-flex items-center gap-2 rounded-full bg-[#FF8A64] px-4 py-2 text-xs font-semibold text-white shadow-md shadow-[#FF8A64]/30 transition hover:bg-[#F9744B]">
-                                                Lihat Tiket
+                                                class="inline-flex items-center gap-1 sm:gap-2 rounded-full bg-[#FFBE8E] px-3 sm:px-4 py-2 text-xs font-semibold text-white shadow-md shadow-[#FFBE8E]/30 transition hover:bg-[#822021] whitespace-nowrap">
+                                                <span class="hidden sm:inline">Lihat Tiket</span>
+                                                <span class="sm:hidden">Tiket</span>
                                             </a>
                                         </td>
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="6" class="px-6 py-8 text-center text-sm text-[#9A5A46]">
+                                        <td colspan="6" class="px-3 sm:px-6 py-8 text-center text-sm text-[#B49F9A]">
                                             Belum ada data refund. Ajukan refund dari tiket yang sudah terverifikasi.
                                         </td>
                                     </tr>
@@ -276,6 +284,11 @@
                             </tbody>
                         </table>
                     </div>
+                    @if ($recentRefunds->hasPages())
+                        <div class="mt-4 px-3 sm:px-6">
+                            {{ $recentRefunds->appends(request()->query())->links() }}
+                        </div>
+                    @endif
                 @endif
             </div>
         </div>

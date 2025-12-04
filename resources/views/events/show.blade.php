@@ -5,169 +5,214 @@
 @endphp
 
 <x-layouts.app :title="$event->title">
-    <section class="relative overflow-hidden bg-gradient-to-b from-[#FDE8D5] via-[#FFF4EC] to-white">
-        <div class="absolute -top-20 right-0 h-72 w-72 rounded-full bg-white/40 blur-3xl"></div>
-        <div class="absolute -bottom-24 left-6 h-80 w-80 rounded-full bg-[#F7D6E0]/40 blur-3xl"></div>
-
-        <div class="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-14 space-y-10">
-            <div class="flex items-center gap-3 text-sm text-[#B05A62]">
-                <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <section class="relative overflow-hidden bg-gradient-to-b from-[#FCF5E6] to-[#FFBE8E] min-h-screen">
+        <div class="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
+            <div class="flex items-center gap-3 text-sm">
+                <svg class="h-4 w-4 text-[#822021]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15.75 19.5L8.25 12l7.5-7.5" />
                 </svg>
-                <a href="{{ route('events.index') }}" class="font-medium hover:underline">Kembali ke Events</a>
+                <a href="{{ route('events.index') }}" class="font-semibold text-[#822021]" style="font-family: 'Open Sans', sans-serif;">Kembali ke Events</a>
             </div>
 
-            <div class="grid gap-10 lg:grid-cols-[1.6fr,1fr] items-start">
-                <div class="relative rounded-[40px] bg-white/70 p-10 shadow-[0_40px_80px_-60px_rgba(176,90,98,0.7)] backdrop-blur">
-                    <div class="inline-flex items-center gap-3 rounded-full bg-[#FFF4EC] px-5 py-2 text-xs font-semibold uppercase tracking-[0.4em] text-[#B05A62]/80">
-                        <span>{{ Str::of($event->title)->before(' ')->title() }}</span>
-                        <span>{{ $event->start_at->translatedFormat('d M Y') }}</span>
+            @if ($event->portfolios?->count())
+                <div class="relative mb-6 max-w-2xl mx-auto">
+                    <div class="relative overflow-hidden rounded-2xl shadow-lg" style="aspect-ratio: 16/9;">
+                        <div id="carousel" class="flex transition-transform duration-300 ease-in-out h-full">
+                            @foreach ($event->portfolios as $index => $portfolio)
+                                <div class="w-full flex-shrink-0 h-full">
+                                    @if ($portfolio->cover_image_url)
+                                        <img src="{{ $portfolio->cover_image_url }}" alt="{{ $portfolio->title }}" class="w-full h-full object-cover" />
+                                    @else
+                                        <div class="w-full h-full bg-gray-200 flex items-center justify-center">
+                                            <span class="text-gray-500">{{ $portfolio->title }}</span>
+                                        </div>
+                                    @endif
+                                </div>
+                            @endforeach
+                        </div>
+                        <button id="prevBtn" class="absolute left-4 top-1/2 transform -translate-y-1/2 bg-[#822021] hover:bg-[#6a1a1b] rounded-full p-2 shadow-lg">
+                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                            </svg>
+                        </button>
+                        <button id="nextBtn" class="absolute right-4 top-1/2 transform -translate-y-1/2 bg-[#822021] hover:bg-[#6a1a1b] rounded-full p-2 shadow-lg">
+                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                            </svg>
+                        </button>
                     </div>
-                    <h1 class="mt-6 text-4xl font-semibold text-[#5A3D31]">{{ $event->title }}</h1>
-                    <p class="mt-3 text-base text-slate-600 max-w-2xl leading-relaxed">
-                        {{ Str::limit(strip_tags($event->description), 200) }}
-                    </p>
-                    <dl class="mt-8 grid gap-6 md:grid-cols-2">
-                        <div class="rounded-2xl bg-[#FFF4EC] px-5 py-4">
-                            <dt class="text-xs uppercase tracking-[0.3em] text-[#B05A62]/70">Tanggal &amp; Waktu</dt>
-                            <dd class="mt-2 text-sm font-semibold text-[#5A3D31]">
-                                {{ $event->start_at->translatedFormat('l, d F Y • H.i') }} WIB<br>
-                                {{ $event->end_at->translatedFormat('l, d F Y • H.i') }} WIB
-                            </dd>
-                        </div>
-                        <div class="rounded-2xl bg-[#FFF4EC] px-5 py-4">
-                            <dt class="text-xs uppercase tracking-[0.3em] text-[#B05A62]/70">Venue</dt>
-                            <dd class="mt-2 text-sm font-semibold text-[#5A3D31]">
-                                {{ $event->venue_name }}<br>
-                                <span class="text-xs font-normal text-slate-500">{{ $event->venue_address }}</span>
-                            </dd>
-                        </div>
-                        <div class="rounded-2xl bg-[#FFF4EC] px-5 py-4">
-                            <dt class="text-xs uppercase tracking-[0.3em] text-[#B05A62]/70">Kuota Tersisa</dt>
-                            <dd class="mt-2 text-sm font-semibold text-[#5A3D31]">{{ $event->remainingSlots() ?? 'Tidak terbatas' }}</dd>
-                        </div>
-                        <div class="rounded-2xl bg-[#FFF4EC] px-5 py-4">
-                            <dt class="text-xs uppercase tracking-[0.3em] text-[#B05A62]/70">Total Pendaftar</dt>
-                            <dd class="mt-2 text-sm font-semibold text-[#5A3D31]">{{ $event->registrations_count }} Peserta</dd>
-                        </div>
-                    </dl>
                 </div>
+            @endif
 
-                <aside class="space-y-6">
-                    <div class="rounded-[32px] bg-white px-6 py-8 shadow-[0_30px_60px_-45px_rgba(176,90,98,0.55)] border border-[#F4D5C7]">
-                        <p class="text-xs uppercase tracking-[0.35em] text-[#B05A62]/70">Investasi</p>
-                        <p class="mt-3 text-3xl font-semibold text-[#5A3D31]">
+            <h1 class="text-2xl font-bold text-[#822021] mb-6" style="font-family: 'Cousine', monospace;">{{ $event->title }}</h1>
+            
+            <!-- Deskripsi Full Width -->
+            <div class="bg-white rounded-2xl p-6 border-2 border-[#FFB3E1] mb-4 shadow-md">
+                <h3 class="font-bold text-[#822021] mb-4" style="font-family: 'Cousine', monospace;">Deskripsi</h3>
+                <p class="font-['Open_Sans'] text-justify text-sm text-[#46000D] leading-relaxed px-1">
+                    {{ strip_tags($event->description) }}
+                </p>
+            </div>
+            
+            <div class="grid gap-4 grid-cols-1 md:grid-cols-2 items-start">
+                <!-- Left Column - Detail Event -->
+                <div>
+                    <div class="bg-white rounded-2xl p-4 md:p-5 border-2 border-[#FFB3E1] shadow-md md:h-[392px] overflow-hidden">
+                        <h3 class="font-bold text-[#822021] text-base md:text-lg mb-3 md:mb-4" style="font-family: 'Cousine', monospace;">Detail Event</h3>
+                        <div class="space-y-3 md:space-y-4">
+                            <div class="flex items-start gap-3">
+                                <div class="w-8 h-8 bg-[#FAF8F1] border border-[#FFB3E1] rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                                    <svg class="w-4 h-4 text-[#FFB3E1]" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd" />
+                                    </svg>
+                                </div>
+                                <div>
+                                    <p class="font-['Open_Sans'] text-xs text-[#B49F9A] mb-1">Tanggal</p>
+                                    <p class="font-['Open_Sans'] text-xs font-semibold text-[#46000D]">{{ $event->start_at->translatedFormat('l, d F Y') }}</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <div class="w-8 h-8 bg-[#FAF8F1] border border-[#FFB3E1] rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                                    <svg class="w-4 h-4 text-[#FFB3E1]" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd" />
+                                    </svg>
+                                </div>
+                                <div>
+                                    <p class="font-['Open_Sans'] text-xs text-[#B49F9A] mb-1">Waktu</p>
+                                    <p class="font-['Open_Sans'] text-xs font-semibold text-[#46000D]">{{ $event->start_at->translatedFormat('H.i') }} - {{ $event->end_at->translatedFormat('H.i') }} WIB</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <div class="w-8 h-8 bg-[#FAF8F1] border border-[#FFB3E1] rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                                    <svg class="w-4 h-4 text-[#FFB3E1]" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd" />
+                                    </svg>
+                                </div>
+                                <div>
+                                    <p class="font-['Open_Sans'] text-xs text-[#B49F9A] mb-1">Lokasi</p>
+                                    <p class="font-['Open_Sans'] text-xs font-semibold text-[#46000D]">{{ $event->venue_name }}, {{ $event->venue_address }}</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <div class="w-8 h-8 bg-[#FAF8F1] border border-[#FFB3E1] rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                                    <svg class="w-4 h-4 text-[#FFB3E1]" fill="currentColor" viewBox="0 0 20 20">
+                                        <path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z" />
+                                    </svg>
+                                </div>
+                                <div>
+                                    <p class="font-['Open_Sans'] text-xs text-[#B49F9A] mb-1">Kuota Peserta</p>
+                                    <p class="font-['Open_Sans'] text-xs font-semibold text-[#46000D]">{{ $event->registrations_count }}/{{ $event->remainingSlots() ?? '∞' }} peserta terdaftar</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-4 md:mt-6 flex gap-2 md:gap-3 justify-center">
+                            <img src="{{ asset('images/Konsep Desain KH - 8.png') }}" alt="Design" class="w-12 h-12 md:w-16 md:h-16 object-contain" />
+                            <img src="{{ asset('images/Konsep Desain KH - 8.png') }}" alt="Design" class="w-12 h-12 md:w-16 md:h-16 object-contain" />
+                            <img src="{{ asset('images/Konsep Desain KH - 8.png') }}" alt="Design" class="w-12 h-12 md:w-16 md:h-16 object-contain" />
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Right Column - Harga and Mentor -->
+                <div class="space-y-4">
+                    <div class="bg-white rounded-2xl p-4 md:p-5 border-2 border-[#FFB3E1] shadow-md">
+                        <h3 class="font-bold text-[#822021] text-base md:text-lg mb-3" style="font-family: 'Cousine', monospace;">Harga</h3>
+                        <p class="text-xl md:text-2xl font-semibold text-[#822021] mb-3 md:mb-4">
                             @if ($event->price > 0)
-                                Rp{{ number_format($event->price, 0, ',', '.') }}
+                                Rp {{ number_format($event->price, 0, ',', '.') }}
                             @else
                                 Gratis
                             @endif
                         </p>
-                        <p class="mt-2 text-sm text-slate-500">Termasuk materi dan akses rekaman sesi (jika tersedia).</p>
-                        <div class="mt-6 space-y-3">
+                        <div class="space-y-2 text-sm mb-6">
+                            <div class="flex justify-between font-['Open_Sans'] text-xs text-[#46000D]">
+                                <span>Total Pendaftar</span>
+                                <span>{{ $event->registrations_count }} peserta</span>
+                            </div>
+                            <div class="flex justify-between font-['Open_Sans'] text-xs text-[#46000D]">
+                                <span>Kuota Tersisa</span>
+                                <span>{{ $event->remainingSlots() ?? '∞' }} kuota</span>
+                            </div>
+                        </div>
+                        
+                        <div class="space-y-3">
                             @auth
                                 @if ($existingRegistration)
-                                    <a href="{{ route('registrations.show', $existingRegistration) }}#tiket" class="inline-flex w-full items-center justify-center rounded-full bg-[#0F766E] px-6 py-3 text-sm font-semibold text-white transition hover:bg-[#0B5F59]">
+                                    <a href="{{ route('registrations.show', $existingRegistration) }}#tiket" class="inline-flex w-full items-center justify-center rounded-full bg-[#0F766E] px-6 py-2 font-['Open_Sans'] text-sm font-semibold text-white transition hover:bg-[#0B5F59]">
                                         Lihat Tiket Saya
                                     </a>
-                                    <p class="text-center text-xs font-semibold text-[#0F766E]">Anda sudah terdaftar untuk event ini.</p>
+                                    <p class="font-['Open_Sans'] text-center text-xs text-[#B49F9A]">Anda sudah terdaftar untuk event ini</p>
                                 @else
-                                    <a href="{{ route('events.register', $event) }}" class="inline-flex w-full items-center justify-center rounded-full bg-[#B05A62] px-6 py-3 text-sm font-semibold text-white transition hover:bg-[#9A4750]">
+                                    <a href="{{ route('events.register', $event) }}" class="inline-flex w-full items-center justify-center rounded-full bg-[#FFB3E1] px-6 py-2 font-semibold text-sm text-[#822021] transition hover:bg-[#FF9FD8]" style="font-family: 'Open Sans', sans-serif;">
                                         Daftar Sekarang
                                     </a>
+                                    <p class="font-['Open_Sans'] text-center text-xs text-[#B49F9A]">Anda harus login terlebih dahulu untuk mendaftar</p>
                                 @endif
                             @else
-                                <a href="{{ route('login') }}" class="inline-flex w-full items-center justify-center rounded-full bg-[#B05A62] px-6 py-3 text-sm font-semibold text-white transition hover:bg-[#9A4750]">
+                                <a href="{{ route('login') }}" class="inline-flex w-full items-center justify-center rounded-full bg-[#FFB3E1] px-6 py-2 font-semibold text-sm text-[#822021] transition hover:bg-[#FF9FD8]" style="font-family: 'Open Sans', sans-serif;">
                                     Login untuk Daftar
                                 </a>
+                                <p class="font-['Open_Sans'] text-center text-xs text-[#B49F9A]">Anda harus login terlebih dahulu untuk mendaftar</p>
                             @endauth
-                            <a href="mailto:halo@kreasihangat.com" class="inline-flex w-full items-center justify-center rounded-full border border-[#B05A62]/30 px-6 py-3 text-sm font-semibold text-[#B05A62] transition hover:border-[#B05A62]">
-                                Tanya Tim Kami
-                            </a>
                         </div>
                     </div>
-
-                    <div class="rounded-[28px] bg-white px-6 py-6 border border-[#F4D5C7]/70">
-                        <h2 class="text-lg font-semibold text-[#5A3D31]">Instruktur</h2>
-                        <div class="mt-4 flex items-center gap-4">
-                            <div class="flex h-12 w-12 items-center justify-center rounded-full bg-[#FAD5B7] text-lg font-semibold text-[#B05A62]">
-                                {{ Str::substr($event->tutor_name, 0, 1) }}
+                    
+                    <div class="bg-white rounded-2xl p-3 md:px-4 py-3 border-2 border-[#FFB3E1] shadow-md">
+                        <h3 class="font-bold text-[#822021] text-base md:text-lg mb-2 md:mb-3" style="font-family: 'Cousine', monospace;">Mentor</h3>
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 md:w-12 md:h-12 bg-gray-300 rounded-full flex items-center justify-center">
+                                <span class="text-base md:text-lg font-semibold">{{ Str::substr($event->tutor_name, 0, 1) }}</span>
                             </div>
                             <div>
-                                <p class="text-sm font-semibold text-[#5A3D31]">{{ $event->tutor_name }}</p>
-                                <p class="text-xs text-slate-500">Fasilitator utama program ini</p>
-                                @if ($event->creator)
-                                    <p class="mt-1 text-[11px] text-slate-400">Dikelola oleh {{ $event->creator->name }}</p>
-                                @endif
+                                <p class="font-semibold font-['Open_Sans'] text-[#46000D]">{{ $event->tutor_name }}</p>
                             </div>
                         </div>
                     </div>
-
-                    @if ($event->portfolios?->count())
-                        <div class="rounded-[28px] bg-white px-6 py-6 border border-[#F4D5C7]/70 space-y-4">
-                            <h2 class="text-lg font-semibold text-[#5A3D31]">Portofolio Terkait</h2>
-                            <div class="space-y-3">
-                                @foreach ($event->portfolios as $portfolio)
-                                    <div class="space-y-2 rounded-2xl bg-[#FFF4EC] px-4 py-3">
-                                        <div class="flex items-start gap-3">
-                                            @if ($portfolio->cover_image_url)
-                                                <div class="flex h-12 w-12 items-center justify-center overflow-hidden rounded-xl border border-[#FAD6C7]/60 bg-white">
-                                                    <img src="{{ $portfolio->cover_image_url }}" alt="{{ $portfolio->title }}" class="h-full w-full object-cover" />
-                                                </div>
-                                            @endif
-                                            <div class="flex-1">
-                                                <p class="text-sm font-semibold text-[#5A3D31]">{{ $portfolio->title }}</p>
-                                                @if ($portfolio->description)
-                                                    <p class="mt-1 text-xs text-slate-500">{{ Str::limit($portfolio->description, 90) }}</p>
-                                                @endif
-                                            </div>
-                                        </div>
-                                        @if ($portfolio->images->isNotEmpty())
-                                            <div class="flex gap-2 overflow-x-auto pb-1">
-                                                @foreach ($portfolio->images->take(5) as $image)
-                                                    <img src="{{ $image->url }}" alt="{{ $portfolio->title }}" class="h-14 w-20 flex-none rounded-xl object-cover" />
-                                                @endforeach
-                                                @if ($portfolio->images->count() > 5)
-                                                    <span class="flex h-14 w-20 flex-none items-center justify-center rounded-xl border border-dashed border-[#FAD6C7] text-[11px] font-semibold uppercase tracking-[0.28em] text-[#C65B74]">
-                                                        +{{ $portfolio->images->count() - 5 }}
-                                                    </span>
-                                                @endif
-                                            </div>
-                                        @endif
-                                        @if ($portfolio->media_url)
-                                            <a href="{{ $portfolio->media_url }}" target="_blank" class="inline-flex items-center gap-2 text-xs font-semibold text-[#B05A62] hover:underline">
-                                                Lihat dokumentasi lengkap
-                                                <x-heroicon-o-arrow-up-right class="h-3.5 w-3.5" />
-                                            </a>
-                                        @endif
-                                    </div>
-                                @endforeach
-                            </div>
-                        </div>
-                    @endif
-                </aside>
+                </div>
+            </div>
+            
+            <div class="bg-white rounded-2xl p-5 border-2 border-[#FFB3E1] mt-4 shadow-md">
+                <div class="flex items-start gap-3">
+                    <div class="w-6 h-6 bg-red-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                        <span class="text-red-600 text-sm font-bold">!</span>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-[#822021] mb-2" style="font-family: 'Cousine', monospace;">Catatan</h3>
+                        <p class="font-['Open_Sans'] text-justify text-sm text-[#46000D] leading-relaxed">
+                            Pastikan hadir 15 menit sebelum sesi dimulai. Perlengkapan yang diperlukan akan diinformasikan melalui email setelah pembayaran terkonfirmasi.
+                        </p>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
 
-    <section class="bg-white">
-        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-16 grid gap-12 lg:grid-cols-[1.6fr,1fr]">
-            <article class="space-y-6">
-                <h2 class="text-2xl font-semibold text-[#5A3D31]">Tentang Workshop</h2>
-                <div class="prose max-w-none text-slate-700 prose-p:leading-relaxed">
-                    {!! nl2br(e($event->description)) !!}
-                </div>
-            </article>
-            <div class="space-y-8">
-                <div class="rounded-[28px] bg-[#FFF4EC] px-6 py-5">
-                    <h3 class="text-lg font-semibold text-[#5A3D31]">Catatan Khusus</h3>
-                    <p class="mt-2 text-sm text-slate-600">Pastikan hadir 15 menit sebelum sesi dimulai. Perlengkapan lengkap akan diinformasikan melalui email setelah pembayaran terkonfirmasi.</p>
-                </div>
-                <div class="rounded-[28px] bg-[#FFF4EC] px-6 py-5">
-                    <h3 class="text-lg font-semibold text-[#5A3D31]">Butuh Bantuan?</h3>
-                    <p class="mt-2 text-sm text-slate-600">Hubungi kami melalui WhatsApp di <span class="font-semibold text-[#B05A62]">+62 812-3456-7890</span> atau email ke <span class="font-semibold text-[#B05A62]">halo@kreasihangat.com</span>.</p>
-                </div>
-            </div>
-        </div>
-    </section>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const carousel = document.getElementById('carousel');
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            
+            if (carousel && prevBtn && nextBtn) {
+                let currentIndex = 0;
+                const totalSlides = carousel.children.length;
+                
+                function updateCarousel() {
+                    const translateX = -currentIndex * 100;
+                    carousel.style.transform = `translateX(${translateX}%)`;
+                }
+                
+                prevBtn.addEventListener('click', function() {
+                    currentIndex = currentIndex > 0 ? currentIndex - 1 : totalSlides - 1;
+                    updateCarousel();
+                });
+                
+                nextBtn.addEventListener('click', function() {
+                    currentIndex = currentIndex < totalSlides - 1 ? currentIndex + 1 : 0;
+                    updateCarousel();
+                });
+            }
+        });
+    </script>
 </x-layouts.app>

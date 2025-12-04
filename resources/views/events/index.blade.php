@@ -2,30 +2,27 @@
     use Illuminate\Support\Str;
 @endphp
 
-<x-layouts.app :title="'Semua Event & Workshop'">
+<x-layouts.app :title="'Event & Workshop'">
     {{-- SECTION HERO & SEARCH --}}
-    <section class="relative overflow-hidden bg-gradient-to-b from-[#FDE8D5] via-[#FFF4EC] to-white pb-16 pt-24">
+    <section class="relative overflow-hidden bg-[#FAF8F1] pb-10 pt-16">
         {{-- Dekorasi Background --}}
-        <div class="absolute -top-16 -right-10 h-60 w-60 rounded-full bg-white/40 blur-3xl"></div>
-        <div class="absolute -bottom-20 -left-10 h-72 w-72 rounded-full bg-[#F7D6E0]/40 blur-3xl"></div>
-
         <div class="relative mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
             <div class="text-center">
-                <h1 class="text-3xl font-bold tracking-tight text-[#5A3D31] sm:text-4xl md:text-5xl">
-                    Temukan Inspirasi
+                <h1 class="text-3xl font-bold font-['Cousine'] tracking-tight text-[#822021] sm:text-4xl md:text-5xl">
+                    Event & Workshop
                 </h1>
-                <p class="mx-auto mt-3 max-w-2xl text-base text-slate-600 sm:text-lg">
-                    Cari workshop kreatif, tutor favorit, atau lokasi terdekat secara langsung.
+                <p class="mx-auto mt-3 max-w-lg text-base sm:text-lg text-[#46000D] font-['Open_Sans']">
+                    Temukan workshop dan kelas kreatif yang sesuai dengan minat dan bakat Anda
                 </p>
             </div>
 
-            {{-- FORM PENCARIAN (Floating Style ala Canva) --}}
+            {{-- FORM PENCARIAN --}}
             <form method="GET" action="{{ route('events.index') }}" class="mt-10">
-                <div class="relative mx-auto max-w-2xl transition-transform duration-300 hover:-translate-y-1">
-                    <div class="relative overflow-hidden rounded-full bg-white shadow-[0_8px_30px_rgb(0,0,0,0.08)] ring-1 ring-slate-900/5 transition focus-within:shadow-[0_8px_30px_rgb(176,90,98,0.2)] focus-within:ring-[#B05A62]/50">
-                        <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-5">
+                <div class="relative mx-auto max-w-2xl">
+                    <div class="relative overflow-hidden rounded-full bg-white border-2 border-[#FFB3E1] focus-within:border-[#FFB3E1] focus-within:ring-2 focus-within:ring-[#FFB3E1]/20">
+                        <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4">
                             {{-- Icon Search --}}
-                            <svg class="h-6 w-6 text-[#B05A62]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <svg class="h-5 w-5 text-[#FFB3E1]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <circle cx="11" cy="11" r="8"></circle>
                                 <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
                             </svg>
@@ -38,15 +35,15 @@
                             name="q" 
                             value="{{ request('q') }}"
                             data-auto-search 
-                            class="block w-full border-0 bg-transparent py-4 pl-14 pr-14 text-slate-900 placeholder:text-slate-400 focus:ring-0 sm:text-lg"
-                            placeholder="Ketik 'Melukis', 'Jakarta', atau nama tutor..."
+                            class="block w-full border-0 bg-transparent py-2 pl-12 pr-12 text-slate-900 placeholder:text-slate-400 focus:ring-0 focus:outline-none text-base"
+                            placeholder="Cari event atau workshop..."
                             autocomplete="off"
                         >
 
                         {{-- Tombol Reset (Muncul otomatis jika ada pencarian) --}}
                         @if(request('q'))
                             <div class="absolute inset-y-0 right-0 flex items-center pr-3">
-                                <a href="{{ route('events.index') }}" class="rounded-full p-2 text-slate-400 hover:bg-slate-100 hover:text-[#B05A62]" title="Hapus Pencarian">
+                                <a href="{{ route('events.index') }}" class="rounded-full p-2 text-[#FFB3E1] hover:bg-slate-100 hover:text-[#FFB3E1]" title="Hapus Pencarian">
                                     <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                         <path d="M18 6L6 18M6 6l12 12"></path>
                                     </svg>
@@ -60,19 +57,19 @@
     </section>
 
     {{-- HASIL PENCARIAN --}}
-    <section class="min-h-[500px] bg-white">
-        <div class="mx-auto max-w-6xl px-4 py-12 sm:px-6 lg:px-8">
+    <section class="min-h-[500px] bg-[#FAF8F1]">
+        <div class="mx-auto max-w-6xl px-4 py-6 sm:px-6 lg:px-8">
             
             {{-- Header Hasil --}}
             <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-                <h2 class="text-xl font-semibold text-[#5A3D31]">
+                <h2 class="text-xl font-semibold font-['Cousine'] text-[#822021]">
                     @if(request('q'))
                         Menampilkan hasil: "<span class="text-[#B05A62]">{{ request('q') }}</span>"
                     @else
-                        Jadwal Terbaru
+                        Event Mendatang
                     @endif
                 </h2>
-                <span class="inline-flex items-center rounded-full bg-[#FFF4EC] px-4 py-1.5 text-xs font-semibold text-[#B05A62]">
+                <span class="inline-flex items-center rounded-full bg-white border border-[#FFBE8E] px-4 py-1.5 text-xs font-['Open_Sans'] font-semibold text-[#822021]">
                     {{ $events->total() }} Event Ditemukan
                 </span>
             </div>
@@ -80,44 +77,68 @@
             {{-- Grid Event --}}
             <div class="mt-8 grid gap-8 md:grid-cols-2 xl:grid-cols-3">
                 @forelse ($events as $event)
-                    <article class="group relative flex h-full flex-col overflow-hidden rounded-[24px] border border-slate-100 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.1)]">
-                        {{-- Gambar / Placeholder --}}
-                        <div class="relative h-48 overflow-hidden bg-gradient-to-br from-[#FCE3E5] to-[#FAD5B7]">
-                            <div class="absolute inset-0 flex flex-col items-center justify-center p-6 text-center">
-                                <span class="text-xs font-bold uppercase tracking-widest text-[#B05A62]/60">{{ $event->venue_name }}</span>
-                                <h3 class="mt-1 text-2xl font-bold text-[#5A3D31] line-clamp-2">{{ $event->title }}</h3>
-                            </div>
-                            {{-- Badge Tanggal --}}
-                            <div class="absolute bottom-4 left-4 rounded-full bg-white/90 px-3 py-1 text-xs font-bold text-[#B05A62] backdrop-blur-sm shadow-sm">
-                                {{ $event->start_at->translatedFormat('d M Y') }}
-                            </div>
+                    <article class="bg-white border-2 border-[#FFB3E1] rounded-[24px] overflow-hidden flex flex-col h-full shadow-lg shadow-[#FFB3E1]/40 transition hover:-translate-y-1 hover:shadow-xl flex flex-col">
+                        <div class="aspect-[4/3] bg-gray-200 overflow-hidden">
+                            @if ($event->cover_image_url)
+                                <img src="{{ $event->cover_image_url }}" alt="{{ $event->title }}" class="w-full h-full object-cover">
+                            @else
+                                <div class="w-full h-full bg-gradient-to-br from-[#FFD4B6] via-[#FFE9DC] to-white flex items-center justify-center">
+                                    <span class="text-[#C65B74]/70 text-sm uppercase tracking-[0.35em]">Event Image</span>
+                                </div>
+                            @endif
                         </div>
-
-                        {{-- Konten Card --}}
-                        <div class="flex flex-1 flex-col p-6">
-                            <div class="mb-4 flex items-start gap-3">
-                                <div class="flex h-10 w-10 flex-none items-center justify-center rounded-full bg-[#FFF4EC] text-[#B05A62] font-bold">
-                                    {{ Str::substr($event->tutor_name, 0, 1) }}
+                        
+                        <div class="p-6 flex flex-col flex-grow">
+                            <div class="h-16 mb-4 flex items-center">
+                                <h3 class="text-xl font-['Cousine'] font-bold text-[#822021] line-clamp-2">{{ $event->title }}</h3>
+                            </div>
+                            
+                            <div class="space-y-3 mb-6">
+                                <div class="flex items-center gap-3 text-[#46000D] font-['Open_Sans']">
+                                    <svg width="20" height="20" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M5.33331 1.3335V4.00016" stroke="#FFB3E1" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+                                        <path d="M10.6667 1.3335V4.00016" stroke="#FFB3E1" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+                                        <path d="M12.6667 2.6665H3.33333C2.59695 2.6665 2 3.26346 2 3.99984V13.3332C2 14.0696 2.59695 14.6665 3.33333 14.6665H12.6667C13.403 14.6665 14 14.0696 14 13.3332V3.99984C14 3.26346 13.403 2.6665 12.6667 2.6665Z" stroke="#FFB3E1" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+                                        <path d="M2 6.6665H14" stroke="#FFB3E1" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                    <span class="text-sm">{{ $event->start_at->translatedFormat('d M Y') }}</span>
                                 </div>
-                                <div>
-                                    <p class="text-sm font-semibold text-slate-900">{{ $event->tutor_name }}</p>
-                                    <p class="text-xs text-slate-500">Instruktur</p>
+                                <div class="flex items-center gap-3 text-[#46000D] font-['Open_Sans']">
+                                    <svg width="20" height="20" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M13.3334 6.66683C13.3334 9.9955 9.64069 13.4622 8.40069 14.5328C8.28517 14.6197 8.14455 14.6667 8.00002 14.6667C7.85549 14.6667 7.71487 14.6197 7.59935 14.5328C6.35935 13.4622 2.66669 9.9955 2.66669 6.66683C2.66669 5.25234 3.22859 3.89579 4.22878 2.89559C5.22898 1.8954 6.58553 1.3335 8.00002 1.3335C9.41451 1.3335 10.7711 1.8954 11.7713 2.89559C12.7715 3.89579 13.3334 5.25234 13.3334 6.66683Z" stroke="#FFB3E1" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+                                        <path d="M8 8.6665C9.10457 8.6665 10 7.77107 10 6.6665C10 5.56193 9.10457 4.6665 8 4.6665C6.89543 4.6665 6 5.56193 6 6.6665C6 7.77107 6.89543 8.6665 8 8.6665Z" stroke="#FFB3E1" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                    <span class="text-sm">{{ $event->venue_name }}</span>
+                                </div>
+                                <div class="flex items-center gap-3 text-[#46000D] font-['Open_Sans']">
+                                    <svg width="20" height="20" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M10.6666 14V12.6667C10.6666 11.9594 10.3857 11.2811 9.8856 10.781C9.3855 10.281 8.70722 10 7.99998 10H3.99998C3.29274 10 2.61446 10.281 2.11436 10.781C1.61426 11.2811 1.33331 11.9594 1.33331 12.6667V14" stroke="#FFB3E1" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+                                        <path d="M10.6667 2.08545C11.2385 2.2337 11.7449 2.56763 12.1065 3.03482C12.468 3.50202 12.6642 4.07604 12.6642 4.66678C12.6642 5.25752 12.468 5.83154 12.1065 6.29874C11.7449 6.76594 11.2385 7.09987 10.6667 7.24812" stroke="#FFB3E1" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+                                        <path d="M14.6667 14.0002V12.6669C14.6662 12.0761 14.4696 11.5021 14.1076 11.0351C13.7456 10.5682 13.2388 10.2346 12.6667 10.0869" stroke="#FFB3E1" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+                                        <path d="M5.99998 7.33333C7.47274 7.33333 8.66665 6.13943 8.66665 4.66667C8.66665 3.19391 7.47274 2 5.99998 2C4.52722 2 3.33331 3.19391 3.33331 4.66667C3.33331 6.13943 4.52722 7.33333 5.99998 7.33333Z" stroke="#FFB3E1" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                    <span class="text-sm">{{ $event->remainingSlots() ?? 'Tidak terbatas' }} peserta</span>
                                 </div>
                             </div>
+                            
+                            <div class="flex items-center justify-between mt-auto">
+                                <div class="flex items-center gap-2">
+                                    <svg width="20" height="20" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <g clip-path="url(#clip0_2083_468)">
+                                        <path d="M8.39071 1.72416C8.14072 1.4741 7.80163 1.33357 7.44804 1.3335H2.66671C2.31309 1.3335 1.97395 1.47397 1.7239 1.72402C1.47385 1.97407 1.33337 2.31321 1.33337 2.66683V7.44816C1.33345 7.80176 1.47397 8.14084 1.72404 8.39083L7.52671 14.1935C7.82972 14.4946 8.23954 14.6636 8.66671 14.6636C9.09388 14.6636 9.5037 14.4946 9.80671 14.1935L14.1934 9.80683C14.4945 9.50382 14.6635 9.094 14.6635 8.66683C14.6635 8.23966 14.4945 7.82984 14.1934 7.52683L8.39071 1.72416Z" stroke="#FFB3E1" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+                                        <path d="M4.99996 5.33317C5.18405 5.33317 5.33329 5.18393 5.33329 4.99984C5.33329 4.81574 5.18405 4.6665 4.99996 4.6665C4.81586 4.6665 4.66663 4.81574 4.66663 4.99984C4.66663 5.18393 4.81586 5.33317 4.99996 5.33317Z" fill="#FFB3E1" stroke="#FFB3E1" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+                                        </g>
+                                        <defs>
+                                        <clipPath id="clip0_2083_468">
+                                        <rect width="16" height="16" fill="white"/>
+                                        </clipPath>
+                                        </defs>
+                                    </svg>
 
-                            <p class="mb-6 flex-1 text-sm leading-relaxed text-slate-600">
-                                {{ Str::limit(strip_tags($event->description), 100) }}
-                            </p>
-
-                            <div class="mt-auto flex items-center justify-between border-t border-slate-100 pt-4">
-                                <div>
-                                    <p class="text-xs text-slate-400">Harga Tiket</p>
-                                    <p class="text-base font-bold text-[#5A3D31]">
-                                        @if ($event->price > 0) Rp{{ number_format($event->price, 0, ',', '.') }} @else Gratis @endif
-                                    </p>
+                                    <span class="text-lg font-['Open_Sans'] font-bold text-[#822021]">Rp {{ number_format($event->price, 0, ',', '.') }}</span>
                                 </div>
-                                <a href="{{ route('events.show', $event) }}" class="rounded-full bg-[#B05A62] px-5 py-2 text-sm font-medium text-white transition hover:bg-[#9A4750] shadow-md shadow-[#B05A62]/20">
-                                    Detail
+                                <a href="{{ route('events.show', $event) }}" class="bg-[#FFB3E1] text-[#822021] font-['Open_Sans'] font-semibold py-2 px-6 rounded-full hover:bg-[#FFB3E1]/80 transition">
+                                    Lihat Detail
                                 </a>
                             </div>
                         </div>

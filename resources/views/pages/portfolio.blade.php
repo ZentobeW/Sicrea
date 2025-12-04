@@ -8,110 +8,340 @@
 @endphp
 
 <x-layouts.app :title="'Portofolio Sicrea'">
-    <section class="relative overflow-hidden bg-gradient-to-br from-[#FFE3D3] via-[#FFF1EA] to-white">
-        <div class="absolute -right-24 -top-24 h-72 w-72 rounded-full bg-[#FFD4B6]/60 blur-3xl"></div>
-        <div class="absolute -left-16 bottom-0 h-64 w-64 rounded-full bg-[#FFB6A0]/40 blur-3xl"></div>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cousine:wght@400;700&family=Open+Sans:wght@400;600&display=swap');
+        .font-cousine { font-family: 'Cousine', monospace; }
+        .font-open-sans { font-family: 'Open Sans', sans-serif; }
+        .portfolio-card:hover .portfolio-image {
+            transform: scale(1.1);
+        }
+        .portfolio-overlay {
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .portfolio-card:hover .portfolio-overlay {
+            opacity: 1;
+        }
+        
+        /* Modal Styling */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .modal-content {
+            background: linear-gradient(135deg, #FCF5E6 0%, #FFBE8E 100%);
+            border: 3px solid #FFBE8E;
+            border-radius: 24px;
+            max-width: 700px;
+            width: 90%;
+            aspect-ratio: 4/3;
+            overflow: hidden;
+            position: relative;
+            transform: scale(0.8);
+            transition: transform 0.3s ease;
+        }
+        
+        .modal-overlay.active .modal-content {
+            transform: scale(1);
+        }
+        
+        /* Mobile Responsive Styles */
+        @media (max-width: 768px) {
+            .modal-content {
+                width: 95%;
+                max-width: none;
+                aspect-ratio: auto;
+                max-height: 90vh;
+                border-radius: 16px;
+                border-width: 2px;
+            }
+            
+            .modal-content .p-6 {
+                padding: 1rem !important;
+            }
+            
+            #modalContent {
+                gap: 0.75rem;
+            }
+            
+            #modalTitle {
+                font-size: 1.25rem !important;
+                line-height: 1.4 !important;
+                padding-right: 2rem !important;
+            }
+            
+            .modal-content .space-y-2 {
+                margin-bottom: 0.75rem !important;
+            }
+            
+            .modal-content .flex-1 {
+                margin-bottom: 0.75rem !important;
+            }
+            
+            .modal-content .aspect-\[16\/9\] {
+                aspect-ratio: 16/10;
+                max-width: none;
+            }
+            
+            .modal-content .flex.justify-between {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: stretch;
+            }
+            
+            #thumbnailContainer {
+                justify-content: center;
+                max-width: 100%;
+                overflow-x: auto;
+                padding-bottom: 0.25rem;
+            }
+            
+            #thumbnailContainer .w-16 {
+                width: 3rem;
+                height: 3rem;
+                flex-shrink: 0;
+            }
+            
+            #lihatEventBtn {
+                width: 100%;
+                justify-self: stretch;
+                padding: 0.75rem 1.5rem !important;
+                font-size: 0.875rem !important;
+            }
+            
+            .modal-content button[onclick="closeModal()"] {
+                top: 0.75rem;
+                right: 0.75rem;
+                font-size: 1.5rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .modal-content {
+                width: 98%;
+                border-radius: 12px;
+            }
+            
+            #modalTitle {
+                font-size: 1.125rem !important;
+            }
+            
+            #thumbnailContainer .w-16 {
+                width: 2.5rem;
+                height: 2.5rem;
+            }
+        }
+    </style>
 
-        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-            <div class="grid gap-12 lg:grid-cols-[1.1fr,0.9fr] items-center">
-                <div class="space-y-8">
-                    <span class="inline-flex items-center gap-2 rounded-full bg-white/80 px-4 py-2 text-xs font-semibold uppercase tracking-[0.3em] text-[#C65B74] shadow-sm shadow-[#C65B74]/10">Portofolio</span>
-                    <div class="space-y-5">
-                        <h1 class="text-4xl md:text-5xl font-semibold leading-tight text-[#2C1E1E]">Portofolio Kegiatan</h1>
-                        <p class="text-base md:text-lg leading-relaxed text-[#5F4C4C] max-w-2xl">Dokumentasi berbagai workshop dan event kreatif yang telah kami selenggarakan bersama komunitas dan mitra. Temukan inspirasi baru dari karya peserta dan kolaborator Kreasi Hangat.</p>
-                    </div>
-                    <div class="flex flex-wrap items-center gap-4">
-                        <a href="{{ route('events.index') }}" class="inline-flex items-center rounded-full bg-[#FF8A64] px-6 py-3 text-sm font-semibold text-white shadow-md shadow-[#FF8A64]/30 transition hover:bg-[#F9744B]">Cari Event Terkait</a>
-                        <a href="{{ route('partnership.index') }}" class="inline-flex items-center rounded-full bg-white px-6 py-3 text-sm font-semibold text-[#C65B74] shadow-sm shadow-[#FFB6A0]/40 transition hover:text-[#A2475D]">Ajukan Kolaborasi</a>
-                        @can('access-admin')
-                            <a href="{{ route('admin.portfolios.index') }}" class="inline-flex items-center rounded-full border border-[#FAD6C7] px-6 py-3 text-sm font-semibold text-[#C65B74] hover:border-[#C65B74] transition">Kelola Portofolio</a>
-                        @endcan
-                    </div>
-                    <dl class="grid gap-4 sm:grid-cols-3">
-                        <div class="rounded-3xl bg-white/80 p-5 text-center shadow-sm shadow-[#FAD6C7]/40 backdrop-blur">
-                            <dt class="text-xs font-semibold uppercase tracking-[0.3em] text-[#C65B74]/70">Dokumentasi</dt>
-                            <dd class="mt-2 text-2xl font-semibold text-[#2C1E1E]">{{ $totalPortfolios }}</dd>
-                        </div>
-                        <div class="rounded-3xl bg-white/80 p-5 text-center shadow-sm shadow-[#FAD6C7]/40 backdrop-blur">
-                            <dt class="text-xs font-semibold uppercase tracking-[0.3em] text-[#C65B74]/70">Kategori</dt>
-                            <dd class="mt-2 text-2xl font-semibold text-[#2C1E1E]">{{ $categoryCount ?: '10+' }}</dd>
-                        </div>
-                        <div class="rounded-3xl bg-white/80 p-5 text-center shadow-sm shadow-[#FAD6C7]/40 backdrop-blur">
-                            <dt class="text-xs font-semibold uppercase tracking-[0.3em] text-[#C65B74]/70">Kolaborator</dt>
-                            <dd class="mt-2 text-2xl font-semibold text-[#2C1E1E]">{{ $portfolioCollection->isNotEmpty() ? '15+' : '—' }}</dd>
-                        </div>
-                    </dl>
-                </div>
-                <div class="relative">
-                    <div class="rounded-[44px] border border-white/70 bg-white/80 p-6 shadow-xl shadow-[#E8BDB0]/40 backdrop-blur">
-                        <div class="aspect-[4/3] overflow-hidden rounded-[36px] bg-[#FFE9DC] flex items-center justify-center text-sm uppercase tracking-[0.35em] text-[#C65B74]/70">Galeri Portofolio</div>
-                    </div>
-                </div>
+    <section class="bg-[#FAF8F1] py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center space-y-4 mb-12">
+                <h1 class="text-4xl md:text-5xl font-cousine font-bold text-[#822021]">Portofolio Kegiatan</h1>
+                <p class="text-base font-open-sans text-[#46000D] max-w-md mx-auto">Dokumentasi berbagai workshop dan event kreatif yang telah kami selenggarakan</p>
             </div>
-        </div>
-    </section>
 
-    <section class="bg-[#FFF7F2]">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 space-y-12">
-            <div class="text-center space-y-4">
-                <h2 class="text-3xl font-semibold text-[#2C1E1E]">Dokumentasi Terbaru</h2>
-                <p class="text-base text-[#5F4C4C] max-w-2xl mx-auto">Setiap portofolio mengabadikan proses kreatif, suasana kelas, dan hasil karya peserta. Klik salah satu dokumentasi untuk terhubung dengan event terkait.</p>
-            </div>
-
-            <div class="grid gap-8 md:grid-cols-2 xl:grid-cols-3">
+            <div class="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
                 @forelse ($portfolios as $portfolio)
                     @php($photoCount = $portfolio->images->count())
-                    <article class="group flex h-full flex-col overflow-hidden rounded-[36px] border border-[#FAD6C7] bg-white shadow-sm shadow-[#FAD6C7]/40 transition hover:-translate-y-1 hover:shadow-xl">
-                        <div class="relative h-56 overflow-hidden">
+                    <article class="portfolio-card group cursor-pointer" 
+                             data-id="{{ $portfolio->id }}" 
+                             data-title="{{ $portfolio->title }}" 
+                             data-date="{{ $portfolio->created_at->translatedFormat('d M Y') }}" 
+                             data-image="{{ $portfolio->cover_image_url }}" 
+                             data-images="{{ $portfolio->images->pluck('image_url')->toJson() }}"
+                             data-event-id="{{ $portfolio->event_id }}"
+                             onclick="openModal(this)">
+                        <div class="relative overflow-hidden rounded-2xl shadow-md mb-4 transition-transform duration-300 hover:scale-105">
                             @if ($portfolio->cover_image_url)
-                                <img src="{{ $portfolio->cover_image_url }}" alt="{{ $portfolio->title }}" class="h-full w-full object-cover transition duration-500 group-hover:scale-105" />
+                                <img src="{{ $portfolio->cover_image_url }}" alt="{{ $portfolio->title }}" class="portfolio-image h-64 w-full object-cover transition-transform duration-500" />
                             @else
-                                <div class="flex h-full w-full items-center justify-center bg-[#FFE3D3] text-xs uppercase tracking-[0.35em] text-[#C65B74]/70">Dokumentasi</div>
+                                <div class="portfolio-image flex h-64 w-full items-center justify-center bg-gray-200 transition-transform duration-500">
+                                    <span class="text-gray-500">No Image</span>
+                                </div>
                             @endif
-                            <div class="absolute inset-x-5 bottom-5 flex items-center justify-between rounded-full bg-white/95 px-5 py-2 text-[11px] font-semibold uppercase tracking-[0.28em] text-[#C65B74] shadow-md shadow-[#FAD6C7]/60">
-                                <span>{{ $portfolio->created_at->translatedFormat('d M Y') }}</span>
-                                <span>{{ $photoCount }} foto</span>
+                            
+                            <!-- Photo count badge -->
+                            <div class="absolute top-3 right-3 bg-black/60 text-white px-2 py-1 rounded text-sm font-open-sans">
+                                +{{ $photoCount }} foto
+                            </div>
+                            
+                            <!-- Content overlay - only visible on hover -->
+                            <div class="portfolio-overlay absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex flex-col justify-end p-4 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                                <div class="space-y-3">
+                                    
+                                    <h3 class="font-open-sans font-semibold text-white text-lg leading-tight">{{ $portfolio->title }}</h3>
+                                    <p class="font-open-sans text-white text-sm leading-relaxed">{{ Str::limit($portfolio->description, 100) }}</p>
+                                </div>
                             </div>
                         </div>
-                        <div class="flex flex-1 flex-col gap-4 p-6">
-                            <div class="space-y-2">
-                                <h3 class="text-xl font-semibold text-[#2C1E1E] group-hover:text-[#C65B74] transition">{{ $portfolio->title }}</h3>
-                                <p class="text-sm leading-relaxed text-[#5F4C4C]">{{ Str::limit($portfolio->description, 150) }}</p>
-                                @if ($portfolio->event)
-                                    <p class="text-xs text-[#A04E62]">{{ $portfolio->event->venue_name }} • {{ $portfolio->event->tutor_name }}</p>
-                                    <p class="text-[11px] text-[#A04E62]">{{ $portfolio->event->venue_address }}</p>
-                                @endif
-                            </div>
-                            <div class="mt-auto flex items-center justify-between rounded-2xl bg-[#FFF0E6] px-5 py-3 text-xs font-semibold uppercase tracking-[0.28em] text-[#C65B74]">
-                                @if ($portfolio->event)
-                                    <a href="{{ route('events.show', $portfolio->event) }}" class="inline-flex items-center gap-2 text-[#C65B74] hover:text-[#A2475D]">
-                                        <span>
-                                            {{ $portfolio->event->title }}
-                                            <span class="block text-[11px] font-normal text-[#A04E62]">{{ $portfolio->event->venue_name }}</span>
-                                        </span>
-                                        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5l7 7-7 7" />
-                                        </svg>
-                                    </a>
-                                @else
-                                    <span>Program Internal</span>
-                                @endif
-                                <a href="mailto:hello@sicrea.id" class="inline-flex items-center rounded-full border border-[#C65B74]/20 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.28em] text-[#C65B74] hover:border-[#C65B74]">Hubungi Kami</a>
+                        
+                        <div class="space-y-2">
+                            <h4 class="font-open-sans font-semibold text-[#822021] text-lg">{{ $portfolio->title }}</h4>
+                            <div class="flex items-center gap-2 text-[#46000D] text-sm font-open-sans">
+                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" class="flex-shrink-0">
+                                    <path d="M5.33331 1.3335V4.00016" stroke="#46000D" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M10.6667 1.3335V4.00016" stroke="#46000D" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M12.6667 2.6665H3.33333C2.59695 2.6665 2 3.26346 2 3.99984V13.3332C2 14.0696 2.59695 14.6665 3.33333 14.6665H12.6667C13.403 14.6665 14 14.0696 14 13.3332V3.99984C14 3.26346 13.403 2.6665 12.6667 2.6665Z" stroke="#46000D" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M2 6.6665H14" stroke="#46000D" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                                <span>{{ $portfolio->created_at->translatedFormat('d M Y') }}</span>
                             </div>
                         </div>
                     </article>
                 @empty
-                    <div class="col-span-full text-center rounded-[36px] border border-dashed border-[#FAD6C7] bg-white/80 py-16">
-                        <p class="text-[#5F4C4C]">Belum ada portofolio yang dapat ditampilkan saat ini.</p>
+                    <div class="col-span-full text-center py-16">
+                        <p class="font-open-sans text-[#46000D]">Belum ada portofolio yang dapat ditampilkan saat ini.</p>
                     </div>
                 @endforelse
             </div>
 
             @if ($portfolios->hasPages())
-                <div class="pt-6">
-                    {{ $portfolios->links() }}
+                <div class="pt-6 pagination-wrapper">
+                    <div style="font-family: 'Open Sans', sans-serif; color: #46000D;">
+                        {{ $portfolios->links() }}
+                    </div>
                 </div>
             @endif
         </div>
     </section>
+
+    <!-- Modal Popup -->
+    <div id="portfolioModal" class="modal-overlay">
+        <div class="modal-content p-6">
+            <!-- Close Button -->
+            <button onclick="closeModal()" class="absolute top-4 right-4 text-[#822021] hover:text-[#46000D] text-2xl font-bold cursor-pointer">
+                ×
+            </button>
+            
+            <!-- Modal Content -->
+            <div id="modalContent" class="h-full flex flex-col">
+                <!-- Top Section: Title and Date -->
+                <div class="space-y-2 mb-4">
+                    <h2 id="modalTitle" class="font-cousine font-bold text-2xl text-[#822021] pr-8">Nama Dokumentasi Workshop</h2>
+                    <div class="flex items-center gap-2 text-[#46000D] text-sm font-open-sans">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M5.33331 1.3335V4.00016" stroke="#46000D" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M10.6667 1.3335V4.00016" stroke="#46000D" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M12.6667 2.6665H3.33333C2.59695 2.6665 2 3.26346 2 3.99984V13.3332C2 14.0696 2.59695 14.6665 3.33333 14.6665H12.6667C13.403 14.6665 14 14.0696 14 13.3332V3.99984C14 3.26346 13.403 2.6665 12.6667 2.6665Z" stroke="#46000D" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M2 6.6665H14" stroke="#46000D" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <span id="modalDate">Tanggal Workshop</span>
+                    </div>
+                </div>
+                
+                <!-- Center Section: Main Image -->
+                <div class="flex-1 flex items-center justify-center mb-4">
+                    <div class="rounded-2xl overflow-hidden shadow-md aspect-[16/9] w-full max-w-md">
+                        <img id="modalImage" src="https://via.placeholder.com/600x320" alt="Workshop Image" class="w-full h-full object-cover" />
+                    </div>
+                </div>
+                
+                <!-- Bottom Section: Thumbnails and Button -->
+                <div class="flex justify-between items-end mt-auto">
+                    <div id="thumbnailContainer" class="flex gap-3 flex-wrap">
+                        <!-- Thumbnails will be populated dynamically -->
+                    </div>
+                    <button id="lihatEventBtn" class="bg-[#822021] text-[#FAF8F1] font-open-sans font-semibold px-6 py-2 rounded-full hover:bg-[#6a1a1b] transition-colors cursor-pointer">
+                        Lihat Event
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function openModal(element) {
+            const title = element.getAttribute('data-title');
+            const date = element.getAttribute('data-date');
+            const coverImage = element.getAttribute('data-image');
+            const imagesData = element.getAttribute('data-images');
+            const eventId = element.getAttribute('data-event-id');
+            
+            let images = [];
+            try {
+                images = JSON.parse(imagesData || '[]');
+            } catch (e) {
+                images = [];
+            }
+            
+            // Add cover image as first image if it exists and not already in images
+            if (coverImage && !images.includes(coverImage)) {
+                images.unshift(coverImage);
+            }
+            
+            document.getElementById('modalTitle').textContent = title;
+            document.getElementById('modalDate').textContent = date;
+            
+            // Set main image (first image or cover image)
+            const mainImage = images.length > 0 ? images[0] : 'https://via.placeholder.com/600x320';
+            document.getElementById('modalImage').src = mainImage;
+            
+            // Populate thumbnails
+            const thumbnailContainer = document.getElementById('thumbnailContainer');
+            thumbnailContainer.innerHTML = '';
+            
+            images.forEach((imageUrl, index) => {
+                const thumbnailDiv = document.createElement('div');
+                thumbnailDiv.className = 'w-20 h-13 rounded-xl overflow-hidden cursor-pointer transition hover:opacity-90 shadow-md hover:shadow-lg hover:scale-105 transition-transform duration-200';
+                thumbnailDiv.innerHTML = '<img src="' + imageUrl + '" alt="Thumbnail" class="w-full h-full object-cover" />';
+                thumbnailDiv.onclick = function() {
+                    document.getElementById('modalImage').src = imageUrl;
+                    document.querySelectorAll('#thumbnailContainer div').forEach(div => {
+                        div.classList.remove('ring-1', 'ring-[#822021]');
+                    });
+
+                    thumbnailDiv.classList.add('ring-1', 'ring-[#822021]');
+                };
+                thumbnailContainer.appendChild(thumbnailDiv);
+            });
+
+            const firstThumb = thumbnailContainer.querySelector('div');
+            if (firstThumb) {
+                firstThumb.classList.add('ring-1', 'ring-[#822021]');
+            }
+                        
+            // Set up Lihat Event button
+            const lihatEventBtn = document.getElementById('lihatEventBtn');
+            if (eventId) {
+                lihatEventBtn.style.display = 'block';
+                lihatEventBtn.onclick = function() {
+                    window.location.href = `/events/${eventId}`;
+                };
+            } else {
+                lihatEventBtn.style.display = 'none';
+            }
+            
+            document.getElementById('portfolioModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            document.getElementById('portfolioModal').classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        document.getElementById('portfolioModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+    </script>
+
 </x-layouts.app>

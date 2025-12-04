@@ -28,9 +28,13 @@
 @endphp
 
 <x-layouts.app :title="'Pembayaran Pendaftaran'">
-    <section class="bg-gradient-to-br from-[#FFE3D3] via-[#FFF3EA] to-white py-12">
-        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
-            <a href="{{ route('profile.show') }}" class="inline-flex items-center gap-2 text-sm font-semibold text-[#C65B74] hover:text-[#A2475D]">
+    <style>
+        .font-title { font-family: 'Cousine', monospace; }
+        .font-body { font-family: 'Open Sans', sans-serif; }
+    </style>
+    <section class="bg-gradient-to-br from-[#FFBE8E] to-[#FCF5E6] py-8 md:py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-4 md:space-y-6">
+            <a href="{{ route('profile.show') }}" class="inline-flex items-center gap-2 text-sm font-semibold text-[#822021] hover:text-[#B49F9A] font-body transition-colors">
                 <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15.75 19.5 8.25 12l7.5-7.5" />
                 </svg>
@@ -38,68 +42,77 @@
             </a>
 
             @if ($showTicket)
-                <div id="tiket" class="space-y-6">
-                    <div>
-                        <p class="text-sm font-semibold uppercase tracking-[0.3em] text-[#C65B74]">Detail Tiket Event</p>
-                        <h1 class="mt-2 text-3xl font-semibold text-[#2C1E1E]">{{ $registration->event->title }}</h1>
-                        <p class="mt-2 max-w-2xl text-sm text-[#9A5A46]">Lihat tiket, status pembayaran, dan ajukan refund jika berhalangan hadir.</p>
+                <div id="tiket" class="space-y-4 md:space-y-6">
+                    <div class="text-center md:text-left">
+                        <p class="text-s md:text-sm font-semibold uppercase tracking-[0.3em] text- [#822021] font-body">Detail Tiket Event</p>
+                        <p class="mt-2 max-w-2xl text-sm md:text-base text-[#B49F9A] font-body">Lihat tiket, status pembayaran, dan ajukan refund jika berhalangan hadir.</p>
                     </div>
 
-                    <div class="grid gap-6 lg:grid-cols-[1.15fr_0.85fr]">
-                        <div class="space-y-6">
-                            <div class="rounded-[28px] border border-[#FAD6C7] bg-white/95 p-6 shadow-xl shadow-[#FAD6C7]/40 backdrop-blur">
+                    <div class="grid gap-4 md:gap-6 lg:grid-cols-2 lg:items-start">
+                        <div class="space-y-4 md:space-y-6">
+                            <div class="rounded-2xl md:rounded-[28px] border border-[#FFDEF8] bg-white/95 p-4 md:p-6 shadow-xl shadow-[#FFB3E1]/20 backdrop-blur">
                                 <div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-                                    <div>
-                                        <p class="text-xs font-semibold uppercase tracking-[0.3em] text-[#C65B74]">Informasi Event</p>
-                                        <h2 class="mt-2 text-2xl font-semibold text-[#7C3A2D]">{{ $registration->event->title }}</h2>
-                                        <p class="mt-1 text-sm text-[#9A5A46]">
+                                    <div class="flex-1">
+                                        <p class="text-xs font-semibold uppercase tracking-[0.3em] text-[#B49F9A] font-body">Informasi Event</p>
+                                        <h2 class="mt-2 text-xl md:text-2xl font-bold text-[#822021] font-title">{{ $registration->event->title }}</h2>
+                                        <p class="mt-1 text-sm md:text-base text-[#B49F9A] font-body leading-relaxed">
                                             {{ Str::limit(strip_tags($registration->event->description ?? ''), 120) ?: 'Detail event akan diinformasikan.' }}
                                         </p>
                                     </div>
-                                    <div class="h-20 w-28 rounded-2xl bg-gradient-to-br from-[#FFE1D0] to-[#FFD2C0] shadow-inner"></div>
                                 </div>
 
-                                <div class="mt-5 grid gap-4 sm:grid-cols-2">
-                                    <div class="rounded-2xl bg-[#FFF5EF] px-4 py-3">
-                                        <p class="text-[11px] font-semibold uppercase tracking-[0.3em] text-[#C65B74]">Tanggal</p>
-                                        <p class="mt-2 text-sm font-semibold text-[#7C3A2D]">{{ optional($registration->event->start_at)->translatedFormat('d F Y') }}</p>
+                                <div class="mt-4 grid gap-3 grid-cols-1 sm:grid-cols-2">
+                                    <div class="rounded-xl md:rounded-2xl bg-[#FCF5E6] px-3 py-2.5 border border-[#FFDEF8]">
+                                        <p class="text-[10px] font-semibold uppercase tracking-[0.3em] text-[#B49F9A] font-body">Tanggal</p>
+                                        <p class="mt-1 text-sm font-bold text-[#822021] font-body">{{ optional($registration->event->start_at)->translatedFormat('d F Y') }}</p>
                                     </div>
-                                    <div class="rounded-2xl bg-[#FFF5EF] px-4 py-3">
-                                        <p class="text-[11px] font-semibold uppercase tracking-[0.3em] text-[#C65B74]">Waktu</p>
-                                        <p class="mt-2 text-sm font-semibold text-[#7C3A2D]">
+                                    <div class="rounded-xl md:rounded-2xl bg-[#FCF5E6] px-3 py-2.5 border border-[#FFDEF8]">
+                                        <p class="text-[10px] font-semibold uppercase tracking-[0.3em] text-[#B49F9A] font-body">Waktu</p>
+                                        <p class="mt-1 text-sm font-bold text-[#822021] font-body">
                                             {{ optional($registration->event->start_at)->translatedFormat('H:i') }} - {{ optional($registration->event->end_at)->translatedFormat('H:i') }} WIB
                                         </p>
                                     </div>
-                                    <div class="rounded-2xl bg-[#FFF5EF] px-4 py-3">
-                                        <p class="text-[11px] font-semibold uppercase tracking-[0.3em] text-[#C65B74]">Tempat</p>
-                                        <p class="mt-2 text-sm font-semibold text-[#7C3A2D]">{{ $registration->event->venue_name }}</p>
-                                        <p class="text-xs text-[#9A5A46]">{{ $registration->event->venue_address }}</p>
+                                    <div class="rounded-xl md:rounded-2xl bg-[#FCF5E6] px-3 py-2.5 border border-[#FFDEF8]">
+                                        <p class="text-[10px] font-semibold uppercase tracking-[0.3em] text-[#B49F9A] font-body">Tempat</p>
+                                        <p class="mt-1 text-sm font-bold text-[#822021] font-body">{{ $registration->event->venue_name }}</p>
+                                        <p class="text-xs text-[#B49F9A] font-body mt-0.5">{{ $registration->event->venue_address }}</p>
                                     </div>
-                                    <div class="rounded-2xl bg-[#FFF5EF] px-4 py-3">
-                                        <p class="text-[11px] font-semibold uppercase tracking-[0.3em] text-[#C65B74]">Harga</p>
-                                        <p class="mt-2 text-xl font-semibold text-[#7C3A2D]">Rp{{ number_format($transaction?->amount ?? $registration->event->price, 0, ',', '.') }}</p>
-                                        <p class="text-[11px] text-[#C99F92]">ID: reg{{ $registration->id }}</p>
+                                    <div class="rounded-xl md:rounded-2xl bg-[#FCF5E6] px-3 py-2.5 border border-[#FFDEF8]">
+                                        <p class="text-[10px] font-semibold uppercase tracking-[0.3em] text-[#B49F9A] font-body">Harga</p>
+                                        <p class="mt-1 text-sm font-bold text-[#822021] font-body">Rp{{ number_format($transaction?->amount ?? $registration->event->price, 0, ',', '.') }}</p>
+                                        <p class="text-xs text-[#B49F9A] font-body mt-0.5">ID: reg{{ $registration->id }}</p>
                                     </div>
                                 </div>
                             </div>
 
-                            <div class="rounded-[28px] border border-[#FAD6C7] bg-white/95 p-6 shadow-xl shadow-[#FAD6C7]/40 backdrop-blur">
-                                <h3 class="text-lg font-semibold text-[#2C1E1E]">Detail Pendaftaran</h3>
-                                <div class="mt-4 grid gap-4 sm:grid-cols-2">
-                                    <div class="rounded-2xl border border-dashed border-[#FAD6C7] bg-[#FFF5EF] px-4 py-4 text-sm text-[#6F4F4F]">
-                                        <p class="text-[11px] font-semibold uppercase tracking-[0.3em] text-[#C65B74]">Bukti Pembayaran</p>
+                            <div class="rounded-2xl md:rounded-[28px] border border-[#FFDEF8] bg-white/95 p-4 md:p-6 shadow-xl shadow-[#FFB3E1]/20 backdrop-blur">
+                                <p class="text-xs font-semibold uppercase tracking-[0.3em] text-[#B49F9A] font-body">Informasi Mentor</p>
+                                <div class="mt-3 rounded-xl md:rounded-2xl bg-[#FCF5E6] px-3 md:px-4 py-3 text-sm border border-[#FFDEF8]">
+                                    <p class="text-[10px] md:text-[11px] font-semibold uppercase tracking-[0.3em] text-[#B49F9A] font-body">Nama</p>
+                                    <p class="mt-1 text-base md:text-lg font-bold text-[#822021] font-body">{{ $registration->event->tutor_name ?? 'Pengajar akan diumumkan' }}</p>
+                                    <p class="mt-1 text-xs md:text-sm text-[#B49F9A] font-body">Pembimbing utama workshop.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <aside class="flex flex-col space-y-4 md:space-y-6">
+                            <div class="rounded-2xl md:rounded-[28px] border border-[#FFDEF8] bg-white/90 p-4 md:p-6 shadow-lg shadow-[#FFB3E1]/20 backdrop-blur flex-1">
+                                <p class="text-xs font-semibold uppercase tracking-[0.3em] text-[#B49F9A] font-body">Detail Pendaftaran</p>
+                                <div class="mt-4 grid gap-3 md:gap-4 sm:grid-cols-2">
+                                    <div class="rounded-xl md:rounded-2xl border border-[#FFDEF8] bg-[#FCF5E6] px-3 md:px-4 py-4 text-sm">
+                                        <p class="text-[10px] md:text-[11px] font-semibold uppercase tracking-[0.3em] text-[#B49F9A] font-body">Bukti Pembayaran</p>
                                         @if ($transaction?->payment_proof_path)
-                                            <a href="{{ Storage::disk('public')->url($transaction->payment_proof_path) }}" target="_blank" class="mt-3 inline-flex items-center gap-2 rounded-full bg-[#FF8A64] px-4 py-2 text-xs font-semibold text-white shadow-md shadow-[#FF8A64]/30 transition hover:bg-[#F9744B]">
+                                            <a href="{{ Storage::disk('public')->url($transaction->payment_proof_path) }}" target="_blank" class="mt-3 inline-flex items-center gap-2 rounded-full bg-[#822021] px-3 md:px-4 py-2 text-xs font-semibold text-white shadow-md shadow-[#822021]/30 transition hover:bg-[#B49F9A] font-body">
                                                 Lihat Bukti
                                             </a>
                                         @else
-                                            <p class="mt-2 text-sm font-semibold text-[#C65B74]">Belum ada bukti pembayaran.</p>
+                                            <p class="mt-2 text-sm font-semibold text-[#822021] font-body">Belum ada bukti pembayaran.</p>
                                         @endif
                                     </div>
-                                    <div class="rounded-2xl border border-dashed border-[#FAD6C7] bg-[#F7FFF9] px-4 py-4 text-sm text-[#6F4F4F]">
-                                        <p class="text-[11px] font-semibold uppercase tracking-[0.3em] text-[#2F9A55]">Status</p>
+                                    <div class="rounded-xl md:rounded-2xl border border-[#FFDEF8] bg-[#FCF5E6] px-3 md:px-4 py-4 text-sm">
+                                        <p class="text-[10px] md:text-[11px] font-semibold uppercase tracking-[0.3em] text-[#B49F9A] font-body">Status</p>
                                         <span @class([
-                                            'mt-2 inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-semibold',
+                                            'mt-2 inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-semibold font-body',
                                             'bg-[#E4F5E9] text-[#2F9A55]' => $isVerified,
                                             'bg-[#FDE1E7] text-[#BA1B1D]' => $isRejected,
                                             'bg-[#FDF7D8] text-[#B89530]' => $isAwaitingVerification,
@@ -108,32 +121,20 @@
                                             {{ $paymentStatus?->label() ?? 'Tidak ada data' }}
                                         </span>
                                         @if ($transaction?->verified_at)
-                                            <p class="mt-1 text-xs text-[#9A5A46]">Terverifikasi: {{ $transaction->verified_at->translatedFormat('d F Y H:i') }}</p>
+                                            <p class="mt-1 text-xs text-[#B49F9A] font-body">Terverifikasi: {{ $transaction->verified_at->translatedFormat('d F Y H:i') }}</p>
                                         @endif
                                     </div>
                                 </div>
-                                <div class="mt-4 rounded-2xl border border-dashed border-[#FAD6C7]/80 bg-white/80 px-4 py-4 text-sm text-[#6F4F4F]">
-                                    <p class="text-[11px] font-semibold uppercase tracking-[0.3em] text-[#C65B74]">Catatan</p>
-                                    <p class="mt-2 text-sm text-[#7C3A2D]">Pembayaran sudah dikonfirmasi. Simpan tiket ini dan hadir tepat waktu.</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <aside class="space-y-6">
-                            <div class="rounded-[28px] border border-[#FAD6C7] bg-white/90 p-6 shadow-lg shadow-[#FAD6C7]/40 backdrop-blur">
-                                <h3 class="text-lg font-semibold text-[#2C1E1E]">Informasi Mentor</h3>
-                                <div class="mt-3 rounded-2xl bg-[#FFF5EF] px-4 py-3 text-sm text-[#6F4F4F]">
-                                    <p class="text-[11px] font-semibold uppercase tracking-[0.3em] text-[#C65B74]">Nama</p>
-                                    <p class="mt-1 text-base font-semibold text-[#7C3A2D]">{{ $registration->event->tutor_name ?? 'Pengajar akan diumumkan' }}</p>
-                                    <p class="mt-1 text-xs text-[#9A5A46]">Pembimbing utama workshop.</p>
+                                <div class="mt-4 rounded-xl md:rounded-2xl border border-[#FFDEF8] bg-white/80 px-3 md:px-4 py-4 text-sm">
+                                    <p class="text-[10px] md:text-[11px] font-semibold uppercase tracking-[0.3em] text-[#46000D] font-body">Catatan</p>
+                                    <p class="mt-2 text-sm md:text-base text-[#822021] font-body">Pembayaran sudah dikonfirmasi. Simpan tiket ini dan hadir tepat waktu.</p>
                                 </div>
                             </div>
 
-                            <div class="rounded-[28px] border border-[#FAD6C7] bg-white/90 p-6 shadow-lg shadow-[#FAD6C7]/40 backdrop-blur">
-                                <div class="flex items-center justify-between gap-3">
-                                    <div>
-                                        <p class="text-[11px] font-semibold uppercase tracking-[0.3em] text-[#C65B74]">Pengajuan Refund</p>
-                                        <p class="text-sm text-[#6F4F4F]">Ajukan refund maksimal 3 hari sebelum event.</p>
+                            <div class="rounded-2xl md:rounded-[28px] border border-[#FFDEF8] bg-white/90 p-4 md:p-6 shadow-lg shadow-[#FFB3E1]/20 backdrop-blur">
+                                <div class="flex flex-wrap items-center justify-between gap-3">
+                                    <div class="flex-1">
+                                        <p class="text-xs font-semibold uppercase tracking-[0.3em] text-[#46000D] font-body">Pengajuan Refund</p>
                                     </div>
                                     @if ($refund)
                                         <span @class([
@@ -144,12 +145,18 @@
                                         ])>
                                             {{ $refund->status->label() }}
                                         </span>
+                                    @else
+                                        @can('requestRefund', $registration)
+                                            <a href="{{ route('registrations.refund.create', $registration) }}" class="inline-flex items-center gap-2 rounded-full bg-[#822021] px-3 md:px-4 py-2 text-xs font-semibold text-white shadow-md shadow-[#822021]/30 transition hover:bg-[#B49F9A] font-body">
+                                                Ajukan Refund
+                                            </a>
+                                        @endcan
                                     @endif
                                 </div>
 
-                                <div class="mt-4 space-y-3 text-sm text-[#6F4F4F]">
-                                    <p class="font-semibold text-[#7C3A2D]">Syarat & Ketentuan:</p>
-                                    <ul class="list-disc list-inside space-y-1 text-xs text-[#9A5A46]">
+                                <div class="mt-4 space-y-3 text-sm">
+                                    <p class="font-bold text-[#822021] font-body">Syarat & Ketentuan:</p>
+                                    <ul class="list-disc list-inside space-y-1 text-xs md:text-sm text-[#B49F9A] font-body">
                                         <li>Refund maksimal 3 hari sebelum event.</li>
                                         <li>Biaya admin 10% dari total.</li>
                                         <li>Proses 3-7 hari kerja setelah disetujui.</li>
@@ -157,54 +164,50 @@
                                 </div>
 
                                 @if ($refund)
-                                    <div class="mt-4 rounded-2xl border border-dashed border-[#FAD6C7] bg-white/80 px-4 py-3 text-sm text-[#6F4F4F]">
-                                        <p class="text-[11px] font-semibold uppercase tracking-[0.3em] text-[#C65B74]">Detail Refund</p>
-                                        <p class="mt-2 text-sm text-[#7C3A2D]">Alasan: {{ $refund->reason }}</p>
-                                        <p class="text-xs text-[#9A5A46]">Diajukan: {{ optional($refund->requested_at)->translatedFormat('d F Y H:i') ?? '-' }}</p>
+                                    <div class="mt-4 rounded-xl md:rounded-2xl border border-dashed border-[#FFDEF8] bg-white/80 px-3 md:px-4 py-3 text-sm">
+                                        <p class="text-[10px] md:text-[11px] font-semibold uppercase tracking-[0.3em] text-[#FFB3E1] font-body">Detail Refund</p>
+                                        <p class="mt-2 text-sm md:text-base text-[#822021] font-body">Alasan: {{ $refund->reason }}</p>
+                                        <p class="text-xs md:text-sm text-[#B49F9A] font-body">Diajukan: {{ optional($refund->requested_at)->translatedFormat('d F Y H:i') ?? '-' }}</p>
                                     </div>
                                 @else
-                                    @can('requestRefund', $registration)
-                                        <a href="{{ route('registrations.refund.create', $registration) }}" class="mt-4 inline-flex items-center gap-2 rounded-full bg-[#822021] px-5 py-3 text-sm font-semibold text-[#FAF8F1] shadow-md shadow-[#B49F9A]/30 transition hover:-translate-y-0.5 hover:bg-[#822021]/70">
-                                            Ajukan Refund
-                                        </a>
-                                    @else
-                                        <p class="mt-4 text-sm font-semibold text-[#C65B74]">Refund tersedia setelah pembayaran terverifikasi.</p>
-                                    @endcan
+                                    @cannot('requestRefund', $registration)
+                                        <p class="mt-4 text-sm font-semibold text-[#822021] font-body">Refund tersedia setelah pembayaran terverifikasi.</p>
+                                    @endcannot
                                 @endif
                             </div>
                         </aside>
                     </div>
                 </div>
             @else
-                <div id="tiket" class="grid gap-8 lg:grid-cols-[minmax(0,2fr),minmax(0,1fr)]">
-                    <div class="rounded-[32px] border border-[#FAD6C7] bg-white/95 p-8 shadow-xl shadow-[#FAD6C7]/40 backdrop-blur">
-                        <div class="flex flex-wrap items-center justify-between gap-4">
-                            <div>
-                                <p class="text-sm font-semibold uppercase tracking-[0.3em] text-[#C65B74]">Step Pendaftaran</p>
-                                <h1 class="mt-2 text-2xl font-semibold text-[#2C1E1E]">
+                <div id="tiket" class="grid gap-4 md:gap-8 lg:grid-cols-[minmax(0,2fr),minmax(0,1fr)]">
+                    <div class="rounded-2xl md:rounded-[32px] border border-[#FFDEF8] bg-white/95 p-4 md:p-6 lg:p-8 shadow-xl shadow-[#FFB3E1]/20 backdrop-blur">
+                        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                            <div class="text-center md:text-left">
+                                <p class="text-xs md:text-sm font-semibold uppercase tracking-[0.3em] text-[#B49F9A] font-body">Step Pendaftaran</p>
+                                <h1 class="mt-2 text-xl md:text-2xl lg:text-3xl font-bold text-[#822021] font-title">
                                     {{ $currentStep === 3 ? 'Konfirmasi Pembayaran' : 'Informasi Pembayaran' }}
                                 </h1>
                             </div>
-                            <div class="flex items-center gap-2 text-sm font-semibold text-[#C65B74]">
-                                <span class="flex h-8 w-8 items-center justify-center rounded-full bg-[#FF8A64] text-white">{{ $currentStep }}</span>
+                            <div class="flex items-center justify-center md:justify-start gap-2 text-sm font-semibold text-[#822021] font-body">
+                                <span class="flex h-8 w-8 items-center justify-center rounded-full bg-[#FFBE8E] text-white font-bold">{{ $currentStep }}</span>
                                 <span>Langkah {{ $currentStep }} dari 3</span>
                             </div>
                         </div>
 
-                        <div class="mt-6 grid gap-3 md:grid-cols-3">
+                        <div class="mt-4 md:mt-6 grid gap-2 md:gap-3 grid-cols-1 sm:grid-cols-3">
                             @foreach ($steps as $index => $step)
                                 @php($stepNumber = $index + 1)
                                 <div @class([
-                                    'rounded-2xl px-4 py-3 text-sm font-semibold transition',
-                                    'border border-[#FAD6C7] bg-[#FFF5EF] text-[#C65B74]' => $stepNumber <= $currentStep,
-                                    'border border-dashed border-[#FAD6C7]/70 text-[#C65B74]/60' => $stepNumber > $currentStep,
+                                    'rounded-xl md:rounded-2xl px-3 md:px-4 py-2 md:py-3 text-xs md:text-sm font-semibold transition text-center font-body',
+                                    'border border-[#FFDEF8] bg-[#FCF5E6] text-[#822021]' => $stepNumber <= $currentStep,
+                                    'border border-dashed border-[#FFDEF8]/70 text-[#B49F9A]' => $stepNumber > $currentStep,
                                 ])>
                                     {{ $step['label'] }}
                                 </div>
                             @endforeach
                         </div>
 
-                        <div class="mt-8 space-y-8">
+                        <div class="mt-6 md:mt-8 space-y-6 md:space-y-8">
                             @if ($isAwaitingVerification)
                                 <x-status-card-success message="Bukti pembayaran berhasil dikirim." sub="Tim admin sedang melakukan verifikasi." />
                             @elseif ($isVerified)
@@ -216,65 +219,65 @@
                             @endif
 
                             @if (! $isAwaitingVerification && ! $isVerified && ! $isRefunded)
-                                <div class="grid gap-6 md:grid-cols-2">
-                                    <div class="space-y-5">
-                                        <div class="rounded-[28px] border border-[#FAD6C7] bg-[#FFF5EF] px-6 py-5 shadow-inner">
-                                            <p class="text-xs font-semibold uppercase tracking-[0.3em] text-[#C65B74]">Informasi Pembayaran</p>
-                                            <p class="text-xs font-semibold uppercase tracking-[0.3em] text-[#C65B74]">Metode Pembayaran</p>
-                                            <p class="mt-1 text-sm font-semibold text-[#7C3A2D]">{{ $paymentMethod }}</p>
+                                <div class="grid gap-4 md:gap-6 lg:grid-cols-2">
+                                    <div class="space-y-4 md:space-y-5">
+                                        <div class="rounded-2xl md:rounded-[28px] border border-[#FFDEF8] bg-[#FCF5E6] px-4 md:px-6 py-4 md:py-5 shadow-inner">
+                                            <p class="text-[10px] md:text-xs font-semibold uppercase tracking-[0.3em] text-[#B49F9A] font-body">Informasi Pembayaran</p>
+                                            <p class="text-[10px] md:text-xs font-semibold uppercase tracking-[0.3em] text-[#B49F9A] font-body mt-2">Metode Pembayaran</p>
+                                            <p class="mt-1 text-sm md:text-base font-bold text-[#822021] font-body">{{ $paymentMethod }}</p>
 
                                             @if ($paymentAccount)
-                                                <h2 class="mt-2 text-xl font-semibold text-[#2C1E1E]">Virtual Account {{ $paymentAccount['bank'] }}</h2>
-                                                <dl class="mt-4 space-y-3 text-sm text-[#5F4C4C]">
+                                                <h2 class="mt-2 text-lg md:text-xl font-bold text-[#822021] font-title">Virtual Account {{ $paymentAccount['bank'] }}</h2>
+                                                <dl class="mt-4 space-y-3 text-sm md:text-base">
                                                     <div>
-                                                        <dt class="text-[#A04E62]">Nomor Rekening</dt>
-                                                        <dd class="text-lg font-semibold tracking-[0.2em] text-[#2C1E1E]">{{ $paymentAccount['number'] }}</dd>
+                                                        <dt class="text-[#B49F9A] font-body">Nomor Rekening</dt>
+                                                        <dd class="text-base md:text-lg font-bold tracking-[0.2em] text-[#822021] font-title">{{ $paymentAccount['number'] }}</dd>
                                                     </div>
                                                     <div>
-                                                        <dt class="text-[#A04E62]">Atas Nama</dt>
-                                                        <dd class="font-medium">{{ $paymentAccount['name'] }}</dd>
+                                                        <dt class="text-[#B49F9A] font-body">Atas Nama</dt>
+                                                        <dd class="font-semibold text-[#822021] font-body">{{ $paymentAccount['name'] }}</dd>
                                                     </div>
                                                     @if (! empty($paymentAccount['branch']))
                                                         <div>
-                                                            <dt class="text-[#A04E62]">Cabang</dt>
-                                                            <dd>{{ $paymentAccount['branch'] }}</dd>
+                                                            <dt class="text-[#B49F9A] font-body">Cabang</dt>
+                                                            <dd class="font-body text-[#822021]">{{ $paymentAccount['branch'] }}</dd>
                                                         </div>
                                                     @endif
                                                 </dl>
                                                 @if (! empty($paymentAccount['notes']))
-                                                    <p class="mt-4 rounded-2xl border border-dashed border-[#FAD6C7] bg-white/80 px-4 py-3 text-xs text-[#A04E62]">
+                                                    <p class="mt-4 rounded-xl md:rounded-2xl border border-dashed border-[#FFDEF8] bg-white/80 px-3 md:px-4 py-3 text-xs md:text-sm text-[#B49F9A] font-body">
                                                         {{ $paymentAccount['notes'] }}
                                                     </p>
                                                 @endif
                                             @endif
                                         </div>
 
-                                        <div class="rounded-[28px] border border-dashed border-[#FAD6C7]/80 bg-white/70 px-6 py-5 text-sm text-[#6F4F4F] shadow-sm">
-                                            <h3 class="text-base font-semibold text-[#2C1E1E]">Petunjuk Pembayaran</h3>
-                                            <ul class="mt-3 space-y-2 list-disc list-inside">
-                                                <li>Transfer sebesar <span class="font-semibold text-[#C65B74]">Rp{{ number_format($transaction?->amount ?? $registration->event->price, 0, ',', '.') }}</span></li>
-                                                <li>Gunakan berita transfer “Workshop {{ $registration->event->title }}”</li>
+                                        <div class="rounded-2xl md:rounded-[28px] border border-dashed border-[#FFDEF8]/80 bg-white/70 px-4 md:px-6 py-4 md:py-5 text-sm shadow-sm">
+                                            <h3 class="text-base md:text-lg font-bold text-[#822021] font-title">Petunjuk Pembayaran</h3>
+                                            <ul class="mt-3 space-y-2 list-disc list-inside text-[#B49F9A] font-body">
+                                                <li>Transfer sebesar <span class="font-bold text-[#822021]">Rp{{ number_format($transaction?->amount ?? $registration->event->price, 0, ',', '.') }}</span></li>
+                                                <li>Gunakan berita transfer "Workshop {{ $registration->event->title }}"</li>
                                                 <li>Unggah bukti pembayaran melalui form di samping</li>
                                             </ul>
                                         </div>
                                     </div>
 
                                     <div>
-                                        <div class="rounded-[28px] border border-[#FAD6C7] bg-white/90 px-6 py-6 shadow-inner">
-                                            <form method="POST" action="{{ route('registrations.payment-proof', $registration) }}" enctype="multipart/form-data" class="space-y-6">
+                                        <div class="rounded-2xl md:rounded-[28px] border border-[#FFDEF8] bg-white/90 px-4 md:px-6 py-4 md:py-6 shadow-inner">
+                                            <form method="POST" action="{{ route('registrations.payment-proof', $registration) }}" enctype="multipart/form-data" class="space-y-4 md:space-y-6">
                                                 @csrf
                                                 <div>
-                                                    <label for="payment_proof" class="block text-sm font-semibold text-[#2C1E1E]">Unggah Bukti Pembayaran</label>
+                                                    <label for="payment_proof" class="block text-sm md:text-base font-bold text-[#822021] font-body">Unggah Bukti Pembayaran</label>
                                                     <input type="file" id="payment_proof" name="payment_proof" class="sr-only" accept="image/*,.pdf" required data-proof-input>
-                                                    <label for="payment_proof" class="mt-3 flex cursor-pointer flex-col items-center justify-center gap-4 rounded-[24px] border border-dashed border-[#FAD6C7] bg-[#FFF5EF] px-6 py-10 text-center text-sm font-semibold text-[#C65B74] shadow-inner transition hover:bg-[#FFE8DB]">
+                                                    <label for="payment_proof" class="mt-3 flex cursor-pointer flex-col items-center justify-center gap-4 rounded-2xl md:rounded-[24px] border border-dashed border-[#FFDEF8] bg-[#FCF5E6] px-4 md:px-6 py-8 md:py-10 text-center text-sm font-semibold text-[#822021] shadow-inner transition hover:bg-[#FFDEF8] font-body">
                                                         <div data-proof-empty>
-                                                            <p class="text-base">Klik untuk upload</p>
-                                                            <p class="text-xs font-normal text-[#B87A7A]">Format JPG, PNG, PDF • Maksimal 5MB</p>
+                                                            <p class="text-base md:text-lg font-bold">Klik untuk upload</p>
+                                                            <p class="text-xs md:text-sm font-normal text-[#B49F9A]">Format JPG, PNG, PDF • Maksimal 5MB</p>
                                                         </div>
-                                                        <div class="hidden w-full text-[#7C3A2D]" data-proof-preview>
-                                                            <p class="text-xs font-semibold uppercase tracking-[0.3em] text-[#C65B74]">File dipilih</p>
+                                                        <div class="hidden w-full text-[#822021]" data-proof-preview>
+                                                            <p class="text-xs font-semibold uppercase tracking-[0.3em] text-[#B49F9A]">File dipilih</p>
                                                             <p class="mt-3 break-words text-sm font-semibold" data-proof-name>-</p>
-                                                            <p class="text-xs font-medium text-[#B87A7A]" data-proof-size></p>
+                                                            <p class="text-xs font-medium text-[#B49F9A]" data-proof-size></p>
                                                         </div>
                                                     </label>
                                                     @error('payment_proof')
@@ -282,9 +285,9 @@
                                                     @enderror
                                                 </div>
 
-                                                <div class="flex flex-wrap items-center justify-between gap-3">
-                                                    <a href="{{ route('events.show', $registration->event) }}" class="inline-flex items-center justify-center rounded-full border border-[#FAD6C7] px-6 py-3 text-sm font-semibold text-[#C65B74] transition hover:bg-[#FFF0E6]">Batal</a>
-                                                    <button type="submit" data-proof-submit disabled class="inline-flex items-center justify-center gap-2 rounded-full bg-[#FF8A64] px-6 py-3 text-sm font-semibold text-white shadow-md shadow-[#FF8A64]/30 transition hover:bg-[#F9744B] disabled:bg-[#F5B19D] disabled:text-white/60 disabled:cursor-not-allowed">
+                                                <div class="flex flex-col sm:flex-row items-center justify-between gap-3">
+                                                    <a href="{{ route('events.show', $registration->event) }}" class="w-full sm:w-auto inline-flex items-center justify-center rounded-full border border-[#FFDEF8] px-4 md:px-6 py-2 md:py-3 text-sm font-semibold text-[#822021] transition hover:bg-[#FCF5E6] font-body">Batal</a>
+                                                    <button type="submit" data-proof-submit disabled class="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-full bg-[#FFBE8E] px-4 md:px-6 py-2 md:py-3 text-sm font-semibold text-white shadow-md shadow-[#FFBE8E]/30 transition hover:bg-[#822021] disabled:bg-[#B49F9A] disabled:text-white/60 disabled:cursor-not-allowed font-body">
                                                         Lanjutkan
                                                     </button>
                                                 </div>
@@ -293,93 +296,86 @@
                                     </div>
                                 </div>
                             @else
-                                <div id="konfirmasi" class="rounded-[28px] border border-[#FAD6C7] bg-white/90 px-6 py-6 shadow-inner text-sm text-[#6F4F4F]">
-                                    <h3 class="text-base font-semibold text-[#2C1E1E]">Detail Pembayaran</h3>
-                                    <dl class="mt-4 space-y-2">
+                                <div id="konfirmasi" class="rounded-2xl md:rounded-[28px] border border-[#FFDEF8] bg-white/90 px-4 md:px-6 py-4 md:py-6 shadow-inner text-sm">
+                                    <h3 class="text-base md:text-lg font-bold text-[#822021] font-title">Detail Pembayaran</h3>
+                                    <dl class="mt-4 space-y-2 font-body">
                                         <div class="flex items-center justify-between">
-                                            <dt class="text-[#A04E62]">Status</dt>
-                                            <dd class="font-semibold text-[#C65B74]">{{ $paymentStatus?->label() }}</dd>
+                                            <dt class="text-[#B49F9A]">Status</dt>
+                                            <dd class="font-bold text-[#822021]">{{ $paymentStatus?->label() }}</dd>
                                         </div>
                                         <div class="flex items-center justify-between">
-                                            <dt class="text-[#A04E62]">Nominal</dt>
-                                            <dd class="font-semibold text-[#2C1E1E]">Rp{{ number_format($transaction?->amount ?? $registration->event->price, 0, ',', '.') }}</dd>
+                                            <dt class="text-[#B49F9A]">Nominal</dt>
+                                            <dd class="font-bold text-[#822021]">Rp{{ number_format($transaction?->amount ?? $registration->event->price, 0, ',', '.') }}</dd>
                                         </div>
                                         <div class="flex items-center justify-between">
-                                            <dt class="text-[#A04E62]">Metode</dt>
-                                            <dd class="font-medium text-[#5F4C4C]">{{ $paymentMethod }}</dd>
+                                            <dt class="text-[#B49F9A]">Metode</dt>
+                                            <dd class="font-semibold text-[#822021]">{{ $paymentMethod }}</dd>
                                         </div>
                                         @if ($transaction?->paid_at)
                                             <div class="flex items-center justify-between">
-                                                <dt class="text-[#A04E62]">Dibayar</dt>
-                                                <dd>{{ $transaction->paid_at->translatedFormat('d F Y H:i') }}</dd>
+                                                <dt class="text-[#B49F9A]">Dibayar</dt>
+                                                <dd class="text-[#822021]">{{ $transaction->paid_at->translatedFormat('d F Y H:i') }}</dd>
                                             </div>
                                         @endif
                                         @if ($transaction?->payment_proof_path)
                                             <div class="flex items-center justify-between">
-                                                <dt class="text-[#A04E62]">Bukti</dt>
+                                                <dt class="text-[#B49F9A]">Bukti</dt>
                                                 <dd>
-                                                    <a href="{{ Storage::disk('public')->url($transaction->payment_proof_path) }}" target="_blank" class="inline-flex items-center gap-2 text-sm font-semibold text-[#C65B74] hover:text-[#A2475D]">
+                                                    <a href="{{ Storage::disk('public')->url($transaction->payment_proof_path) }}" target="_blank" class="inline-flex items-center gap-2 text-sm font-semibold text-[#822021] hover:text-[#B49F9A]">
                                                         Lihat Bukti
                                                     </a>
                                                 </dd>
                                             </div>
                                         @endif
                                     </dl>
-                                    <div class="mt-6 flex flex-wrap items-center gap-3">
-                                        <a href="{{ route('registrations.index') }}" class="inline-flex items-center justify-center rounded-full border border-[#FAD6C7] px-6 py-3 text-sm font-semibold text-[#C65B74]">Lihat Riwayat</a>
-                                        <a href="{{ route('events.index') }}" class="inline-flex items-center justify-center rounded-full bg-[#FF8A64] px-6 py-3 text-sm font-semibold text-white shadow-md shadow-[#FF8A64]/30">Kembali ke Events</a>
-                                    </div>
+                                    <!-- <div class="mt-6 flex flex-col sm:flex-row items-center gap-3">
+                                        <a href="{{ route('registrations.index') }}" class="w-full sm:w-auto inline-flex items-center justify-center rounded-full border border-[#FFDEF8] px-4 md:px-6 py-2 md:py-3 text-sm font-semibold text-[#822021] font-body">Lihat Riwayat</a>
+                                        <a href="{{ route('events.index') }}" class="w-full sm:w-auto inline-flex items-center justify-center rounded-full bg-[#FFBE8E] px-4 md:px-6 py-2 md:py-3 text-sm font-semibold text-white shadow-md shadow-[#FFBE8E]/30 font-body">Kembali ke Events</a>
+                                    </div> -->
                                 </div>
                             @endif
                         </div>
                     </div>
 
-                    <aside class="space-y-6">
-                        <div class="rounded-[32px] border border-[#FAD6C7] bg-white/85 p-6 shadow-lg shadow-[#FAD6C7]/40 backdrop-blur">
-                            <h2 class="text-lg font-semibold text-[#2C1E1E]">Ringkasan Event</h2>
-                            <div class="mt-4 space-y-4 text-sm text-[#5F4C4C]">
-                                <div class="rounded-2xl bg-[#FFF0E6] px-4 py-3 text-[#C65B74]">
-                                    {{ $registration->event->title }}
-                                </div>
-                                <dl class="space-y-3">
+                    <aside class="space-y-4 md:space-y-6">
+                        <div class="rounded-2xl md:rounded-[32px] border border-[#FFDEF8] bg-white/85 p-4 md:p-6 shadow-lg shadow-[#FFB3E1]/20 backdrop-blur">
+                            <p class="text-xs font-semibold uppercase tracking-[0.3em] text-[#B49F9A] font-body">Informasi Event</p>
+                            <h2 class="mt-2 text-lg md:text-xl font-bold text-[#822021] font-title">{{ $registration->event->title }}</h2>
+                            <p class="mt-1 text-sm text-[#B49F9A] font-body leading-relaxed">
+                                {{ Str::limit(strip_tags($registration->event->description ?? ''), 120) ?: 'Detail event akan diinformasikan.' }}
+                            </p>
+                            <div class="mt-4 space-y-3 md:space-y-4 text-sm">
+                                <dl class="space-y-3 font-body">
                                     <div class="flex items-start justify-between gap-3">
-                                        <dt class="text-[#A04E62]">Tanggal</dt>
-                                        <dd class="text-right">{{ $registration->event->start_at->translatedFormat('d F Y') }}</dd>
+                                        <dt class="text-[#B49F9A]">Tanggal</dt>
+                                        <dd class="text-right text-[#822021] font-semibold">{{ $registration->event->start_at->translatedFormat('d F Y') }}</dd>
                                     </div>
                                     <div class="flex items-start justify-between gap-3">
-                                        <dt class="text-[#A04E62]">Waktu</dt>
-                                        <dd class="text-right">
+                                        <dt class="text-[#B49F9A]">Waktu</dt>
+                                        <dd class="text-right text-[#822021] font-semibold">
                                             {{ $registration->event->start_at->translatedFormat('H:i') }} -
                                             {{ $registration->event->end_at->translatedFormat('H:i') }} WIB
                                         </dd>
                                     </div>
                                     <div class="flex items-start justify-between gap-3">
-                                        <dt class="text-[#A04E62]">Venue</dt>
+                                        <dt class="text-[#B49F9A]">Venue</dt>
                                         <dd class="text-right">
-                                            <span class="font-semibold text-[#2C1E1E]">{{ $registration->event->venue_name }}</span>
-                                            <span class="block text-xs text-[#5F4C4C]">{{ $registration->event->venue_address }}</span>
+                                            <span class="font-bold text-[#822021]">{{ $registration->event->venue_name }}</span>
+                                            <span class="block text-xs text-[#B49F9A]">{{ $registration->event->venue_address }}</span>
                                         </dd>
                                     </div>
                                     <div class="flex items-start justify-between gap-3">
-                                        <dt class="text-[#A04E62]">Pemateri</dt>
-                                        <dd class="text-right">{{ $registration->event->tutor_name }}</dd>
+                                        <dt class="text-[#B49F9A]">Pemateri</dt>
+                                        <dd class="text-right text-[#822021] font-semibold">{{ $registration->event->tutor_name }}</dd>
                                     </div>
                                     <div class="flex items-start justify-between gap-3">
-                                        <dt class="text-[#A04E62]">Nominal</dt>
-                                        <dd class="text-right font-semibold text-[#C65B74]">
+                                        <dt class="text-[#B49F9A]">Nominal</dt>
+                                        <dd class="text-right font-bold text-[#822021]">
                                             Rp{{ number_format($registration->event->price, 0, ',', '.') }}
                                         </dd>
                                     </div>
                                 </dl>
                             </div>
-                        </div>
-
-                        <div class="rounded-[28px] border border-dashed border-[#FAD6C7]/80 bg-white/70 p-6 text-sm text-[#5F4C4C] shadow-sm">
-                            <h3 class="text-base font-semibold text-[#2C1E1E]">Butuh Bantuan?</h3>
-                            <p class="mt-2 text-sm text-[#6F4F4F]">
-                                Hubungi admin Kreasi Hangat di
-                                <span class="font-semibold text-[#C65B74]">support@kreasihangat.com</span>
-                            </p>
                         </div>
                     </aside>
                 </div>

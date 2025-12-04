@@ -3,7 +3,7 @@
 @endphp
 
 <x-layouts.app :title="'Pengajuan Refund'">
-    <section class="bg-gradient-to-br from-[#FFE3D3] via-[#FFF3EA] to-white py-12">
+    <section class="bg-[#FCF5E6] py-12">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
             <a href="{{ route('registrations.show', $registration) }}" class="inline-flex items-center gap-2 text-sm font-semibold text-[#C65B74] hover:text-[#A2475D]">
                 <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -12,7 +12,7 @@
                 Kembali
             </a>
 
-            <div class="rounded-[28px] bg-[#FDE4F0] px-6 py-3 text-center text-sm font-semibold uppercase tracking-[0.25em] text-[#7C3A2D] shadow-inner shadow-[#F4B59E]/30">
+            <div class="rounded-[28px] bg-[#822021] px-6 py-3 text-center text-sm font-semibold uppercase tracking-[0.25em] text-white shadow-inner shadow-[#F4B59E]/30">
                 Step Pengajuan Refund
             </div>
 
@@ -92,7 +92,7 @@
                             {{ Str::limit(strip_tags($registration->event->description ?? ''), 100) ?: 'Ringkasan event akan ditampilkan di sini.' }}
                         </p>
 
-                        <div class="mt-5 rounded-2xl bg-[#FFF8F3] px-4 py-4">
+                        <div class="mt-5 rounded-2xl bg-[#FFF8F3] px-4 py-8">
                             <p class="text-[11px] font-semibold uppercase tracking-[0.3em] text-[#C65B74] text-center">Tabel Informasi</p>
                             <dl class="mt-3 space-y-2 text-sm text-[#6F4F4F]">
                                 <div class="flex justify-between">

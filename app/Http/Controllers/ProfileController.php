@@ -31,8 +31,7 @@ class ProfileController extends Controller
         $recentRegistrations = $user->registrations()
             ->with(['event', 'transaction.refund'])
             ->latest('registered_at')
-            ->take(5)
-            ->get();
+            ->paginate(5, ['*'], 'registrations');
 
         $recentRefunds = Refund::query()
             ->with(['transaction.registration.event'])
@@ -40,8 +39,7 @@ class ProfileController extends Controller
                 $query->where('user_id', $user->id);
             })
             ->latest('requested_at')
-            ->take(5)
-            ->get();
+            ->paginate(5, ['*'], 'refunds');
 
         $upcomingRegistration = $user->registrations()
             ->with(['event', 'transaction'])

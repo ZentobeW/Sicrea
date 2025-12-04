@@ -25,13 +25,7 @@
                     </p>
                     
                     <div class="flex flex-wrap gap-4">
-                        <a href="{{ asset('storage/proposal-kemitraan.pdf') }}" target="_blank" class="inline-flex items-center bg-[#822021] hover:bg-[#822021]/90 text-white px-6 py-3 rounded-lg text-base font-semibold">
-                            <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd"/>
-                            </svg>
-                            Unduh Proposal
-                        </a>
-                        <a href="https://wa.me/6281234567890" target="_blank" class="inline-flex items-center border border-gray-300 hover:border-gray-400 text-gray-700 px-6 py-3 rounded-lg text-base font-semibold">
+                        <a href="https://wa.me/6285871497367" target="_blank" class="inline-flex items-center border border-gray-300 hover:border-gray-400 text-gray-700 px-6 py-3 rounded-full text-base font-semibold bg-white">
                             <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
                                 <path fill-rule="evenodd" d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.338-3.123C2.493 12.767 2 11.434 2 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM7 9H5v2h2V9zm8 0h-2v2h2V9zM9 9h2v2H9V9z" clip-rule="evenodd"/>
                             </svg>
@@ -50,62 +44,54 @@
         </div>
     </section>
 
-    <!-- Benefits Section -->
+    <!-- Plan Section -->
     <section class="py-20 bg-[#FCF5E6]">
         <div class="container mx-auto px-4 lg:px-8">
             <div class="text-center mb-12">
-                <h2 class="text-3xl lg:text-4xl mb-4 font-bold text-[#822021]">Mengapa Bermitra dengan Kami?</h2>
+                <h2 class="text-3xl lg:text-4xl mb-4 font-bold text-[#822021]">Rencana Kegiatan Kami</h2>
                 <p class="text-lg text-gray-600 max-w-2xl mx-auto">
-                    Dapatkan berbagai keuntungan dari kolaborasi strategis dengan Kreasi Hangat
+                    Dapatkan gambaran rencana kegiatan kolaborasi strategis dengan Kreasi Hangat
                 </p>
             </div>
             
             <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                <div class="border-2 border-[#FFB3E1]/30 hover:border-[#822021] transition-colors rounded-lg bg-white">
+                <div class="border-2 border-[#FFB3E1] hover:border-[#FFB3E1] hover:shadow-lg hover:shadow-[#FFB3E1]/30 transition-all rounded-[24px] bg-white">
                     <div class="p-6">
-                        <div class="bg-gradient-to-br from-[#FCF5E6] to-[#FFDEF8] w-14 h-14 rounded-xl flex items-center justify-center mb-4 border border-[#FFB3E1] mx-auto">
-                            <svg class="w-7 h-7 text-[#FFB3E1]" fill="currentColor" viewBox="0 0 20 20">
-                                <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3z"/>
-                            </svg>
+                        <div class="w-14 h-14 rounded-xl flex items-center justify-center mb-4 mx-auto">
+                            <img src="{{ asset('images/Konsep Desain KH - 8.png') }}" alt="plan Icon" class="w-14 h-14 object-contain">
                         </div>
-                        <h3 class="mb-2 text-center font-semibold text-[#822021]">Jangkauan Luas</h3>
-                        <p class="text-sm text-gray-600 text-center">2,500+ peserta aktif dan 50+ instruktur expert di berbagai bidang kreatif</p>
+                        <h3 class="mb-2 text-center font-semibold text-[#822021]">Tempat</h3>
+                        <p class="text-sm text-gray-600 text-center">Bisa diadakan di café, mall, atau studio yang bekerja sama.</p>
                     </div>
                 </div>
                 
-                <div class="border-2 border-[#FFB3E1]/30 hover:border-[#822021] transition-colors rounded-lg bg-white">
+                <div class="border-2 border-[#FFB3E1] hover:border-[#FFB3E1] hover:shadow-lg hover:shadow-[#FFB3E1]/30 transition-all rounded-[24px] bg-white">
                     <div class="p-6">
-                        <div class="bg-gradient-to-br from-[#FCF5E6] to-[#FFDEF8] w-14 h-14 rounded-xl flex items-center justify-center mb-4 border border-[#FFB3E1] mx-auto">
-                            <svg class="w-7 h-7 text-[#FFB3E1]" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M12 7a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0V8.414l-4.293 4.293a1 1 0 01-1.414 0L8 10.414l-4.293 4.293a1 1 0 01-1.414-1.414l5-5a1 1 0 011.414 0L11 10.586 14.586 7H12z" clip-rule="evenodd"/>
-                            </svg>
+                        <div class="w-14 h-14 rounded-xl flex items-center justify-center mb-4 mx-auto">
+                            <img src="{{ asset('images/Konsep Desain KH - 8.png') }}" alt="plan Icon" class="w-14 h-14 object-contain">
                         </div>
-                        <h3 class="mb-2 text-center font-semibold text-[#822021]">Track Record Terbukti</h3>
-                        <p class="text-sm text-gray-600 text-center">150+ event terselenggara dengan tingkat kepuasan peserta 95%</p>
+                        <h3 class="mb-2 text-center font-semibold text-[#822021]">Durasi</h3>
+                        <p class="text-sm text-gray-600 text-center">2 - 3 jam per sesi</p>
                     </div>
                 </div>
                 
-                <div class="border-2 border-[#FFB3E1]/30 hover:border-[#822021] transition-colors rounded-lg bg-white">
+                <div class="border-2 border-[#FFB3E1] hover:border-[#FFB3E1] hover:shadow-lg hover:shadow-[#FFB3E1]/30 transition-all rounded-[24px] bg-white">
                     <div class="p-6">
-                        <div class="bg-gradient-to-br from-[#FCF5E6] to-[#FFDEF8] w-14 h-14 rounded-xl flex items-center justify-center mb-4 border border-[#FFB3E1] mx-auto">
-                            <svg class="w-7 h-7 text-[#FFB3E1]" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                            </svg>
+                        <div class="w-14 h-14 rounded-xl flex items-center justify-center mb-4 mx-auto">
+                            <img src="{{ asset('images/Konsep Desain KH - 8.png') }}" alt="plan Icon" class="w-14 h-14 object-contain">
                         </div>
-                        <h3 class="mb-2 text-center font-semibold text-[#822021]">Kualitas Terjamin</h3>
-                        <p class="text-sm text-gray-600 text-center">Standar penyelenggaraan workshop profesional dengan fasilitas lengkap</p>
+                        <h3 class="mb-2 text-center font-semibold text-[#822021]">Jumlah Peserta</h3>
+                        <p class="text-sm text-gray-600 text-center">10 - 20 orang per workshop (dapat disesuaikan).</p>
                     </div>
                 </div>
                 
-                <div class="border-2 border-[#FFB3E1]/30 hover:border-[#822021] transition-colors rounded-lg bg-white">
+                <div class="border-2 border-[#FFB3E1] hover:border-[#FFB3E1] hover:shadow-lg hover:shadow-[#FFB3E1]/30 transition-all rounded-[24px] bg-white">
                     <div class="p-6">
-                        <div class="bg-gradient-to-br from-[#FCF5E6] to-[#FFDEF8] w-14 h-14 rounded-xl flex items-center justify-center mb-4 border border-[#FFB3E1] mx-auto">
-                            <svg class="w-7 h-7 text-[#FFB3E1]" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                            </svg>
+                        <div class="w-14 h-14 rounded-xl flex items-center justify-center mb-4 mx-auto">
+                            <img src="{{ asset('images/Konsep Desain KH - 8.png') }}" alt="plan Icon" class="w-14 h-14 object-contain">
                         </div>
-                        <h3 class="mb-2 text-center font-semibold text-[#822021]">Kolaborasi Fleksibel</h3>
-                        <p class="text-sm text-gray-600 text-center">Berbagai model kerjasama yang dapat disesuaikan dengan kebutuhan mitra</p>
+                        <h3 class="mb-2 text-center font-semibold text-[#822021]">Peralatan dan Material </h3>
+                        <p class="text-sm text-gray-600 text-center">Disediakan oleh <em>Kreasi Hangat</em> atau dapat bekerja sama dengan mitra.</p>
                     </div>
                 </div>
             </div>
@@ -125,9 +111,9 @@
             <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
                 @forelse ($featuredPortfolios as $portfolio)
                     <div class="group cursor-pointer">
-                        <div class="relative overflow-hidden rounded-xl mb-4 aspect-[4/3]">
+                        <div class="relative overflow-hidden rounded-2xl shadow-md mb-4 aspect-[4/3] transition-transform duration-300 hover:scale-105">
                             @if ($portfolio->cover_image_url)
-                                <img src="{{ $portfolio->cover_image_url }}" alt="{{ $portfolio->title }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
+                                <img src="{{ $portfolio->cover_image_url }}" alt="{{ $portfolio->title }}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
                             @else
                                 <div class="w-full h-full bg-[#FCF5E6] flex items-center justify-center">
                                     <span class="text-gray-400">No Image</span>
@@ -155,7 +141,7 @@
             </div>
 
             <div class="text-center">
-                <a href="{{ route('portfolio.index') }}" class="inline-flex items-center bg-[#822021] hover:bg-[#822021]/90 text-white px-7 py-3 rounded-lg font-semibold">
+                <a href="{{ route('portfolio.index') }}" class="inline-flex items-center bg-[#822021] hover:bg-[#822021]/90 text-white px-7 py-3 rounded-full font-semibold">
                     Jelajahi Semua Portofolio
                 </a>
             </div>
@@ -173,9 +159,9 @@
             </div>
             
             <div class="grid lg:grid-cols-3 gap-8">
-                <div class="border-2 border-[#FFB3E1]/30 hover:shadow-xl transition-all hover:border-[#822021] rounded-lg bg-white">
+                <div class="border-2 border-[#FFB3E1] hover:border-[#FFB3E1] hover:shadow-lg hover:shadow-[#FFB3E1]/30 transition-all rounded-[24px] bg-white">
                     <div class="p-8">
-                        <div class="bg-gradient-to-br from-[#FFB3E1] to-[#FFBE8E] text-white w-10 h-10 rounded-lg flex items-center justify-center mb-4 mx-auto">
+                        <div class="bg-gradient-to-br from-[#FFB3E1] to-[#FFBE8E] text-white w-10 h-10 rounded-[24px] flex items-center justify-center mb-4 mx-auto">
                             <span class="font-semibold">1</span>
                         </div>
                         <h3 class="mb-3 text-center font-semibold text-[#822021]">Maximizing Brand Exposure</h3>
@@ -209,9 +195,9 @@
                     </div>
                 </div>
                 
-                <div class="border-2 border-[#FFB3E1]/30 hover:shadow-xl transition-all hover:border-[#822021] rounded-lg bg-white">
+                <div class="border-2 border-[#FFB3E1] hover:border-[#FFB3E1] hover:shadow-lg hover:shadow-[#FFB3E1]/30 transition-all rounded-[24px] bg-white">
                     <div class="p-8">
-                        <div class="bg-gradient-to-br from-[#FFB3E1] to-[#FFBE8E] text-white w-10 h-10 rounded-lg flex items-center justify-center mb-4 mx-auto">
+                        <div class="bg-gradient-to-br from-[#FFB3E1] to-[#FFBE8E] text-white w-10 h-10 rounded-[24px] flex items-center justify-center mb-4 mx-auto">
                             <span class="font-semibold">2</span>
                         </div>
                         <h3 class="mb-3 text-center font-semibold text-[#822021]">Empowering Expertise</h3>
@@ -233,9 +219,9 @@
                     </div>
                 </div>
                 
-                <div class="border-2 border-[#FFB3E1]/30 hover:shadow-xl transition-all hover:border-[#822021] rounded-lg bg-white">
+                <div class="border-2 border-[#FFB3E1] hover:border-[#FFB3E1] hover:shadow-lg hover:shadow-[#FFB3E1]/30 transition-all rounded-[24px] bg-white">
                     <div class="p-8">
-                        <div class="bg-gradient-to-br from-[#FFB3E1] to-[#FFBE8E] text-white w-10 h-10 rounded-lg flex items-center justify-center mb-4 mx-auto">
+                        <div class="bg-gradient-to-br from-[#FFB3E1] to-[#FFBE8E] text-white w-10 h-10 rounded-[24px] flex items-center justify-center mb-4 mx-auto">
                             <span class="font-semibold">3</span>
                         </div>
                         <h3 class="mb-3 text-center font-semibold text-[#822021]">Strategic Promotion & Media Blitz</h3>
@@ -266,37 +252,17 @@
         </div>
     </section>
 
-    <!-- CTA Section -->
-    <section class="py-20 bg-gradient-to-br from-[#FFB3E1] to-[#FFBE8E] text-white">
-        <div class="container mx-auto px-4 lg:px-8">
-            <div class="max-w-3xl mx-auto text-center">
-                <h2 class="text-3xl lg:text-4xl mb-4 font-bold">
-                    Tertarik untuk Berkolaborasi?
-                </h2>
-                <p class="text-lg text-white/90 mb-8">
-                    Hubungi kami untuk mendiskusikan peluang kerjasama yang saling menguntungkan. 
-                    Tim kami siap membantu mewujudkan kolaborasi terbaik.
-                </p>
-                <div class="flex flex-wrap gap-4 justify-center">
-                    <a href="{{ asset('storage/proposal-kemitraan.pdf') }}" target="_blank" class="inline-flex items-center bg-white text-[#822021] hover:bg-white/90 px-8 py-3 rounded-lg font-semibold">
-                        <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd"/>
-                        </svg>
-                        Unduh Proposal Partnership
-                    </a>
-                    <a href="https://wa.me/6281234567890" target="_blank" class="inline-flex items-center bg-white text-[#822021] hover:bg-white/90 px-8 py-3 rounded-lg font-semibold">
-                        <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.338-3.123C2.493 12.767 2 11.434 2 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM7 9H5v2h2V9zm8 0h-2v2h2V9zM9 9h2v2H9V9z" clip-rule="evenodd"/>
-                        </svg>
+    <section class="bg-gradient-to-r from-[#FFBE8E] to-[#FCF5E6]">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 text-center">
+            <div class="mx-auto space-y-4">
+                <h2 class="text-3xl font-['Cousine'] font-bold text-[#822021]">Tertarik untuk Berkolaborasi?</h2>
+                <p class="text-base font-['Open_Sans'] text-[#46000D] max-w-xl mx-auto">Hubungi kami untuk mendiskusikan peluang kerjasama yang saling menguntungkan. 
+                    Tim kami siap membantu mewujudkan kolaborasi terbaik.</p>
+                <div class="flex flex-wrap justify-center gap-4 pt-2">
+                    <a href="https://wa.me/6285871497367" target="_blank" class="inline-flex items-center rounded-full bg-[#FAF8F1] border border-[#FFBE8E] px-7 py-3 text-sm font-['Open_Sans'] font-semibold text-[#822021] shadow-sm shadow-[#FFBE8E]/40 transition hover:bg-white transition">
                         Hubungi Kami
-                        <svg class="w-4 h-4 ml-2" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"/>
-                        </svg>
                     </a>
                 </div>
-                <p class="text-sm text-white/80 mt-6">
-                    Email: kreasihangat@gmail.com | WhatsApp: +62 812 3456 7890
-                </p>
             </div>
         </div>
     </section>
