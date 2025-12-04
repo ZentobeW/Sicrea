@@ -69,16 +69,20 @@ class Event extends Model
             return null;
         }
 
-        $confirmed = $this->registrations()
+        $confirmedOrHeld = $this->registrations()
             ->where(function ($query) {
                 $query->where('status', RegistrationStatus::Confirmed->value)
                     ->orWhereHas('transaction', function ($transactionQuery) {
-                        $transactionQuery->where('status', PaymentStatus::Verified->value);
+                        $transactionQuery->whereIn('status', [
+                            PaymentStatus::Pending->value,
+                            PaymentStatus::AwaitingVerification->value,
+                            PaymentStatus::Verified->value,
+                        ]);
                     });
             })
             ->count();
 
-        return max($this->capacity - $confirmed, 0);
+        return max($this->capacity - $confirmedOrHeld, 0);
     }
 
     public function titleWithSchedule(): Attribute

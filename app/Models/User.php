@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use App\Notifications\QueuedResetPassword;
 
 class User extends Authenticatable implements \Illuminate\Contracts\Auth\MustVerifyEmail
 {
@@ -82,5 +83,13 @@ class User extends Authenticatable implements \Illuminate\Contracts\Auth\MustVer
     public function admin()
     {
         return $this->hasOne(\App\Models\Admin::class);
+    }
+
+    /**
+     * Send the password reset notification via queue to avoid slowing the response.
+     */
+    public function sendPasswordResetNotification($token): void
+    {
+        $this->notify(new QueuedResetPassword($token));
     }
 }

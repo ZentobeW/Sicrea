@@ -25,6 +25,7 @@
 
     $refund = $transaction?->refund;
     $showTicket = $isVerified || $isRefunded || $refund;
+    $showCountdown = ! $showTicket && ! $hasProof;
 @endphp
 
 <x-layouts.app :title="'Pembayaran Pendaftaran'">
@@ -257,6 +258,48 @@
                                                 <li>Unggah bukti pembayaran melalui form di samping</li>
                                             </ul>
                                         </div>
+
+                                        @if ($showCountdown)
+                                            <div
+                                                data-payment-timer
+                                                data-seconds="10"
+                                                data-expire-url="{{ route('registrations.expire', $registration) }}"
+                                                data-event-url="{{ route('events.show', $registration->event) }}"
+                                                class="relative overflow-hidden rounded-[28px] border border-[#FAD6C7] bg-gradient-to-br from-[#FFF3EA] via-white to-[#FFE1D0] p-5 shadow-xl shadow-[#FAD6C7]/50"
+                                            >
+                                                <div class="absolute inset-0 opacity-40 blur-3xl" style="background: radial-gradient(circle at 20% 20%, #FFB8A2 0%, transparent 35%), radial-gradient(circle at 80% 0%, #C65B74 0%, transparent 30%);"></div>
+                                                <div class="relative flex flex-col gap-4 text-[#2C1E1E]">
+                                                    <div class="flex items-center justify-between gap-3">
+                                                        <p class="text-[11px] font-semibold uppercase tracking-[0.3em] text-[#C65B74]">Konfirmasi Pembayaran</p>
+                                                        <span class="inline-flex items-center gap-2 rounded-full bg-[#2F9A55]/10 px-3 py-1 text-[12px] font-semibold text-[#2F9A55]">
+                                                            Auto reload in <span data-countdown-label class="tabular-nums">00:05</span>
+                                                        </span>
+                                                    </div>
+                                                    <div class="flex items-center gap-4 rounded-2xl bg-white/70 p-4 shadow-inner shadow-[#FAD6C7]/30 backdrop-blur">
+                                                        <div class="relative flex h-16 w-16 items-center justify-center">
+                                                            <svg class="h-16 w-16 -rotate-90" viewBox="0 0 36 36">
+                                                                <circle cx="18" cy="18" r="16" fill="none" stroke="#FAD6C7" stroke-width="4" class="opacity-60" />
+                                                                <circle cx="18" cy="18" r="16" fill="none" stroke="url(#timerGradient)" stroke-width="4" stroke-linecap="round" stroke-dasharray="100" stroke-dashoffset="0" data-countdown-progress />
+                                                                <defs>
+                                                                    <linearGradient id="timerGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                                                        <stop offset="0%" stop-color="#FF8A64"/>
+                                                                        <stop offset="100%" stop-color="#C65B74"/>
+                                                                    </linearGradient>
+                                                                </defs>
+                                                            </svg>
+                                                            <div class="absolute inset-0 flex items-center justify-center text-lg font-bold text-[#C65B74]" data-countdown-number>5</div>
+                                                        </div>
+                                                        <div class="space-y-2">
+                                                            <h4 class="text-base font-semibold text-[#2C1E1E]">Segera unggah bukti pembayaran</h4>
+                                                            <p class="text-sm text-[#6F4F4F]">Jika waktu habis, halaman otomatis dimuat ulang. Bila masih belum ada bukti pembayaran, Anda akan diarahkan kembali ke detail event.</p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="relative h-2 overflow-hidden rounded-full bg-[#FDE5D7]">
+                                                        <div class="absolute inset-y-0 left-0 w-0 rounded-full bg-gradient-to-r from-[#FF8A64] to-[#C65B74]" data-countdown-bar></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        @endif
                                     </div>
 
                                     <div>
@@ -391,6 +434,71 @@
         @push('scripts')
         <script>
         document.addEventListener('DOMContentLoaded', () => {
+            const timerEl = document.querySelector('[data-payment-timer]');
+            if (timerEl) {
+                const totalSeconds = Number(timerEl.dataset.seconds ?? 5);
+                const bar = timerEl.querySelector('[data-countdown-bar]');
+                const number = timerEl.querySelector('[data-countdown-number]');
+                const label = timerEl.querySelector('[data-countdown-label]');
+                const progress = timerEl.querySelector('[data-countdown-progress]');
+                const eventUrl = timerEl.dataset.eventUrl;
+                const expireUrl = timerEl.dataset.expireUrl;
+                const csrf = document.querySelector('meta[name="csrf-token"]')?.content;
+                let remaining = totalSeconds;
+
+                const formatTime = (value) => value.toString().padStart(2, '0');
+                const cleanupAndRedirect = () => {
+                    window.location.href = eventUrl || '/events';
+                };
+                const expireRegistration = async () => {
+                    if (!expireUrl || !csrf) {
+                        cleanupAndRedirect();
+                        return;
+                    }
+
+                    try {
+                        const response = await fetch(expireUrl, {
+                            method: 'POST',
+                            headers: {
+                                'X-CSRF-TOKEN': csrf,
+                                'Accept': 'application/json',
+                            },
+                        });
+
+                        if (!response.ok) {
+                            cleanupAndRedirect();
+                            return;
+                        }
+
+                        const data = await response.json();
+                        window.location.href = data.redirect || eventUrl || '/events';
+                    } catch (error) {
+                        cleanupAndRedirect();
+                    }
+                };
+
+                const render = () => {
+                    const percent = Math.max(0, Math.min(100, (remaining / totalSeconds) * 100));
+                    if (bar) bar.style.width = `${100 - percent}%`;
+                    if (number) number.textContent = remaining;
+                    if (label) label.textContent = `00:${formatTime(remaining)}`;
+                    if (progress) progress.style.strokeDashoffset = (100 - percent).toString();
+                };
+
+                const tick = () => {
+                    remaining -= 1;
+                    if (remaining < 0) {
+                        expireRegistration();
+                        return;
+                    }
+                    render();
+                    setTimeout(tick, 1000);
+                };
+
+                render();
+                setTimeout(tick, 1000);
+            }
+
             const input = document.querySelector('[data-proof-input]');
             const submit = document.querySelector('[data-proof-submit]');
             const emptyState = document.querySelector('[data-proof-empty]');

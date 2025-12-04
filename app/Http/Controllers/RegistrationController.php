@@ -12,6 +12,8 @@ use App\Models\Event;
 use App\Models\Registration;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth; 
 use Illuminate\Support\Facades\DB;   
 use Illuminate\Support\Facades\Log;  
@@ -44,7 +46,13 @@ class RegistrationController extends Controller
             ->latest('registered_at')
             ->first();
 
-        if ($existingRegistration) {
+        $existingIsTerminal = $existingRegistration
+            && (
+                in_array($existingRegistration->status, [RegistrationStatus::Cancelled, RegistrationStatus::Refunded], true)
+                || in_array($existingRegistration->transaction?->status, [PaymentStatus::Refunded, PaymentStatus::Rejected], true)
+            );
+
+        if ($existingRegistration && ! $existingIsTerminal) {
             return redirect()
                 ->to(route('registrations.show', $existingRegistration) . '#tiket')
                 ->with('status', 'Anda sudah terdaftar di event ini. Kami arahkan ke tiket Anda.');
@@ -163,12 +171,6 @@ class RegistrationController extends Controller
             'payment_method' => $paymentMethod,
         ])->save();
 
-        // Update status registrasi juga agar konsisten
-        $registration->update([
-            'payment_status' => PaymentStatus::AwaitingVerification,
-            'payment_proof_path' => $path
-        ]);
-
         // 2. KIRIM EMAIL (DIBUNGKUS TRY-CATCH)
         // Ini bagian kuncinya. Jika SMTP error, dia akan masuk ke 'catch' dan TIDAK bikin crash.
         try {
@@ -207,5 +209,30 @@ class RegistrationController extends Controller
         return redirect()
             ->to(route('registrations.show', $registration) . '#konfirmasi')
             ->with('status', 'Bukti pembayaran berhasil diunggah. Menunggu verifikasi admin.');
+    }
+
+    public function expire(Request $request, Registration $registration): JsonResponse
+    {
+        $this->authorize('update', $registration);
+
+        $registration->loadMissing(['transaction', 'event']);
+
+        $isPending = $registration->status === RegistrationStatus::Pending;
+        $transactionPending = $registration->transaction?->status === PaymentStatus::Pending;
+        $hasProof = filled($registration->transaction?->payment_proof_path);
+
+        if (! $isPending || ! $transactionPending || $hasProof) {
+            return response()->json(['message' => 'Tidak dapat membatalkan pendaftaran ini.'], 422);
+        }
+
+        DB::transaction(function () use ($registration) {
+            $registration->transaction?->delete();
+            $registration->delete();
+        });
+
+        return response()->json([
+            'redirect' => route('events.show', $registration->event),
+            'message' => 'Pendaftaran dibatalkan karena tidak ada bukti pembayaran.',
+        ]);
     }
 }
