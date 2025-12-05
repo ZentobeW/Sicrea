@@ -12,8 +12,8 @@
         </a>
     </x-slot>
 
-    <section class="relative overflow-hidden rounded-[36px] bg-gradient-to-r from-[#FFBDAA] via-[#FFC9BB] to-[#FFE3D2] p-8 text-[#5C2518]">
-        <div class="absolute inset-y-0 right-0 hidden w-1/2 bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.45),transparent_65%)] lg:block"></div>
+    <section class="relative overflow-hidden rounded-[36px] bg-[#FCF5E6] p-8 text-[#5C2518]">
+        <div class="absolute inset-y-0 right-0 hidden w-1/2 bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.45),transpar]ent_65%)] lg:block"></div>
         <div class="relative z-10">
             <h2 class="text-xl font-semibold">Kurasi Dokumentasi Terbaik</h2>
             <p class="mt-2 max-w-2xl text-sm text-[#7A3D2A]">Gunakan pencarian untuk menemukan portofolio tertentu atau filter berdasarkan event agar mudah mengatur konten landing page.</p>

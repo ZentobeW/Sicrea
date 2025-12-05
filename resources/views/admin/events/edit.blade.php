@@ -13,21 +13,21 @@
         <section class="rounded-[32px] bg-white/95 p-6 sm:p-8 shadow-[0_35px_90px_-45px_rgba(240,128,128,0.45)]">
             <header class="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
                 <div>
-                    <p class="text-xs font-semibold uppercase tracking-[0.35em] text-[#E77B5F]">Informasi Dasar</p>
-                    <h2 class="text-xl font-semibold text-[#4B2A22]">Detail Utama Event</h2>
-                    <p class="mt-1 text-sm text-[#A35C45]">Tentukan judul dan highlight utama agar peserta langsung memahami nilai workshop.</p>
+                    <p class="text-sm font-semibold uppercase tracking-[0.35em] text-[#822021]">Informasi Dasar</p>
+                    <h2 class="text-2xl font-semibold text-[#822021]">Detail Utama Event</h2>
+                    <p class="mt-1 text-base text-[#822021]">Tentukan judul dan highlight utama agar peserta langsung memahami nilai workshop.</p>
                 </div>
-                <span class="inline-flex items-center gap-2 rounded-full bg-[#FFF0E7] px-4 py-2 text-xs font-semibold text-[#C16A55]">Terakhir diperbarui {{ $event->updated_at->diffForHumans() }}</span>
+                <span class="inline-flex items-center gap-2 rounded-full bg-[#FCF5E6] px-4 py-2 text-sm font-semibold text-[#822021]">Terakhir diperbarui {{ $event->updated_at->diffForHumans() }}</span>
             </header>
 
             <div class="mt-6 grid gap-6">
-                <label class="space-y-2 text-sm font-semibold text-[#7A3E2F]">
+                <label class="space-y-2 text-base font-semibold text-[#822021]">
                     <span>Judul Event</span>
-                    <input type="text" name="title" value="{{ old('title', $event->title) }}" class="w-full rounded-3xl border border-[#FFD6C7] bg-[#FFF7F3] px-5 py-3 text-sm text-[#4B2A22] placeholder:text-[#D28B7B] focus:border-[#F68C7B] focus:outline-none" required>
+                    <input type="text" name="title" value="{{ old('title', $event->title) }}" class="w-full rounded-3xl border border-[#FFD6C7] bg-[#FCF5E6] px-5 py-3 text-base text-[#822021] placeholder:text-[#D28B7B] focus:border-[#822021] focus:outline-none" required>
                 </label>
-                <label class="space-y-2 text-sm font-semibold text-[#7A3E2F]">
+                <label class="space-y-2 text-base font-semibold text-[#822021]">
                     <span>Deskripsi Event</span>
-                    <textarea name="description" rows="6" class="w-full rounded-3xl border border-[#FFD6C7] bg-[#FFF7F3] px-5 py-3 text-sm text-[#4B2A22] placeholder:text-[#D28B7B] focus:border-[#F68C7B] focus:outline-none">{{ old('description', $event->description) }}</textarea>
+                    <textarea name="description" rows="6" class="w-full rounded-3xl border border-[#FFD6C7] bg-[#FCF5E6] px-5 py-3 text-base text-[#822021] placeholder:text-[#D28B7B] focus:border-[#822021] focus:outline-none">{{ old('description', $event->description) }}</textarea>
                 </label>
             </div>
         </section>
@@ -35,28 +35,28 @@
         <section class="rounded-[32px] bg-white/95 p-6 sm:p-8 shadow-[0_35px_90px_-45px_rgba(241,128,128,0.35)]">
             <header class="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
                 <div>
-                    <p class="text-xs font-semibold uppercase tracking-[0.35em] text-[#E77B5F]">Jadwal &amp; Lokasi</p>
-                    <h2 class="text-xl font-semibold text-[#4B2A22]">Atur waktu dan venue</h2>
-                    <p class="mt-1 text-sm text-[#A35C45]">Informasi ini akan tampil pada katalog peserta dan e-mail konfirmasi.</p>
+                    <p class="text-sm font-semibold uppercase tracking-[0.35em] text-[#822021]">Jadwal &amp; Lokasi</p>
+                    <h2 class="text-2xl font-semibold text-[#822021]">Atur waktu dan venue</h2>
+                    <p class="mt-1 text-base text-[#822021]">Informasi ini akan tampil pada katalog peserta dan e-mail konfirmasi.</p>
                 </div>
             </header>
 
             <div class="mt-6 grid gap-5 md:grid-cols-2">
-                <label class="space-y-2 text-sm font-semibold text-[#7A3E2F]">
+                <label class="space-y-2 text-base font-semibold text-[#822021]">
                     <span>Mulai</span>
-                    <input type="datetime-local" name="start_at" value="{{ old('start_at', $event->start_at->format('Y-m-d\TH:i')) }}" class="w-full rounded-3xl border border-[#FFD6C7] bg-[#FFF7F3] px-5 py-3 text-sm text-[#4B2A22] focus:border-[#F68C7B] focus:outline-none" required>
+                    <input type="datetime-local" name="start_at" value="{{ old('start_at', $event->start_at->format('Y-m-d\TH:i')) }}" class="w-full rounded-3xl border border-[#FFD6C7] bg-[#FCF5E6] px-5 py-3 text-base text-[#822021] focus:border-[#822021] focus:outline-none" required>
                 </label>
-                <label class="space-y-2 text-sm font-semibold text-[#7A3E2F]">
+                <label class="space-y-2 text-base font-semibold text-[#822021]">
                     <span>Selesai</span>
-                    <input type="datetime-local" name="end_at" value="{{ old('end_at', $event->end_at->format('Y-m-d\TH:i')) }}" class="w-full rounded-3xl border border-[#FFD6C7] bg-[#FFF7F3] px-5 py-3 text-sm text-[#4B2A22] focus:border-[#F68C7B] focus:outline-none" required>
+                    <input type="datetime-local" name="end_at" value="{{ old('end_at', $event->end_at->format('Y-m-d\TH:i')) }}" class="w-full rounded-3xl border border-[#FFD6C7] bg-[#FCF5E6] px-5 py-3 text-base text-[#822021] focus:border-[#822021] focus:outline-none" required>
                 </label>
-                <label class="space-y-2 text-sm font-semibold text-[#7A3E2F]">
+                <label class="space-y-2 text-base font-semibold text-[#822021]">
                     <span>Nama Venue</span>
-                    <input type="text" name="venue_name" value="{{ old('venue_name', $event->venue_name) }}" class="w-full rounded-3xl border border-[#FFD6C7] bg-[#FFF7F3] px-5 py-3 text-sm text-[#4B2A22] placeholder:text-[#D28B7B] focus:border-[#F68C7B] focus:outline-none" required>
+                    <input type="text" name="venue_name" value="{{ old('venue_name', $event->venue_name) }}" class="w-full rounded-3xl border border-[#FFD6C7] bg-[#FCF5E6] px-5 py-3 text-base text-[#822021] placeholder:text-[#D28B7B] focus:border-[#822021] focus:outline-none" required>
                 </label>
-                <label class="space-y-2 text-sm font-semibold text-[#7A3E2F]">
+                <label class="space-y-2 text-base font-semibold text-[#822021]">
                     <span>Alamat Venue / Platform</span>
-                    <input type="text" name="venue_address" value="{{ old('venue_address', $event->venue_address) }}" class="w-full rounded-3xl border border-[#FFD6C7] bg-[#FFF7F3] px-5 py-3 text-sm text-[#4B2A22] placeholder:text-[#D28B7B] focus:border-[#F68C7B] focus:outline-none" required>
+                    <input type="text" name="venue_address" value="{{ old('venue_address', $event->venue_address) }}" class="w-full rounded-3xl border border-[#FFD6C7] bg-[#FCF5E6] px-5 py-3 text-base text-[#822021] placeholder:text-[#D28B7B] focus:border-[#822021] focus:outline-none" required>
                 </label>
             </div>
         </section>
@@ -64,44 +64,44 @@
         <section class="rounded-[32px] bg-white/95 p-6 sm:p-8 shadow-[0_35px_90px_-45px_rgba(210,110,86,0.35)]">
             <header class="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
                 <div>
-                    <p class="text-xs font-semibold uppercase tracking-[0.35em] text-[#E77B5F]">Pengelolaan Event</p>
-                    <h2 class="text-xl font-semibold text-[#4B2A22]">Tutor, kuota, dan publikasi</h2>
-                    <p class="mt-1 text-sm text-[#A35C45]">Pastikan data tutor akurat dan tentukan apakah event siap tayang.</p>
+                    <p class="text-sm font-semibold uppercase tracking-[0.35em] text-[#822021]">Pengelolaan Event</p>
+                    <h2 class="text-2xl font-semibold text-[#822021]">Tutor, kuota, dan publikasi</h2>
+                    <p class="mt-1 text-base text-[#822021]">Pastikan data tutor akurat dan tentukan apakah event siap tayang.</p>
                 </div>
             </header>
 
             <div class="mt-6 grid gap-5 md:grid-cols-2">
-                <label class="space-y-2 text-sm font-semibold text-[#7A3E2F]">
+                <label class="space-y-2 text-base font-semibold text-[#822021]">
                     <span>Nama Tutor</span>
-                    <input type="text" name="tutor_name" value="{{ old('tutor_name', $event->tutor_name) }}" class="w-full rounded-3xl border border-[#FFD6C7] bg-[#FFF7F3] px-5 py-3 text-sm text-[#4B2A22] placeholder:text-[#D28B7B] focus:border-[#F68C7B] focus:outline-none" required>
+                    <input type="text" name="tutor_name" value="{{ old('tutor_name', $event->tutor_name) }}" class="w-full rounded-3xl border border-[#FFD6C7] bg-[#FCF5E6] px-5 py-3 text-base text-[#822021] placeholder:text-[#D28B7B] focus:border-[#822021] focus:outline-none" required>
                 </label>
-                <label class="space-y-2 text-sm font-semibold text-[#7A3E2F]">
+                <label class="space-y-2 text-base font-semibold text-[#822021]">
                     <span>Kuota Peserta</span>
-                    <input type="number" name="capacity" value="{{ old('capacity', $event->capacity) }}" min="1" class="w-full rounded-3xl border border-[#FFD6C7] bg-[#FFF7F3] px-5 py-3 text-sm text-[#4B2A22] focus:border-[#F68C7B] focus:outline-none">
+                    <input type="number" name="capacity" value="{{ old('capacity', $event->capacity) }}" min="1" class="w-full rounded-3xl border border-[#FFD6C7] bg-[#FCF5E6] px-5 py-3 text-base text-[#822021] focus:border-[#822021] focus:outline-none">
                 </label>
-                <label class="space-y-2 text-sm font-semibold text-[#7A3E2F]">
+                <label class="space-y-2 text-base font-semibold text-[#822021]">
                     <span>Harga Tiket</span>
-                    <div class="flex items-center rounded-3xl border border-[#FFD6C7] bg-[#FFF7F3] px-4 py-2 focus-within:border-[#F68C7B]">
-                        <span class="text-sm text-[#D28B7B]">Rp</span>
-                        <input type="number" name="price" value="{{ old('price', $event->price) }}" min="0" class="ml-2 w-full bg-transparent text-sm text-[#4B2A22] focus:outline-none" required>
+                    <div class="flex items-center rounded-3xl border border-[#FFD6C7] bg-[#FCF5E6] px-4 py-2 focus-within:border-[#822021]">
+                        <span class="text-base text-[#D28B7B]">Rp</span>
+                        <input type="number" name="price" value="{{ old('price', $event->price) }}" min="0" class="ml-2 w-full bg-transparent text-base text-[#822021] focus:outline-none" required>
                     </div>
                 </label>
-                <div class="space-y-3 rounded-3xl border border-[#FFD6C7] bg-[#FFF4EE] px-5 py-4">
-                    <p class="text-sm font-semibold text-[#7A3E2F]">Status Publikasi</p>
-                    <p class="text-xs text-[#B36A54]">Aktifkan untuk menayangkan event di katalog peserta.</p>
-                    <label class="inline-flex items-center gap-3 text-sm font-semibold text-[#C16A55]">
+                <div class="space-y-3 rounded-3xl border border-[#FFD6C7] bg-[#FCF5E6] px-5 py-4">
+                    <p class="text-base font-semibold text-[#822021]">Status Publikasi</p>
+                    <p class="text-sm text-[#822021]">Aktifkan untuk menayangkan event di katalog peserta.</p>
+                    <label class="inline-flex items-center gap-3 text-base font-semibold text-[#822021]">
                         <input type="hidden" name="publish" value="0">
-                        <input type="checkbox" name="publish" value="1" class="h-4 w-4 rounded border-[#F4A994] text-[#F68C7B] focus:ring-[#F68C7B]" {{ old('publish', $event->status->value === 'published') ? 'checked' : '' }}>
+                        <input type="checkbox" name="publish" value="1" class="h-4 w-4 rounded border-[#F4A994] text-[#822021] focus:ring-[#822021]" {{ old('publish', $event->status->value === 'published') ? 'checked' : '' }}>
                         Publikasikan setelah disimpan
                     </label>
-                    <p class="text-xs text-[#D28B7B]">Status saat ini: <strong>{{ $event->status->label() }}</strong></p>
+                    <p class="text-sm text-[#822021]">Status saat ini: <strong>{{ $event->status->label() }}</strong></p>
                 </div>
             </div>
         </section>
 
         <div class="flex flex-col gap-3 rounded-[32px] bg-white/95 p-6 shadow-[0_35px_90px_-45px_rgba(234,140,101,0.45)] sm:flex-row sm:items-center sm:justify-between">
-            <a href="{{ route('admin.events.index') }}" class="inline-flex items-center justify-center gap-2 rounded-full bg-[#FFF0E7] px-5 py-3 text-sm font-semibold text-[#822021] transition hover:bg-[#FFD6C7]">Batal</a>
-            <button class="inline-flex items-center justify-center gap-2 rounded-full bg-[#822021] px-6 py-3 text-sm font-semibold text-[#FAF8F1] shadow-lg shadow-[#822021]/30 transition hover:-translate-y-0.5 hover:bg-[#822021]/70 hover:text-[#FAF8F1]">
+            <a href="{{ route('admin.events.index') }}" class="inline-flex items-center justify-center gap-2 rounded-full bg-[#FCF5E6] px-5 py-3 text-base font-semibold text-[#822021] transition hover:bg-[#FFD6C7]">Batal</a>
+            <button class="inline-flex items-center justify-center gap-2 rounded-full bg-[#822021] px-6 py-3 text-base font-semibold text-[#FCF5E6] shadow-lg shadow-[#822021]/30 transition hover:-translate-y-0.5 hover:bg-[#822021]/70 hover:text-[#FCF5E6]">
                 Simpan Perubahan
             </button>
         </div>

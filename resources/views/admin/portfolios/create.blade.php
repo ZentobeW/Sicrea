@@ -6,7 +6,7 @@
 
 <x-layouts.admin title="Tambah Portofolio" subtitle="Abadikan momen terbaik dari workshop dan tampilkan pada galeri inspirasi." :tabs="$tabs" :back-url="route('admin.portfolios.index')">
     <div class="grid gap-8 lg:grid-cols-[2fr,1fr]">
-        <form method="POST" action="{{ route('admin.portfolios.store') }}" enctype="multipart/form-data" class="rounded-3xl border border-slate-200/60 bg-white p-6 sm:p-8 shadow-xl space-y-6">
+        <form method="POST" action="{{ route('admin.portfolios.store') }}" enctype="multipart/form-data" class="rounded-3xl border border-slate-200/60 bg-[#FCF5E6] p-6 sm:p-8 shadow-xl space-y-6">
             @csrf
             <div class="grid gap-5">
                 <div>
@@ -65,7 +65,7 @@
             </div>
         </form>
 
-        <aside class="space-y-5 rounded-3xl border border-white/60 bg-white/70 p-6 shadow-xl backdrop-blur">
+        <aside class="space-y-5 rounded-3xl border border-white/60 bg-[#FCF5E6] p-6 shadow-xl backdrop-blur">
             <div>
                 <h2 class="text-sm font-semibold text-slate-700">Standar Kualitas</h2>
                 <p class="mt-2 text-sm text-slate-500">Gunakan foto dengan pencahayaan baik, sertakan caption singkat yang menjelaskan highlight kegiatan.</p>

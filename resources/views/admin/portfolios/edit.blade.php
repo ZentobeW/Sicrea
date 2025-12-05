@@ -8,7 +8,7 @@
 
 <x-layouts.admin :title="'Edit Portofolio: ' . $portfolio->title" subtitle="Sempurnakan cerita visual agar audiens merasakan pengalaman workshop secara utuh." :tabs="$tabs" :back-url="route('admin.portfolios.index')">
     <div class="space-y-8">
-        <section class="relative overflow-hidden rounded-[32px] bg-gradient-to-br from-[#FFE8D6] via-[#FFF5EC] to-[#FDE5F7] p-6 sm:p-8 shadow-xl">
+        <section class="relative overflow-hidden rounded-[32px] bg-[#FCF5E6] p-6 sm:p-8 shadow-xl">
             <div class="absolute inset-y-0 right-0 hidden h-full w-1/2 translate-x-1/6 rounded-[40px] bg-white/30 blur-3xl lg:block"></div>
             <div class="relative z-10 flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
                 <div class="max-w-2xl space-y-3">
@@ -47,7 +47,7 @@
             @csrf
             @method('PUT')
 
-            <div class="rounded-[32px] border border-slate-200/70 bg-white/95 p-6 sm:p-8 shadow-xl shadow-orange-100/50 space-y-6">
+            <div class="rounded-[32px] border border-slate-200/70 bg-[#FAF8F1] p-6 sm:p-8 shadow-xl shadow-orange-100/50 space-y-6">
                 <div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
                     <div>
                         <h3 class="text-lg font-semibold text-slate-900">Informasi Dasar</h3>
@@ -102,7 +102,7 @@
                 </div>
             </div>
 
-            <div class="rounded-[32px] border border-slate-200/70 bg-white/95 p-6 sm:p-8 shadow-xl shadow-orange-100/50 space-y-6" data-gallery-uploader>
+            <div class="rounded-[32px] border border-slate-200/70 bg-[#FAF8F1] p-6 sm:p-8 shadow-xl shadow-orange-100/50 space-y-6" data-gallery-uploader>
                 <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                     <div>
                         <h3 class="text-lg font-semibold text-slate-900">Dokumentasi Foto</h3>

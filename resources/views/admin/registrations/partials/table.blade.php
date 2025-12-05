@@ -1,8 +1,8 @@
 @php($list = $items)
 
 <div class="overflow-x-auto">
-    <table class="min-w-full divide-y divide-[#FAD6C7]/70 text-sm">
-        <thead class="bg-[#FFF5EF] text-xs font-semibold uppercase tracking-widest text-[#B87A7A]">
+    <table class="min-w-full divide-y divide-[#FAD6C7]/70 text-base">
+        <thead class="bg-[#FFF5EF] text-sm font-semibold uppercase tracking-widest text-[#822021]">
             <tr>
                 <th class="px-6 py-3 text-left">{{ $isRefundView ? 'ID Refund' : 'ID Daftar' }}</th>
                 <th class="px-6 py-3 text-left">Event</th>
@@ -26,31 +26,31 @@
                     @php($formData = collect($registration->form_data))
                     @php($transaction = $registration->transaction)
                 @endif
-                <tr class="transition hover:bg-[#FFF0E6]">
+                <tr class="transition hover:bg-[#FCF5E6]">
                     <td class="px-6 py-4 align-top">
-                            <div class="font-semibold text-[#2C1E1E]">
+                            <div class="font-semibold text-base text-[#822021]">
                                 #{{ str_pad($isRefundView ? $refund->id : $registration->id, 4, '0', STR_PAD_LEFT) }}
                             </div>
-                            <div class="text-xs text-[#B87A7A]">
+                            <div class="text-sm text-[#822021]">
                                 {{ $isRefundView ? optional($refund->requested_at)->translatedFormat('d M Y H:i') : optional($registration->registered_at)->translatedFormat('d M Y H:i') }}
                             </div>
                     </td>
                     <td class="px-6 py-4 align-top">
-                            <p class="font-semibold text-[#2C1E1E]">{{ $registration?->event->title }}</p>
-                            <p class="text-xs text-[#B87A7A]">{{ $registration?->event->venue_name }}</p>
-                            <p class="text-[11px] text-[#B87A7A]">Tutor: {{ $registration?->event->tutor_name }}</p>
+                            <p class="font-semibold text-base text-[#822021]">{{ $registration?->event->title }}</p>
+                            <p class="text-sm text-[#822021]">{{ $registration?->event->venue_name }}</p>
+                            <p class="text-sm text-[#822021]">Tutor: {{ $registration?->event->tutor_name }}</p>
                     </td>
                     <td class="px-6 py-4 align-top">
-                            <p class="font-semibold text-[#2C1E1E]">{{ $registration?->user->name }}</p>
-                            <p class="text-xs text-[#B87A7A]">{{ $formData->get('phone', $registration?->user->phone ?? '-') }}</p>
-                            <p class="text-[11px] text-[#B87A7A]">{{ $registration?->user->email }}</p>
+                            <p class="font-semibold text-base text-[#822021]">{{ $registration?->user->name }}</p>
+                            <p class="text-sm text-[#822021]">{{ $formData->get('phone', $registration?->user->phone ?? '-') }}</p>
+                            <p class="text-sm text-[#822021]">{{ $registration?->user->email }}</p>
                     </td>
-                    <td class="px-6 py-4 align-top text-[#2C1E1E]">
+                    <td class="px-6 py-4 align-top text-base text-[#822021]">
                             {{ $formData->get('account_number') ?? $formData->get('bank_account') ?? '-' }}
                     </td>
                     <td class="px-6 py-4 align-top">
-                            <p class="font-semibold text-[#2C1E1E]">Rp{{ number_format($transaction?->amount ?? 0, 0, ',', '.') }}</p>
-                            <p class="text-[11px] text-[#B87A7A]">
+                            <p class="font-semibold text-base text-[#822021]">Rp{{ number_format($transaction?->amount ?? 0, 0, ',', '.') }}</p>
+                            <p class="text-sm text-[#822021]">
                                 {{ $isRefundView
                                     ? optional($refund->requested_at)->translatedFormat('d M Y H:i')
                                     : $registration?->event->start_at->translatedFormat('d M Y') }}
@@ -125,7 +125,7 @@
                 </tr>
             @empty
                 <tr>
-                    <td colspan="7" class="px-6 py-8 text-center text-sm text-[#B87A7A]">
+                    <td colspan="7" class="px-6 py-8 text-center text-base text-[#822021]">
                         Tidak ada data pada filter saat ini.
                     </td>
                 </tr>
@@ -134,7 +134,7 @@
     </table>
 </div>
 
-<div class="border-t border-[#FAD6C7]/70 bg-[#FFF5EF] px-6 py-4 text-sm text-[#6F4F4F] flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+<div class="border-t border-[#FAD6C7]/70 bg-[#FAF8F1] px-6 py-4 text-base text-[#822021] flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
     <div>
         @if ($list->count())
             Menampilkan {{ $list->firstItem() }}–{{ $list->lastItem() }} dari {{ $list->total() }} data
