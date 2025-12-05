@@ -96,31 +96,13 @@
                             @endif
                     </td>
                     <td class="px-6 py-4 align-top text-right">
-                        @if ($isRefundView)
-                            <div class="inline-flex items-center gap-2">
-                                <form method="POST" action="{{ route('admin.refunds.approve', $refund) }}">
-                                    @csrf
-                                    <button class="inline-flex items-center gap-2 rounded-full bg-[#E4F5E9] px-3 py-1 text-xs font-semibold text-[#2F9A55] transition hover:bg-[#d4efdf]">
-                                        <x-heroicon-o-check class="h-4 w-4" />
-                                        Setujui
-                                    </button>
-                                </form>
-                                <form method="POST" action="{{ route('admin.refunds.reject', $refund) }}">
-                                    @csrf
-                                    <button class="inline-flex items-center gap-2 rounded-full bg-[#FDE1E7] px-3 py-1 text-xs font-semibold text-[#BA1B1D] transition hover:bg-[#f7cdd7]">
-                                        <x-heroicon-o-x-mark class="h-4 w-4" />
-                                        Tolak
-                                    </button>
-                                </form>
-                            </div>
-                        @else
-                            <div class="inline-flex items-center justify-end gap-2">
-                                <a href="{{ route('admin.registrations.show', $registration) }}" class="inline-flex h-9 w-9 items-center justify-center rounded-full bg-[#822021] text-[#FAF8F1] shadow-inner transition hover:-translate-y-0.5 hover:bg-[#822021]/70" title="Detail transaksi">
-                                    <span class="sr-only">Detail</span>
-                                    <x-heroicon-o-eye class="h-5 w-5" />
-                                </a>
-                            </div>
-                        @endif
+                        {{-- PERBAIKAN: Menyamakan tombol aksi menjadi "Lihat Detail" untuk semua tampilan --}}
+                        <div class="inline-flex items-center justify-end gap-2">
+                            <a href="{{ route('admin.registrations.show', $registration) }}" class="inline-flex h-9 w-9 items-center justify-center rounded-full bg-[#822021] text-[#FAF8F1] shadow-inner transition hover:-translate-y-0.5 hover:bg-[#822021]/70" title="Lihat Detail & Proses">
+                                <span class="sr-only">Detail</span>
+                                <x-heroicon-o-eye class="h-5 w-5" />
+                            </a>
+                        </div>
                     </td>
                 </tr>
             @empty

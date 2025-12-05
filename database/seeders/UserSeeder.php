@@ -32,7 +32,7 @@ class UserSeeder extends Seeder
             'province' => 'East Java',
             'city' => 'Surabaya',
             'address' => 'Jl. Test No. 1',
-            'is_admin' => false,
+            'is_admin' => true,
             'password' => Hash::make('password'),
         ]);
     }

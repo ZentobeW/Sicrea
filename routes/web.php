@@ -103,6 +103,8 @@ Route::middleware(['auth', 'verified.email'])->group(function () {
     Route::get('/registrations/{registration}', [RegistrationController::class, 'show'])->name('registrations.show');
     Route::post('/registrations/{registration}/payment-proof', [RegistrationController::class, 'uploadProof'])
         ->name('registrations.payment-proof');
+    Route::post('/registrations/{registration}/expire', [RegistrationController::class, 'expire'])
+        ->name('registrations.expire');
 
     Route::get('/registrations/{registration}/refund', [RefundController::class, 'create'])
         ->name('registrations.refund.create');
@@ -172,11 +174,20 @@ Route::middleware(['auth', 'verified.email', 'can:access-admin'])
 //    return "Email test berhasil dikirim ke {$to}!";
 //});
 
-Route::get('/test-brevo', function () {
-    Mail::raw('Test email from Brevo SMTP (Laravel)', function ($msg) {
-        $msg->to('yourrecipient@example.com')
-            ->subject('Brevo SMTP Testing');
+Route::get('/test-email', function (Request $request) {
+    $recipient = $request->string('to')->value()
+        ?: config('mail.test_recipient')
+        ?: config('mail.admin_address')
+        ?: config('mail.from.address');
+
+    if (! $recipient) {
+        return 'Set MAIL_TEST_RECIPIENT di .env atau tambahkan parameter ?to=email@domain.test';
+    }
+
+    Mail::raw('Test email via SMTP (Laravel)', function ($msg) use ($recipient) {
+        $msg->to($recipient)
+            ->subject('SMTP Testing');
     });
 
-    return 'Email sent!';
+    return "Email test terkirim ke {$recipient}!";
 });
