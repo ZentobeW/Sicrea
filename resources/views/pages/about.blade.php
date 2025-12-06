@@ -1,6 +1,136 @@
 <x-layouts.app :title="'About Us'">
+    <style>
+    /* --- Contact Button Styles --- */
+        .contact-btn {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            text-decoration: none;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+            padding: 0.8em 1.5em;
+            border-radius: 1em;
+            background: #FFFFFF;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease-in;
+            cursor: pointer;
+            width: 100%;
+            max-width: 400px;
+            margin: 0 auto;
+            height: 80px;
+            border: 2px solid transparent;
+        }
+
+        .contact-btn .btn-text {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: center;
+            text-align: left;
+            transition: all 0.3s ease-in-out;
+            opacity: 1;
+            transform: translateX(0);
+            z-index: 2; /* Pastikan text di atas background */
+        }
+
+        .contact-btn .btn-label {
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 2px;
+            color: var(--text-color);
+        }
+
+        .contact-btn .btn-value {
+            font-size: 1rem;
+            font-weight: 500;
+            color: #555;
+        }
+
+        /* --- Style Gambar Logo (IMG) --- */
+        .contact-btn .btn-icon {
+            height: 38px; /* Ukuran Logo */
+            width: 38px;
+            object-fit: contain;
+            position: absolute;
+            right: 24px;
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            z-index: 2; /* Pastikan logo di atas background */
+        }
+
+        /* --- Brand Colors --- */
+        .contact-btn.whatsapp {
+            --text-color: #25D366;
+        }
+
+        .contact-btn.email {
+            --text-color: #EA4335;
+        }
+
+        /* --- Hover Animations --- */
+        
+        /* 1. Text menghilang ke kiri */
+        .contact-btn:hover .btn-text {
+            opacity: 0;
+            transform: translateX(-30px);
+        }
+        
+        /* 2. Logo bergerak ke tengah & JADI PUTIH */
+        .contact-btn:hover .btn-icon {
+            right: 50%;
+            transform: translateX(50%) scale(1.4); /* Perbesar sedikit */
+            
+            /* MAGIC TRICK: Ubah logo jadi putih solid saat hover */
+            /* filter: brightness(0) invert(1);  */
+        }
+
+        /* 3. Liquid Background Effect */
+        .contact-btn:before {
+            content: "";
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%) scaleY(1) scaleX(1.25);
+            top: 100%;
+            width: 140%;
+            height: 180%;
+            background-color: rgba(0, 0, 0, 0.05);
+            border-radius: 50%;
+            display: block;
+            transition: all 0.5s 0.1s cubic-bezier(0.55, 0, 0.1, 1);
+            z-index: 0;
+        }
+
+        .contact-btn:after {
+            content: "";
+            position: absolute;
+            left: 55%;
+            transform: translateX(-50%) scaleY(1) scaleX(1.45);
+            top: 180%;
+            width: 160%;
+            height: 190%;
+            background-color: var(--hover-color);
+            border-radius: 50%;
+            display: block;
+            transition: all 0.5s 0.1s cubic-bezier(0.55, 0, 0.1, 1);
+            z-index: 0;
+        }
+
+        .contact-btn:hover:before {
+            top: -35%;
+            background-color: var(--hover-color);
+            transform: translateX(-50%) scaleY(1.3) scaleX(0.8);
+        }
+
+        .contact-btn:hover:after {
+            top: -45%;
+            background-color: var(--hover-color);
+            transform: translateX(-50%) scaleY(1.3) scaleX(0.8);
+        }
+    </style>
     <!-- Hero Section -->
-    <section class="py-20 bg-[#FCF5E6] relative">
+    <section class="py-20 bg-[#FFDEF8] relative">
         <div class="container mx-auto px-4 lg:px-8">
             <div class="max-w-4xl mx-auto text-center">
                 <h1 class="text-4xl lg:text-5xl mb-6 font-bold text-[#822021]">Who Is Kreasi Hangat?</h1>
@@ -19,32 +149,46 @@
     <!-- Mission & Vision -->
     <section class="py-20 bg-[#FCF5E6]">
         <div class="container mx-auto px-4 lg:px-8">
-            <div class="interactive-grid grid md:grid-cols-2 gap-8 max-w-6xl mx-auto">
-                <!-- Visi Card -->
-                <div class="interactive-card bg-white rounded-2xl p-8 shadow-sm border border-gray-100">
+            
+            <div class="interactive-grid grid grid-cols-1 md:grid-cols-3 gap-8 max-w-7xl mx-auto">
+                
+                <div class="interactive-card bg-white rounded-2xl p-8 border-2 border-[#FFB3E1] hover:border-[#FFB3E1] hover:shadow-lg hover:shadow-[#FFB3E1]/30 h-full flex flex-col transition-all duration-300">
                     <div class="flex items-center gap-4 mb-6">
                         <img src="{{ asset('images/Konsep Desain KH - 8.png') }}" alt="Visi Icon" class="w-16 h-16 object-contain">
                         <h2 class="text-2xl font-bold text-[#822021]">Visi Kami</h2>
                     </div>
-                    <p class="text-gray-600 leading-relaxed">
+                    <p class="text-gray-600 leading-relaxed flex-grow">
                         Menjadi komunitas kreatif dan inklusif yang memberikan ruang bagi semua individu untuk berekspresi, belajar, dan berkembang melalui berbagai kegiatan seni dan workshop.
                     </p>
                 </div>
 
-                <!-- Misi Card -->
-                <div class="interactive-card bg-white rounded-2xl p-8 shadow-sm border border-gray-100">
+                <div class="interactive-card bg-white rounded-2xl p-8 border-2 border-[#FFB3E1] hover:border-[#FFB3E1] hover:shadow-lg hover:shadow-[#FFB3E1]/30 h-full flex flex-col transition-all duration-300">
                     <div class="flex items-center gap-4 mb-6">
                         <img src="{{ asset('images/Konsep Desain KH - 8.png') }}" alt="Misi Icon" class="w-16 h-16 object-contain">
                         <h2 class="text-2xl font-bold text-[#822021]">Misi Kami</h2>
                     </div>
-                    <ul class="list-disc pl-5 text-gray-600 leading-relaxed space-y-2">
-                        <li>Menghadirkan <em>workshop</em> kreatif yang inspiratif dan edukatif bagi berbagai kalangan.</li>
-                        <li>Membangun komunitas yang mendukung pengembangan keterampilan seni dan kreativitas.</li>
-                        <li>Berkolaborasi dengan berbagai pihak untuk menciptakan acara yang bermanfaat dan menarik.</li>
-                        <li>Memberikan nilai tambah bagi mitra melalui promosi dan <em>engagement</em> komunitas.</li>
-                        <li>Mengembangkan program-program inovatif yang dapat diakses oleh lebih banyak orang.</li>
+                    <ul class="list-disc pl-5 text-gray-600 leading-relaxed space-y-2 flex-grow">
+                        <li>Menghadirkan <em>workshop</em> kreatif yang inspiratif dan edukatif.</li>
+                        <li>Membangun komunitas yang mendukung pengembangan keterampilan seni.</li>
+                        <li>Berkolaborasi dengan berbagai pihak untuk acara bermanfaat.</li>
+                        <li>Memberikan nilai tambah bagi mitra melalui promosi.</li>
+                        <li>Mengembangkan program inovatif yang inklusif.</li>
                     </ul>
                 </div>
+
+                <div class="interactive-card bg-white rounded-2xl p-8 border-2 border-[#FFB3E1] hover:border-[#FFB3E1] hover:shadow-lg hover:shadow-[#FFB3E1]/30 h-full flex flex-col transition-all duration-300">
+                    <div class="flex items-center gap-4 mb-6">
+                        <img src="{{ asset('images/Konsep Desain KH - 8.png') }}" alt="Tujuan Icon" class="w-16 h-16 object-contain">
+                        <h2 class="text-2xl font-bold text-[#822021]">Tujuan Kami</h2>
+                    </div>
+                    <ul class="list-disc pl-5 text-gray-600 leading-relaxed space-y-2 flex-grow">
+                        <li>Meningkatkan minat dan keterampilan seni masyarakat.</li>
+                        <li>Menyediakan pengalaman workshop yang edukatif & fun.</li>
+                        <li>Membantu mitra mendapatkan exposure dan pelanggan baru.</li>
+                        <li>Membangun komunitas kreatif yang aktif dan produktif.</li>
+                    </ul>
+                </div>
+
             </div>
         </div>
     </section>
@@ -65,7 +209,7 @@
 
         @media (prefers-reduced-motion: reduce){ .value-card, .interactive-card{ transition: none; } }
     </style>
-    <section class="py-20 bg-white">
+    <section class="py-20 bg-[#FFDEF8]">
         <div class="container mx-auto px-4 lg:px-8">
             <div class="text-center mb-12">
                 <h2 class="text-3xl lg:text-4xl mb-4 font-bold text-[#822021]">Our Values</h2>
@@ -76,7 +220,7 @@
             <div class="values-grid grid sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
                 <div class="value-card bg-white border border-[#FFB3E1]/70 rounded-2xl p-6 text-center hover:shadow-lg">
                     <div class="w-16 h-16 bg-[#FCF5E6] rounded-full flex items-center justify-center mx-auto mb-4">
-                        <svg class="w-8 h-8 text-[#FFB3E1]" fill="currentColor" viewBox="0 0 20 20">
+                        <svg class="w-8 h-8 text-[#820221]" fill="currentColor" viewBox="0 0 20 20">
                             <path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clip-rule="evenodd"/>
                         </svg>
                     </div>
@@ -87,7 +231,7 @@
                 </div>
                 <div class="value-card bg-white border border-[#FFB3E1]/70 rounded-2xl p-6 text-center hover:shadow-lg">
                     <div class="w-16 h-16 bg-[#FCF5E6] rounded-full flex items-center justify-center mx-auto mb-4">
-                        <svg class="w-8 h-8 text-[#FFB3E1]" fill="currentColor" viewBox="0 0 20 20">
+                        <svg class="w-8 h-8 text-[#820221]" fill="currentColor" viewBox="0 0 20 20">
                             <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"/>
                         </svg>
                     </div>
@@ -98,7 +242,7 @@
                 </div>
                 <div class="value-card bg-white border border-[#FFB3E1]/70 rounded-2xl p-6 text-center hover:shadow-lg">
                     <div class="w-16 h-16 bg-[#FCF5E6] rounded-full flex items-center justify-center mx-auto mb-4">
-                        <svg class="w-8 h-8 text-[#FFB3E1]" fill="currentColor" viewBox="0 0 20 20">
+                        <svg class="w-8 h-8 text-[#820221]" fill="currentColor" viewBox="0 0 20 20">
                             <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3z"/>
                         </svg>
                     </div>
@@ -109,7 +253,7 @@
                 </div>
                 <div class="value-card bg-white border border-[#FFB3E1]/70 rounded-2xl p-6 text-center hover:shadow-lg">
                     <div class="w-16 h-16 bg-[#FCF5E6] rounded-full flex items-center justify-center mx-auto mb-4">
-                        <svg class="w-8 h-8 text-[#FFB3E1]" fill="currentColor" viewBox="0 0 20 20">
+                        <svg class="w-8 h-8 text-[#820221]" fill="currentColor" viewBox="0 0 20 20">
                             <path fill-rule="evenodd" d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V4a2 2 0 00-2-2H6zm1 2a1 1 0 000 2h6a1 1 0 100-2H7zm6 7a1 1 0 011 1v3a1 1 0 11-2 0v-3a1 1 0 011-1zm-3 3a1 1 0 100 2h.01a1 1 0 100-2H10zm-4 1a1 1 0 011-1h.01a1 1 0 110 2H7a1 1 0 01-1-1zm1-4a1 1 0 100 2h.01a1 1 0 100-2H7zm2 0a1 1 0 100 2h.01a1 1 0 100-2H9zm2 0a1 1 0 100 2h.01a1 1 0 100-2H11z" clip-rule="evenodd"/>
                         </svg>
                     </div>
@@ -120,10 +264,10 @@
                 </div>
             </div>
         </div>
-    </section>
+    </section> -->
 
     <!-- Team Section -->
-    <section class="py-20 bg-[#FCF5E6]">
+    <section class="py-20 bg-white">
         <div class="container mx-auto px-4 lg:px-8">
             <div class="text-center mb-12">
                 <h2 class="text-3xl lg:text-4xl mb-4 font-bold text-[#822021]">Our Teams</h2>
@@ -240,12 +384,16 @@
                         <p class="text-sm text-gray-500">Tim Tutor</p>
                     </div>
                 </div>
-
-                <button class="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white text-[#822021] p-3 rounded-full shadow-lg border border-[#FFB3E1]">
-                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
-                        <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"/>
-                    </svg>
-                </button>
+                
+                <!-- Dot Indicators -->
+                <div class="flex justify-center gap-2 mt-4">
+                    <div class="carousel-dot w-2 h-2 rounded-full bg-[#822021] transition-colors duration-300" data-index="0"></div>
+                    <div class="carousel-dot w-2 h-2 rounded-full bg-gray-300 transition-colors duration-300" data-index="1"></div>
+                    <div class="carousel-dot w-2 h-2 rounded-full bg-gray-300 transition-colors duration-300" data-index="2"></div>
+                    <div class="carousel-dot w-2 h-2 rounded-full bg-gray-300 transition-colors duration-300" data-index="3"></div>
+                    <div class="carousel-dot w-2 h-2 rounded-full bg-gray-300 transition-colors duration-300" data-index="4"></div>
+                    <div class="carousel-dot w-2 h-2 rounded-full bg-gray-300 transition-colors duration-300" data-index="5"></div>
+                </div>
             </div>
         </div>
     </section>
@@ -259,39 +407,62 @@
                     Punya pertanyaan atau ingin tahu lebih lanjut? Kami siap membantumu.
                 </p>
 
-                <div class="grid sm:grid-cols-2 gap-6">
-                    <!-- <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20">
-                        <svg class="w-8 h-8 mx-auto mb-3" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"/>
-                        </svg>
-                        <h4 class="mb-2 font-semibold">Alamat</h4>
-                        <p class="text-sm text-[#822021]">
-                            Jl. Kreatif No. 123<br>Jakarta Selatan 12345
-                        </p>
-                    </div> -->
-
-                    <a href="https://wa.me/6281234567890" target="_blank" class="bg-white/30 backdrop-blur-sm rounded-2xl p-6 border border-white/20 block hover:bg-white/40 transition-colors">
-                        <svg class="w-8 h-8 mx-auto mb-3" fill="currentColor" viewBox="0 0 20 20">
-                            <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"/>
-                        </svg>
-                        <h4 class="mb-2 font-semibold text-[#822021]">WhatsApp</h4>
-                        <p class="text-sm text-[#822021]">
-                            +62 858 7149 7367
-                        </p>
+                <div class="grid sm:grid-cols-2 gap-8 max-w-4xl mx-auto">
+                    
+                    <a href="https://wa.me/6285871497367" target="_blank" class="contact-btn whatsapp">
+                        <div class="btn-text">
+                            <span class="btn-label">WhatsApp</span>
+                            <span class="btn-value">+62 858 7149 7367</span>
+                        </div>
+                        <img src="https://img.icons8.com/color/48/whatsapp--v1.png" alt="WhatsApp" class="btn-icon">
                     </a>
 
-                    <a href="mailto:kreasihangat@gmail.com" class="bg-white/30 backdrop-blur-sm rounded-2xl p-6 border border-white/20 block hover:bg-white/40 transition-colors">
-                        <svg class="w-8 h-8 mx-auto mb-3" fill="currentColor" viewBox="0 0 20 20">
-                            <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"/>
-                            <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"/>
-                        </svg>
-                        <h4 class="mb-2 font-semibold text-[#822021]">Email</h4>
-                        <p class="text-sm text-[#822021]">
-                            kreasihangat@gmail.com
-                        </p>
+                    <a href="mailto:kreasihangat@gmail.com" class="contact-btn email">
+                        <div class="btn-text">
+                            <span class="btn-label">Email</span>
+                            <span class="btn-value">kreasihangat@gmail.com</span>
+                        </div>
+                        <img src="https://img.icons8.com/color/50/gmail-new.png" alt="Gmail" class="btn-icon">
                     </a>
+
                 </div>
             </div>
         </div>
     </section>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const carousel = document.getElementById('teamCarousel');
+        const dots = document.querySelectorAll('.carousel-dot');
+        
+        if (carousel && dots.length > 0) {
+            carousel.addEventListener('scroll', function() {
+                const scrollLeft = carousel.scrollLeft;
+                const scrollWidth = carousel.scrollWidth;
+                const clientWidth = carousel.clientWidth;
+                const itemWidth = 224; 
+                
+                let currentIndex;
+                
+                // Check if at the end
+                if (scrollLeft + clientWidth >= scrollWidth - 10) {
+                    currentIndex = dots.length - 1;
+                } else {
+                    currentIndex = Math.round(scrollLeft / itemWidth);
+                    currentIndex = Math.min(currentIndex, dots.length - 1);
+                }
+                
+                dots.forEach((dot, index) => {
+                    if (index === currentIndex) {
+                        dot.classList.remove('bg-gray-300');
+                        dot.classList.add('bg-[#822021]');
+                    } else {
+                        dot.classList.remove('bg-[#822021]');
+                        dot.classList.add('bg-gray-300');
+                    }
+                });
+            });
+        }
+    });
+    </script>
 </x-layouts.app>

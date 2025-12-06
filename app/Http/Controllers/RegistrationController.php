@@ -28,7 +28,7 @@ class RegistrationController extends Controller
             ->with(['event', 'transaction'])
             ->where('user_id', auth()->id())
             ->latest('registered_at')
-            ->paginate(10);
+            ->paginate(5);
 
         return view('registrations.index', compact('registrations'));
     }
