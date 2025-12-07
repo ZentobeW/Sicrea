@@ -17,386 +17,98 @@
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
     @stack('styles')
     <style>
+        /* Import Fonts */
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Cousine:wght@400;700&family=Open+Sans:wght@400;600&display=swap');
+
         :root{
-            --primary: #822021; /* button & footer background */
-            --on-primary: #FCF5E6; /* button text & header text */
-            --header-bg: #FCF5E6; /* main header background */
-            --footer-bg: #822021; /* main footer background */
-            --font-title: 'Poppins', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue';
-            --font-subtitle: 'Poppins', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue';
-            --font-body: 'Open Sans', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto;
+            --primary: #822021;
+            --on-primary: #FCF5E6;
+            --header-bg: #FCF5E6;
+            --footer-bg: #822021;
+            --font-title: 'Poppins', sans-serif;
+            --font-subtitle: 'Poppins', sans-serif;
+            --font-body: 'Poppins', sans-serif;
         }
 
-        .btn-primary{
-            background-color: var(--primary) !important;
-            color: var(--on-primary) !important;
-            font-family: var(--font-body) !important;
-        }
+        body { font-family: var(--font-body); }
+        .site-title { font-family: var(--font-title); }
+        h2, h3, h4, .subtitle { font-family: var(--font-subtitle); }
 
-        .btn-primary:hover{
-            filter: brightness(.9);
-        }
+        .btn-primary{ background-color: var(--primary) !important; color: var(--on-primary) !important; font-family: var(--font-body) !important; }
+        .btn-primary:hover{ filter: brightness(.9); }
+        header.app-header{ background-color: var(--header-bg) !important; font-family: var(--font-body); }
+        footer.app-footer{ background-color: var(--footer-bg) !important; color: var(--on-primary) !important; }
 
-        header.app-header{
-            background-color: var(--header-bg) !important;
-            font-family: var(--font-body);
-        }
-
-        /* Title (judul) - Poppins */
-        .site-title{
-            font-family: var(--font-title);
-        }
-
-        /* Subtitles (sub judul) - Courier New */
-        h2, h3, h4, .subtitle{
-            font-family: var(--font-subtitle);
-        }
-
-        /* Body (isi) - Open Sans */
-        body{
-            font-family: var(--font-body);
-        }
-
-        footer.app-footer{
-            background-color: var(--footer-bg) !important;
-            color: var(--on-primary) !important;
-        }
         /* Navigation link styles */
         .nav-link {
-            display: inline-flex;
-            align-items: center;
-            gap: .5rem;
-            padding: .5rem 1rem; /* Sedikit diperbesar agar enak dilihat */
-            border-radius: 9999px;
-            color: #822021; /* Warna text default header */
-            font-weight: 500;
-            transition: all .3s ease; /* Transisi halus */
-            text-decoration: none;
+            display: inline-flex; align-items: center; gap: .5rem; padding: .5rem 1rem;
+            border-radius: 9999px; color: #822021; font-weight: 500;
+            transition: all .3s ease; text-decoration: none;
         }
-
-        /* Logic saat Hover: Background berubah, Text berubah, Opacity 80%, Zoom Out (Scale down) */
         .nav-link:hover {
-            background-color: #822021;
-            color: #FCF5E6;
-            opacity: 0.8; 
-            transform: scale(0.90); /* Efek Zoom Out */
+            background-color: #822021; color: #FCF5E6; opacity: 0.8; transform: scale(0.90);
         }
-
-        /* Logic saat Active (Halaman sedang dibuka) */
         .nav-link.active {
-            background-color: #822021;
-            color: #FCF5E6;
-            opacity: 1;
-            transform: scale(1); /* Tetap ukuran normal */
+            background-color: #822021; color: #FCF5E6; opacity: 1; transform: scale(1);
         }
 
-        /* Apply same styles to mobile menu anchors inside header if present */
-        header .mobile-menu a,
-        header .mobile-nav a,
-        header .mobile-links a{
-            display: inline-flex;
-            align-items: center;
-            gap: .5rem;
-            padding: .375rem .75rem;
-            border-radius: 9999px;
-            color: #9A5A46;
-            transition: background-color .22s ease, color .18s ease, transform .12s ease;
+        /* Mobile menu styles */
+        header .mobile-menu a, header .mobile-nav a, header .mobile-links a{
+            display: inline-flex; align-items: center; gap: .5rem; padding: .375rem .75rem;
+            border-radius: 9999px; color: #9A5A46; transition: background-color .22s ease, color .18s ease, transform .12s ease;
             -webkit-tap-highlight-color: transparent;
         }
-
-        header .mobile-menu a:hover,
-        header .mobile-nav a:hover,
-        header .mobile-links a:hover{
-            background-color: rgba(130,32,33,.7);
-            color: var(--on-primary);
-            transform: translateY(-2px);
+        header .mobile-menu a:hover, header .mobile-nav a:hover, header .mobile-links a:hover{
+            background-color: rgba(130,32,33,.7); color: var(--on-primary); transform: translateY(-2px);
+        }
+        header .mobile-menu a.active, header .mobile-nav a.active, header .mobile-links a.active{
+            background-color: var(--primary); color: var(--on-primary);
         }
 
-        header .mobile-menu a.active,
-        header .mobile-nav a.active,
-        header .mobile-links a.active{
-            background-color: var(--primary);
-            color: var(--on-primary);
-        }
-        /* Footer social buttons */
+        /* Footer social buttons & Animation */
         .footer-social{ display:flex; gap:.75rem; align-items:center; }
         .footer-social a.social-btn{ display:inline-flex; align-items:center; gap:.5rem; text-decoration:none; color:var(--on-primary); }
-        .footer-social .social-icon{ height:2.5rem; width:2.5rem; display:inline-flex; align-items:center; justify-content:center; border-radius:9999px; background: rgba(255,255,255,0.06); transition: background-color .18s ease, transform .12s ease; }
-        .footer-social a.social-btn:hover .social-icon{ background: rgba(130,32,33,0.7); color:var(--on-primary); transform: translateY(-2px); }
-
-        /* --- Back to Top Button Styles --- */
-        .back-to-top {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background-color: #FFDEF8; /* Default BG */
-            border: none;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2); /* Shadow halus */
-            cursor: pointer;
-            transition-duration: 0.3s;
-            overflow: hidden;
-            border: #822021 2px solid;
-            
-            /* Positioning (Agar melayang di pojok kanan bawah) */
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            z-index: 999;
-            
-            /* Hidden by default (Javascript akan mengaturnya) */
-            opacity: 0;
-            visibility: hidden;
-            transform: translateY(20px);
-        }
-
-        /* Class tambahan saat tombol muncul */
-        .back-to-top.show {
-            opacity: 1;
-            visibility: visible;
-            transform: translateY(0);
-        }
-
-        .svgIcon {
-            width: 12px;
-            transition-duration: 0.3s;
-        }
-
-        .svgIcon path {
-            fill: #822021; /* Default Icon Color */
-        }
-
-        /* Hover State */
-        .back-to-top:hover {
-            width: 140px;
-            border-radius: 50px;
-            transition-duration: 0.3s;
-            background-color: #FFDEF8; /* Hover BG */
-            align-items: center;
-        }
-
-        .back-to-top:hover .svgIcon {
-            transition-duration: 0.3s;
-            transform: translateY(-200%);
-        }
         
-        /* Ubah warna icon saat hover agar kontras */
-        .back-to-top:hover .svgIcon path {
-            fill: #822021; 
-        }
+        ul.example-2 { list-style: none; display: flex; justify-content: flex-start; align-items: center; padding: 0; margin-top: 10px; }
+        .example-2 .icon-content { margin: 0 10px 0 0; position: relative; }
+        .example-2 .icon-content .tooltip { position: absolute; top: -30px; left: 50%; transform: translateX(-50%); color: #fff; padding: 6px 10px; border-radius: 5px; opacity: 0; visibility: hidden; font-size: 14px; transition: all 0.3s ease; white-space: nowrap; pointer-events: none; }
+        .example-2 .icon-content:hover .tooltip { opacity: 1; visibility: visible; top: -45px; }
+        .example-2 .icon-content a { position: relative; overflow: hidden; display: flex; justify-content: center; align-items: center; width: 45px; height: 45px; border-radius: 50%; background-color: #FCF5E6; color: #822021; transition: all 0.3s ease-in-out; text-decoration: none; }
+        .example-2 .icon-content a:hover { box-shadow: 3px 2px 45px 0px rgba(0, 0, 0, 0.12); color: white; }
+        .example-2 .icon-content a svg { position: relative; z-index: 1; width: 24px; height: 24px; }
+        .example-2 .icon-content a .filled { position: absolute; top: auto; bottom: 0; left: 0; width: 100%; height: 0; background-color: #000; transition: all 0.3s ease-in-out; }
+        .example-2 .icon-content a:hover .filled { height: 100%; }
+        .example-2 .icon-content a[data-social="instagram"] .filled, .example-2 .icon-content a[data-social="instagram"] ~ .tooltip { background: linear-gradient(45deg, #405de6, #5b51db, #b33ab4, #c135b4, #e1306c, #fd1f1f); }
+        .example-2 .icon-content a[data-social="tiktok"] .filled, .example-2 .icon-content a[data-social="tiktok"] ~ .tooltip { background-color: #000000; }
 
-        .back-to-top::before {
-            position: absolute;
-            bottom: -20px;
-            content: "Back to Top";
-            color: #822021; /* Hover Text Color */
-            font-size: 0px;
-            font-family: var(--font-body);
-        }
+        /* Back to Top & WA Button */
+        .back-to-top { width: 50px; height: 50px; border-radius: 50%; background-color: #FFDEF8; border: #822021 2px solid; font-weight: 600; display: flex; align-items: center; justify-content: center; box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2); cursor: pointer; transition-duration: 0.3s; overflow: hidden; position: fixed; bottom: 30px; right: 30px; z-index: 999; opacity: 0; visibility: hidden; transform: translateY(20px); }
+        .back-to-top.show { opacity: 1; visibility: visible; transform: translateY(0); }
+        .svgIcon { width: 12px; transition-duration: 0.3s; }
+        .svgIcon path { fill: #822021; }
+        .back-to-top:hover { width: 140px; border-radius: 50px; background-color: #FFDEF8; }
+        .back-to-top:hover .svgIcon { transform: translateY(-200%); }
+        .back-to-top::before { position: absolute; bottom: -20px; content: "Back to Top"; color: #822021; font-size: 0px; font-family: var(--font-body); }
+        .back-to-top:hover::before { font-size: 13px; opacity: 1; bottom: unset; transition-duration: 0.3s; }
 
-        .back-to-top:hover::before {
-            font-size: 13px;
-            opacity: 1;
-            bottom: unset;
-            transition-duration: 0.3s;
-        }
+        .whatsapp-btn { display: flex; align-items: center; justify-content: flex-start; width: 45px; height: 45px; border: none; border-radius: 50%; cursor: pointer; position: fixed; bottom: 90px; right: 32px; z-index: 998; overflow: hidden; transition-duration: 0.3s; box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.199); background-color: #00d757; text-decoration: none; }
+        .sign { width: 100%; transition-duration: 0.3s; display: flex; align-items: center; justify-content: center; }
+        .sign svg { width: 25px; } .sign svg path { fill: white; }
+        .text-wa { position: absolute; right: 0%; width: 0%; opacity: 0; color: white; font-size: 1.2em; font-weight: 600; transition-duration: 0.3s; padding-right: 0; }
+        .whatsapp-btn:hover { width: 150px; border-radius: 40px; }
+        .whatsapp-btn:hover .sign { width: 30%; padding-left: 10px; }
+        .whatsapp-btn:hover .text-wa { opacity: 1; width: 70%; padding-right: 10px; }
 
-        /* --- WhatsApp Floating Button Styles --- */
-        .whatsapp-btn {
-            display: flex;
-            align-items: center;
-            justify-content: flex-start;
-            width: 45px;
-            height: 45px;
-            border: none;
-            border-radius: 50%;
-            cursor: pointer;
-            position: relative;
-            overflow: hidden;
-            transition-duration: 0.3s;
-            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.199);
-            background-color: #00d757; /* Warna Khas WA */
-            text-decoration: none; /* Hilangkan garis bawah link */
-            
-            /* Positioning (Ditaruh di atas tombol Back to Top) */
-            position: fixed;
-            bottom: 90px; /* 30px (margin) + 50px (tinggi btn top) + 10px (jarak) */
-            right: 32px; /* Disesuaikan agar lurus dengan back-to-top */
-            z-index: 998;
-        }
-
-        .sign {
-            width: 100%;
-            transition-duration: 0.3s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .sign svg {
-            width: 25px;
-        }
-
-        .sign svg path {
-            fill: white;
-        }
-
-        .text-wa {
-            position: absolute;
-            right: 0%;
-            width: 0%;
-            opacity: 0;
-            color: white;
-            font-size: 1.2em;
-            font-weight: 600;
-            transition-duration: 0.3s;
-        }
-
-        /* Hover Effect */
-        .whatsapp-btn:hover {
-            width: 150px;
-            border-radius: 40px;
-            transition-duration: 0.3s;
-        }
-
-        .whatsapp-btn:hover .sign {
-            width: 30%;
-            transition-duration: 0.3s;
-            padding-left: 10px;
-        }
-
-        .whatsapp-btn:hover .text-wa {
-            opacity: 1;
-            width: 70%;
-            transition-duration: 0.3s;
-            padding-right: 10px;
-        }
-
-        .whatsapp-btn:active {
-            transform: translate(2px, 2px);
-        }
-
-        /* --- Animated Social Media Icons Styles --- */
-        ul.example-2 {
-            list-style: none;
-            display: flex;
-            justify-content: flex-start; /* Rata kiri sesuai layout footer */
-            align-items: center;
-            padding: 0;
-            margin-top: 10px; /* Jarak dari text username */
-        }
-        
-        .example-2 .icon-content {
-            margin: 0 10px 0 0; /* Margin kanan saja agar rapi rata kiri */
-            position: relative;
-        }
-        
-        .example-2 .icon-content .tooltip {
-            position: absolute;
-            top: -30px;
-            left: 50%;
-            transform: translateX(-50%);
-            color: #fff;
-            padding: 6px 10px;
-            border-radius: 5px;
-            opacity: 0;
-            visibility: hidden;
-            font-size: 14px;
-            transition: all 0.3s ease;
-            white-space: nowrap;
-            pointer-events: none;
-        }
-        
-        .example-2 .icon-content:hover .tooltip {
-            opacity: 1;
-            visibility: visible;
-            top: -45px;
-        }
-        
-        .example-2 .icon-content a {
-            position: relative;
-            overflow: hidden;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            background-color: #FCF5E6; /* Warna Default: Krem (Tema Website) */
-            color: #822021; /* Warna Icon Default: Merah (Tema Website) */
-            transition: all 0.3s ease-in-out;
-            text-decoration: none;
-        }
-        
-        .example-2 .icon-content a:hover {
-            box-shadow: 3px 2px 45px 0px rgba(0, 0, 0, 0.12);
-        }
-        
-        .example-2 .icon-content a svg {
-            position: relative;
-            z-index: 1;
-            width: 24px;
-            height: 24px;
-        }
-        
-        .example-2 .icon-content a:hover {
-            color: white; /* Warna icon saat hover jadi putih */
-        }
-        
-        .example-2 .icon-content a .filled {
-            position: absolute;
-            top: auto;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 0;
-            background-color: #000;
-            transition: all 0.3s ease-in-out;
-        }
-        
-        .example-2 .icon-content a:hover .filled {
-            height: 100%;
-        }
-
-        /* --- Specific Hover Colors --- */
-        
-        /* Instagram (Gradient) */
-        .example-2 .icon-content a[data-social="instagram"] .filled,
-        .example-2 .icon-content a[data-social="instagram"] ~ .tooltip {
-            background: linear-gradient(
-                45deg,
-                #405de6,
-                #5b51db,
-                #b33ab4,
-                #c135b4,
-                #e1306c,
-                #fd1f1f
-            );
-        }
-
-        /* TikTok (Black) */
-        .example-2 .icon-content a[data-social="tiktok"] .filled,
-        .example-2 .icon-content a[data-social="tiktok"] ~ .tooltip {
-            background-color: #000000; 
-        }
-
-        #toast-container {
-            z-index: 9999; /* Pastikan di atas segalanya */
-        }
-
+        #toast-container { z-index: 9999; }
     </style>
 </head>
 <body @class([
     'bg-slate-50 text-slate-900 min-h-screen' => ! $isAdmin,
     'min-h-screen bg-[#FFEDE3] text-[#4B2A22]' => $isAdmin,
 ])>
+
     {{-- [START] NOTIFICATION TOAST CONTAINER --}}
     <div id="toast-container" class="fixed top-24 right-5 z-[9999] w-full max-w-sm space-y-4 pointer-events-none px-4 sm:px-0">
-        
-        {{-- 1. SUCCESS MESSAGE --}}
         @if (session('status') || session('success'))
             <div role="alert" class="toast-message pointer-events-auto bg-green-100 border-l-4 border-green-500 text-green-900 p-4 rounded-lg flex items-center shadow-lg transform transition-all duration-500 ease-out opacity-0 translate-x-full">
                 <svg stroke="currentColor" viewBox="0 0 24 24" fill="none" class="h-6 w-6 flex-shrink-0 mr-3 text-green-600" xmlns="http://www.w3.org/2000/svg">
@@ -409,7 +121,6 @@
             </div>
         @endif
 
-        {{-- 2. INFO MESSAGE --}}
         @if (session('info'))
             <div role="alert" class="toast-message pointer-events-auto bg-blue-100 border-l-4 border-blue-500 text-blue-900 p-4 rounded-lg flex items-center shadow-lg transform transition-all duration-500 ease-out opacity-0 translate-x-full">
                 <svg stroke="currentColor" viewBox="0 0 24 24" fill="none" class="h-6 w-6 flex-shrink-0 mr-3 text-blue-600" xmlns="http://www.w3.org/2000/svg">
@@ -422,7 +133,6 @@
             </div>
         @endif
 
-        {{-- 3. WARNING MESSAGE --}}
         @if (session('warning'))
             <div role="alert" class="toast-message pointer-events-auto bg-yellow-100 border-l-4 border-yellow-500 text-yellow-900 p-4 rounded-lg flex items-center shadow-lg transform transition-all duration-500 ease-out opacity-0 translate-x-full">
                 <svg stroke="currentColor" viewBox="0 0 24 24" fill="none" class="h-6 w-6 flex-shrink-0 mr-3 text-yellow-600" xmlns="http://www.w3.org/2000/svg">
@@ -435,7 +145,6 @@
             </div>
         @endif
 
-        {{-- 4. ERROR MESSAGE --}}
         @if ($errors->any() || session('error'))
             <div role="alert" class="toast-message pointer-events-auto bg-red-100 border-l-4 border-red-500 text-red-900 p-4 rounded-lg flex items-center shadow-lg transform transition-all duration-500 ease-out opacity-0 translate-x-full">
                 <svg stroke="currentColor" viewBox="0 0 24 24" fill="none" class="h-6 w-6 flex-shrink-0 mr-3 text-red-600" xmlns="http://www.w3.org/2000/svg">
@@ -452,57 +161,42 @@
     </div>
     {{-- [END] NOTIFICATION TOAST CONTAINER --}}
 
-
     @if ($isAdmin)
         {{ $slot }}
     @else
         <div class="min-h-screen flex flex-col">
+            {{-- HEADER BARU DENGAN LOGO --}}
             <header class="bg-[#FCF5E6] border-b border-[#F7C8B8]/60 sticky top-0 z-50">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
                     
-                    <a href="{{ route('home') }}" class="text-lg font-semibold text-[#822021]">
-                        {{ config('app.name', 'Sicrea') }}
+                    {{-- Logo & Brand Name --}}
+                    <a href="{{ route('home') }}" class="flex items-center gap-3 group">
+                        <img src="{{ asset('images/Logo KH.svg') }}" alt="Logo Kreasi Hangat" class="h-10 w-auto transition-transform duration-300 group-hover:scale-105">
+                        <span class="text-lg font-bold text-[#822021] tracking-wide group-hover:text-[#6a1a1b] transition-colors">
+                            Kreasi Hangat
+                        </span>
                     </a>
 
+                    {{-- Desktop Navigation --}}
                     <nav class="hidden md:flex items-center gap-4 text-sm">
-                        <a href="{{ route('home') }}" 
-                           class="nav-link {{ request()->routeIs('home') ? 'active' : '' }}">
-                           Home
-                        </a>
-                        
-                        <a href="{{ route('events.index') }}" 
-                           class="nav-link {{ request()->routeIs('events.*') ? 'active' : '' }}">
-                           Events
-                        </a>
-
-                        <a href="{{ route('portfolio.index') }}" 
-                           class="nav-link {{ request()->routeIs('portfolio.*') ? 'active' : '' }}">
-                           Portfolio
-                        </a>
-
-                        <a href="{{ route('partnership.index') }}" 
-                           class="nav-link {{ request()->routeIs('partnership.*') ? 'active' : '' }}">
-                           Partnership
-                        </a>
-
-                        <a href="{{ route('about.index') }}" 
-                           class="nav-link {{ request()->routeIs('about.*') ? 'active' : '' }}">
-                           About Us
-                        </a>
+                        <a href="{{ route('home') }}" class="nav-link {{ request()->routeIs('home') ? 'active' : '' }}">Home</a>
+                        <a href="{{ route('events.index') }}" class="nav-link {{ request()->routeIs('events.*') ? 'active' : '' }}">Events</a>
+                        <a href="{{ route('portfolio.index') }}" class="nav-link {{ request()->routeIs('portfolio.*') ? 'active' : '' }}">Portfolio</a>
+                        <a href="{{ route('partnership.index') }}" class="nav-link {{ request()->routeIs('partnership.*') ? 'active' : '' }}">Partnership</a>
+                        <a href="{{ route('about.index') }}" class="nav-link {{ request()->routeIs('about.*') ? 'active' : '' }}">About Us</a>
                     </nav>
 
+                    {{-- Auth Buttons --}}
                     <div class="flex items-center gap-3 text-sm">
                         @auth
                             <a href="{{ route('profile.show') }}" class="hidden md:inline-flex items-center rounded-full px-4 py-2 font-medium btn-primary transition transform hover:scale-95">
                                 Profil Saya
                             </a>
-
                             @can('access-admin')
                                 <a href="{{ route('admin.dashboard') }}" class="hidden md:inline-flex items-center rounded-full px-4 py-2 font-medium btn-primary transition transform hover:scale-95">
                                     Admin
                                 </a>
                             @endcan
-
                             @if (Route::has('logout'))
                                 <form method="POST" action="{{ route('logout') }}">
                                     @csrf
@@ -524,6 +218,7 @@
                             @endif
                         @endauth
                         
+                        {{-- Mobile Menu Button --}}
                         <button id="mobile-menu-button" class="md:hidden p-2 rounded-lg text-[#822021] hover:bg-[#822021]/10 transition">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
@@ -532,50 +227,50 @@
                     </div>
                 </div>
 
+                {{-- Mobile Menu Dropdown (Updated with full links) --}}
                 <div id="mobile-menu" class="md:hidden hidden bg-[#FCF5E6] border-t border-[#F7C8B8]/60 shadow-lg">
                     <div class="px-4 py-3 space-y-2">
-                        <a href="{{ route('home') }}" 
-                        class="block px-4 py-2 rounded-lg transition duration-300 text-[#822021] font-bold {{ request()->routeIs('home') ? 'bg-[#822021] text-[#FCF5E6]' : 'hover:bg-[#822021]/10'}}">
-                        Home
+                        <a href="{{ route('home') }}" class="block px-4 py-2 rounded-lg transition duration-300 text-[#822021] font-bold {{ request()->routeIs('home') ? 'bg-[#822021] text-[#FCF5E6]' : 'hover:bg-[#822021]/10'}}">
+                            Home
                         </a>
+                        <a href="{{ route('events.index') }}" class="block px-4 py-2 rounded-lg transition duration-300 text-[#822021] font-bold {{ request()->routeIs('events.*') ? 'bg-[#822021] text-[#FCF5E6]' : 'hover:bg-[#822021]/10'}}">
+                            Events
+                        </a>
+                        <a href="{{ route('portfolio.index') }}" class="block px-4 py-2 rounded-lg transition duration-300 text-[#822021] font-bold {{ request()->routeIs('portfolio.*') ? 'bg-[#822021] text-[#FCF5E6]' : 'hover:bg-[#822021]/10'}}">
+                            Portfolio
+                        </a>
+                        <a href="{{ route('partnership.index') }}" class="block px-4 py-2 rounded-lg transition duration-300 text-[#822021] font-bold {{ request()->routeIs('partnership.*') ? 'bg-[#822021] text-[#FCF5E6]' : 'hover:bg-[#822021]/10'}}">
+                            Partnership
+                        </a>
+                        <a href="{{ route('about.index') }}" class="block px-4 py-2 rounded-lg transition duration-300 text-[#822021] font-bold {{ request()->routeIs('about.*') ? 'bg-[#822021] text-[#FCF5E6]' : 'hover:bg-[#822021]/10'}}">
+                            About Us
+                        </a>
+                        
+                        {{-- Mobile Auth Links --}}
+                        <div class="border-t border-[#822021]/20 pt-2 mt-2 space-y-2">
+                            @auth
+                                <a href="{{ route('profile.show') }}" class="block px-4 py-2 rounded-lg text-[#822021] font-semibold hover:bg-[#822021]/10">Profil Saya</a>
+                                @can('access-admin')
+                                    <a href="{{ route('admin.dashboard') }}" class="block px-4 py-2 rounded-lg text-[#822021] font-semibold hover:bg-[#822021]/10">Dashboard Admin</a>
+                                @endcan
+                            @endauth
                         </div>
+                    </div>
                 </div>
             </header>
 
             <main class="flex-1">
-                <!-- @if (session('status'))
-                    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6">
-                        <div class="mb-6 rounded-xl bg-green-100 border border-green-200 text-green-800 px-4 py-3">
-                            {{ session('status') }}
-                        </div>
-                    </div>
-                @endif
-
-                @if ($errors->any() && !request()->routeIs('register'))
-                    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6">
-                        <div class="mb-6 rounded-xl bg-red-100 border border-red-200 text-red-800 px-4 py-3">
-                            <ul class="list-disc list-inside text-sm space-y-1">
-                                @foreach ($errors->all() as $error)
-                                    <li>{{ $error }}</li>
-                                @endforeach
-                            </ul>
-                        </div>
-                    </div>
-                @endif -->
-
                 {{ $slot }}
             </main>
 
             <footer class="bg-[#822021] text-[#FCF5E6] border-t border-[#FCF5E6]/20">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 grid gap-8 md:grid-cols-3">
-                    
                     <div class="space-y-3">
                         <h3 class="text-xl font-semibold font-['Poppins']">{{ config('app.name', 'Sicrea') }}</h3>
                         <p class="text-sm leading-relaxed opacity-90">
                             Platform online untuk pendaftaran workshop, event, dan kegiatan kreatif. Wujudkan potensi kreatif Anda bersama kami.
                         </p>
                     </div>
-
                     <div class="space-y-3">
                         <h3 class="text-xl font-semibold font-['Poppins']">Kontak Kami</h3>
                         <ul class="space-y-3 text-sm">
@@ -583,14 +278,12 @@
                                 <x-heroicon-o-map-pin class="h-5 w-5 mt-0.5 flex-shrink-0" />
                                 <span>Jl. Kreasi No. 123, Jakarta</span>
                             </li>
-                            
                             <li class="flex items-center gap-3">
                                 <x-heroicon-o-phone class="h-5 w-5 flex-shrink-0" />
                                 <a href="https://wa.me/6285871497367" target="_blank" class="hover:underline hover:text-white transition decoration-[#FCF5E6]">
                                     +62 858-7149-7367
                                 </a>
                             </li>
-
                             <li class="flex items-center gap-3">
                                 <x-heroicon-o-envelope class="h-5 w-5 flex-shrink-0" />
                                 <a href="mailto:kreasihangat@gmail.com" class="hover:underline hover:text-white transition decoration-[#FCF5E6]">
@@ -599,12 +292,10 @@
                             </li>
                         </ul>
                     </div>
-
                     <div class="space-y-4">
                         <div>
                             <h3 class="text-xl font-semibold font-['Poppins']">Ikuti Kami</h3>
                             <p class="text-sm opacity-90 mb-2">@kreasihangat</p>
-                            
                             <ul class="example-2">
                                 <li class="icon-content">
                                     <a data-social="instagram" aria-label="Instagram" href="https://instagram.com/kreasihangat" target="_blank">
@@ -615,7 +306,6 @@
                                     </a>
                                     <div class="tooltip">Instagram</div>
                                 </li>
-
                                 <li class="icon-content">
                                     <a data-social="tiktok" aria-label="TikTok" href="https://tiktok.com/@kreasihangat" target="_blank">
                                         <div class="filled"></div>
@@ -627,13 +317,11 @@
                                 </li>
                             </ul>
                         </div>
-
                         <p class="text-xs font-light tracking-wide opacity-80 pt-2 border-t border-[#FCF5E6]/20">
                             Dapatkan update terbaru tentang workshop dan event kami!
                         </p>
                     </div>
                 </div>
-
                 <div class="border-t border-[#FCF5E6]/10">
                     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 text-center text-sm opacity-80">
                         &copy; {{ now()->year }} {{ config('app.name', 'Kreasi Hangat') }} Kreasi Hangat. All rights reserved. Made with 💖
@@ -656,87 +344,57 @@
         </div>
     @endif
 
-
-
     @stack('scripts')
     
     <script>
-        // Mobile menu toggle
         document.addEventListener('DOMContentLoaded', function() {
             const mobileMenuButton = document.getElementById('mobile-menu-button');
             const mobileMenu = document.getElementById('mobile-menu');
-            
             if (mobileMenuButton && mobileMenu) {
                 mobileMenuButton.addEventListener('click', function() {
                     mobileMenu.classList.toggle('hidden');
                 });
             }
         });
-        // --- Back to Top Logic ---
+        
         const backToTopButton = document.querySelector('.back-to-top');
-
         window.addEventListener('scroll', () => {
-            // Jika scroll lebih dari 300px, munculkan tombol
             if (window.scrollY > 300) {
                 backToTopButton.classList.add('show');
             } else {
                 backToTopButton.classList.remove('show');
             }
         });
-
         function scrollToTop() {
-            window.scrollTo({
-                top: 0,
-                behavior: 'smooth' // Efek scroll halus
-            });
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // [START] SMOOTH TOAST NOTIFICATION SCRIPT
         document.addEventListener('DOMContentLoaded', function() {
             const toasts = document.querySelectorAll('.toast-message');
-            
             if (toasts.length > 0) {
-                // 1. ANIMASI MASUK (Slide In)
-                // Gunakan sedikit delay agar browser merender state awal (hidden) dulu
                 setTimeout(() => {
                     toasts.forEach(toast => {
-                        // Hapus class yang menyembunyikan elemen
                         toast.classList.remove('opacity-0', 'translate-x-full');
                     });
                 }, 100);
 
-                // 2. ANIMASI KELUAR (Slide Out + Collapse)
-                // Tunggu 5 detik (5000ms) sebelum mulai menghilang
                 setTimeout(() => {
                     toasts.forEach(toast => {
-                        // a. Slide ke kanan & Fade Out
                         toast.classList.add('opacity-0', 'translate-x-full');
-                        
-                        // b. Collapse Height (Agar elemen bawahnya naik smooth, tidak lompat)
-                        // Kita set max-height, margin, dan padding menjadi 0
-                        toast.style.maxHeight = toast.scrollHeight + 'px'; // Set tinggi asli dulu
-                        toast.style.overflow = 'hidden'; // Hindari konten tumpah saat mengecil
-                        
-                        // Trigger reflow (memaksa browser membaca tinggi asli sebelum di-nol-kan)
+                        toast.style.maxHeight = toast.scrollHeight + 'px'; 
+                        toast.style.overflow = 'hidden'; 
                         void toast.offsetWidth; 
-
-                        // Mulai menyusutkan elemen
                         toast.style.maxHeight = '0';
                         toast.style.marginTop = '0';
                         toast.style.marginBottom = '0';
                         toast.style.paddingTop = '0';
                         toast.style.paddingBottom = '0';
                         toast.style.border = 'none';
-                        
-                        // c. Hapus dari DOM setelah animasi CSS selesai (500ms sesuai duration-500)
-                        setTimeout(() => {
-                            toast.remove();
-                        }, 500);
+                        setTimeout(() => { toast.remove(); }, 500);
                     });
-                }, 5000); // Durasi tampil notifikasi (5 Detik)
+                }, 5000); 
             }
         });
-        // [END] SMOOTH TOAST NOTIFICATION SCRIPT
     </script>
 </body>
 </html>
