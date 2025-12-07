@@ -29,7 +29,7 @@
     </style>
 
     {{-- Main Background: FFDEF8 --}}
-    <section class="bg-[#FFDEF8] py-16 min-h-screen">
+    <section class="bg-[#FCF5E6] py-16 min-h-screen">
         <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
             
             {{-- Tombol Kembali --}}

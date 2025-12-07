@@ -22,7 +22,7 @@
     </style>
 
     {{-- Main Background: FFDEF8 --}}
-    <section class="bg-[#FFDEF8] py-16 min-h-screen flex items-center">
+    <section class="bg-[#FCF5E6] py-16 min-h-screen flex items-center">
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
             
             {{-- CARD: BG FAF8F1, Border 822021 --}}

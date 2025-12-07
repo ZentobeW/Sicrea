@@ -75,7 +75,7 @@
 
         <div class="flex-1">
             <div class="relative isolate overflow-hidden">
-                <div class="absolute inset-0 -z-10 bg-[#FFB3E1]"></div>
+                <div class="absolute inset-0 -z-10 bg-[#FFDEF8]"></div>
                 <div class="absolute right-12 top-6 -z-10 h-40 w-40 rounded-full bg-[#FFB3E1]/50 blur-2xl"></div>
                 <div class="px-6 py-10 sm:px-10 lg:px-12">
                     <div class="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
@@ -102,7 +102,7 @@
                 </div>
             </div>
 
-            <div class="relative -mt-10 pb-16 bg-[#FFB3E1] pt-10 shadow-lg shadow-[#B49F9A]/20">
+            <div class="relative -mt-10 pb-16 bg-[#FFDEF8] pt-10 shadow-lg shadow-[#B49F9A]/20">
                 <div class="px-4 sm:px-6 lg:px-12">
                     @if (session('status'))
                         <div class="mb-6 rounded-3xl bg-[#FFB3E1] border border-[#822021] shadow-[0_20px_45px_-20px_rgba(180,159,154,0.5)] px-6 py-4 text-sm font-medium text-[#822021]">

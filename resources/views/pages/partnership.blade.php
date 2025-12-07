@@ -164,7 +164,7 @@
 
     </style>
 
-    <section class="relative bg-gradient-to-br from-[#FFB3E1] via-[#FFDEF8] to-[#FAF8F1] py-20 lg:py-32">
+    <section class="relative bg-gradient-to-br from-[#FAF8F1] via-[#FCF5E6] to-[#FAF8F1] py-20 lg:py-32">
         <div class="container mx-auto px-4 lg:px-8">
             <div class="grid lg:grid-cols-2 gap-12 items-center">
                 <div>

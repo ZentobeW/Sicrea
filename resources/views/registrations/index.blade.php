@@ -10,7 +10,7 @@
     </style>
 
     {{-- Main Container with Background #FFDEF8 --}}
-    <div class="min-h-screen bg-[#FFDEF8] py-8 md:py-12">
+    <div class="min-h-screen bg-[#FCF5E6] py-8 md:py-12">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             
             {{-- Header Page --}}

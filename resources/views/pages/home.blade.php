@@ -108,77 +108,9 @@
             #modalTitle { font-size: 1.125rem !important; }
             #thumbnailContainer .w-16 { width: 2.5rem; height: 2.5rem; }
         }
-
-        /* --- New Infinite Slider CSS --- */
-        .slider {
-            width: 100%;
-            height: var(--height);
-            overflow: hidden;
-            /* Efek fade di pinggir kiri dan kanan */
-            mask-image: linear-gradient(to right, transparent, #000 5% 95%, transparent);
-        }
-
-        .slider .list {
-            display: flex;
-            width: 100%;
-            min-width: calc(var(--width) * var(--quantity));
-            position: relative;
-        }
-
-        .slider .list .item {
-            width: var(--width);
-            height: var(--height);
-            position: absolute;
-            left: 100%;
-            animation: autoRun 30s linear infinite; /* Kecepatan Medium (30s) */
-            transition: filter 0.5s;
-            animation-delay: calc(
-                (30s / var(--quantity)) * (var(--position) - 1) - 30s
-            ) !important;
-            padding: 0 10px; /* Jarak antar gambar */
-        }
-
-        /* Style Gambar di dalam Item */
-        .slider .list .item img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            border-radius: 12px;
-            border: 2px solid #822021; /* Border Merah */
-            box-shadow: 0 4px 6px rgba(130, 32, 33, 0.2);
-            transition: transform 0.3s;
-        }
-
-        @keyframes autoRun {
-            from { left: 100%; }
-            to { left: calc(var(--width) * -1); }
-        }
-
-        /* Hover Effect: Pause & Grayscale */
-        .slider:hover .item {
-            animation-play-state: paused !important;
-            filter: grayscale(1);
-        }
-
-        .slider .item:hover {
-            filter: grayscale(0);
-            z-index: 10;
-        }
-        
-        .slider .item:hover img {
-            transform: scale(1.05); /* Zoom dikit saat hover gambar spesifik */
-        }
-
-        /* Responsif untuk Mobile */
-        @media (max-width: 768px) {
-            .slider {
-                --width: 250px !important; /* Gambar lebih kecil di HP */
-                --height: 180px !important;
-            }
-        }
     </style>
 
-    <section class="relative overflow-hidden bg-[#FFDEF8]">
+    <section class="relative overflow-hidden bg-[#FCF5E6]">
         <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-20">
             <div class="grid gap-10 lg:grid-cols-2 items-center">
                 <div class="space-y-8">
@@ -187,7 +119,7 @@
                             Wujudkan <br> Kreativitas Anda Bersama Kami
                         </h1>
                         <p class="text-justify text-base md:text-lg leading-relaxed text-[#822021] max-w-2xl">
-                            Kreasi Hangat hadir sebagai komunitas yang bergerak di bidang creative class dan workshop...
+                            Kreasi Hangat hadir sebagai komunitas yang bergerak di bidang creative class dan workshop, dengan fokus pada kegiatan yang mengembangkan kreativitas serta memberikan pengalaman seni yang menyenangkan.
                         </p>
                     </div>
                     <div class="flex flex-wrap items-center gap-4">
@@ -211,61 +143,44 @@
         </div>
     </section>
 
-    <section class="bg-[#FCF5E6] py-16 border-y border-[#822021]/10">
-        <div class="max-w-full mx-auto"> <div class="text-center mb-8">
-                <h3 class="text-2xl font-bold text-[#822021] font-['Cousine']">Galeri Aktivitas</h3>
-            </div>
-
-            <div class="slider" style="--width: 350px; --height: 250px; --quantity: 10;">
-                <div class="list">
-                    
-                    <div class="item" style="--position: 1">
-                        <img src="https://images.unsplash.com/photo-1758522274463-67ef9e5e88b1?w=800&h=600&fit=crop" alt="Workshop 1">
+    <section class="bg-[#FAF8F1] py-16 border-y border-[#822021]/10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="relative">
+                <div class="flex items-center justify-center h-96 relative overflow-hidden" id="carousel-container">
+                    <div class="w-20 h-64 opacity-20 z-10 transition-all duration-500 ease-out" id="img-left-2" style="display: none;">
+                        <img src="" alt="Workshop" class="w-full h-full object-cover rounded-lg shadow-lg border border-[#822021]">
                     </div>
-                    
-                    <div class="item" style="--position: 2">
-                        <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=800&h=600&fit=crop" alt="Workshop 2">
+                    <div class="w-30 h-80 opacity-40 z-20 transition-all duration-500 ease-out" id="img-left-1" style="display: none;">
+                        <img src="" alt="Workshop" class="w-full h-full object-cover rounded-lg shadow-lg border border-[#822021]">
                     </div>
-                    
-                    <div class="item" style="--position: 3">
-                        <img src="https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=800&h=600&fit=crop" alt="Workshop 3">
+                    <div class="w-[40rem] h-96 z-30 transition-all duration-300 ease-out" id="img-center">
+                        <img src="" alt="Workshop" class="w-full h-full object-cover rounded-lg shadow-xl border-2 border-[#822021]" id="center-img">
                     </div>
-                    
-                    <div class="item" style="--position: 4">
-                        <img src="https://images.unsplash.com/photo-1556761175-b413da4baf72?w=800&h=600&fit=crop" alt="Workshop 4">
+                    <div class="w-30 h-80 opacity-40 z-20 transition-all duration-500 ease-out" id="img-right-1" style="display: none;">
+                        <img src="" alt="Workshop" class="w-full h-full object-cover rounded-lg shadow-lg border border-[#822021]">
                     </div>
-                    
-                    <div class="item" style="--position: 5">
-                        <img src="https://images.unsplash.com/photo-1573164713714-d95e436ab8d6?w=800&h=600&fit=crop" alt="Workshop 5">
+                    <div class="w-20 h-64 opacity-20 z-10 transition-all duration-500 ease-out" id="img-right-2" style="display: none;">
+                        <img src="" alt="Workshop" class="w-full h-full object-cover rounded-lg shadow-lg border border-[#822021]">
                     </div>
-                    
-                    <div class="item" style="--position: 6">
-                        <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?w=800&h=600&fit=crop" alt="Workshop 6">
-                    </div>
-                    
-                    <div class="item" style="--position: 7">
-                        <img src="https://images.unsplash.com/photo-1531482615713-2afd69097998?w=800&h=600&fit=crop" alt="Workshop 7">
-                    </div>
-                    
-                    <div class="item" style="--position: 8">
-                        <img src="https://images.unsplash.com/photo-1758522276630-8ebdf55d7619?w=800&h=600&fit=crop" alt="Workshop 8">
-                    </div>
-                    
-                    <div class="item" style="--position: 9">
-                        <img src="https://images.unsplash.com/photo-1517048676732-d65bc937f952?w=800&h=600&fit=crop" alt="Workshop 9">
-                    </div>
-                    
-                    <div class="item" style="--position: 10">
-                        <img src="https://images.unsplash.com/photo-1757085242669-076c35ff9397?w=800&h=600&fit=crop" alt="Workshop 10">
-                    </div>
-
                 </div>
+                
+                <button class="absolute left-4 top-1/2 -translate-y-1/2 bg-[#822021] text-[#FCF5E6] p-3 rounded-full hover:bg-[#6a1a1b] transition z-40 shadow-lg" onclick="prevSlide()">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                </button>
+                <button class="absolute right-4 top-1/2 -translate-y-1/2 bg-[#822021] text-[#FCF5E6] p-3 rounded-full hover:bg-[#6a1a1b] transition z-40 shadow-lg" onclick="nextSlide()">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                </button>
+                
+                <div class="flex justify-center mt-8 space-x-2">
+                    <button class="w-2 h-2 rounded-full bg-[#822021] transition" onclick="goToSlide(0)" id="dot-0"></button>
+                    <button class="w-2 h-2 rounded-full bg-[#822021] opacity-50 transition" onclick="goToSlide(1)" id="dot-1"></button>
+                    <button class="w-2 h-2 rounded-full bg-[#822021] opacity-50 transition" onclick="goToSlide(2)" id="dot-2"></button>
+                    </div>
             </div>
-
         </div>
     </section>
 
-    <section class="bg-[#FFDEF8]">
+    <section class="bg-[#FCF5E6]">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 space-y-10">
             <div class="text-center space-y-3">
                 <h2 class="text-3xl font-bold text-[#822021]">Event Mendatang</h2>
@@ -446,4 +361,156 @@
             </div>
         </div>
     </section>
+
+    <script>
+        // --- Carousel Logic ---
+        let currentSlide = 0;
+        const totalSlides = 10;
+        const images = [
+            'https://images.unsplash.com/photo-1758522274463-67ef9e5e88b1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxhcnQlMjBjbGFzcyUyMGNvbW11bml0eXxlbnwxfHx8fDE3NTkyOTE1MTl8MA&ixlib=rb-4.1.0&q=80&?w=800&h=600&fit=crop',
+            'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=800&h=600&fit=crop',
+            'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=800&h=600&fit=crop',
+            'https://images.unsplash.com/photo-1556761175-b413da4baf72?w=800&h=600&fit=crop',
+            'https://images.unsplash.com/photo-1573164713714-d95e436ab8d6?w=800&h=600&fit=crop',
+            'https://images.unsplash.com/photo-1552664730-d307ca884978?w=800&h=600&fit=crop',
+            'https://images.unsplash.com/photo-1531482615713-2afd69097998?w=800&h=600&fit=crop',
+            'https://images.unsplash.com/photo-1758522276630-8ebdf55d7619?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxwYWludGluZyUyMGNsYXNzJTIwc3R1ZGlvfGVufDF8fHx8MTc1OTI5MTUyMHww&ixlib=rb-4.1.0&q=80&?w=800&h=600&fit=crop',
+            'https://images.unsplash.com/photo-1517048676732-d65bc937f952?w=800&h=600&fit=crop',
+            'https://images.unsplash.com/photo-1757085242669-076c35ff9397?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxjcmVhdGl2ZSUyMHdvcmtzaG9wJTIwcGVvcGxlfGVufDF8fHx8MTc1OTI5MTUxOXww&ixlib=rb-4.1.0&q=80&?w=800&h=600&fit=crop'
+        ];
+        
+        function updateCarousel() {
+            const centerImg = document.getElementById('img-center');
+            centerImg.style.transform = 'scale(0.9)';
+            
+            setTimeout(() => {
+                document.querySelector('#img-center img').src = images[currentSlide];
+                centerImg.style.transform = 'scale(1)';
+            }, 150);
+            
+            // Logic update gambar kiri/kanan
+            const imgLeft2 = document.getElementById('img-left-2');
+            const imgLeft1 = document.getElementById('img-left-1');
+            const imgRight1 = document.getElementById('img-right-1');
+            const imgRight2 = document.getElementById('img-right-2');
+            
+            if (currentSlide >= 2) {
+                imgLeft2.style.display = 'block';
+                imgLeft2.querySelector('img').src = images[currentSlide - 2];
+                imgLeft2.style.transform = 'translateX(-20px)';
+                setTimeout(() => { imgLeft2.style.transform = 'translateX(0)'; }, 100);
+            } else { imgLeft2.style.display = 'none'; }
+            
+            if (currentSlide >= 1) {
+                imgLeft1.style.display = 'block';
+                imgLeft1.querySelector('img').src = images[currentSlide - 1];
+                imgLeft1.style.transform = 'translateX(-20px)';
+                setTimeout(() => { imgLeft1.style.transform = 'translateX(0)'; }, 100);
+            } else { imgLeft1.style.display = 'none'; }
+            
+            if (currentSlide < totalSlides - 1) {
+                imgRight1.style.display = 'block';
+                imgRight1.querySelector('img').src = images[currentSlide + 1];
+                imgRight1.style.transform = 'translateX(20px)';
+                setTimeout(() => { imgRight1.style.transform = 'translateX(0)'; }, 100);
+            } else { imgRight1.style.display = 'none'; }
+            
+            if (currentSlide < totalSlides - 2) {
+                imgRight2.style.display = 'block';
+                imgRight2.querySelector('img').src = images[currentSlide + 2];
+                imgRight2.style.transform = 'translateX(20px)';
+                setTimeout(() => { imgRight2.style.transform = 'translateX(0)'; }, 100);
+            } else { imgRight2.style.display = 'none'; }
+            
+            // Update dots active state
+            for (let i = 0; i < totalSlides; i++) {
+                const dot = document.getElementById(`dot-${i}`);
+                if(dot){
+                    if (i === currentSlide) {
+                        dot.classList.remove('opacity-50');
+                    } else {
+                        dot.classList.add('opacity-50');
+                    }
+                }
+            }
+        }
+        
+        function nextSlide() { currentSlide = (currentSlide + 1) % totalSlides; updateCarousel(); }
+        function prevSlide() { currentSlide = (currentSlide - 1 + totalSlides) % totalSlides; updateCarousel(); }
+        function goToSlide(index) { currentSlide = index; updateCarousel(); }
+        
+        updateCarousel();
+        setInterval(nextSlide, 2500);
+
+        // --- Modal Logic ---
+        function openModal(element) {
+            const title = element.getAttribute('data-title');
+            const date = element.getAttribute('data-date');
+            const coverImage = element.getAttribute('data-image');
+            const imagesData = element.getAttribute('data-images');
+            const eventId = element.getAttribute('data-event-id');
+            
+            let images = [];
+            try {
+                images = JSON.parse(imagesData || '[]');
+            } catch (e) {
+                images = [];
+            }
+            
+            if (coverImage && !images.includes(coverImage)) {
+                images.unshift(coverImage);
+            }
+            
+            document.getElementById('modalTitle').textContent = title;
+            document.getElementById('modalDate').textContent = date;
+            
+            const mainImage = images.length > 0 ? images[0] : 'https://via.placeholder.com/600x320';
+            document.getElementById('modalImage').src = mainImage;
+            
+            const thumbnailContainer = document.getElementById('thumbnailContainer');
+            thumbnailContainer.innerHTML = '';
+            
+            images.forEach((imageUrl, index) => {
+                const thumbnailDiv = document.createElement('div');
+                thumbnailDiv.className = 'w-20 h-13 rounded-xl overflow-hidden cursor-pointer transition hover:opacity-90 shadow-md hover:shadow-lg hover:scale-105 transition-transform duration-200';
+                thumbnailDiv.innerHTML = '<img src="' + imageUrl + '" alt="Thumbnail" class="w-full h-full object-cover" />';
+                thumbnailDiv.onclick = function() {
+                    document.getElementById('modalImage').src = imageUrl;
+                    document.querySelectorAll('#thumbnailContainer div').forEach(div => {
+                        div.classList.remove('ring-1', 'ring-[#822021]');
+                    });
+                    thumbnailDiv.classList.add('ring-1', 'ring-[#822021]');
+                };
+                thumbnailContainer.appendChild(thumbnailDiv);
+            });
+
+            if(thumbnailContainer.firstChild){
+                thumbnailContainer.firstChild.classList.add('ring-1', 'ring-[#822021]');
+            }
+                        
+            const lihatEventBtn = document.getElementById('lihatEventBtn');
+            if (eventId) {
+                lihatEventBtn.style.display = 'block';
+                lihatEventBtn.onclick = function() {
+                    window.location.href = `/events/${eventId}`;
+                };
+            } else {
+                lihatEventBtn.style.display = 'none';
+            }
+            
+            document.getElementById('portfolioModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            document.getElementById('portfolioModal').classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        document.getElementById('portfolioModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+    </script>
 </x-layouts.app>

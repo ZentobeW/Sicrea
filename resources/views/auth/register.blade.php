@@ -25,7 +25,7 @@
     </style>
 
     {{-- Main Background: FFDEF8 --}}
-    <section class="bg-[#FFDEF8] py-16 min-h-screen flex items-center">
+    <section class="bg-[#FCF5E6] py-16 min-h-screen flex items-center">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
 
             <div class="flex flex-col items-center gap-12">

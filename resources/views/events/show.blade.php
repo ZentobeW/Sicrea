@@ -27,7 +27,7 @@
     </style>
 
     {{-- Main Background: FFDEF8 --}}
-    <section class="relative overflow-hidden bg-[#FFDEF8] min-h-screen">
+    <section class="relative overflow-hidden bg-[#FCF5E6] min-h-screen">
         <div class="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
             
             {{-- Breadcrumb --}}

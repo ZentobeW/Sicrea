@@ -130,14 +130,15 @@
         }
     </style>
     <!-- Hero Section -->
-    <section class="py-20 bg-[#FFDEF8] relative">
+    <section class="py-20 bg-[#FCF5E6] relative">
         <div class="container mx-auto px-4 lg:px-8">
             <div class="max-w-4xl mx-auto text-center">
                 <h1 class="text-4xl lg:text-5xl mb-6 font-bold text-[#822021]">Who Is Kreasi Hangat?</h1>
                 <p class="text-lg text-gray-600 leading-relaxed mb-8 max-w-3xl mx-auto">
-                    Kreasi Hangat adalah platform online yang menghubungkan para pembelajar dengan berbagai 
-                    workshop, event, dan kegiatan kreatif. Kami percaya bahwa setiap orang memiliki potensi 
-                    kreatif yang dapat dikembangkan melalui pembelajaran yang tepat dan lingkungan yang mendukung.
+                    Kreasi Hangat hadir sebagai komunitas yang bergerak di bidang creative class dan workshop, dengan fokus pada kegiatan yang mengembangkan kreativitas serta memberikan pengalaman seni yang menyenangkan.
+                    Workshop Kreasi Hangat dirancang untuk semua kalangan, baik pemula maupun yang sudah berpengalaman. 
+                    Kegiatan ini tidak hanya bertujuan untuk  memberikan pengalaman seni yang interaktif dan menyenangkan, tetapi juga untuk membuka peluang usaha bagi para peserta. 
+                    Dengan adanya Workshop Kreasi Hangat, diharapkan dapat lahir pengrajin-pengrajin baru yang berkontribusi dalam melestarikan budaya serta meningkatkan perekonomian kreatif di Indonesia
                 </p>
                 <div class="relative rounded-2xl overflow-hidden shadow-2xl">
                     <img src="https://images.unsplash.com/photo-1758522274463-67ef9e5e88b1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxhcnQlMjBjbGFzcyUyMGNvbW11bml0eXxlbnwxfHx8fDE3NTkyOTE1MTl8MA&ixlib=rb-4.1.0&q=80&w=1080" alt="About Kreasi Hangat" class="w-full h-96 object-cover">

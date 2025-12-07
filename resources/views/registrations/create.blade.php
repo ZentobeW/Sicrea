@@ -21,7 +21,7 @@
     </style>
 
     {{-- Main Background: FFDEF8 --}}
-    <section class="bg-[#FFDEF8] py-8 md:py-12 min-h-screen">
+    <section class="bg-[#FCF5E6] py-8 md:py-12 min-h-screen">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             
             {{-- Back Link --}}
