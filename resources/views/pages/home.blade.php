@@ -126,7 +126,7 @@
                         <a href="{{ route('events.index') }}" class="btn-zoom inline-flex items-center rounded-full bg-[#FFDEF8] border border-[#822021] px-6 py-2 text-sm font-semibold text-[#822021] shadow-sm">
                             Lihat Event
                         </a>
-                        <a href="{{ route('portfolio.index') }}" class="btn-zoom inline-flex items-center rounded-full bg-[#FFDEF8] border border-[#822021] px-6 py-2 text-sm font-semibold text-[#822021] shadow-sm">
+                        <a href="{{ route('about.index') }}" class="btn-zoom inline-flex items-center rounded-full bg-[#FFDEF8] border border-[#822021] px-6 py-2 text-sm font-semibold text-[#822021] shadow-sm">
                             Tentang Kami
                         </a>
                     </div>
