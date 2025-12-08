@@ -17,6 +17,9 @@ return new class extends Migration
             $table->json('form_data');
             $table->dateTime('registered_at')->index();
             $table->text('notes')->nullable();
+            $table->string('registered_name')->nullable();
+            $table->string('registered_email')->nullable();
+            $table->string('registered_phone')->nullable();
             $table->timestamps();
         });
     }

@@ -99,6 +99,9 @@ class RegistrationController extends Controller
                 'status' => RegistrationStatus::Pending,
                 'form_data' => $formData,
                 'registered_at' => now(),
+                'registered_name' => $user->name,
+                'registered_email' => $user->email,
+                'registered_phone' => $user->phone_number ?? null,
             ]);
 
             $registration->transaction()->create([

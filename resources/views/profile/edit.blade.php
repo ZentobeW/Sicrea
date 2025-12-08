@@ -50,9 +50,18 @@
 
                 {{-- Tabs Menu --}}
                 <div class="mt-6 flex flex-wrap gap-3 justify-center md:justify-start">
-                    <button type="button" class="rounded-full bg-[#822021] px-5 py-2 text-sm font-semibold text-[#FAF8F1] shadow-md">Data Pribadi</button>
-                    <button type="button" class="rounded-full border border-[#822021]/20 bg-[#FFDEF8] px-5 py-2 text-sm font-semibold text-[#822021]/60 cursor-not-allowed">Akun</button>
-                    <button type="button" class="rounded-full border border-[#822021]/20 bg-[#FFDEF8] px-5 py-2 text-sm font-semibold text-[#822021]/60 cursor-not-allowed">Pengaturan</button>
+
+                    <button type="button"
+                        class="btn-action inline-flex items-center gap-2 rounded-full bg-[#822021] px-5 py-2 text-sm font-semibold text-[#FAF8F1] shadow-md cursor-pointer border border-[#822021]">
+                        Data Pribadi
+                    </button>
+
+                    <button type="button"
+                        onclick="window.location='{{ route('account.settings') }}'"
+                        class="btn-action inline-flex items-center gap-2 rounded-full border border-[#822021] bg-[#FFDEF8] px-5 py-2 text-sm font-semibold text-[#822021] shadow-md cursor-pointer">
+                        Akun
+                    </button>
+
                 </div>
 
                 <form method="POST" action="{{ route('profile.update') }}" enctype="multipart/form-data" class="mt-8 space-y-8">

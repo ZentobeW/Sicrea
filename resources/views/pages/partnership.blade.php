@@ -184,15 +184,6 @@
                     </p>
                     
                     <div class="flex flex-wrap gap-4">
-                        <a href="{{ asset('storage/proposal-kemitraan.pdf') }}" target="_blank" class="btn-anim text-base">
-                            <span>
-                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd"/>
-                                </svg>
-                                Unduh Proposal
-                            </span>
-                        </a>
-
                         <a href="https://wa.me/6285871497367" target="_blank" class="btn-liquid">
                             Diskusi via WhatsApp
                             <svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
@@ -432,16 +423,6 @@
                     Tim kami siap membantu mewujudkan kolaborasi terbaik.
                 </p>
                 <div class="flex flex-wrap gap-4 justify-center">
-                    
-                    <a href="{{ asset('storage/proposal-kemitraan.pdf') }}" target="_blank" class="btn-anim text-lg">
-                        <span>
-                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd"/>
-                            </svg>
-                            Unduh Proposal Partnership
-                        </span>
-                    </a>
-
                     <a href="https://wa.me/6285871497367" target="_blank" class="btn-liquid">
                         Hubungi Kami
                         <svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">

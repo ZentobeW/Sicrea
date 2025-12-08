@@ -8,6 +8,10 @@ use App\Http\Requests\UpdateProfileRequest;
 use App\Models\Refund;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Rule;
+use Illuminate\Validation\Rules\Password;
+use App\Rules\DisposableEmail;
+use Illuminate\Support\Facades\Hash;
 
 class ProfileController extends Controller
 {
@@ -91,6 +95,57 @@ class ProfileController extends Controller
         return redirect()
             ->route('profile.show')
             ->with('status', 'Profil berhasil diperbarui.');
+    }
+
+    public function accountSettings(Request $request)
+    {
+        return view('profile.account-settings', [
+            'user' => $request->user(),
+        ]);
+    }
+
+    public function updateAccount(Request $request)
+    {
+        $request->validate([
+            'email' => [
+                'required',
+                'email:rfc,dns',
+                'max:255',
+                Rule::unique('users')->ignore($request->user()->id),
+                new DisposableEmail,
+            ],
+
+            'password' => [
+                'nullable',
+                Password::min(8)->mixedCase()->numbers()->symbols(),
+                'confirmed',
+            ],
+        ]);
+
+        $user = $request->user();
+
+        if ($request->email !== $user->email) {
+            $user->new_email = $request->email;
+            $user->email_verified_at = null;
+            $user->save();
+
+            // Kirim OTP ke email baru
+            $this->otpService->sendToNewEmail($user, $request->email);
+
+            // Simpan session untuk verifikasi
+            $request->session()->put('pending_email_update_user_id', $user->id);
+
+            return redirect()
+                ->route('verification.email.update.notice')
+                ->with('status', 'Kami mengirim OTP ke email baru untuk verifikasi.');
+        }
+
+        if ($request->filled('password')) {
+            $user->password = Hash::make($request->password);
+        }
+
+        $user->save();
+        return back()->with('success', 'Profil berhasil diperbarui.');
     }
 
 }

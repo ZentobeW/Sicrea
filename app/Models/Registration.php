@@ -21,6 +21,9 @@ class Registration extends Model
         'form_data',
         'registered_at',
         'notes',
+        'registered_name',
+        'registered_email',
+        'registered_phone',
     ];
 
     protected $appends = [

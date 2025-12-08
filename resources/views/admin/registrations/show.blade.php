@@ -24,11 +24,11 @@
                     </div>
                     <div class="space-y-1">
                         <dt class="text-[11px] font-semibold uppercase tracking-[0.25em] text-[#B87A7A]">Nama Peserta</dt>
-                        <dd class="text-base font-semibold text-[#2C1E1E]">{{ $registration->user->name }}</dd>
+                        <dd class="text-base font-semibold text-[#2C1E1E]">{{ $registration->user->registered_name }}</dd>
                     </div>
                     <div class="space-y-1">
                         <dt class="text-[11px] font-semibold uppercase tracking-[0.25em] text-[#B87A7A]">Email Peserta</dt>
-                        <dd class="text-base font-semibold text-[#2C1E1E]">{{ $registration->user->email }}</dd>
+                        <dd class="text-base font-semibold text-[#2C1E1E]">{{ $registration->user->registered_email }}</dd>
                     </div>
                     <div class="space-y-1">
                         <dt class="text-[11px] font-semibold uppercase tracking-[0.25em] text-[#B87A7A]">Jumlah Bayar</dt>

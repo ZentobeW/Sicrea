@@ -1,3 +1,8 @@
+@php
+    // Format tanggal dan waktu saat ini sesuai standar HTML datetime-local (YYYY-MM-DDTHH:MM)
+    $minDateTime = now()->format('Y-m-d\TH:i');
+@endphp
+
 <x-layouts.admin title="Tambah Event" subtitle="Susun pengalaman workshop yang inspiratif dan pastikan informasinya lengkap sebelum dibagikan ke publik." back-url="{{ route('admin.events.index') }}">
     <div class="grid gap-8 lg:grid-cols-[2fr,1fr]">
         <form method="POST" action="{{ route('admin.events.store') }}" class="space-y-6">
@@ -12,11 +17,11 @@
                     <div class="grid gap-4 md:grid-cols-2">
                         <label class="space-y-2 text-base font-semibold text-[#822021]">
                             <span>Mulai</span>
-                            <input type="datetime-local" name="start_at" value="{{ old('start_at') }}" class="w-full rounded-2xl border border-[#FFD6C7] bg-[#FCF5E6] px-4 py-3 text-base text-[#822021] focus:border-[#822021] focus:outline-none" required>
+                            <input type="datetime-local" id="start_at" name="start_at" value="{{ old('start_at') }}" min="{{ $minDateTime }}" oninput="updateMinEndTime()" class="w-full rounded-2xl border border-[#FFD6C7] bg-[#FCF5E6] px-4 py-3 text-base text-[#822021] focus:border-[#822021] focus:outline-none" required>
                         </label>
                         <label class="space-y-2 text-base font-semibold text-[#822021]">
                             <span>Selesai</span>
-                            <input type="datetime-local" name="end_at" value="{{ old('end_at') }}" class="w-full rounded-2xl border border-[#FFD6C7] bg-[#FCF5E6] px-4 py-3 text-base text-[#822021] focus:border-[#822021] focus:outline-none" required>
+                            <input type="datetime-local" id="end_at" name="end_at" value="{{ old('end_at') }}" class="w-full rounded-2xl border border-[#FFD6C7] bg-[#FCF5E6] px-4 py-3 text-base text-[#822021] focus:border-[#822021] focus:outline-none" required>
                         </label>
                     </div>
                     <div class="grid gap-4 md:grid-cols-2">
@@ -93,4 +98,35 @@
             </div>
         </aside>
     </div>
+
+    @push('scripts')
+    <script>
+        function updateMinEndTime() {
+            const startInput = document.getElementById('start_at');
+            const endInput = document.getElementById('end_at');
+            
+            const startTime = startInput.value;
+
+            if (startTime) {
+                // Set atribut 'min' dari input waktu akhir ke nilai waktu mulai
+                endInput.min = startTime;
+                
+                // Jika waktu akhir sudah diisi tapi kurang dari waktu mulai yang baru, kosongkan
+                // Ini memaksa pengguna memilih waktu yang valid
+                if (endInput.value && endInput.value <= startTime) {
+                    endInput.value = '';
+                }
+            }
+        }
+        
+        // Panggil fungsi saat input start_at diubah untuk inisialisasi awal
+        document.addEventListener('DOMContentLoaded', () => {
+            const startInput = document.getElementById('start_at');
+            if (startInput) {
+                updateMinEndTime(); // Cek sekali saat dimuat (untuk kasus old('start_at'))
+                startInput.addEventListener('change', updateMinEndTime);
+            }
+        });
+    </script>
+    @endpush
 </x-layouts.admin>
