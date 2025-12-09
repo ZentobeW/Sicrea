@@ -28,7 +28,8 @@ class EmailOtpService
             'expires_at' => now()->addMinutes(15),
         ]);
 
-        Mail::to($user->email)->queue(new EmailOtpMail($user, $code));
+        // Kirim langsung (tanpa antrean) karena beban email masih ringan
+        Mail::to($user->email)->send(new EmailOtpMail($user, $code));
     }
 
     /**

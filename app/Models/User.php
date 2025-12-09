@@ -86,7 +86,7 @@ class User extends Authenticatable implements \Illuminate\Contracts\Auth\MustVer
     }
 
     /**
-     * Send the password reset notification via queue to avoid slowing the response.
+     * Send the password reset notification secara langsung (tanpa antrean).
      */
     public function sendPasswordResetNotification($token): void
     {

@@ -3,14 +3,12 @@
 namespace App\Mail;
 
 use App\Models\Refund;
-use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class RefundRejected extends Mailable implements ShouldQueue
+class RefundRejected extends Mailable
 {
-    use Queueable, SerializesModels;
+    use SerializesModels;
 
     public function __construct(public Refund $refund)
     {

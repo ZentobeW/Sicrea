@@ -178,7 +178,7 @@ class RegistrationController extends Controller
             $adminEmail = config('mail.admin_address') ?? config('mail.from.address');
 
             if ($adminEmail) {
-                // Gunakan send() jika queue driver 'sync', atau queue() jika driver database/redis
+                // Kirim langsung tanpa antrean (beban email masih ringan)
                 Mail::to($adminEmail)->send(new PaymentProofUploaded($registration));
             }
 

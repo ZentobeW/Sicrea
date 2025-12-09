@@ -69,11 +69,13 @@ class RefundController extends Controller
         $userEmail = $registration->user->email ?? null;
 
         if ($adminEmail) {
-            Mail::to($adminEmail)->queue(new RefundRequested($refund));
+            // Kirim langsung tanpa antrean
+            Mail::to($adminEmail)->send(new RefundRequested($refund));
         }
 
         if ($userEmail) {
-            Mail::to($userEmail)->queue(new RefundRequested($refund));
+            // Kirim langsung tanpa antrean
+            Mail::to($userEmail)->send(new RefundRequested($refund));
 
             Email::create([
                 'registration_id' => $registration->id,

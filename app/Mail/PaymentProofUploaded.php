@@ -3,14 +3,12 @@
 namespace App\Mail;
 
 use App\Models\Registration;
-use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class PaymentProofUploaded extends Mailable implements ShouldQueue
+class PaymentProofUploaded extends Mailable
 {
-    use Queueable, SerializesModels;
+    use SerializesModels;
 
     public function __construct(public Registration $registration)
     {
