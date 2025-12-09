@@ -172,27 +172,19 @@
                         <svg class="w-4 h-4 text-[#822021]" fill="currentColor" viewBox="0 0 20 20">
                             <path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
                         </svg>
-                        <span class="text-sm text-gray-600">Partnership & Kolaborasi</span>
+                        <span class="text-sm text-gray-600">Kemitraan</span>
                     </div>
                     
                     <h1 id="typewriter-text" class="text-4xl lg:text-5xl xl:text-6xl mb-6 text-[#822021] font-bold typing-cursor min-h-[1.2em] lg:min-h-[2.4em]">
                         </h1>
                     
                     <p class="text-lg text-gray-600 mb-8 leading-relaxed">
-                        Bergabunglah dengan kami untuk menciptakan dampak positif bagi komunitas kreatif Indonesia. 
-                        Berbagai model kerjasama yang dapat disesuaikan dengan kebutuhan bisnis Anda.
+                        Kami membuka kesempatan kolaborasi dengan berbagai pihak, seperti kafe, mal, dan tutor, untuk
+                        menghadirkan workshop berkualitas, menarik, dan
+                        inklusif bagi peserta
                     </p>
                     
                     <div class="flex flex-wrap gap-4">
-                        <a href="{{ asset('storage/proposal-kemitraan.pdf') }}" target="_blank" class="btn-anim text-base">
-                            <span>
-                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd"/>
-                                </svg>
-                                Unduh Proposal
-                            </span>
-                        </a>
-
                         <a href="https://wa.me/6285871497367" target="_blank" class="btn-liquid">
                             Diskusi via WhatsApp
                             <svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
@@ -272,7 +264,7 @@
     <section class="py-20 bg-[#FFDEF8]">
         <div class="container mx-auto px-4 lg:px-8">
             <div class="text-center mb-12">
-                <h2 class="text-3xl lg:text-4xl mb-4 font-bold text-[#822021]">Portfolio Terbaik Kami</h2>
+                <h2 class="text-3xl lg:text-4xl mb-4 font-bold text-[#822021]">Portofolio Terbaik Kami</h2>
                 <p class="text-lg text-gray-600 max-w-2xl mx-auto">
                     Lihat hasil kolaborasi dan event yang telah kami selenggarakan
                 </p>
@@ -333,7 +325,7 @@
                         <div class="bg-gradient-to-br from-[#FFB3E1] to-[#FFBE8E] text-white w-10 h-10 rounded-[24px] flex items-center justify-center mb-4 mx-auto">
                             <span class="font-semibold">1</span>
                         </div>
-                        <h3 class="mb-3 text-center font-semibold text-[#822021]">Maximizing Brand Exposure</h3>
+                        <h3 class="mb-3 text-center font-semibold text-[#822021]">Dengan Cafe / Mall</h3>
                         <p class="text-gray-600 mb-6 text-justify max-w-sm mx-auto">Jadikan lokasi Anda sebagai pusat kreativitas!</p>
                         <div class="space-y-3 text-left">
                             <div class="flex items-start gap-2">
@@ -369,8 +361,8 @@
                         <div class="bg-gradient-to-br from-[#FFB3E1] to-[#FFBE8E] text-white w-10 h-10 rounded-[24px] flex items-center justify-center mb-4 mx-auto">
                             <span class="font-semibold">2</span>
                         </div>
-                        <h3 class="mb-3 text-center font-semibold text-[#822021]">Empowering Expertise</h3>
-                        <p class="text-gray-600 mb-6 text-justify max-w-sm mx-auto">Bergabunglah sebagai Tim Instruktur kami!</p>
+                        <h3 class="mb-3 text-center font-semibold text-[#822021]">Dengan Tutor</h3>
+                        <p class="text-gray-600 mb-6 text-justify max-w-sm mx-auto">Bergabunglah sebagai Tim Tutor kami!</p>
                         <div class="space-y-3 text-left">
                             <div class="flex items-start gap-2">
                                 <svg class="w-5 h-5 text-[#FFB3E1] flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
@@ -382,7 +374,7 @@
                                 <svg class="w-5 h-5 text-[#FFB3E1] flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
                                     <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
                                 </svg>
-                                <span class="text-sm text-gray-600">Honorarium yang fleksibel, dapat disepakati melalui sistem bagi hasil atau fee tetap.</span>
+                                <span class="text-sm text-gray-600">Honorarium yang fleksibel, dapat disepakati melalui sistem bagi hasil atau <em>fee</em> tetap.</span>
                             </div>
                         </div>
                     </div>
@@ -393,7 +385,7 @@
                         <div class="bg-gradient-to-br from-[#FFB3E1] to-[#FFBE8E] text-white w-10 h-10 rounded-[24px] flex items-center justify-center mb-4 mx-auto">
                             <span class="font-semibold">3</span>
                         </div>
-                        <h3 class="mb-3 text-center font-semibold text-[#822021]">Strategic Promotion & Media Blitz</h3>
+                        <h3 class="mb-3 text-center font-semibold text-[#822021]">Promosi & Kerja Sama</h3>
                         <p class="text-gray-600 mb-6 text-justify max-w-sm mx-auto">Pastikan acara Anda dilihat oleh ribuan orang!</p>
                         <div class="space-y-3 text-left">
                             <div class="flex items-start gap-2">
@@ -431,17 +423,7 @@
                     Hubungi kami untuk mendiskusikan peluang kerjasama yang saling menguntungkan. 
                     Tim kami siap membantu mewujudkan kolaborasi terbaik.
                 </p>
-                <div class="flex flex-wrap gap-4 justify-center">
-                    
-                    <a href="{{ asset('storage/proposal-kemitraan.pdf') }}" target="_blank" class="btn-anim text-lg">
-                        <span>
-                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd"/>
-                            </svg>
-                            Unduh Proposal Partnership
-                        </span>
-                    </a>
-
+                <div class="flex flex-wrap gap-4 justify-center">                 
                     <a href="https://wa.me/6285871497367" target="_blank" class="btn-liquid">
                         Hubungi Kami
                         <svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
