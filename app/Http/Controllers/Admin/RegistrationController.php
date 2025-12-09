@@ -21,6 +21,8 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class RegistrationController extends Controller
 {
+    // ... method index, show, verifyPayment, rejectPayment tetap sama ...
+
     public function index(Request $request): View
     {
         $view = $request->input('view', '');
@@ -159,7 +161,6 @@ class RegistrationController extends Controller
         return view('admin.registrations.show', compact('registration'));
     }
 
-    // PERBAIKAN: Menambahkan Request $request & Try-Catch
     public function verifyPayment(Request $request, Registration $registration): RedirectResponse
     {
         $registration->markVerified();
@@ -204,7 +205,6 @@ class RegistrationController extends Controller
         return back()->with('status', 'Pembayaran berhasil diverifikasi. Peserta menerima konfirmasi otomatis.');
     }
 
-    // PERBAIKAN: Menambahkan Request $request
     public function rejectPayment(Request $request, Registration $registration): RedirectResponse
     {
         $adminNote = $request->string('admin_note', '')->limit(500)->toString();
@@ -229,6 +229,9 @@ class RegistrationController extends Controller
         $reportType = $request->string('report')->toString();
         $reportType = in_array($reportType, ['finance', 'participants'], true) ? $reportType : 'participants';
 
+        // Tangkap input view untuk filter refund jika diperlukan
+        $isRefundView = in_array($request->string('view'), ['refund', 'refunds'], true);
+
         $eventIds = collect((array) $request->input('event_ids', []))
             ->map(fn ($id) => (int) $id)
             ->filter()
@@ -240,16 +243,21 @@ class RegistrationController extends Controller
             $eventIds = $eventIds->unique()->values();
         }
 
+        // Ambil status pembayaran jika ada
+        $paymentStatus = $request->filled('payment_status') 
+            ? \App\Enums\PaymentStatus::tryFrom((string)$request->input('payment_status')) 
+            : null;
+
         $fileName = sprintf('%s-%s.csv', $reportType, now()->format('Ymd-His'));
         $headers = [
             'Content-Type' => 'text/csv; charset=UTF-8',
             'Content-Disposition' => "attachment; filename=\"{$fileName}\"",
         ];
 
-        $callback = function () use ($request, $reportType, $eventIds) {
+        $callback = function () use ($reportType, $eventIds, $paymentStatus, $isRefundView) {
             $handle = fopen('php://output', 'wb');
 
-            // Ensure Excel on Windows recognizes UTF-8
+            // BOM untuk support Excel
             fwrite($handle, chr(0xEF) . chr(0xBB) . chr(0xBF));
 
             $delimiter = ';';
@@ -266,44 +274,83 @@ class RegistrationController extends Controller
                     'Status Refund',
                 ], $delimiter);
             } else {
-                fputcsv($handle, ['Event', 'Nama Peserta', 'Email', 'No. Telepon', 'Status Pendaftaran', 'Status Pembayaran', 'Tanggal Daftar'], $delimiter);
+                fputcsv($handle, [
+                    'Event',
+                    'Nama Peserta',
+                    'Email',
+                    'No. Telepon',
+                    'Status Pendaftaran',
+                    'Status Pembayaran',
+                    'Tanggal Daftar'
+                ], $delimiter);
             }
 
-            $status = \App\Enums\PaymentStatus::tryFrom((string) $request->string('payment_status'));
-
+            // QUERY UTAMA
             Registration::query()
                 ->with(['event', 'user', 'transaction.refund'])
-                ->when($eventIds->isNotEmpty(), fn ($query) => $query->whereIn('event_id', $eventIds))
-                ->when($status, function ($query, $status) {
-                    $query->whereHas('transaction', fn ($transactionQuery) => $transactionQuery->where('status', $status));
+                // Join ke Events untuk Sorting
+                ->join('events', 'registrations.event_id', '=', 'events.id')
+                ->select('registrations.*') // Penting: Agar ID Registration tidak tertimpa ID Event
+                
+                // Filter Event IDs
+                ->when($eventIds->isNotEmpty(), fn ($query) => $query->whereIn('registrations.event_id', $eventIds))
+                
+                // Filter Payment Status
+                ->when($paymentStatus, function ($query, $status) {
+                    $query->whereHas('transaction', fn ($q) => $q->where('status', $status));
                 })
-                ->when(in_array($request->string('view'), ['refund', 'refunds'], true), fn ($query) => $query->whereHas('transaction.refund'))
-                ->orderByDesc('registered_at')
+                
+                // Filter Refund View
+                ->when($isRefundView, fn ($query) => $query->whereHas('transaction.refund'))
+                
+                // Sorting: Event Terdekat -> Pendaftar Terbaru
+                ->orderBy('events.start_at', 'asc')
+                ->orderBy('registrations.registered_at', 'desc')
+                
+                // Chunking untuk performa
                 ->chunk(200, function ($chunk) use ($handle, $delimiter, $reportType) {
                     foreach ($chunk as $registration) {
                         $transaction = $registration->transaction;
                         $refund = $transaction?->refund;
+                        $event = $registration->event;
+                        $user = $registration->user;
+
+                        // Ambil data dengan aman (gunakan optional atau null coalescing)
+                        $eventName = $event?->title ?? 'Event Terhapus';
+                        $userName = $user?->name ?? 'User Terhapus';
+                        $userEmail = $user?->email ?? '-';
+                        $userPhone = $user?->phone ?? '-';
+                        
+                        $paymentStatusLabel = $transaction?->status?->label() ?? 'Belum Ada Transaksi';
+                        $amount = $transaction?->amount ?? 0;
+                        
+                        $paidAt = optional($transaction?->paid_at)->format('d-m-Y H:i') ?? '-';
+                        $verifiedAt = optional($transaction?->verified_at)->format('d-m-Y H:i') ?? '-';
+                        $refundLabel = $refund?->status?->label() ?? '-';
+                        
+                        $regStatusLabel = $registration->status->label();
+                        $regDate = optional($registration->registered_at)->format('d-m-Y H:i') ?? '-';
 
                         if ($reportType === 'finance') {
                             fputcsv($handle, [
-                                $registration->event->title,
-                                $registration->user->name,
-                                $registration->user->email,
-                                $transaction?->status->label() ?? '-',
-                                $transaction?->amount ?? 0,
-                                optional($transaction?->paid_at)?->format('d-m-Y H:i'),
-                                optional($transaction?->verified_at)?->format('d-m-Y H:i'),
-                                $refund?->status?->label() ?? '-',
+                                $eventName,
+                                $userName,
+                                $userEmail,
+                                $paymentStatusLabel,
+                                $amount,
+                                $paidAt,
+                                $verifiedAt,
+                                $refundLabel,
                             ], $delimiter);
                         } else {
                             fputcsv($handle, [
-                                $registration->event->title,
-                                $registration->user->name,
-                                $registration->user->email,
-                                $registration->user->phone,
-                                $registration->status->label(),
-                                $transaction?->status->label() ?? '-',
-                                $registration->registered_at?->format('d-m-Y H:i'),
+                                $eventName,
+                                $userName,
+                                $userEmail,
+                                $userPhone,
+                                $regStatusLabel,
+                                $paymentStatusLabel,
+                                $regDate,
                             ], $delimiter);
                         }
                     }
@@ -315,7 +362,6 @@ class RegistrationController extends Controller
         return response()->streamDownload($callback, $fileName, $headers);
     }
 
-    // PERBAIKAN: Menambahkan Request $request & Try-Catch
     public function approveRefund(Request $request, Refund $refund): RedirectResponse
     {
         $adminNote = $request->string('admin_note', '')->limit(500)->toString();
@@ -359,7 +405,6 @@ class RegistrationController extends Controller
         return back()->with('status', 'Refund peserta disetujui dan ditandai selesai.');
     }
 
-    // PERBAIKAN: Menambahkan Request $request & Try-Catch
     public function rejectRefund(Request $request, Refund $refund): RedirectResponse
     {
         $adminNote = $request->string('admin_note', '')->limit(500)->toString();

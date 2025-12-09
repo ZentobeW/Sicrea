@@ -179,11 +179,11 @@
 
                     {{-- Desktop Navigation --}}
                     <nav class="hidden md:flex items-center gap-4 text-sm">
-                        <a href="{{ route('home') }}" class="nav-link {{ request()->routeIs('home') ? 'active' : '' }}">Home</a>
-                        <a href="{{ route('events.index') }}" class="nav-link {{ request()->routeIs('events.*') ? 'active' : '' }}">Events</a>
-                        <a href="{{ route('portfolio.index') }}" class="nav-link {{ request()->routeIs('portfolio.*') ? 'active' : '' }}">Portfolio</a>
-                        <a href="{{ route('partnership.index') }}" class="nav-link {{ request()->routeIs('partnership.*') ? 'active' : '' }}">Partnership</a>
-                        <a href="{{ route('about.index') }}" class="nav-link {{ request()->routeIs('about.*') ? 'active' : '' }}">About Us</a>
+                        <a href="{{ route('home') }}" class="nav-link {{ request()->routeIs('home') ? 'active' : '' }}">Beranda</a>
+                        <a href="{{ route('events.index') }}" class="nav-link {{ request()->routeIs('events.*') ? 'active' : '' }}">Event</a>
+                        <a href="{{ route('portfolio.index') }}" class="nav-link {{ request()->routeIs('portfolio.*') ? 'active' : '' }}">Portofolio</a>
+                        <a href="{{ route('partnership.index') }}" class="nav-link {{ request()->routeIs('partnership.*') ? 'active' : '' }}">Kemitraan</a>
+                        <a href="{{ route('about.index') }}" class="nav-link {{ request()->routeIs('about.*') ? 'active' : '' }}">Tentang Kami</a>
                     </nav>
 
                     {{-- Auth Buttons --}}
@@ -208,11 +208,11 @@
                         @else
                             @if (Route::has('login'))
                                 <a href="{{ route('login') }}" class="inline-flex items-center rounded-full border border-[#822021] px-4 py-2 font-semibold text-[#822021] bg-transparent hover:bg-[#822021] hover:text-[#FCF5E6] transition duration-300">
-                                    Login
+                                    Masuk
                                 </a>
                             @endif
                             @if (Route::has('register'))
-                                <a href="{{ route('register') }}" class="inline-flex items-center rounded-full bg-[#822021] px-4 py-2 font-semibold text-[#FCF5E6] hover:opacity-90 transition">
+                                <a href="{{ route('register') }}" class="hidden sm:inline-flex items-center rounded-full bg-[#822021] px-4 py-2 font-semibold text-[#FCF5E6] hover:opacity-90 transition">
                                     Registrasi
                                 </a>
                             @endif
@@ -227,23 +227,23 @@
                     </div>
                 </div>
 
-                {{-- Mobile Menu Dropdown (Updated with full links) --}}
+                {{-- Mobile Menu Dropdown  --}}
                 <div id="mobile-menu" class="md:hidden hidden bg-[#FCF5E6] border-t border-[#F7C8B8]/60 shadow-lg">
                     <div class="px-4 py-3 space-y-2">
                         <a href="{{ route('home') }}" class="block px-4 py-2 rounded-lg transition duration-300 text-[#822021] font-bold {{ request()->routeIs('home') ? 'bg-[#822021] text-[#FCF5E6]' : 'hover:bg-[#822021]/10'}}">
-                            Home
+                            Beranda
                         </a>
                         <a href="{{ route('events.index') }}" class="block px-4 py-2 rounded-lg transition duration-300 text-[#822021] font-bold {{ request()->routeIs('events.*') ? 'bg-[#822021] text-[#FCF5E6]' : 'hover:bg-[#822021]/10'}}">
-                            Events
+                            Event
                         </a>
                         <a href="{{ route('portfolio.index') }}" class="block px-4 py-2 rounded-lg transition duration-300 text-[#822021] font-bold {{ request()->routeIs('portfolio.*') ? 'bg-[#822021] text-[#FCF5E6]' : 'hover:bg-[#822021]/10'}}">
-                            Portfolio
+                            Portofolio
                         </a>
                         <a href="{{ route('partnership.index') }}" class="block px-4 py-2 rounded-lg transition duration-300 text-[#822021] font-bold {{ request()->routeIs('partnership.*') ? 'bg-[#822021] text-[#FCF5E6]' : 'hover:bg-[#822021]/10'}}">
-                            Partnership
+                            Kemitraan
                         </a>
                         <a href="{{ route('about.index') }}" class="block px-4 py-2 rounded-lg transition duration-300 text-[#822021] font-bold {{ request()->routeIs('about.*') ? 'bg-[#822021] text-[#FCF5E6]' : 'hover:bg-[#822021]/10'}}">
-                            About Us
+                            Tentang Kami
                         </a>
                         
                         {{-- Mobile Auth Links --}}
@@ -266,9 +266,11 @@
             <footer class="bg-[#822021] text-[#FCF5E6] border-t border-[#FCF5E6]/20">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 grid gap-8 md:grid-cols-3">
                     <div class="space-y-3">
-                        <h3 class="text-xl font-semibold font-['Poppins']">{{ config('app.name', 'Sicrea') }}</h3>
+                        <img src="{{ asset('images/Logo KH.svg') }}" alt="{{ config('app.name', 'Sicrea') }}" class="h-18 w-auto">
                         <p class="text-sm leading-relaxed opacity-90">
-                            Platform online untuk pendaftaran workshop, event, dan kegiatan kreatif. Wujudkan potensi kreatif Anda bersama kami.
+                            #TumbuhBersamaKreasiHangat 
+                        <br>
+                            “Menemanimu meromantisasikan proses belajar melalui hal-hal sederhana yang bermakna”
                         </p>
                     </div>
                     <div class="space-y-3">
@@ -276,7 +278,7 @@
                         <ul class="space-y-3 text-sm">
                             <li class="flex items-start gap-3">
                                 <x-heroicon-o-map-pin class="h-5 w-5 mt-0.5 flex-shrink-0" />
-                                <span>Jl. Kreasi No. 123, Jakarta</span>
+                                <span>Tangerang Selatan</span>
                             </li>
                             <li class="flex items-center gap-3">
                                 <x-heroicon-o-phone class="h-5 w-5 flex-shrink-0" />
@@ -307,7 +309,7 @@
                                     <div class="tooltip">Instagram</div>
                                 </li>
                                 <li class="icon-content">
-                                    <a data-social="tiktok" aria-label="TikTok" href="https://tiktok.com/@kreasihangat" target="_blank">
+                                    <a data-social="tiktok" aria-label="TikTok" href="https://tiktok.com/@kreasi.hangat" target="_blank">
                                         <div class="filled"></div>
                                         <svg xml:space="preserve" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                                             <path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"></path>

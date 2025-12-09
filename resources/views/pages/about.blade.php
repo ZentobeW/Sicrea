@@ -133,7 +133,7 @@
     <section class="py-20 bg-[#FCF5E6] relative">
         <div class="container mx-auto px-4 lg:px-8">
             <div class="max-w-4xl mx-auto text-center">
-                <h1 class="text-4xl lg:text-5xl mb-6 font-bold text-[#822021]">Who Is Kreasi Hangat?</h1>
+                <h1 class="text-4xl lg:text-5xl mb-6 font-bold text-[#822021]">Siapa Kreasi Hangat?</h1>
                 <p class="text-lg text-gray-600 leading-relaxed mb-8 max-w-3xl mx-auto">
                     Kreasi Hangat hadir sebagai komunitas yang bergerak di bidang creative class dan workshop, dengan fokus pada kegiatan yang mengembangkan kreativitas serta memberikan pengalaman seni yang menyenangkan.
                     Workshop Kreasi Hangat dirancang untuk semua kalangan, baik pemula maupun yang sudah berpengalaman. 
@@ -183,9 +183,9 @@
                         <h2 class="text-2xl font-bold text-[#822021]">Tujuan Kami</h2>
                     </div>
                     <ul class="list-disc pl-5 text-gray-600 leading-relaxed space-y-2 flex-grow">
-                        <li>Meningkatkan minat dan keterampilan seni masyarakat.</li>
-                        <li>Menyediakan pengalaman workshop yang edukatif & fun.</li>
-                        <li>Membantu mitra mendapatkan exposure dan pelanggan baru.</li>
+                        <li>Meningkatkan minat dan keterampilan seni serta kreativitas masyarakat.</li>
+                        <li>Menyediakan pengalaman workshop yang edukatif & menyenangkan.</li>
+                        <li>Membantu mitra (cafe, mall, dan tutor) mendapatkan exposure dan potensi pelanggan baru.</li>
                         <li>Membangun komunitas kreatif yang aktif dan produktif.</li>
                     </ul>
                 </div>
@@ -210,7 +210,7 @@
 
         @media (prefers-reduced-motion: reduce){ .value-card, .interactive-card{ transition: none; } }
     </style>
-    <section class="py-20 bg-[#FFDEF8]">
+    <!-- <section class="py-20 bg-[#FFDEF8]">
         <div class="container mx-auto px-4 lg:px-8">
             <div class="text-center mb-12">
                 <h2 class="text-3xl lg:text-4xl mb-4 font-bold text-[#822021]">Our Values</h2>
@@ -271,7 +271,7 @@
     <section class="py-20 bg-white">
         <div class="container mx-auto px-4 lg:px-8">
             <div class="text-center mb-12">
-                <h2 class="text-3xl lg:text-4xl mb-4 font-bold text-[#822021]">Our Teams</h2>
+                <h2 class="text-3xl lg:text-4xl mb-4 font-bold text-[#822021]">Tim Kami</h2>
                 <p class="text-lg text-gray-600 max-w-2xl mx-auto">
                     Para ahli berpengalaman yang siap membimbing perjalanan kreatif Anda
                 </p>
@@ -330,13 +330,7 @@
 
             <!-- Mobile Carousel -->
             <div class="lg:hidden relative">
-                <button class="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white text-[#822021] p-3 rounded-full shadow-lg border border-[#FFB3E1]">
-                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
-                        <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd"/>
-                    </svg>
-                </button>
-
-                <div class="flex overflow-x-auto gap-6 pb-4 px-12" style="scrollbar-width: none; -ms-overflow-style: none;">
+                <div id="teamCarousel" class="flex overflow-x-auto gap-6 pb-4 px-4" style="scrollbar-width: none; -ms-overflow-style: none;">
                     <div class="min-w-[200px] text-center flex-shrink-0 interactive-card">
                         <div class="relative mb-4 overflow-hidden rounded-2xl aspect-square">
                             <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=300&h=300&fit=crop" alt="Adella Marshanda" class="w-full h-full object-cover">
@@ -403,7 +397,7 @@
     <section class="py-20 bg-gradient-to-br from-[#FFB3E1] to-[#FFBE8E] text-white">
         <div class="container mx-auto px-4 lg:px-8">
             <div class="max-w-4xl mx-auto text-center">
-                <h2 class="text-3xl lg:text-4xl mb-4 font-bold text-[#822021]">Contact Us</h2>
+                <h2 class="text-3xl lg:text-4xl mb-4 font-bold text-[#822021]">Kontak Kami</h2>
                 <p class="text-lg mb-12 text-[#822021]">
                     Punya pertanyaan atau ingin tahu lebih lanjut? Kami siap membantumu.
                 </p>
@@ -438,20 +432,18 @@
         
         if (carousel && dots.length > 0) {
             carousel.addEventListener('scroll', function() {
-                const scrollLeft = carousel.scrollLeft;
-                const scrollWidth = carousel.scrollWidth;
-                const clientWidth = carousel.clientWidth;
-                const itemWidth = 224; 
+                const items = carousel.querySelectorAll('.interactive-card');
+                let currentIndex = 0;
+                let minDistance = Infinity;
                 
-                let currentIndex;
-                
-                // Check if at the end
-                if (scrollLeft + clientWidth >= scrollWidth - 10) {
-                    currentIndex = dots.length - 1;
-                } else {
-                    currentIndex = Math.round(scrollLeft / itemWidth);
-                    currentIndex = Math.min(currentIndex, dots.length - 1);
-                }
+                items.forEach((item, index) => {
+                    const itemLeft = item.offsetLeft;
+                    const distance = Math.abs(carousel.scrollLeft - itemLeft);
+                    if (distance < minDistance) {
+                        minDistance = distance;
+                        currentIndex = index;
+                    }
+                });
                 
                 dots.forEach((dot, index) => {
                     if (index === currentIndex) {

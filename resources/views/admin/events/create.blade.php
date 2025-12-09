@@ -1,6 +1,7 @@
 <x-layouts.admin title="Tambah Event" subtitle="Susun pengalaman workshop yang inspiratif dan pastikan informasinya lengkap sebelum dibagikan ke publik." back-url="{{ route('admin.events.index') }}">
     <div class="grid gap-8 lg:grid-cols-[2fr,1fr]">
-        <form method="POST" action="{{ route('admin.events.store') }}" class="space-y-6">
+        {{-- PENTING: Tambahkan enctype="multipart/form-data" --}}
+        <form method="POST" action="{{ route('admin.events.store') }}" enctype="multipart/form-data" class="space-y-6">
             @csrf
             <div class="space-y-6 rounded-3xl bg-white p-6 shadow-[0_35px_90px_-45px_rgba(240,128,128,0.55)]">
                 <h2 class="text-xl font-semibold text-[#822021]">Informasi Dasar</h2>
@@ -9,6 +10,19 @@
                         <span>Judul Event</span>
                         <input type="text" name="title" value="{{ old('title') }}" class="w-full rounded-2xl border border-[#FFD6C7] bg-[#FCF5E6] px-4 py-3 text-base text-[#822021] placeholder:text-[#D28B7B] focus:border-[#822021] focus:outline-none" required>
                     </label>
+
+                    {{-- Input Foto Baru --}}
+                    <label class="space-y-2 text-base font-semibold text-[#822021]">
+                        <span>Banner Event</span>
+                        <div class="relative">
+                            <input type="file" name="image" accept="image/*" class="w-full rounded-2xl border border-[#FFD6C7] bg-[#FCF5E6] px-4 py-3 text-base text-[#822021] file:mr-4 file:rounded-full file:border-0 file:bg-[#822021] file:px-4 file:py-2 file:text-sm file:font-semibold file:text-[#FAF8F1] hover:file:bg-[#822021]/80 focus:border-[#822021] focus:outline-none cursor-pointer">
+                        </div>
+                        <p class="text-xs text-[#D28B7B] mt-1">Format: JPG, PNG, WEBP. Maksimal 2MB.</p>
+                        @error('image')
+                            <p class="text-xs text-red-600 mt-1">{{ $message }}</p>
+                        @enderror
+                    </label>
+
                     <div class="grid gap-4 md:grid-cols-2">
                         <label class="space-y-2 text-base font-semibold text-[#822021]">
                             <span>Mulai</span>

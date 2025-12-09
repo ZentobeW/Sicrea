@@ -12,7 +12,7 @@ use Illuminate\Http\RedirectResponse;
 
 class EventController extends Controller
 {
-    public function index(Request $request): View
+    ppublic function index(Request $request): View
     {
         $events = Event::query()
             ->withCount([
@@ -20,6 +20,9 @@ class EventController extends Controller
                 'registrations as total_registrations_count',
             ])
             ->where('status', EventStatus::Published)
+            
+            // --- TAMBAHAN: Hanya tampilkan event yang belum lewat ---
+            ->where('start_at', '>=', now()) 
             
             // Filter Pencarian (Search)
             ->when($request->filled('q'), function ($query) use ($request) {
@@ -33,9 +36,12 @@ class EventController extends Controller
                 });
             })
             
-           ->orderBy('start_at') // Urutkan berdasarkan tanggal terdekat
-            ->paginate(9) // Tampilkan 9 event per halaman
+            // Urutkan dari yang paling dekat tanggalnya (Ascending)
+            ->orderBy('start_at', 'asc') 
+            
+            ->paginate(9)
             ->withQueryString();
+
         return view('events.index', compact('events'));
     }
 

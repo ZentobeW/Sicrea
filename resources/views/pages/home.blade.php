@@ -355,7 +355,7 @@
                         Lihat Event
                     </a>
                     <a href="{{ route('partnership.index') }}" class="btn-zoom inline-flex items-center rounded-full bg-[#FAF8F1] border border-[#822021] px-6 py-2 text-sm font-semibold text-[#822021] shadow-sm">
-                        Ajukan Kolaborasi
+                        Ajukan Kemitraan
                     </a>
                 </div>
             </div>

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Upload</title>
+</head>
+<body>
+    <h1>Test Form Upload</h1>
+    <form method="POST" action="/profile" enctype="multipart/form-data">
+        <input type="hidden" name="_token" value="test">
+        <input type="hidden" name="_method" value="PUT">
+        <input type="file" name="avatar" accept="image/*" required>
+        <button type="submit">Upload</button>
+    </form>
+    
+    <script>
+        document.querySelector('form').addEventListener('submit', function(e) {
+            const fileInput = document.querySelector('input[type="file"]');
+            console.log('File selected:', fileInput.files[0]);
+            console.log('Form data:', new FormData(this));
+        });
+    </script>
+</body>
+</html>
