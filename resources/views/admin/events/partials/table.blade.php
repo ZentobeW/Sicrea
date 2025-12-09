@@ -80,7 +80,7 @@
     }
 </style>
 
-<form method="GET" action="{{ route('admin.registrations.export') }}" class="mt-6 space-y-4">
+<form id="export-form" method="GET" action="{{ route('admin.registrations.export') }}" class="mt-6 space-y-4">
     <div class="flex flex-col gap-3 rounded-2xl bg-[#FCF5E6] px-4 py-3 text-base text-[#822021] lg:flex-row lg:items-center lg:justify-between">
         <div class="flex flex-wrap items-center gap-3">
             <label class="font-semibold text-[#822021]">Jenis Laporan</label>
@@ -100,6 +100,7 @@
             </button>
         </div>
     </div>
+</form>
 
     {{-- TABLE --}}
     <div class="overflow-x-auto">
