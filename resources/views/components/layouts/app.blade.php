@@ -68,7 +68,7 @@
         /* Footer social buttons & Animation */
         .footer-social{ display:flex; gap:.75rem; align-items:center; }
         .footer-social a.social-btn{ display:inline-flex; align-items:center; gap:.5rem; text-decoration:none; color:var(--on-primary); }
-        
+
         ul.example-2 { list-style: none; display: flex; justify-content: flex-start; align-items: center; padding: 0; margin-top: 10px; }
         .example-2 .icon-content { margin: 0 10px 0 0; position: relative; }
         .example-2 .icon-content .tooltip { position: absolute; top: -30px; left: 50%; transform: translateX(-50%); color: #fff; padding: 6px 10px; border-radius: 5px; opacity: 0; visibility: hidden; font-size: 14px; transition: all 0.3s ease; white-space: nowrap; pointer-events: none; }
@@ -168,7 +168,7 @@
             {{-- HEADER BARU DENGAN LOGO --}}
             <header class="bg-[#FCF5E6] border-b border-[#F7C8B8]/60 sticky top-0 z-50">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
-                    
+
                     {{-- Logo & Brand Name --}}
                     <a href="{{ route('home') }}" class="flex items-center gap-3 group">
                         <img src="{{ asset('images/Logo KH.svg') }}" alt="Logo Kreasi Hangat" class="h-10 w-auto transition-transform duration-300 group-hover:scale-105">
@@ -217,7 +217,7 @@
                                 </a>
                             @endif
                         @endauth
-                        
+
                         {{-- Mobile Menu Button --}}
                         <button id="mobile-menu-button" class="md:hidden p-2 rounded-lg text-[#822021] hover:bg-[#822021]/10 transition">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -245,7 +245,7 @@
                         <a href="{{ route('about.index') }}" class="block px-4 py-2 rounded-lg transition duration-300 text-[#822021] font-bold {{ request()->routeIs('about.*') ? 'bg-[#822021] text-[#FCF5E6]' : 'hover:bg-[#822021]/10'}}">
                             Tentang Kami
                         </a>
-                        
+
                         {{-- Mobile Auth Links --}}
                         <div class="border-t border-[#822021]/20 pt-2 mt-2 space-y-2">
                             @auth
@@ -268,7 +268,7 @@
                     <div class="space-y-3">
                         <img src="{{ asset('images/Logo KH.svg') }}" alt="{{ config('app.name', 'Sicrea') }}" class="h-18 w-auto">
                         <p class="text-sm leading-relaxed opacity-90">
-                            #TumbuhBersamaKreasiHangat 
+                            #TumbuhBersamaKreasiHangat
                         <br>
                             “Menemanimu meromantisasikan proses belajar melalui hal-hal sederhana yang bermakna”
                         </p>
@@ -347,7 +347,7 @@
     @endif
 
     @stack('scripts')
-    
+
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const mobileMenuButton = document.getElementById('mobile-menu-button');
@@ -358,7 +358,7 @@
                 });
             }
         });
-        
+
         const backToTopButton = document.querySelector('.back-to-top');
         window.addEventListener('scroll', () => {
             if (window.scrollY > 300) {
@@ -383,9 +383,9 @@
                 setTimeout(() => {
                     toasts.forEach(toast => {
                         toast.classList.add('opacity-0', 'translate-x-full');
-                        toast.style.maxHeight = toast.scrollHeight + 'px'; 
-                        toast.style.overflow = 'hidden'; 
-                        void toast.offsetWidth; 
+                        toast.style.maxHeight = toast.scrollHeight + 'px';
+                        toast.style.overflow = 'hidden';
+                        void toast.offsetWidth;
                         toast.style.maxHeight = '0';
                         toast.style.marginTop = '0';
                         toast.style.marginBottom = '0';
@@ -394,7 +394,7 @@
                         toast.style.border = 'none';
                         setTimeout(() => { toast.remove(); }, 500);
                     });
-                }, 5000); 
+                }, 5000);
             }
         });
     </script>

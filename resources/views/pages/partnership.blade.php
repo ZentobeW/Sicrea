@@ -24,7 +24,7 @@
             animation: blink 1s step-end infinite;
             color: #822021;
         }
-        
+
         @keyframes blink {
             0%, 100% { opacity: 1; }
             50% { opacity: 0; }
@@ -174,16 +174,16 @@
                         </svg>
                         <span class="text-sm text-gray-600">Kemitraan</span>
                     </div>
-                    
+
                     <h1 id="typewriter-text" class="text-4xl lg:text-5xl xl:text-6xl mb-6 text-[#822021] font-bold typing-cursor min-h-[1.2em] lg:min-h-[2.4em]">
                         </h1>
-                    
+
                     <p class="text-lg text-gray-600 mb-8 leading-relaxed">
                         Kami membuka kesempatan kolaborasi dengan berbagai pihak, seperti kafe, mal, dan tutor, untuk
                         menghadirkan workshop berkualitas, menarik, dan
                         inklusif bagi peserta
                     </p>
-                    
+
                     <div class="flex flex-wrap gap-4">
                         <a href="https://wa.me/6285871497367" target="_blank" class="btn-liquid">
                             Diskusi via WhatsApp
@@ -197,7 +197,7 @@
                         </a>
                     </div>
                 </div>
-                
+
                 <div class="relative">
                     <div class="relative rounded-2xl overflow-hidden shadow-2xl">
                         <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=800&h=600&fit=crop" alt="Partnership" class="w-full h-[500px] object-cover">
@@ -216,7 +216,7 @@
                     Dapatkan gambaran rencana kegiatan kolaborasi strategis dengan Kreasi Hangat
                 </p>
             </div>
-            
+
             <div class="interactive-grid grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 <div class="interactive-card border-2 border-[#FFB3E1]/30 hover:border-[#822021] transition-colors rounded-lg bg-white">
                     <div class="p-6">
@@ -227,7 +227,7 @@
                         <p class="text-sm text-gray-600 text-center">Bisa diadakan di café, mall, atau studio yang bekerja sama.</p>
                     </div>
                 </div>
-                
+
                 <div class="interactive-card border-2 border-[#FFB3E1]/30 hover:border-[#822021] transition-colors rounded-lg bg-white">
                     <div class="p-6">
                         <div class="w-14 h-14 rounded-xl flex items-center justify-center mb-4 mx-auto">
@@ -237,7 +237,7 @@
                         <p class="text-sm text-gray-600 text-center">2 - 3 jam per sesi</p>
                     </div>
                 </div>
-                
+
                 <div class="interactive-card border-2 border-[#FFB3E1]/30 hover:border-[#822021] transition-colors rounded-lg bg-white">
                     <div class="p-6">
                         <div class="w-14 h-14 rounded-xl flex items-center justify-center mb-4 mx-auto">
@@ -247,7 +247,7 @@
                         <p class="text-sm text-gray-600 text-center">10 - 20 orang per workshop (dapat disesuaikan).</p>
                     </div>
                 </div>
-                
+
                 <div class="interactive-card border-2 border-[#FFB3E1]/30 hover:border-[#822021] transition-colors rounded-lg bg-white">
                     <div class="p-6">
                         <div class="w-14 h-14 rounded-xl flex items-center justify-center mb-4 mx-auto">
@@ -269,7 +269,7 @@
                     Lihat hasil kolaborasi dan event yang telah kami selenggarakan
                 </p>
             </div>
-            
+
             <div class="interactive-grid grid sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
                 @forelse ($featuredPortfolios as $portfolio)
                     <div class="interactive-card group cursor-pointer" onclick="openPortfolioModal(event, '{{ $portfolio->id }}', '{{ addslashes($portfolio->title) }}', '{{ $portfolio->cover_image_url ?? '' }}', '{{ addslashes($portfolio->event?->title ?? 'Program Internal') }}')">
@@ -318,7 +318,7 @@
                     Berbagai pilihan kerjasama yang dapat disesuaikan dengan kebutuhan Anda
                 </p>
             </div>
-            
+
             <div class="interactive-grid grid lg:grid-cols-3 gap-8">
                 <div class="interactive-card border-2 border-[#FFB3E1]/30 hover:shadow-xl transition-all hover:border-[#822021] rounded-lg bg-white">
                     <div class="p-8">
@@ -355,7 +355,7 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="interactive-card border-2 border-[#FFB3E1]/30 hover:shadow-xl transition-all hover:border-[#822021] rounded-lg bg-white">
                     <div class="p-8">
                         <div class="bg-gradient-to-br from-[#FFB3E1] to-[#FFBE8E] text-white w-10 h-10 rounded-[24px] flex items-center justify-center mb-4 mx-auto">
@@ -379,7 +379,7 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="interactive-card border-2 border-[#FFB3E1]/30 hover:shadow-xl transition-all hover:border-[#822021] rounded-lg bg-white">
                     <div class="p-8">
                         <div class="bg-gradient-to-br from-[#FFB3E1] to-[#FFBE8E] text-white w-10 h-10 rounded-[24px] flex items-center justify-center mb-4 mx-auto">
@@ -420,10 +420,10 @@
                     Tertarik untuk Berkolaborasi?
                 </h2>
                 <p class="text-lg text-[#822021] mb-8">
-                    Hubungi kami untuk mendiskusikan peluang kerjasama yang saling menguntungkan. 
+                    Hubungi kami untuk mendiskusikan peluang kerjasama yang saling menguntungkan.
                     Tim kami siap membantu mewujudkan kolaborasi terbaik.
                 </p>
-                <div class="flex flex-wrap gap-4 justify-center">                 
+                <div class="flex flex-wrap gap-4 justify-center">
                     <a href="https://wa.me/6285871497367" target="_blank" class="btn-liquid">
                         Hubungi Kami
                         <svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">

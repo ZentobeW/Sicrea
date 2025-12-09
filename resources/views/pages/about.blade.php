@@ -70,18 +70,18 @@
         }
 
         /* --- Hover Animations --- */
-        
+
         /* 1. Text menghilang ke kiri */
         .contact-btn:hover .btn-text {
             opacity: 0;
             transform: translateX(-30px);
         }
-        
+
         /* 2. Logo bergerak ke tengah & JADI PUTIH */
         .contact-btn:hover .btn-icon {
             right: 50%;
             transform: translateX(50%) scale(1.4); /* Perbesar sedikit */
-            
+
             /* MAGIC TRICK: Ubah logo jadi putih solid saat hover */
             /* filter: brightness(0) invert(1);  */
         }
@@ -136,8 +136,8 @@
                 <h1 class="text-4xl lg:text-5xl mb-6 font-bold text-[#822021]">Siapa Kreasi Hangat?</h1>
                 <p class="text-lg text-gray-600 leading-relaxed mb-8 max-w-3xl mx-auto">
                     Kreasi Hangat hadir sebagai komunitas yang bergerak di bidang creative class dan workshop, dengan fokus pada kegiatan yang mengembangkan kreativitas serta memberikan pengalaman seni yang menyenangkan.
-                    Workshop Kreasi Hangat dirancang untuk semua kalangan, baik pemula maupun yang sudah berpengalaman. 
-                    Kegiatan ini tidak hanya bertujuan untuk  memberikan pengalaman seni yang interaktif dan menyenangkan, tetapi juga untuk membuka peluang usaha bagi para peserta. 
+                    Workshop Kreasi Hangat dirancang untuk semua kalangan, baik pemula maupun yang sudah berpengalaman.
+                    Kegiatan ini tidak hanya bertujuan untuk  memberikan pengalaman seni yang interaktif dan menyenangkan, tetapi juga untuk membuka peluang usaha bagi para peserta.
                     Dengan adanya Workshop Kreasi Hangat, diharapkan dapat lahir pengrajin-pengrajin baru yang berkontribusi dalam melestarikan budaya serta meningkatkan perekonomian kreatif di Indonesia
                 </p>
                 <div class="relative rounded-2xl overflow-hidden shadow-2xl">
@@ -150,9 +150,9 @@
     <!-- Mission & Vision -->
     <section class="py-20 bg-[#FCF5E6]">
         <div class="container mx-auto px-4 lg:px-8">
-            
+
             <div class="interactive-grid grid grid-cols-1 md:grid-cols-3 gap-8 max-w-7xl mx-auto">
-                
+
                 <div class="interactive-card bg-white rounded-2xl p-8 border-2 border-[#FFB3E1] hover:border-[#FFB3E1] hover:shadow-lg hover:shadow-[#FFB3E1]/30 h-full flex flex-col transition-all duration-300">
                     <div class="flex items-center gap-4 mb-6">
                         <img src="{{ asset('images/Konsep Desain KH - 8.png') }}" alt="Visi Icon" class="w-16 h-16 object-contain">
@@ -213,7 +213,7 @@
     <!-- <section class="py-20 bg-[#FFDEF8]">
         <div class="container mx-auto px-4 lg:px-8">
             <div class="text-center mb-12">
-                <h2 class="text-3xl lg:text-4xl mb-4 font-bold text-[#822021]">Our Values</h2>
+                <h2 class="text-3xl lg:text-4xl mb-4 font-bold text-[#822021]">Nilai Unggulan</h2>
                 <p class="text-lg text-gray-600 max-w-2xl mx-auto">
                     Prinsip yang menjadi fondasi dalam setiap kegiatan yang kami selenggarakan
                 </p>
@@ -379,7 +379,7 @@
                         <p class="text-sm text-gray-500">Tim Tutor</p>
                     </div>
                 </div>
-                
+
                 <!-- Dot Indicators -->
                 <div class="flex justify-center gap-2 mt-4">
                     <div class="carousel-dot w-2 h-2 rounded-full bg-[#822021] transition-colors duration-300" data-index="0"></div>
@@ -403,7 +403,7 @@
                 </p>
 
                 <div class="grid sm:grid-cols-2 gap-8 max-w-4xl mx-auto">
-                    
+
                     <a href="https://wa.me/6285871497367" target="_blank" class="contact-btn whatsapp">
                         <div class="btn-text">
                             <span class="btn-label">WhatsApp</span>
@@ -429,13 +429,13 @@
     document.addEventListener('DOMContentLoaded', function() {
         const carousel = document.getElementById('teamCarousel');
         const dots = document.querySelectorAll('.carousel-dot');
-        
+
         if (carousel && dots.length > 0) {
             carousel.addEventListener('scroll', function() {
                 const items = carousel.querySelectorAll('.interactive-card');
                 let currentIndex = 0;
                 let minDistance = Infinity;
-                
+
                 items.forEach((item, index) => {
                     const itemLeft = item.offsetLeft;
                     const distance = Math.abs(carousel.scrollLeft - itemLeft);
@@ -444,7 +444,7 @@
                         currentIndex = index;
                     }
                 });
-                
+
                 dots.forEach((dot, index) => {
                     if (index === currentIndex) {
                         dot.classList.remove('bg-gray-300');

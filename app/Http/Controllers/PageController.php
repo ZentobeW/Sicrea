@@ -133,7 +133,6 @@ class PageController extends Controller
         $contactInfo = [
             'email' => 'partnership@sicrea.id',
             'phone' => '+62 812-3456-7890',
-            'address' => 'Jl. Kreasi No. 123, Jakarta Selatan',
             'whatsapp' => '6281234567890',
         ];
 

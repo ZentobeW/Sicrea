@@ -251,7 +251,6 @@
                              data-date="{{ $portfolio->created_at->translatedFormat('d M Y') }}" 
                              data-image="{{ $portfolio->cover_image_url }}" 
                              data-images="{{ $portfolio->images->pluck('image_url')->toJson() }}"
-                             data-event-id="{{ $portfolio->event_id }}"
                              onclick="openModal(this)">
                         <div class="relative overflow-hidden rounded-2xl shadow-md mb-4 transition-transform duration-300 hover:scale-105">
                             @if ($portfolio->cover_image_url)
@@ -331,11 +330,8 @@
                 </div>
                 
                 <div class="flex justify-between items-end mt-auto">
-                    <div id="thumbnailContainer" class="flex gap-3 flex-wrap">
+                    <div id="thumbnailContainer" class="flex gap-3 flex-wrap justify-center">
                         </div>
-                    <button id="lihatEventBtn" class="bg-[#822021] text-[#FAF8F1] font-poppins font-semibold px-6 py-2 rounded-full hover:bg-[#6a1a1b] transition-colors cursor-pointer">
-                        Lihat Event
-                    </button>
                 </div>
             </div>
         </div>
@@ -389,16 +385,6 @@
                 firstThumb.classList.add('ring-1', 'ring-[#822021]');
             }
                         
-            const lihatEventBtn = document.getElementById('lihatEventBtn');
-            if (eventId) {
-                lihatEventBtn.style.display = 'block';
-                lihatEventBtn.onclick = function() {
-                    window.location.href = `/events/${eventId}`;
-                };
-            } else {
-                lihatEventBtn.style.display = 'none';
-            }
-            
             document.getElementById('portfolioModal').classList.add('active');
             document.body.style.overflow = 'hidden';
         }

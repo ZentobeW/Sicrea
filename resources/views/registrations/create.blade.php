@@ -59,19 +59,6 @@
                         <form method="POST" action="{{ route('events.register.store', $event) }}" class="space-y-4 md:space-y-6">
                             @csrf
 
-                            {{-- Radio Buttons: Pribadi / Orang Lain --}}
-                            {{-- Exception: Tidak pakai efek zoom in tombol utama --}}
-                            <div class="flex flex-wrap gap-2 md:gap-3 rounded-full bg-[#FCF5E6] p-2 text-sm font-semibold text-[#822021]">
-                                <label class="flex-1 cursor-pointer">
-                                    <input type="radio" name="form_data[participant_mode]" value="self" checked class="peer hidden">
-                                    <span class="flex h-10 md:h-11 w-full items-center justify-center rounded-full bg-white/50 px-3 md:px-4 py-2 transition peer-checked:bg-[#822021] peer-checked:text-[#FCF5E6] text-center border border-transparent peer-checked:border-[#822021]">Pribadi</span>
-                                </label>
-                                <label class="flex-1 cursor-pointer">
-                                    <input type="radio" name="form_data[participant_mode]" value="other" class="peer hidden">
-                                    <span class="flex h-10 md:h-11 w-full items-center justify-center rounded-full bg-white/50 px-3 md:px-4 py-2 transition peer-checked:bg-[#822021] peer-checked:text-[#FCF5E6] text-center border border-transparent peer-checked:border-[#822021]">Orang Lain</span>
-                                </label>
-                            </div>
-
                             <div class="grid gap-4 md:gap-5 grid-cols-1 md:grid-cols-2">
                                 <div class="space-y-2">
                                     <label class="block text-sm md:text-base font-bold text-[#822021]">Nama Lengkap</label>
@@ -98,10 +85,16 @@
                                             <option value="{{ $bank }}" @selected(old('form_data.bank_name') === $bank)>{{ $bank }}</option>
                                         @endforeach
                                     </select>
+                                    @error('form_data.bank_name')
+                                        <span class="text-xs text-red-600">{{ $message }}</span>
+                                    @enderror
                                 </div>
                                 <div class="space-y-2">
                                     <label class="block text-sm md:text-base font-bold text-[#822021]">Nomor Rekening</label>
                                     <input type="text" name="form_data[account_number]" value="{{ old('form_data.account_number') }}" required class="w-full rounded-xl md:rounded-2xl border border-[#822021]/40 bg-white px-3 md:px-4 py-2 md:py-3 text-sm md:text-base text-[#822021] placeholder:text-[#822021]/40 focus:border-[#822021] focus:outline-none focus:ring-2 focus:ring-[#822021]/20" placeholder="1234 5678 9000">
+                                    @error('form_data.account_number')
+                                        <span class="text-xs text-red-600">{{ $message }}</span>
+                                    @enderror
                                 </div>
                                 <div class="space-y-2">
                                     <label class="block text-sm md:text-base font-bold text-[#822021]">Instansi / Perusahaan <span class="text-[#822021]/60 font-normal">(opsional)</span></label>

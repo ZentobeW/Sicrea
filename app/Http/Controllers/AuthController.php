@@ -36,7 +36,7 @@ class AuthController extends Controller
         $request->validate([
             'email' => ['required', 'email'],
             'password' => ['required'],
-            // 'g-recaptcha-response' => ['required', 'captcha'], // DISABLED for development
+            'g-recaptcha-response' => ['required', 'captcha']
         ]);
 
         if (Auth::attempt($request->only('email', 'password'))) {
@@ -73,8 +73,8 @@ class AuthController extends Controller
                 Password::min(8)->mixedCase()->numbers()->symbols(),
                 'confirmed',
             ],
-            'website' => ['present', 'max:0'], // honeypot
-            // 'g-recaptcha-response' => ['required', 'captcha'], // DISABLED for development
+            'website' => ['present', 'max:0'],
+            'g-recaptcha-response' => ['required', 'captcha'],
         ]);
 
         $user = User::create([

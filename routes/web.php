@@ -110,6 +110,13 @@ Route::middleware(['auth', 'verified.email'])->group(function () {
         ->name('registrations.refund.create');
     Route::post('/registrations/{registration}/refund', [RefundController::class, 'store'])
         ->name('registrations.refund.store');
+
+    // Account Settings (Email & Password)
+    Route::get('/account/settings', [ProfileController::class, 'accountSettings'])
+        ->name('account.settings');
+
+    Route::put('/account/settings', [ProfileController::class, 'updateAccount'])
+        ->name('account.update');
 });
 
 /*
