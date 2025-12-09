@@ -27,6 +27,11 @@
             border-color: #822021 !important;
             box-shadow: 0 10px 15px -3px rgba(130, 32, 33, 0.3);
         }
+
+        /* Center reCaptcha on mobile */
+        .g-recaptcha {
+            display: inline-block;
+        }
     </style>
 
     {{-- Main Background: FFDEF8 --}}
@@ -43,7 +48,6 @@
                 </div>
 
                 {{-- CARD LOGIN --}}
-                {{-- BG: FAF8F1, Border: 822021 --}}
                 <div class="w-full max-w-lg rounded-[36px] bg-[#FAF8F1] border border-[#822021] shadow-xl shadow-[#822021]/10 p-10">
 
                     {{-- GOOGLE LOGIN ERROR --}}
@@ -56,18 +60,11 @@
                     {{-- HEADER --}}
                     <div class="flex items-center justify-between mb-8">
                         <div>
-                            <h2 class="text-2xl font-bold text-[#822021]">Login</h2>
+                            <h2 class="text-2xl font-bold text-[#822021]">Masuk</h2>
                             <p class="text-sm text-[#822021]/70 mt-1">
                                 Masuk ke akun untuk mendaftar event dan workshop.
                             </p>
                         </div>
-                        <span class="inline-flex h-12 w-12 items-center justify-center rounded-full bg-[#FFDEF8] border border-[#822021]/20 text-[#822021]">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                stroke-width="1.5" stroke="currentColor" class="h-6 w-6">
-                                <path stroke-linecap="round" stroke-linejoin="round"
-                                    d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-9A2.25 2.25 0 002.25 5.25v13.5A2.25 2.25 0 004.5 21h9a2.25 2.25 0 002.25-2.25V15M9.75 9l3 3-3 3m6-3H9.75" />
-                            </svg>
-                        </span>
                     </div>
 
                     {{-- LOGIN FORM --}}
@@ -100,7 +97,9 @@
 
                         {{-- RECAPTCHA --}}
                         <div class="mt-4 flex justify-center">
-                            {!! NoCaptcha::display() !!}
+                            <div class="inline-block">
+                                {!! NoCaptcha::display() !!}
+                            </div>
                         </div>
 
                         {{-- REMEMBER + REGISTER --}}
@@ -112,15 +111,13 @@
                             </label>
 
                             @if (Route::has('register'))
-                                <a href="{{ route('register') }}" class="font-bold text-[#822021] hover:underline transition">
-                                    Belum punya akun? Daftar sekarang
+                                <a href="{{ route('register') }}" class="text-[#822021] hover:underline transition">
+                                    Belum punya akun? <b>Daftar sekarang</b>
                                 </a>
                             @endif
                         </div>
 
                         {{-- SUBMIT BUTTON --}}
-                        {{-- Default: BG FFDEF8, Text 822021 --}}
-                        {{-- Hover: Zoom, BG 822021, Text FCF5E6 --}}
                         <button type="submit"
                             class="btn-action w-full rounded-full bg-[#FFDEF8] border border-[#822021] px-6 py-3 text-sm font-bold text-[#822021] shadow-md">
                             Masuk

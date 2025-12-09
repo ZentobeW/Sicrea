@@ -22,6 +22,11 @@
             border-color: #822021 !important;
             box-shadow: 0 10px 15px -3px rgba(130, 32, 33, 0.3);
         }
+
+        /* Center reCaptcha on mobile */
+        .g-recaptcha {
+            display: inline-block;
+        }
     </style>
 
     {{-- Main Background: FFDEF8 --}}
@@ -160,10 +165,12 @@
 
                             {{-- RECAPTCHA --}}
                             <div class="mt-2 flex justify-center">
-                                {!! NoCaptcha::display() !!}
-                                @error('g-recaptcha-response')
-                                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-                                @enderror
+                                <div class="inline-block">
+                                    {!! NoCaptcha::display() !!}
+                                    @error('g-recaptcha-response')
+                                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                                    @enderror
+                                </div>
                             </div>
 
                             {{-- SUBMIT --}}
