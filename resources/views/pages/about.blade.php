@@ -133,7 +133,7 @@
     <section class="py-20 bg-[#FCF5E6] relative">
         <div class="container mx-auto px-4 lg:px-8">
             <div class="max-w-4xl mx-auto text-center">
-                <h1 class="text-4xl lg:text-5xl mb-6 font-bold text-[#822021]">Who Is Kreasi Hangat?</h1>
+                <h1 class="text-4xl lg:text-5xl mb-6 font-bold text-[#822021]">Apa itu Kreasi Hangat?</h1>
                 <p class="text-lg text-gray-600 leading-relaxed mb-8 max-w-3xl mx-auto">
                     Kreasi Hangat hadir sebagai komunitas yang bergerak di bidang creative class dan workshop, dengan fokus pada kegiatan yang mengembangkan kreativitas serta memberikan pengalaman seni yang menyenangkan.
                     Workshop Kreasi Hangat dirancang untuk semua kalangan, baik pemula maupun yang sudah berpengalaman. 
@@ -213,7 +213,7 @@
     <section class="py-20 bg-[#FFDEF8]">
         <div class="container mx-auto px-4 lg:px-8">
             <div class="text-center mb-12">
-                <h2 class="text-3xl lg:text-4xl mb-4 font-bold text-[#822021]">Our Values</h2>
+                <h2 class="text-3xl lg:text-4xl mb-4 font-bold text-[#822021]">Nilai Unggulan</h2>
                 <p class="text-lg text-gray-600 max-w-2xl mx-auto">
                     Prinsip yang menjadi fondasi dalam setiap kegiatan yang kami selenggarakan
                 </p>
@@ -271,7 +271,7 @@
     <section class="py-20 bg-white">
         <div class="container mx-auto px-4 lg:px-8">
             <div class="text-center mb-12">
-                <h2 class="text-3xl lg:text-4xl mb-4 font-bold text-[#822021]">Our Teams</h2>
+                <h2 class="text-3xl lg:text-4xl mb-4 font-bold text-[#822021]">Tim Kami</h2>
                 <p class="text-lg text-gray-600 max-w-2xl mx-auto">
                     Para ahli berpengalaman yang siap membimbing perjalanan kreatif Anda
                 </p>

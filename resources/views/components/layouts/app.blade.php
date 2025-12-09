@@ -467,7 +467,7 @@
                     <nav class="hidden md:flex items-center gap-4 text-sm">
                         <a href="{{ route('home') }}" 
                            class="nav-link {{ request()->routeIs('home') ? 'active' : '' }}">
-                           Home
+                           Beranda
                         </a>
                         
                         <a href="{{ route('events.index') }}" 
@@ -477,17 +477,17 @@
 
                         <a href="{{ route('portfolio.index') }}" 
                            class="nav-link {{ request()->routeIs('portfolio.*') ? 'active' : '' }}">
-                           Portfolio
+                           Portofolio
                         </a>
 
                         <a href="{{ route('partnership.index') }}" 
                            class="nav-link {{ request()->routeIs('partnership.*') ? 'active' : '' }}">
-                           Partnership
+                           Kemitraan
                         </a>
 
                         <a href="{{ route('about.index') }}" 
                            class="nav-link {{ request()->routeIs('about.*') ? 'active' : '' }}">
-                           About Us
+                           Tentang Kami
                         </a>
                     </nav>
 
@@ -536,7 +536,7 @@
                     <div class="px-4 py-3 space-y-2">
                         <a href="{{ route('home') }}" 
                         class="block px-4 py-2 rounded-lg transition duration-300 text-[#822021] font-bold {{ request()->routeIs('home') ? 'bg-[#822021] text-[#FCF5E6]' : 'hover:bg-[#822021]/10'}}">
-                        Home
+                        Beranda
                         </a>
                         </div>
                 </div>
