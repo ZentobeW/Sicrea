@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\Storage; // Tambahkan ini
 
 class Event extends Model
 {
@@ -17,6 +18,7 @@ class Event extends Model
 
     protected $fillable = [
         'title',
+        'image', 
         'description',
         'start_at',
         'end_at',
@@ -83,6 +85,15 @@ class Event extends Model
             ->count();
 
         return max($this->capacity - $confirmedOrHeld, 0);
+    }
+
+    public function imageUrl(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->image 
+                ? Storage::disk('public')->url($this->image) 
+                : null,
+        );
     }
 
     public function titleWithSchedule(): Attribute

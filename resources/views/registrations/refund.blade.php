@@ -49,24 +49,33 @@
                     <div class="rounded-[28px] border border-[#822021] bg-[#FAF8F1] p-6 shadow-lg shadow-[#822021]/10">
                         <form method="POST" action="{{ route('registrations.refund.store', $registration) }}" class="space-y-5">
                             @csrf
-
-                            <div class="grid gap-4 sm:grid-cols-2">
+                                <div class="grid gap-4 sm:grid-cols-2">
+                                {{-- UBAH 1: Ambil Nama dari form_data --}}
                                 <div class="space-y-2">
                                     <label class="block text-sm font-bold text-[#822021]">Nama Lengkap</label>
-                                    <input value="{{ $registration->user->name }}" disabled class="w-full rounded-2xl border border-[#822021]/40 bg-[#FFDEF8]/50 px-4 py-3 text-sm text-[#822021] font-medium" />
+                                    <input value="{{ data_get($registration->form_data, 'name', $registration->user->name) }}" disabled class="w-full rounded-2xl border border-[#822021]/40 bg-[#FFDEF8]/50 px-4 py-3 text-sm text-[#822021] font-medium" />
                                 </div>
+
+                                {{-- UBAH 2: Ambil No. Telepon dari form_data --}}
                                 <div class="space-y-2">
                                     <label class="block text-sm font-bold text-[#822021]">Nomor Telepon</label>
-                                    <input value="{{ $registration->user->phone ?? '-' }}" disabled class="w-full rounded-2xl border border-[#822021]/40 bg-[#FFDEF8]/50 px-4 py-3 text-sm text-[#822021] font-medium" />
+                                    <input value="{{ data_get($registration->form_data, 'phone', $registration->user->phone) }}" disabled class="w-full rounded-2xl border border-[#822021]/40 bg-[#FFDEF8]/50 px-4 py-3 text-sm text-[#822021] font-medium" />
                                 </div>
+
+                                {{-- UBAH 3: Ambil Bank dari form_data --}}
                                 <div class="space-y-2">
                                     <label class="block text-sm font-bold text-[#822021]">Jenis Bank</label>
-                                    <input value="{{ data_get($registration->form_data, 'bank_name', 'Nama bank') }}" disabled class="w-full rounded-2xl border border-[#822021]/40 bg-[#FFDEF8]/50 px-4 py-3 text-sm text-[#822021] font-medium" />
+                                    <input value="{{ data_get($registration->form_data, 'bank_name', '-') }}" disabled class="w-full rounded-2xl border border-[#822021]/40 bg-[#FFDEF8]/50 px-4 py-3 text-sm text-[#822021] font-medium" />
                                 </div>
+
+                                {{-- UBAH 4: Atas Nama (Biasanya sama dengan Nama Peserta di form_data) --}}
                                 <div class="space-y-2">
                                     <label class="block text-sm font-bold text-[#822021]">Atas Nama Rekening</label>
-                                    <input value="{{ data_get($registration->form_data, 'account_name', $registration->user->name) }}" disabled class="w-full rounded-2xl border border-[#822021]/40 bg-[#FFDEF8]/50 px-4 py-3 text-sm text-[#822021] font-medium" />
+                                    {{-- Menggunakan nama peserta dari form_data sebagai default atas nama --}}
+                                    <input value="{{ data_get($registration->form_data, 'name', $registration->user->name) }}" disabled class="w-full rounded-2xl border border-[#822021]/40 bg-[#FFDEF8]/50 px-4 py-3 text-sm text-[#822021] font-medium" />
                                 </div>
+
+                                {{-- UBAH 5: No Rekening dari form_data --}}
                                 <div class="space-y-2 sm:col-span-2">
                                     <label class="block text-sm font-bold text-[#822021]">Nomor Rekening</label>
                                     <input value="{{ data_get($registration->form_data, 'account_number', '-') }}" disabled class="w-full rounded-2xl border border-[#822021]/40 bg-[#FFDEF8]/50 px-4 py-3 text-sm text-[#822021] font-medium" />

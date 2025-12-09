@@ -9,16 +9,17 @@ use App\Http\Requests\StoreEventRequest;
 use App\Http\Requests\UpdateEventRequest;
 use App\Models\Event;
 use Illuminate\Contracts\View\View;
-use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class EventController extends Controller
 {
     public function index(Request $request): View
     {
         // 1. Ambil kata kunci pencarian
-        $search = $request->input('search'); // Gunakan input() agar dapat null/string biasa
+        $search = $request->input('search');
 
         $events = Event::query()
             ->withCount([
@@ -34,9 +35,9 @@ class EventController extends Controller
                         ->orWhere('tutor_name', 'like', "%{$keyword}%");
                 });
             })
-            ->orderByDesc('start_at')
+            ->orderBy('start_at', 'asc')
             ->paginate(10)
-            ->withQueryString(); // Penting: Simpan filter saat pindah halaman (pagination)
+            ->withQueryString();
 
         $overview = [
             'total' => Event::count(),
@@ -50,7 +51,7 @@ class EventController extends Controller
             ->orderBy('start_at')
             ->first();
 
-        // 3. Kirim data filter ke View agar input tidak kosong setelah reload
+        // 3. Kirim data filter ke View
         $filters = [
             'search' => $search,
         ];
@@ -70,8 +71,15 @@ class EventController extends Controller
     public function store(StoreEventRequest $request): RedirectResponse
     {
         DB::transaction(function () use ($request) {
+            $data = $request->validated();
+
+            // Logika Upload Gambar Baru
+            if ($request->hasFile('image')) {
+                $data['image'] = $request->file('image')->store('events', 'public');
+            }
+
             $event = Event::create(array_merge(
-                $request->validated(),
+                $data,
                 [
                     'created_by' => $request->user()->id,
                     'status' => $request->boolean('publish') ? EventStatus::Published : EventStatus::Draft,
@@ -79,6 +87,7 @@ class EventController extends Controller
                 ]
             ));
 
+            // Jika publish dicentang, update timestamp published_at
             if ($request->boolean('publish')) {
                 $event->update(['published_at' => now()]);
             }
@@ -94,11 +103,24 @@ class EventController extends Controller
 
     public function update(UpdateEventRequest $request, Event $event): RedirectResponse
     {
+        $data = $request->validated();
+
+        // Logika Update Gambar
+        if ($request->hasFile('image')) {
+            // Hapus gambar lama jika ada
+            if ($event->image) {
+                Storage::disk('public')->delete($event->image);
+            }
+            // Upload gambar baru
+            $data['image'] = $request->file('image')->store('events', 'public');
+        }
+
         $event->update(array_merge(
-            $request->validated(),
+            $data,
             [
                 'updated_by' => $request->user()->id,
                 'status' => $request->boolean('publish') ? EventStatus::Published : EventStatus::Draft,
+                // Jangan reset published_at jika sudah ada, kecuali baru di-publish sekarang
                 'published_at' => $request->boolean('publish') ? ($event->published_at ?? now()) : null,
             ]
         ));
@@ -108,6 +130,11 @@ class EventController extends Controller
 
     public function destroy(Event $event): RedirectResponse
     {
+        // Hapus file gambar dari storage saat event dihapus
+        if ($event->image) {
+            Storage::disk('public')->delete($event->image);
+        }
+
         $event->delete();
 
         return redirect()->route('admin.events.index')->with('status', 'Event berhasil dihapus.');

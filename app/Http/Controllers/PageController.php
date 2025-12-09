@@ -8,6 +8,7 @@ use App\Models\Event;
 use App\Models\Portfolio;
 use App\Models\Registration;
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\Request;
 
 class PageController extends Controller
 {
@@ -15,9 +16,10 @@ class PageController extends Controller
     {
         $upcomingEvents = Event::query()
             ->where('status', EventStatus::Published)
+            ->where('start_at', '>=', now())
             ->orderBy('start_at')
             ->limit(3)
-            ->get(['id', 'title', 'description', 'start_at', 'end_at', 'price', 'venue_name', 'venue_address', 'tutor_name']);
+            ->get(['id', 'title', 'image', 'description', 'start_at', 'end_at', 'price', 'venue_name', 'venue_address', 'tutor_name']);
 
         $featuredPortfolios = Portfolio::query()
             ->with([
