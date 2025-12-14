@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Enums\EventStatus;
+use App\Enums\PaymentStatus;
 use App\Enums\RegistrationStatus;
 use App\Http\Controllers\Controller;
 use App\Models\Event;
@@ -16,7 +17,15 @@ class EventController extends Controller
     {
         $events = Event::query()
             ->withCount([
-                'registrations as confirmed_registrations_count' => fn ($query) => $query->where('status', RegistrationStatus::Confirmed),
+                'registrations as confirmed_registrations_count' => fn ($query) => $query
+                    ->where('status', RegistrationStatus::Confirmed),
+                'registrations as verified_registrations_count' => fn ($query) => $query
+                    ->where(function ($query) {
+                        $query->where('status', RegistrationStatus::Confirmed->value)
+                            ->orWhereHas('transaction', function ($transactionQuery) {
+                                $transactionQuery->where('status', PaymentStatus::Verified->value);
+                            });
+                    }),
                 'registrations as total_registrations_count',
             ])
             ->where('status', EventStatus::Published)
@@ -53,7 +62,17 @@ class EventController extends Controller
         $event->loadMissing([
             'portfolios.images',
             'creator',
-        ])->loadCount('registrations');
+        ])->loadCount([
+            'registrations',
+            'registrations as verified_registrations_count' => function ($query) {
+                $query->where(function ($query) {
+                    $query->where('status', RegistrationStatus::Confirmed->value)
+                        ->orWhereHas('transaction', function ($transactionQuery) {
+                            $transactionQuery->where('status', PaymentStatus::Verified->value);
+                        });
+                });
+            },
+        ]);
 
         $existingRegistration = auth()->check()
             ? $event->registrations()

@@ -71,20 +71,16 @@ class Event extends Model
             return null;
         }
 
-        $confirmedOrHeld = $this->registrations()
+        $verifiedCount = $this->registrations()
             ->where(function ($query) {
                 $query->where('status', RegistrationStatus::Confirmed->value)
                     ->orWhereHas('transaction', function ($transactionQuery) {
-                        $transactionQuery->whereIn('status', [
-                            PaymentStatus::Pending->value,
-                            PaymentStatus::AwaitingVerification->value,
-                            PaymentStatus::Verified->value,
-                        ]);
+                        $transactionQuery->where('status', PaymentStatus::Verified->value);
                     });
             })
             ->count();
 
-        return max($this->capacity - $confirmedOrHeld, 0);
+        return max($this->capacity - $verifiedCount, 0);
     }
 
     public function imageUrl(): Attribute

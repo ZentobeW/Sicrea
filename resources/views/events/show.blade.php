@@ -120,7 +120,7 @@
                                 </div>
                                 <div>
                                     <p class="text-xs text-[#822021]/70 mb-1">Kuota Peserta</p>
-                                    <p class="text-xs font-semibold text-[#822021]">{{ $event->registrations_count }}/{{ $event->remainingSlots() ?? '∞' }} peserta terdaftar</p>
+                                    <p class="text-xs font-semibold text-[#822021]">{{ $event->verified_registrations_count ?? 0 }}/{{ $event->capacity ?? '∞' }} peserta terverifikasi</p>
                                 </div>
                             </div>
                         </div>
@@ -151,11 +151,11 @@
                         <div class="space-y-2 text-sm mb-6 border-b border-[#822021]/20 pb-4">
                             <div class="flex justify-between text-xs text-[#822021]">
                                 <span>Total Pendaftar</span>
-                                <span class="font-semibold">{{ $event->registrations_count }} peserta</span>
+                                <span class="font-semibold">{{ $event->verified_registrations_count ?? 0 }} peserta</span>
                             </div>
                             <div class="flex justify-between text-xs text-[#822021]">
                                 <span>Kuota Tersisa</span>
-                                <span class="font-semibold">{{ $event->remainingSlots() ?? '∞' }} kuota</span>
+                                <span class="font-semibold">{{ $event->capacity ? max($event->capacity - ($event->verified_registrations_count ?? 0), 0) : '∞' }} kuota</span>
                             </div>
                         </div>
                         

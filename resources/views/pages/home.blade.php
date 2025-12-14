@@ -220,7 +220,10 @@
                                         <path d="M14.6667 14.0002V12.6669C14.6662 12.0761 14.4696 11.5021 14.1076 11.0351C13.7456 10.5682 13.2388 10.2346 12.6667 10.0869" stroke="#822021" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
                                         <path d="M5.99998 7.33333C7.47274 7.33333 8.66665 6.13943 8.66665 4.66667C8.66665 3.19391 7.47274 2 5.99998 2C4.52722 2 3.33331 3.19391 3.33331 4.66667C3.33331 6.13943 4.52722 7.33333 5.99998 7.33333Z" stroke="#822021" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
                                     </svg>
-                                    <span class="text-sm font-semibold">{{ $event->total_registrations_count }}/{{ $event->remainingSlots() }} peserta</span>
+                                    @php
+                                        $capacityText = $event->capacity ? $event->capacity : 'Tak terbatas';
+                                    @endphp
+                                    <span class="text-sm font-semibold">{{ $event->verified_registrations_count ?? 0 }}/{{ $capacityText }} peserta</span>
                                 </div>
                             </div>
                             <div class="flex items-center justify-between mt-auto">

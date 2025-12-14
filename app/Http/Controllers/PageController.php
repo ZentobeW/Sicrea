@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Enums\EventStatus;
+use App\Enums\PaymentStatus;
 use App\Enums\RegistrationStatus;
 use App\Models\Event;
 use App\Models\Portfolio;
@@ -17,9 +18,19 @@ class PageController extends Controller
         $upcomingEvents = Event::query()
             ->where('status', EventStatus::Published)
             ->where('start_at', '>=', now())
+            ->withCount([
+                'registrations as verified_registrations_count' => function ($query) {
+                    $query->where(function ($query) {
+                        $query->where('status', RegistrationStatus::Confirmed->value)
+                            ->orWhereHas('transaction', function ($transactionQuery) {
+                                $transactionQuery->where('status', PaymentStatus::Verified->value);
+                            });
+                    });
+                },
+            ])
             ->orderBy('start_at')
             ->limit(3)
-            ->get(['id', 'title', 'image', 'description', 'start_at', 'end_at', 'price', 'venue_name', 'venue_address', 'tutor_name']);
+            ->get(['id', 'title', 'image', 'description', 'start_at', 'end_at', 'price', 'venue_name', 'venue_address', 'tutor_name', 'capacity']);
 
         $featuredPortfolios = Portfolio::query()
             ->with([
