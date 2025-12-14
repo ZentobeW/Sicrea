@@ -17,7 +17,7 @@ enum PaymentStatus: string
             self::AwaitingVerification => 'Menunggu Verifikasi',
             self::Verified => 'Pembayaran Terverifikasi',
             self::Rejected => 'Ditolak',
-            self::Refunded => 'Dana Dikembalikan',
+            self::Refunded => 'Refund',
         };
     }
 }

@@ -142,7 +142,7 @@
                                             'bg-[#E4F5E9] text-[#2F9A55]' => $isVerified,
                                             'bg-[#FDE1E7] text-[#BA1B1D]' => $isRejected,
                                             'bg-[#FDF7D8] text-[#B89530]' => $isAwaitingVerification,
-                                            'bg-[#E8F3FF] text-[#2B6CB0]' => $isRefunded,
+                                            'bg-rose-500 text-rose-900' => $isRefunded,
                                         ])>
                                             {{ $paymentStatus?->label() ?? 'Tidak ada data' }}
                                         </span>

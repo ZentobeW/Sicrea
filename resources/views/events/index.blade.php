@@ -193,8 +193,8 @@
                     <article class="event-card h-full">
                         
                         <div class="aspect-[4/3] bg-gray-200 overflow-hidden shrink-0">
-                            @if ($event->cover_image_url)
-                                <img src="{{ $event->cover_image_url }}" alt="{{ $event->title }}" class="w-full h-full object-cover">
+                            @if ($event->image)
+                                <img src="{{ \Illuminate\Support\Facades\Storage::url($event->image) }}" alt="{{ $event->title }}" class="w-full h-full object-cover">
                             @else
                                 <div class="w-full h-full bg-gradient-to-br from-[#FFD4B6] via-[#FFE9DC] to-white flex items-center justify-center">
                                     <span class="text-[#822021]/50 text-sm uppercase tracking-[0.35em] font-['Poppins']">Event Image</span>

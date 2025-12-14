@@ -18,7 +18,7 @@
                         @if($event->image)
                             <div class="mb-2">
                                 <p class="text-xs text-[#822021] mb-1">Gambar Saat Ini:</p>
-                                <img src="{{ Storage::url($event->image) }}" alt="Current Banner" class="h-32 w-auto rounded-lg object-cover border border-[#FFD6C7]">
+                                <img src="{{ \Illuminate\Support\Facades\Storage::url($event->image) }}" alt="Current Banner" class="h-32 w-auto rounded-lg object-cover border border-[#FFD6C7]">
                             </div>
                         @endif
                         <div class="relative">

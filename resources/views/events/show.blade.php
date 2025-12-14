@@ -1,5 +1,4 @@
 @php
-    use Illuminate\Support\Str;
     $existingRegistration ??= null;
 @endphp
 
@@ -38,36 +37,21 @@
                 <a href="{{ route('events.index') }}" class="font-semibold text-[#822021] hover:underline">Kembali ke Events</a>
             </div>
 
-            {{-- Carousel Image (Logic Tetap Sama) --}}
-            @if ($event->portfolios?->count())
-                <div class="relative mb-6 max-w-2xl mx-auto">
-                    <div class="relative overflow-hidden rounded-2xl shadow-lg border-2 border-[#822021]" style="aspect-ratio: 16/9;">
-                        <div id="carousel" class="flex transition-transform duration-300 ease-in-out h-full">
-                            @foreach ($event->portfolios as $index => $portfolio)
-                                <div class="w-full flex-shrink-0 h-full">
-                                    @if ($portfolio->cover_image_url)
-                                        <img src="{{ $portfolio->cover_image_url }}" alt="{{ $portfolio->title }}" class="w-full h-full object-cover" />
-                                    @else
-                                        <div class="w-full h-full bg-[#FAF8F1] flex items-center justify-center">
-                                            <span class="text-[#822021]">{{ $portfolio->title }}</span>
-                                        </div>
-                                    @endif
-                                </div>
-                            @endforeach
+            {{-- FOTO EVENT UTAMA (Bukan Carousel Portfolio lagi) --}}
+            <div class="relative mb-6 max-w-2xl mx-auto">
+                <div class="relative overflow-hidden rounded-2xl shadow-lg border-2 border-[#822021]" style="aspect-ratio: 16/9;">
+                    @if ($event->image)
+                        <img src="{{ \Illuminate\Support\Facades\Storage::url($event->image) }}" 
+                             alt="{{ $event->title }}" 
+                             class="w-full h-full object-cover" />
+                    @else
+                        {{-- Fallback jika tidak ada gambar --}}
+                        <div class="w-full h-full bg-[#FAF8F1] flex items-center justify-center">
+                            <span class="text-[#822021] font-bold text-xl">{{ $event->title }}</span>
                         </div>
-                        <button id="prevBtn" class="absolute left-4 top-1/2 transform -translate-y-1/2 bg-[#822021]/80 hover:bg-[#822021] rounded-full p-2 shadow-lg transition">
-                            <svg class="w-6 h-6 text-[#FCF5E6]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
-                            </svg>
-                        </button>
-                        <button id="nextBtn" class="absolute right-4 top-1/2 transform -translate-y-1/2 bg-[#822021]/80 hover:bg-[#822021] rounded-full p-2 shadow-lg transition">
-                            <svg class="w-6 h-6 text-[#FCF5E6]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                            </svg>
-                        </button>
-                    </div>
+                    @endif
                 </div>
-            @endif
+            </div>
 
             {{-- Judul Event --}}
             <h1 class="text-3xl font-bold text-[#822021] mb-6">{{ $event->title }}</h1>
@@ -183,9 +167,6 @@
                                     </a>
                                     <p class="text-center text-xs text-[#822021]/70">Anda sudah terdaftar</p>
                                 @else
-                                    {{-- BUTTON REGISTER --}}
-                                    {{-- Default: BG FFDEF8, Text 822021 --}}
-                                    {{-- Hover: Zoom, BG 822021, Text FCF5E6 --}}
                                     <a href="{{ route('events.register', $event) }}" class="btn-register inline-flex w-full items-center justify-center rounded-full bg-[#FFDEF8] border border-[#822021] px-6 py-3 font-bold text-sm text-[#822021] shadow-md">
                                         Daftar Sekarang
                                     </a>
@@ -204,7 +185,7 @@
                         <h3 class="font-bold text-[#822021] text-base md:text-lg mb-2 md:mb-3">Mentor</h3>
                         <div class="flex items-center gap-3">
                             <div class="w-10 h-10 md:w-12 md:h-12 bg-[#FFDEF8] border border-[#822021] rounded-full flex items-center justify-center">
-                                <span class="text-base md:text-lg font-bold text-[#822021]">{{ Str::substr($event->tutor_name, 0, 1) }}</span>
+                                <span class="text-base md:text-lg font-bold text-[#822021]">{{ \Illuminate\Support\Str::substr($event->tutor_name, 0, 1) }}</span>
                             </div>
                             <div>
                                 <p class="font-bold text-[#822021]">{{ $event->tutor_name }}</p>
@@ -231,33 +212,4 @@
             </div>
         </div>
     </section>
-
-    {{-- Script Carousel (Tidak Berubah) --}}
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const carousel = document.getElementById('carousel');
-            const prevBtn = document.getElementById('prevBtn');
-            const nextBtn = document.getElementById('nextBtn');
-            
-            if (carousel && prevBtn && nextBtn) {
-                let currentIndex = 0;
-                const totalSlides = carousel.children.length;
-                
-                function updateCarousel() {
-                    const translateX = -currentIndex * 100;
-                    carousel.style.transform = `translateX(${translateX}%)`;
-                }
-                
-                prevBtn.addEventListener('click', function() {
-                    currentIndex = currentIndex > 0 ? currentIndex - 1 : totalSlides - 1;
-                    updateCarousel();
-                });
-                
-                nextBtn.addEventListener('click', function() {
-                    currentIndex = currentIndex < totalSlides - 1 ? currentIndex + 1 : 0;
-                    updateCarousel();
-                });
-            }
-        });
-    </script>
 </x-layouts.app>

@@ -9,10 +9,9 @@
 
 <x-layouts.app :title="'Portofolio Sicrea'">
     <style>
-        /* 1. Mengubah Import Font ke Poppins */
+        /* 1. Import Font Poppins */
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
         
-        /* Class Font Baru */
         .font-poppins { font-family: 'Poppins', sans-serif; }
 
         .portfolio-card:hover .portfolio-image {
@@ -49,14 +48,16 @@
         }
         
         .modal-content {
-            /* 2. Mengubah Background menjadi Solid FCF5E6 */
             background-color: #FCF5E6; 
-            border: 3px solid #FFBE8E; /* Border tetap dipertahankan agar rapi */
+            border: 3px solid #FFBE8E;
             border-radius: 24px;
             max-width: 700px;
             width: 90%;
-            aspect-ratio: 4/3;
-            overflow: hidden;
+            /* Ubah height menjadi max-height agar responsif terhadap konten */
+            max-height: 90vh; 
+            display: flex;
+            flex-direction: column;
+            overflow: hidden; /* Hide overflow parent, scroll child */
             position: relative;
             transform: scale(0.8);
             transition: transform 0.3s ease;
@@ -66,74 +67,42 @@
             transform: scale(1);
         }
         
+        /* Custom Scrollbar untuk Modal Content */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: rgba(0,0,0,0.05);
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #FFBE8E;
+            border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #822021;
+        }
+
         /* Mobile Responsive Styles */
         @media (max-width: 768px) {
             .modal-content {
                 width: 95%;
-                max-width: none;
-                aspect-ratio: auto;
-                max-height: 90vh;
-                border-radius: 16px;
                 border-width: 2px;
             }
-            
             .modal-content .p-6 {
                 padding: 1rem !important;
             }
-            
-            #modalContent {
-                gap: 0.75rem;
-            }
-            
             #modalTitle {
                 font-size: 1.25rem !important;
-                line-height: 1.4 !important;
                 padding-right: 2rem !important;
             }
-            
-            .modal-content .space-y-2 {
-                margin-bottom: 0.75rem !important;
-            }
-            
-            .modal-content .flex-1 {
-                margin-bottom: 0.75rem !important;
-            }
-            
-            .modal-content .aspect-\[16\/9\] {
-                aspect-ratio: 16/10;
-                max-width: none;
-            }
-            
-            .modal-content .flex.justify-between {
-                flex-direction: column;
-                gap: 1rem;
-                align-items: stretch;
-            }
-            
-            #thumbnailContainer {
-                justify-content: center;
-                max-width: 100%;
-                overflow-x: auto;
-                padding-bottom: 0.25rem;
-            }
-            
-            #thumbnailContainer .w-16 {
-                width: 3rem;
-                height: 3rem;
-                flex-shrink: 0;
-            }
-            
-            #lihatEventBtn {
-                width: 100%;
-                justify-self: stretch;
-                padding: 0.75rem 1.5rem !important;
-                font-size: 0.875rem !important;
-            }
-            
             .modal-content button[onclick="closeModal()"] {
                 top: 0.75rem;
                 right: 0.75rem;
                 font-size: 1.5rem;
+            }
+            #thumbnailContainer .w-16 {
+                width: 3rem;
+                height: 3rem;
             }
         }
         
@@ -142,97 +111,38 @@
                 width: 98%;
                 border-radius: 12px;
             }
-            
             #modalTitle {
                 font-size: 1.125rem !important;
             }
-            
             #thumbnailContainer .w-16 {
                 width: 2.5rem;
                 height: 2.5rem;
             }
         }
 
-        /* --- CUSTOM PAGINATION STYLE --- */
-
-        /* 1. Teks "Showing ... results" */
-        nav[role="navigation"] p.text-sm {
-            color: #822021 !important; /* Warna Teks Merah */
-        }
-        nav[role="navigation"] p.text-sm span {
-            color: #822021 !important; /* Warna Angka Tebal Merah */
-            font-weight: 700;
-        }
-
-        /* 2. Container Tombol Pagination (Desktop) */
-        nav[role="navigation"] > div:last-child > div > span {
-            box-shadow: none !important; /* Hilangkan shadow bawaan */
-        }
-
-        /* 3. Semua Tombol (Angka & Panah) - Default State */
+        /* Pagination Styles (Sama seperti sebelumnya) */
+        nav[role="navigation"] p.text-sm { color: #822021 !important; }
+        nav[role="navigation"] p.text-sm span { color: #822021 !important; font-weight: 700; }
+        nav[role="navigation"] > div:last-child > div > span { box-shadow: none !important; }
         nav[role="navigation"] a, 
         nav[role="navigation"] span[aria-current="page"] span,
         nav[role="navigation"] span[aria-disabled="true"] span {
-            background-color: #FCF5E6 !important; /* Background Krem */
-            color: #822021 !important;             /* Text Merah */
-            border: 1px solid #822021 !important;  /* Border Merah */
-            border-radius: 8px;                    /* Sedikit Rounded */
-            margin: 0 2px;                         /* Jarak antar tombol */
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            height: 36px;
-            min-width: 36px;
-            padding: 0 10px;
-            font-size: 0.875rem;
-            font-weight: 600;
-            transition: all 0.3s ease;
+            background-color: #FCF5E6 !important; 
+            color: #822021 !important;            
+            border: 1px solid #822021 !important;  
+            border-radius: 8px;                    
+            margin: 0 2px;                         
+            display: inline-flex; align-items: center; justify-content: center;
+            height: 36px; min-width: 36px; padding: 0 10px;
+            font-size: 0.875rem; font-weight: 600; transition: all 0.3s ease;
         }
-
-        /* 4. Tombol Disabled / Mentok (Panah Kiri/Kanan saat disable) */
-        nav[role="navigation"] span[aria-disabled="true"] span {
-            background-color: #FCF5E6 !important; /* Tetap Krem */
-            color: #822021 !important;             /* Tetap Merah */
-            opacity: 0.5;                          /* Agak transparan agar terlihat non-aktif */
-            cursor: not-allowed;
-        }
-        /* Memastikan icon SVG di dalam tombol disabled juga berwarna merah */
-        nav[role="navigation"] span[aria-disabled="true"] span svg {
-            color: #822021 !important;
-            fill: currentColor;
-        }
-
-        /* 5. Tombol Aktif (Halaman saat ini) */
-        nav[role="navigation"] span[aria-current="page"] span {
-            background-color: #822021 !important; /* Background Merah */
-            color: #FCF5E6 !important;            /* Text Krem */
-            border-color: #822021 !important;
-        }
-
-        /* 6. Efek Hover (Untuk tombol yang bisa diklik) */
-        nav[role="navigation"] a:hover {
-            background-color: #822021 !important; /* Hover jadi Merah */
-            color: #FCF5E6 !important;            /* Text jadi Krem */
-            transform: scale(1.1);                /* Efek Zoom */
-            z-index: 10;
-        }
-
-        /* 7. Icon SVG (Panah Previous/Next) */
-        nav[role="navigation"] svg {
-            width: 16px;
-            height: 16px;
-            stroke-width: 2.5; /* Menebalkan panah */
-        }
-        
-        /* Hilangkan style rounded bawaan tailwind yang menyatu */
-        nav[role="navigation"] span.relative.z-0.inline-flex.shadow-sm.rounded-md {
-            box-shadow: none !important;
-        }
-        nav[role="navigation"] a.relative.inline-flex.items-center,
-        nav[role="navigation"] span[aria-disabled="true"] span {
-            margin-left: 4px !important; /* Beri jarak antar tombol */
-        }
-
+        nav[role="navigation"] span[aria-disabled="true"] span { opacity: 0.5; cursor: not-allowed; }
+        nav[role="navigation"] span[aria-disabled="true"] span svg { color: #822021 !important; fill: currentColor; }
+        nav[role="navigation"] span[aria-current="page"] span { background-color: #822021 !important; color: #FCF5E6 !important; border-color: #822021 !important; }
+        nav[role="navigation"] a:hover { background-color: #822021 !important; color: #FCF5E6 !important; transform: scale(1.1); z-index: 10; }
+        nav[role="navigation"] svg { width: 16px; height: 16px; stroke-width: 2.5; }
+        nav[role="navigation"] span.relative.z-0.inline-flex.shadow-sm.rounded-md { box-shadow: none !important; }
+        nav[role="navigation"] a.relative.inline-flex.items-center, nav[role="navigation"] span[aria-disabled="true"] span { margin-left: 4px !important; }
     </style>
 
     <section class="bg-[#FCF5E6] py-16">
@@ -244,17 +154,29 @@
 
             <div class="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
                 @forelse ($portfolios as $portfolio)
-                    @php($photoCount = $portfolio->images->count())
+                    @php
+                        $gallery = $portfolio->images;
+                        $firstImage = $gallery->first();
+                        $thumbnailUrl = $firstImage ? $firstImage->url : null;
+                        $photoCount = $gallery->count();
+                        $galleryJson = $gallery->pluck('url')->toJson();
+                        $eventTitle = $portfolio->event ? $portfolio->event->title : 'General Event';
+                    @endphp
+
                     <article class="portfolio-card group cursor-pointer" 
                              data-id="{{ $portfolio->id }}" 
                              data-title="{{ $portfolio->title }}" 
-                             data-date="{{ $portfolio->created_at->translatedFormat('d M Y') }}" 
-                             data-image="{{ $portfolio->cover_image_url }}" 
-                             data-images="{{ $portfolio->images->pluck('image_url')->toJson() }}"
+                             data-event-title="{{ $eventTitle }}" 
+                             data-image="{{ $thumbnailUrl }}" 
+                             data-images="{{ $galleryJson }}"
+                             /* DATA BARU: Description & Media URL */
+                             data-description="{{ $portfolio->description }}"
+                             data-media-url="{{ $portfolio->media_url }}"
                              onclick="openModal(this)">
+                        
                         <div class="relative overflow-hidden rounded-2xl shadow-md mb-4 transition-transform duration-300 hover:scale-105">
-                            @if ($portfolio->cover_image_url)
-                                <img src="{{ $portfolio->cover_image_url }}" alt="{{ $portfolio->title }}" class="portfolio-image h-64 w-full object-cover transition-transform duration-500" />
+                            @if ($thumbnailUrl)
+                                <img src="{{ $thumbnailUrl }}" alt="{{ $portfolio->title }}" class="portfolio-image h-64 w-full object-cover transition-transform duration-500" />
                             @else
                                 <div class="portfolio-image flex h-64 w-full items-center justify-center bg-gray-200 transition-transform duration-500">
                                     <span class="text-gray-500 font-poppins">No Image</span>
@@ -276,13 +198,10 @@
                         <div class="space-y-2">
                             <h4 class="font-poppins font-semibold text-[#822021] text-lg">{{ $portfolio->title }}</h4>
                             <div class="flex items-center gap-2 text-[#46000D] text-sm font-poppins">
-                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" class="flex-shrink-0">
-                                    <path d="M5.33331 1.3335V4.00016" stroke="#46000D" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
-                                    <path d="M10.6667 1.3335V4.00016" stroke="#46000D" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
-                                    <path d="M12.6667 2.6665H3.33333C2.59695 2.6665 2 3.26346 2 3.99984V13.3332C2 14.0696 2.59695 14.6665 3.33333 14.6665H12.6667C13.403 14.6665 14 14.0696 14 13.3332V3.99984C14 3.26346 13.403 2.6665 12.6667 2.6665Z" stroke="#46000D" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
-                                    <path d="M2 6.6665H14" stroke="#46000D" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="flex-shrink-0">
+                                    <path d="M15 5V7M15 11V13M15 17V19M5 5C3.89543 5 3 5.89543 3 7V10C4.10457 10 5 10.8954 5 12C5 13.1046 4.10457 14 3 14V17C3 18.1046 3.89543 19 5 19H19C20.1046 19 21 18.1046 21 17V14C19.8954 14 19 13.1046 19 12C19 10.8954 19.8954 10 21 10V7C21 5.89543 20.1046 5 19 5H5Z" stroke="#46000D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                                 </svg>
-                                <span>{{ $portfolio->created_at->translatedFormat('d M Y') }}</span>
+                                <span class="line-clamp-1">{{ $eventTitle }}</span>
                             </div>
                         </div>
                     </article>
@@ -305,46 +224,61 @@
 
     <div id="portfolioModal" class="modal-overlay">
         <div class="modal-content p-6">
-            <button onclick="closeModal()" class="absolute top-4 right-4 text-[#822021] hover:text-[#46000D] text-2xl font-bold cursor-pointer">
+            <button onclick="closeModal()" class="absolute top-4 right-4 text-[#822021] hover:text-[#46000D] text-2xl font-bold cursor-pointer z-20">
                 ×
             </button>
             
-            <div id="modalContent" class="h-full flex flex-col">
-                <div class="space-y-2 mb-4">
-                    <h2 id="modalTitle" class="font-poppins font-bold text-2xl text-[#822021] pr-8">Nama Dokumentasi Workshop</h2>
+            <div id="modalContent" class="h-full flex flex-col overflow-y-auto custom-scrollbar pr-2">
+                <div class="space-y-2 mb-4 shrink-0">
+                    <h2 id="modalTitle" class="font-poppins font-bold text-2xl text-[#822021] pr-8">Judul Portofolio</h2>
+                    
                     <div class="flex items-center gap-2 text-[#46000D] text-sm font-poppins">
-                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M5.33331 1.3335V4.00016" stroke="#46000D" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
-                            <path d="M10.6667 1.3335V4.00016" stroke="#46000D" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
-                            <path d="M12.6667 2.6665H3.33333C2.59695 2.6665 2 3.26346 2 3.99984V13.3332C2 14.0696 2.59695 14.6665 3.33333 14.6665H12.6667C13.403 14.6665 14 14.0696 14 13.3332V3.99984C14 3.26346 13.403 2.6665 12.6667 2.6665Z" stroke="#46000D" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
-                            <path d="M2 6.6665H14" stroke="#46000D" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="flex-shrink-0">
+                            <path d="M15 5V7M15 11V13M15 17V19M5 5C3.89543 5 3 5.89543 3 7V10C4.10457 10 5 10.8954 5 12C5 13.1046 4.10457 14 3 14V17C3 18.1046 3.89543 19 5 19H19C20.1046 19 21 18.1046 21 17V14C19.8954 14 19 13.1046 19 12C19 10.8954 19.8954 10 21 10V7C21 5.89543 20.1046 5 19 5H5Z" stroke="#46000D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                         </svg>
-                        <span id="modalDate">Tanggal Workshop</span>
+                        <span id="modalEventTitle">Nama Event</span>
                     </div>
                 </div>
                 
-                <div class="flex-1 flex items-center justify-center mb-4">
-                    <div class="rounded-2xl overflow-hidden shadow-md aspect-[16/9] w-full max-w-md">
-                        <img id="modalImage" src="https://via.placeholder.com/600x320" alt="Workshop Image" class="w-full h-full object-cover" />
-                    </div>
-                </div>
-                
-                <div class="flex justify-between items-end mt-auto">
-                    <div id="thumbnailContainer" class="flex gap-3 flex-wrap justify-center">
+                <div class="flex-shrink-0 mb-6">
+                    <div class="flex items-center justify-center mb-4">
+                        <div class="rounded-2xl overflow-hidden shadow-md aspect-[16/9] w-full max-w-md bg-gray-100">
+                            <img id="modalImage" src="" alt="Portfolio Image" class="w-full h-full object-cover" />
                         </div>
+                    </div>
+                    
+                    <div class="flex justify-center">
+                        <div id="thumbnailContainer" class="flex gap-3 flex-wrap justify-center">
+                            </div>
+                    </div>
+                </div>
+
+                <div class="mt-auto border-t border-[#FFBE8E] pt-4 pb-2">
+                    <h5 class="font-poppins font-semibold text-[#822021] mb-2 text-sm">Deskripsi</h5>
+                    <p id="modalDescription" class="font-poppins text-sm text-[#46000D] leading-relaxed mb-4 whitespace-pre-line">
+                        </p>
+
+                    <a id="modalLink" href="#" target="_blank" class="hidden inline-flex items-center gap-2 rounded-full bg-[#822021] px-5 py-2.5 text-sm font-medium text-[#FCF5E6] shadow-md transition hover:bg-[#6A1A1B] hover:scale-105">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4">
+                            <path fill-rule="evenodd" d="M15.75 2.25H21a.75.75 0 01.75.75v5.25a.75.75 0 01-1.5 0V4.81L8.03 17.03a.75.75 0 01-1.06-1.06L19.19 3.75h-3.44a.75.75 0 010-1.5zm-10.5 4.5a1.5 1.5 0 00-1.5 1.5v10.5a1.5 1.5 0 001.5 1.5h10.5a1.5 1.5 0 001.5-1.5V10.5a.75.75 0 011.5 0v8.25a3 3 0 01-3 3H5.25a3 3 0 01-3-3V8.25a3 3 0 013-3h8.25a.75.75 0 010 1.5H5.25z" clip-rule="evenodd" />
+                        </svg>
+                        Lihat Dokumentasi Lengkap
+                    </a>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        // ... (Script JavaScript di bawah ini sama persis dengan yang lama, tidak perlu diubah) ...
         function openModal(element) {
+            // Ambil data attributes
             const title = element.getAttribute('data-title');
-            const date = element.getAttribute('data-date');
+            const eventTitle = element.getAttribute('data-event-title');
             const coverImage = element.getAttribute('data-image');
             const imagesData = element.getAttribute('data-images');
-            const eventId = element.getAttribute('data-event-id');
+            // Data baru
+            const description = element.getAttribute('data-description');
+            const mediaUrl = element.getAttribute('data-media-url');
             
             let images = [];
             try {
@@ -357,10 +291,24 @@
                 images.unshift(coverImage);
             }
             
+            // Populate Text Data
             document.getElementById('modalTitle').textContent = title;
-            document.getElementById('modalDate').textContent = date;
+            document.getElementById('modalEventTitle').textContent = eventTitle;
+            document.getElementById('modalDescription').textContent = description || 'Tidak ada deskripsi tersedia.';
             
-            const mainImage = images.length > 0 ? images[0] : 'https://via.placeholder.com/600x320';
+            // Logic Link Dokumen
+            const linkBtn = document.getElementById('modalLink');
+            if (mediaUrl && mediaUrl.trim() !== "") {
+                linkBtn.href = mediaUrl;
+                linkBtn.classList.remove('hidden');
+                linkBtn.classList.add('inline-flex');
+            } else {
+                linkBtn.classList.add('hidden');
+                linkBtn.classList.remove('inline-flex');
+            }
+            
+            // Logic Images
+            const mainImage = coverImage || (images.length > 0 ? images[0] : 'https://via.placeholder.com/600x320');
             document.getElementById('modalImage').src = mainImage;
             
             const thumbnailContainer = document.getElementById('thumbnailContainer');
@@ -382,7 +330,12 @@
 
             const firstThumb = thumbnailContainer.querySelector('div');
             if (firstThumb) {
-                firstThumb.classList.add('ring-1', 'ring-[#822021]');
+                const allThumbs = thumbnailContainer.querySelectorAll('img');
+                allThumbs.forEach(img => {
+                    if(img.src === mainImage) {
+                         img.parentElement.classList.add('ring-1', 'ring-[#822021]');
+                    }
+                });
             }
                         
             document.getElementById('portfolioModal').classList.add('active');
