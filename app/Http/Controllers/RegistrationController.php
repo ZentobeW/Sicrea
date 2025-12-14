@@ -118,6 +118,7 @@ class RegistrationController extends Controller
         $this->authorize('view', $registration);
 
         $registration->loadMissing(['event', 'transaction.refund']);
+        $timeoutMinutes = config('payment.proof_timeout_minutes', 5);
 
         $paymentMethod = config('payment.method', 'Virtual Account');
 
@@ -129,10 +130,36 @@ class RegistrationController extends Controller
             ->firstWhere('is_primary', true)
             ?? collect(config('payment.accounts', []))->first();
 
+        $registeredAt = $registration->registered_at ?? $registration->created_at;
+        $expiresAt = $registeredAt?->copy()->addMinutes($timeoutMinutes);
+
+        if ($expiresAt && $expiresAt->isPast()) {
+            $isPending = $registration->status === RegistrationStatus::Pending;
+            $transactionPending = $registration->transaction?->status === PaymentStatus::Pending;
+            $hasProof = filled($registration->transaction?->payment_proof_path);
+
+            if ($isPending && $transactionPending && ! $hasProof) {
+                $event = $registration->event;
+
+                DB::transaction(function () use ($registration) {
+                    $registration->transaction?->delete();
+                    $registration->delete();
+                });
+
+                return redirect()
+                    ->route('events.show', $event)
+                    ->with('status', 'Pendaftaran dibatalkan karena melewati batas waktu pembayaran.');
+            }
+        }
+
+        $remainingSeconds = max(0, $expiresAt ? now()->diffInSeconds($expiresAt, false) : 0);
+
         return view('registrations.show', [
             'registration' => $registration,
             'paymentAccount' => $paymentAccount,
             'paymentMethod' => $paymentMethod,
+            'paymentTimeoutMinutes' => $timeoutMinutes,
+            'remainingSeconds' => $remainingSeconds,
         ]);
     }
 

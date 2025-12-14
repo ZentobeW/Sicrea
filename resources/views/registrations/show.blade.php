@@ -26,6 +26,10 @@
     $refund = $transaction?->refund;
     $showTicket = $isVerified || $isRefunded || $refund;
     $showCountdown = ! $showTicket && ! $hasProof;
+
+    $paymentTimeoutMinutes ??= config('payment.proof_timeout_minutes', 5);
+    $remainingSeconds = isset($remainingSeconds) ? max(0, (int) $remainingSeconds) : 0;
+    $initialCountdownLabel = $remainingSeconds > 0 ? gmdate('i:s', $remainingSeconds) : '00:00';
 @endphp
 
 <x-layouts.app :title="'Pembayaran Pendaftaran'">
@@ -295,12 +299,12 @@
 
                                         @if ($showCountdown)
                                             {{-- Countdown Timer --}}
-                                            <div data-payment-timer data-seconds="300" data-expire-url="{{ route('registrations.expire', $registration) }}" data-event-url="{{ route('events.show', $registration->event) }}" class="relative overflow-hidden rounded-[28px] border border-[#822021]/40 bg-gradient-to-br from-[#FFDEF8] to-white p-5 shadow-lg">
+                                            <div data-payment-timer data-seconds="{{ $remainingSeconds }}" data-expire-url="{{ route('registrations.expire', $registration) }}" data-event-url="{{ route('events.show', $registration->event) }}" class="relative overflow-hidden rounded-[28px] border border-[#822021]/40 bg-gradient-to-br from-[#FFDEF8] to-white p-5 shadow-lg">
                                                 <div class="relative flex flex-col gap-4 text-[#822021]">
                                                     <div class="flex items-center justify-between gap-3">
                                                         <p class="text-[11px] font-semibold uppercase tracking-[0.3em] text-[#822021]/60">Konfirmasi Pembayaran</p>
                                                         <span class="inline-flex items-center gap-2 rounded-full bg-[#822021]/10 px-3 py-1 text-[12px] font-semibold text-[#822021]">
-                                                            Auto reload in <span data-countdown-label class="tabular-nums">05:00</span>
+                                                            Auto reload in <span data-countdown-label class="tabular-nums">{{ $initialCountdownLabel }}</span>
                                                         </span>
                                                     </div>
                                                     <div class="flex items-center gap-4 rounded-2xl bg-white/70 p-4 shadow-inner">
@@ -309,7 +313,7 @@
                                                                 <circle cx="18" cy="18" r="16" fill="none" stroke="#FAD6C7" stroke-width="4" class="opacity-60" />
                                                                 <circle cx="18" cy="18" r="16" fill="none" stroke="#822021" stroke-width="4" stroke-linecap="round" stroke-dasharray="100" stroke-dashoffset="0" data-countdown-progress />
                                                             </svg>
-                                                            <div class="absolute inset-0 flex items-center justify-center text-lg font-bold text-[#822021]" data-countdown-number>300</div>
+                                                            <div class="absolute inset-0 flex items-center justify-center text-lg font-bold text-[#822021]" data-countdown-number>{{ $remainingSeconds }}</div>
                                                         </div>
                                                         <div class="space-y-2">
                                                             <h4 class="text-base font-semibold text-[#822021]">Segera unggah bukti pembayaran</h4>
@@ -438,8 +442,7 @@
         document.addEventListener('DOMContentLoaded', () => {
             const timerEl = document.querySelector('[data-payment-timer]');
             if (timerEl) {
-                // ... (Logic JS sama seperti sebelumnya) ...
-                const totalSeconds = Number(timerEl.dataset.seconds ?? 300); // 5 menit default
+                const totalSeconds = Math.max(0, Number(timerEl.dataset.seconds ?? 0));
                 const bar = timerEl.querySelector('[data-countdown-bar]');
                 const number = timerEl.querySelector('[data-countdown-number]');
                 const label = timerEl.querySelector('[data-countdown-label]');
@@ -448,6 +451,8 @@
                 const expireUrl = timerEl.dataset.expireUrl;
                 const csrf = document.querySelector('meta[name="csrf-token"]')?.content;
                 let remaining = totalSeconds;
+                let isExpiring = false;
+                let intervalId = null;
 
                 const formatTime = (value) => {
                     const m = Math.floor(value / 60).toString().padStart(2, '0');
@@ -458,6 +463,9 @@
                 const cleanupAndRedirect = () => { window.location.href = eventUrl || '/events'; };
                 
                 const expireRegistration = async () => {
+                    if (isExpiring) return;
+                    isExpiring = true;
+                    if (intervalId) clearInterval(intervalId);
                     if (!expireUrl || !csrf) { cleanupAndRedirect(); return; }
                     try {
                         const response = await fetch(expireUrl, {
@@ -471,22 +479,32 @@
                 };
 
                 const render = () => {
-                    const percent = Math.max(0, Math.min(100, (remaining / totalSeconds) * 100));
+                    const baseSeconds = totalSeconds || 1;
+                    const percent = Math.max(0, Math.min(100, baseSeconds === 0 ? 0 : (remaining / baseSeconds) * 100));
                     if (bar) bar.style.width = `${100 - percent}%`;
                     if (number) number.textContent = remaining;
                     if (label) label.textContent = formatTime(remaining);
                     if (progress) progress.style.strokeDashoffset = (100 - percent).toString();
                 };
 
-                const tick = () => {
-                    remaining -= 1;
-                    if (remaining < 0) { expireRegistration(); return; }
+                const startCountdown = () => {
                     render();
-                    setTimeout(tick, 1000);
+                    if (remaining <= 0) {
+                        expireRegistration();
+                        return;
+                    }
+
+                    intervalId = setInterval(() => {
+                        remaining -= 1;
+                        if (remaining <= 0) {
+                            expireRegistration();
+                            return;
+                        }
+                        render();
+                    }, 1000);
                 };
 
-                render();
-                setTimeout(tick, 1000);
+                startCountdown();
             }
 
             // File Upload Logic
