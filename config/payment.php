@@ -4,7 +4,7 @@ return [
     'method' => 'Virtual Account Bank Transfer',
 
     // Batas waktu (menit) untuk mengunggah bukti pembayaran sebelum pendaftaran otomatis kadaluarsa.
-    'proof_timeout_minutes' => 15,
+    'proof_timeout_minutes' => 1,
 
     'accounts' => [
         [

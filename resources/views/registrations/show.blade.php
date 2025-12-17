@@ -25,7 +25,7 @@
 
     $refund = $transaction?->refund;
     $showTicket = $isVerified || $isRefunded || $refund;
-    $showCountdown = ! $showTicket && ! $hasProof;
+    $showCountdown = ! $showTicket && ($isRejected || ! $hasProof);
 
     $paymentTimeoutMinutes ??= config('payment.proof_timeout_minutes', 5);
     $remainingSeconds = isset($remainingSeconds) ? max(0, (int) $remainingSeconds) : 0;

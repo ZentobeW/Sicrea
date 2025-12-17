@@ -131,17 +131,28 @@ class RegistrationController extends Controller
             ?? collect(config('payment.accounts', []))->first();
 
         $registeredAt = $registration->registered_at ?? $registration->created_at;
+        $transactionStatus = $registration->transaction?->status;
+
+        // Saat bukti ditolak, hitung ulang timer dari waktu penolakan agar user tetap dapat re-upload
+        if ($transactionStatus === PaymentStatus::Rejected) {
+            $registeredAt = $registration->transaction?->updated_at ?? $registeredAt;
+        }
+
         $expiresAt = $registeredAt?->copy()->addMinutes($timeoutMinutes);
 
         if ($expiresAt && $expiresAt->isPast()) {
             $isPending = $registration->status === RegistrationStatus::Pending;
-            $transactionPending = $registration->transaction?->status === PaymentStatus::Pending;
-            $hasProof = filled($registration->transaction?->payment_proof_path);
+            $allowExpireStatuses = in_array($transactionStatus, [PaymentStatus::Pending, PaymentStatus::Rejected], true);
+            $proofPath = $registration->transaction?->payment_proof_path;
+            $hasValidProof = filled($proofPath) && $transactionStatus !== PaymentStatus::Rejected;
 
-            if ($isPending && $transactionPending && ! $hasProof) {
+            if ($isPending && $allowExpireStatuses && ! $hasValidProof) {
                 $event = $registration->event;
 
-                DB::transaction(function () use ($registration) {
+                DB::transaction(function () use ($registration, $proofPath) {
+                    if ($proofPath) {
+                        Storage::disk('public')->delete($proofPath);
+                    }
                     $registration->transaction?->delete();
                     $registration->delete();
                 });
@@ -245,14 +256,19 @@ class RegistrationController extends Controller
         $registration->loadMissing(['transaction', 'event']);
 
         $isPending = $registration->status === RegistrationStatus::Pending;
-        $transactionPending = $registration->transaction?->status === PaymentStatus::Pending;
-        $hasProof = filled($registration->transaction?->payment_proof_path);
+        $transactionStatus = $registration->transaction?->status;
+        $allowExpireStatuses = in_array($transactionStatus, [PaymentStatus::Pending, PaymentStatus::Rejected], true);
+        $proofPath = $registration->transaction?->payment_proof_path;
+        $hasValidProof = filled($proofPath) && $transactionStatus !== PaymentStatus::Rejected;
 
-        if (! $isPending || ! $transactionPending || $hasProof) {
+        if (! $isPending || ! $allowExpireStatuses || $hasValidProof) {
             return response()->json(['message' => 'Tidak dapat membatalkan pendaftaran ini.'], 422);
         }
 
-        DB::transaction(function () use ($registration) {
+        DB::transaction(function () use ($registration, $proofPath) {
+            if ($proofPath) {
+                Storage::disk('public')->delete($proofPath);
+            }
             $registration->transaction?->delete();
             $registration->delete();
         });
