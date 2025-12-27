@@ -19,19 +19,19 @@ class RegistrationPolicy
 
     public function view(User $user, Registration $registration): bool
     {
-        return $registration->user_id === $user->id;
+        return (int) $registration->user_id === (int) $user->getAuthIdentifier();
     }
 
     public function update(User $user, Registration $registration): bool
     {
-        return $registration->user_id === $user->id;
+        return (int) $registration->user_id === (int) $user->getAuthIdentifier();
     }
 
     public function requestRefund(User $user, Registration $registration): bool
     {
         $transaction = $registration->transaction;
 
-        return $registration->user_id === $user->id
+        return (int) $registration->user_id === (int) $user->getAuthIdentifier()
             && $transaction
             && $transaction->status === PaymentStatus::Verified;
     }

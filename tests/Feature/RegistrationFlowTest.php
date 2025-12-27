@@ -9,6 +9,8 @@ use App\Models\Event;
 use App\Models\Registration;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
 class RegistrationFlowTest extends TestCase
@@ -117,5 +119,60 @@ class RegistrationFlowTest extends TestCase
             ])
             ->assertRedirect(route('events.register', $event))
             ->assertSessionHasErrors('event');
+    }
+
+    public function test_user_can_upload_payment_proof(): void
+    {
+        Storage::fake('public');
+
+        $user = User::factory()->create([
+            'phone' => '08123456782',
+            'province' => 'Jawa Barat',
+            'city' => 'Bandung',
+            'address' => 'Jalan Braga 2',
+            'email_verified_at' => now(),
+        ]);
+
+        $event = Event::create([
+            'title' => 'Upload Event',
+            'description' => 'Desc',
+            'start_at' => now()->addDays(2),
+            'end_at' => now()->addDays(2)->addHours(3),
+            'venue_name' => 'Hall C',
+            'venue_address' => 'Address',
+            'tutor_name' => 'Tutor',
+            'capacity' => 20,
+            'price' => 200_000,
+            'status' => EventStatus::Published,
+            'published_at' => now(),
+        ]);
+
+        $registration = Registration::create([
+            'user_id' => $user->id,
+            'event_id' => $event->id,
+            'status' => RegistrationStatus::Pending,
+            'form_data' => [],
+            'registered_at' => now(),
+        ]);
+
+        $registration->transaction()->create([
+            'amount' => $event->price,
+            'status' => PaymentStatus::Pending,
+            'payment_method' => 'Virtual Account',
+        ]);
+
+        $response = $this
+            ->actingAs($user)
+            ->post(route('registrations.payment-proof', $registration), [
+                'payment_proof' => UploadedFile::fake()->image('proof.jpg'),
+            ]);
+
+        $response->assertStatus(302)
+            ->assertSessionHasNoErrors();
+
+        $this->assertDatabaseHas('transactions', [
+            'registration_id' => $registration->id,
+            'status' => PaymentStatus::AwaitingVerification->value,
+        ]);
     }
 }

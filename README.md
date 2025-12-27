@@ -1,63 +1,97 @@
 # Sicrea
-Web App untuk membantu Client Event Organizer Kreasi  Hangat dalam memperkenalkan produk mereka dan membantu manajemen EO mereka
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Sicrea adalah web app untuk membantu client Event Organizer Kreasi Hangat dalam memperkenalkan produk mereka sekaligus mengelola operasional EO.
 
-## About Laravel
+![Sicrea Hero](docs/images/hero.png)
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Fitur utama
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+- Halaman publik: home, event, portfolio, partnership, about
+- Katalog event dan detail event
+- Registrasi workshop, unggah bukti pembayaran, dan pengajuan refund
+- Autentikasi: login/registrasi, verifikasi email via OTP, reset password, Google OAuth
+- Profil pengguna dan pengaturan akun
+- Admin: dashboard, manajemen event, registrasi, portfolio, verifikasi pembayaran, refund, laporan
+- SMTP test route untuk pengecekan email
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Tangkapan layar
 
-## Learning Laravel
+Letakkan gambar di `docs/images/` lalu ganti path di bawah ini sesuai kebutuhan:
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+- `docs/images/hero.png` (landing)
+- `docs/images/events.png` (daftar event)
+- `docs/images/admin-dashboard.png` (admin)
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+## Tech stack
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+- Laravel 12 (PHP 8.2)
+- MySQL
+- Vite + Tailwind CSS v4
+- Laravel Socialite (Google OAuth)
+- no-captcha (Google reCAPTCHA)
+- Queue dan cache berbasis database
 
-## Laravel Sponsors
+## Prasyarat
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+- PHP 8.2+
+- Composer
+- Node.js + npm
+- MySQL/MariaDB
 
-### Premium Partners
+## Instalasi cepat
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+```bash
+composer run setup
+```
 
-## Contributing
+Atau langkah manual:
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+```bash
+composer install
+copy .env.example .env
+php artisan key:generate
+php artisan migrate
+npm install
+npm run build
+```
 
-## Code of Conduct
+Jalankan aplikasi:
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+```bash
+php artisan serve
+```
 
-## Security Vulnerabilities
+Untuk development full (server, queue, logs, vite):
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+```bash
+composer run dev
+```
 
-## License
+## Konfigurasi env
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Minimal yang perlu diisi di `.env`:
+
+- `APP_NAME`, `APP_URL`
+- `DB_HOST`, `DB_PORT`, `DB_DATABASE`, `DB_USERNAME`, `DB_PASSWORD`
+- `MAIL_HOST`, `MAIL_PORT`, `MAIL_USERNAME`, `MAIL_PASSWORD`, `MAIL_FROM_ADDRESS`
+- `MAIL_ADMIN_ADDRESS`, `MAIL_TEST_RECIPIENT`
+- `NOCAPTCHA_SITEKEY`, `NOCAPTCHA_SECRET`
+- `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, `GOOGLE_REDIRECT_URL`
+
+Opsional untuk storage:
+
+```bash
+php artisan storage:link
+```
+
+## Perintah penting
+
+```bash
+composer run test
+php artisan queue:listen
+```
+
+## Catatan
+
+- Jika mengaktifkan Google OAuth, pastikan redirect URL sama dengan `GOOGLE_REDIRECT_URL`.
+- Route test SMTP tersedia di `/test-email?to=email@domain.test` untuk verifikasi email saat development.
